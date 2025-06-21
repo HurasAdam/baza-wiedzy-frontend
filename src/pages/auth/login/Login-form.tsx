@@ -37,7 +37,7 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
   });
 
   return (
-    <div className="minh-screen flex flex-col items-center bg-muted/40 p-4">
+    <div className="minh-screen flex flex-col items-center bg-card/5 rounded-xl p-4">
       <Card className="max-w-md  min-w-md w-full shadow-xl">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>

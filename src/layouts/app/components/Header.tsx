@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useAuthUserQuery } from "@/hooks/auth/use-auth";
+import { useAuthQuery } from "@/hooks/auth/use-auth";
 import { Separator } from "@/components/ui/separator";
 import { Dropdown } from "@/components/Dropdown";
 import { getAvatarFallbackText } from "@/utils/avatar";
@@ -29,7 +29,7 @@ const Header = ({
   onWorkspaceSelected,
   setIsCreatingWorkspace,
 }: HeaderProps) => {
-  const { data: user } = useAuthUserQuery();
+  const { data: user } = useAuthQuery();
 
   const initials = getAvatarFallbackText(user?.name);
 

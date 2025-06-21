@@ -8,7 +8,7 @@ export const useLoginMutation = () => {
   });
 };
 
-export const useAuthUserQuery = () => {
+export const useAuthQuery = () => {
   return useQuery({
     queryKey: ["authUser"],
     queryFn: authService.verifyMe,

@@ -1,7 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import { AuthRoute } from "./auth.route";
-import { authRoutePaths, protectedRoutePaths } from "./routes";
+import { protectedRoutePaths } from "./routes";
 
 import ProtectedRoute from "./protected.route";
 import AppLayout from "@/layouts/app/app.layout";
@@ -14,11 +14,9 @@ export function AppRoutes() {
       <Routes>
         {/* Publiczne ścieżki dostępne TYLKO dla niezalogowanych */}
         <Route element={<AuthRoute />}>
-          <Route element={<BaseLayout />}>
-            {authRoutePaths.map(({ path, element }) => (
-              <Route key={path} path={path} element={element} />
-            ))}
-            {/* Wszystko inne dla niezalogowanych → przekierowanie na /login */}
+          <Route path="auth" element={<BaseLayout />}>
+            <Route path="login" element={<PAGES.LoginPage />} />
+
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Route>
         </Route>
