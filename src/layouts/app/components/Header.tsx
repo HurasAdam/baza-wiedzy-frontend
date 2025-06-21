@@ -39,9 +39,9 @@ const Header = ({
         <div>
           <div className="flex items-center mr-4 pb-2 hover:bg-transparent">
             {/* Avatar */}
-            <Avatar className="h-7.5 w-7.5 bg-primary">
+            <Avatar className="h-7.5 w-7.5 bg-primary ">
               <AvatarImage src={user} alt={user?.name} />
-              <AvatarFallback className="text-base font-sembibold bg-primary text-secondary">
+              <AvatarFallback className="text-base font-sembibold bg-primary text-primary-foreground">
                 {initials}
               </AvatarFallback>
             </Avatar>
@@ -140,7 +140,7 @@ const Header = ({
               <div className="rounded-full flex items-center gap-0.5 cursor-pointer bg-muted/90 p-1 hover:bg-muted">
                 <Avatar className="size-6 bg-primary">
                   <AvatarImage src={user} alt={user?.name} />
-                  <AvatarFallback className="text-base font-sembibold bg-primary text-secondary">
+                  <AvatarFallback className="text-base font-sembibold bg-primary text-primary-foreground">
                     {initials}
                   </AvatarFallback>
                 </Avatar>

@@ -44,11 +44,11 @@ export const SettingsModal = ({
         </DialogHeader>
 
         {/* MAIN */}
-        <div className="flex-grow flex overflow-hidden">
+        <div className="flex-grow flex overflow-hidden scrollbar-custom">
           <Card className="flex flex-grow flex-col w-full overflow-hidden border-none rounded-none p-0 bg-background">
             <CardContent className="flex flex-grow h-full p-0 overflow-hidden">
               {/* SIDEBAR */}
-              <aside className="w-[23%] h-full border-r bg-muted/40 px-3 py-4 space-y-2">
+              <aside className="w-[23%] h-full border-r bg-sidebar px-3 py-4 space-y-2">
                 {tabs.map(({ key, label, icon: Icon }) => {
                   const isActive = activeTab === key;
                   return (
@@ -70,7 +70,7 @@ export const SettingsModal = ({
               </aside>
 
               {/* CONTENT */}
-              <section className="w-full py-6 px-7 overflow-y-auto h-full">
+              <section className="w-full py-6 px-7 overflow-y-auto h-full scrollbar-custom">
                 {activeTab === "general" && (
                   <div>
                     <CardTitle className="mb-4">Ustawienia ogólne</CardTitle>

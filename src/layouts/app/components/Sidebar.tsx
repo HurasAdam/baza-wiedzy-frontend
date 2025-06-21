@@ -72,14 +72,14 @@ export const Sidebar = ({
         <Link to="/dashboard" className="flex items-center">
           {!isCollapsed && (
             <div className="flex items-center gap-2">
-              <Layers className="size-6 text-blue-600" />
-              <span className="font-semibold text-lg hidden md:block">
+              <Layers className="size-6 text-sidebar-primary" />
+              <span className="font-semibold text-lg hidden md:block text-foreground">
                 Baza wiedzy
               </span>
             </div>
           )}
 
-          {isCollapsed && <Layers className="size-6 text-blue-600" />}
+          {isCollapsed && <Layers className="size-6 text-sidebar-primary" />}
         </Link>
 
         <Button
