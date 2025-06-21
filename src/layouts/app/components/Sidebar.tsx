@@ -36,12 +36,12 @@ export const Sidebar = ({
     },
     {
       title: "Artykuły",
-      href: "/workspaces",
+      href: "/articles",
       icon: Users,
     },
     {
       title: "Rejestr tematów",
-      href: "/my-tasks",
+      href: "/register-topic",
       icon: ListCheck,
     },
     {

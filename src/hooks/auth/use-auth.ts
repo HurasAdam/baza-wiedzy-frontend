@@ -13,6 +13,6 @@ export const useAuthUserQuery = () => {
     queryKey: ["authUser"],
     queryFn: authService.verifyMe,
     staleTime: 0,
-    retry: 2,
+    retry: false,
   });
 };

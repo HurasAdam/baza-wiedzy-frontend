@@ -1,37 +1,36 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import { AuthRoute } from "./auth.route";
 import { authRoutePaths, protectedRoutePaths } from "./routes";
 
 import ProtectedRoute from "./protected.route";
+import AppLayout from "@/layouts/app/app.layout";
 import BaseLayout from "@/layouts/base/base.layout";
+import { PAGES } from "@/pages";
 
 export function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<AuthRoute />} />
-        <Route element={<BaseLayout />}>
-          {authRoutePaths.map((route) => {
-            return (
-              <Route
-                key={route.path}
-                path={route.path}
-                element={route.element}
-              />
-            );
-          })}
+        {/* Publiczne ścieżki dostępne TYLKO dla niezalogowanych */}
+        <Route element={<AuthRoute />}>
+          <Route element={<BaseLayout />}>
+            {authRoutePaths.map(({ path, element }) => (
+              <Route key={path} path={path} element={element} />
+            ))}
+            {/* Wszystko inne dla niezalogowanych → przekierowanie na /login */}
+            <Route path="*" element={<Navigate to="/login" replace />} />
+          </Route>
         </Route>
 
-        <Route path="/" element={<ProtectedRoute />}>
-          <Route element={<BaseLayout />}>
-            {protectedRoutePaths.map((route) => (
-              <Route
-                key={route.path}
-                path={route.path}
-                element={route.element}
-              />
+        {/* Chronione ścieżki dostępne TYLKO dla zalogowanych */}
+        <Route element={<ProtectedRoute />}>
+          <Route element={<AppLayout />}>
+            {protectedRoutePaths.map(({ path, element }) => (
+              <Route key={path} path={path} element={element} />
             ))}
+            {/* Tutaj 404 dla zalogowanych na nieznane ścieżki */}
+            <Route path="*" element={<PAGES.NotFoundPage />} />
           </Route>
         </Route>
       </Routes>
