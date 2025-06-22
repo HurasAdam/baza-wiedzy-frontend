@@ -2,15 +2,17 @@ import { cn } from "@/lib/utils";
 // import { useAuth } from "@/provider/auth-context";
 import type { Workspace } from "@/types";
 import {
-  CheckCircle2,
+  BookUser,
   ChevronsLeft,
   ChevronsRight,
   Layers,
   LayoutDashboard,
   ListCheck,
   LogOut,
-  Settings,
-  Users,
+  Newspaper,
+  School,
+  Smile,
+  Star,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -31,7 +33,7 @@ const navItems = [
   {
     title: "Artykuły",
     href: "/articles",
-    icon: Users,
+    icon: Newspaper,
   },
   {
     title: "Rejestr tematów",
@@ -41,17 +43,22 @@ const navItems = [
   {
     title: "Szkoły projektowe",
     href: `/members`,
-    icon: Users,
+    icon: School,
   },
   {
     title: "Działy i kontakty",
     href: `/achieved`,
-    icon: CheckCircle2,
+    icon: BookUser,
   },
   {
     title: "Ulubione",
     href: "/settings",
-    icon: Settings,
+    icon: Star,
+  },
+  {
+    title: "Złote myśli",
+    href: "/settings",
+    icon: Smile,
   },
 ];
 

@@ -23,6 +23,7 @@ import { Loader2 } from "lucide-react";
 
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import type z from "zod";
 
 interface LoginFormProps {
   onSubmit: () => Promise<void>;
@@ -43,9 +44,10 @@ const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
     <div className="minh-screen flex flex-col items-center bg-card/5 rounded-xl p-4">
       <Card className="max-w-md  min-w-md w-full shadow-xl">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
+          <CardTitle className="text-2xl font-bold">Baza Wiedzy</CardTitle>
           <CardDescription className="text-sm text-muted-foreground">
-            Sign in to your account to continue
+            Wprowadź swoje dane, aby uzyskać dostęp do bazy wiedzy i szablonów
+            odpowiedzi.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -79,7 +81,7 @@ const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
                     <div className="flex justify-between items-center">
                       <FormLabel>Hasło</FormLabel>
                       <Link
-                        to="/forgot-password"
+                        to="/auth/forgot-password"
                         className="text-xs text-muted-foreground hover:text-secondary-foreground"
                       >
                         Przypomnij hasło

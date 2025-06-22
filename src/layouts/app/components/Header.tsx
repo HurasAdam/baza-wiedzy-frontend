@@ -1,6 +1,13 @@
 // import { useAuth } from "@/provider/auth-context";
 
-import { Bell, ChevronDown, PlusCircle, User } from "lucide-react";
+import {
+  Bell,
+  ChevronDown,
+  LogOut,
+  PlusCircle,
+  Settings,
+  User,
+} from "lucide-react";
 
 import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu";
 import { Button } from "@/components/ui/button";
@@ -13,10 +20,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useAuthQuery } from "@/hooks/auth/use-auth";
+import { useAuthQuery, useLogoutMutation } from "@/hooks/auth/use-auth";
 import { Separator } from "@/components/ui/separator";
 import { Dropdown } from "@/components/Dropdown";
 import { getAvatarFallbackText } from "@/utils/avatar";
+import queryClient from "@/config/query.client";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 interface HeaderProps {
   onWorkspaceSelected: (workspace: any) => void;
@@ -27,11 +37,28 @@ interface HeaderProps {
 const workspaces = [];
 const Header = ({
   onWorkspaceSelected,
-  setIsCreatingWorkspace,
+  setIsSettingsModalOpen,
+  onCreateWorkspace,
 }: HeaderProps) => {
   const { data: user } = useAuthQuery();
 
   const initials = getAvatarFallbackText(user?.name);
+  const navigate = useNavigate();
+
+  const { mutate, isPending } = useLogoutMutation();
+
+  const onLogout = () => {
+    mutate(undefined, {
+      onSuccess: () => {
+        queryClient.clear();
+        navigate("/auth/login", { replace: true });
+        toast.success("Zostałeś pomyślnie wylogowany");
+      },
+      onError: (err) => {
+        // optionalnego obsłużenia błędu
+      },
+    });
+  };
 
   const profileMenuOptions = [
     {
@@ -57,11 +84,6 @@ const Header = ({
       icon: <></>,
       actionHandler: () => {},
     },
-    {
-      label: "Profil",
-      icon: <User />,
-      actionHandler: () => console.log("profil"),
-    },
 
     {
       label: "Moje zgłoszenia",
@@ -75,10 +97,10 @@ const Header = ({
     },
     {
       label: "Ustawienia",
-      icon: <User />,
-      actionHandler: () => setIsCreatingWorkspace(true),
+      icon: <Settings />,
+      actionHandler: () => setIsSettingsModalOpen(true),
     },
-    { label: "Wyloguj się", icon: <User />, actionHandler: () => {} },
+    { label: "Wyloguj się", icon: <LogOut />, actionHandler: () => onLogout() },
   ];
 
   return (
@@ -90,7 +112,7 @@ const Header = ({
           </DropdownMenuTrigger>
 
           <DropdownMenuContent>
-            <DropdownMenuLabel>Workspace</DropdownMenuLabel>
+            <DropdownMenuLabel>Moduł</DropdownMenuLabel>
             <DropdownMenuSeparator />
 
             <DropdownMenuGroup>
@@ -109,9 +131,9 @@ const Header = ({
             </DropdownMenuGroup>
 
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={onCreateWorkspace}>
                 <PlusCircle className="w-4 h-4 mr-2" />
-                Create Workspace
+                Dodaj Moduł
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>

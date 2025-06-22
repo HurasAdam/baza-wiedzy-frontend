@@ -4,9 +4,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Card, CardContent, CardTitle } from "../ui/card";
 import clsx from "clsx";
 
-interface CreateWorkspaceProps {
-  isCreatingWorkspace: boolean;
-  setIsCreatingWorkspace: (isCreatingWorkspace: boolean) => void;
+interface SettingsModalProps {
+  isSettingsModalOpen: boolean;
+  setIsSettingsModalOpen: (isSettingsModalOpen: boolean) => void;
   closeOnOutsideClick?: boolean;
 }
 
@@ -17,23 +17,23 @@ const tabs = [
 ];
 
 export const SettingsModal = ({
-  isCreatingWorkspace,
-  setIsCreatingWorkspace,
+  isSettingsModalOpen,
+  setIsSettingsModalOpen,
   closeOnOutsideClick = false,
-}: CreateWorkspaceProps) => {
-  const [activeTab, setActiveTab] = useState("general");
+}: SettingsModalProps) => {
+  const [activeTab, setActiveTab] = useState("account");
 
   return (
     <Dialog
-      open={isCreatingWorkspace}
-      onOpenChange={setIsCreatingWorkspace}
+      open={isSettingsModalOpen}
+      onOpenChange={setIsSettingsModalOpen}
       modal
     >
       <DialogContent
         {...(!closeOnOutsideClick
           ? { onInteractOutside: (e) => e.preventDefault() }
           : {})}
-        className="max-h-[83vh] min-h-[83vh] min-w-[62vw] flex flex-col p-0 gap-0"
+        className="max-h-[83vh] min-h-[83vh] min-w-[88vw] md:min-w-[75vw] xl:min-w-[62vw] flex flex-col p-0 gap-0"
       >
         {/* HEADER */}
         <DialogHeader className="flex-shrink-0  border-b py-3 px-4">

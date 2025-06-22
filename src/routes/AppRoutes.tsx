@@ -16,6 +16,10 @@ export function AppRoutes() {
         <Route element={<AuthRoute />}>
           <Route path="auth" element={<BaseLayout />}>
             <Route path="login" element={<PAGES.LoginPage />} />
+            <Route
+              path="forgot-password"
+              element={<PAGES.ForgotPasswordPage />}
+            />
 
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Route>
@@ -24,6 +28,7 @@ export function AppRoutes() {
         {/* Chronione ścieżki dostępne TYLKO dla zalogowanych */}
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
             {protectedRoutePaths.map(({ path, element }) => (
               <Route key={path} path={path} element={element} />
             ))}
