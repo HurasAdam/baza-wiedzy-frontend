@@ -14,11 +14,46 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SidebarNav } from "./Sidebar-nav";
 import { ThemeToggle } from "@/components/Theme-toggle";
+import { useLogoutMutation } from "@/hooks/auth/use-auth";
+import queryClient from "@/config/query.client";
+
+const navItems = [
+  {
+    title: "Start",
+    href: "/dashboard",
+    icon: LayoutDashboard,
+  },
+  {
+    title: "Artykuły",
+    href: "/articles",
+    icon: Users,
+  },
+  {
+    title: "Rejestr tematów",
+    href: "/register-topic",
+    icon: ListCheck,
+  },
+  {
+    title: "Szkoły projektowe",
+    href: `/members`,
+    icon: Users,
+  },
+  {
+    title: "Działy i kontakty",
+    href: `/achieved`,
+    icon: CheckCircle2,
+  },
+  {
+    title: "Ulubione",
+    href: "/settings",
+    icon: Settings,
+  },
+];
 
 export const Sidebar = ({
   currentWorkspace,
@@ -27,39 +62,20 @@ export const Sidebar = ({
 }) => {
   //   const { user, logout } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const navigate = useNavigate();
+  const { mutate, isPending } = useLogoutMutation();
 
-  const navItems = [
-    {
-      title: "Start",
-      href: "/dashboard",
-      icon: LayoutDashboard,
-    },
-    {
-      title: "Artykuły",
-      href: "/articles",
-      icon: Users,
-    },
-    {
-      title: "Rejestr tematów",
-      href: "/register-topic",
-      icon: ListCheck,
-    },
-    {
-      title: "Szkoły projektowe",
-      href: `/members`,
-      icon: Users,
-    },
-    {
-      title: "Działy i kontakty",
-      href: `/achieved`,
-      icon: CheckCircle2,
-    },
-    {
-      title: "Ulubione",
-      href: "/settings",
-      icon: Settings,
-    },
-  ];
+  const onLogout = () => {
+    mutate(undefined, {
+      onSuccess: () => {
+        queryClient.clear();
+        navigate("/auth/login", { replace: true });
+      },
+      onError: (err) => {
+        // optionalnego obsłużenia błędu
+      },
+    });
+  };
 
   return (
     <div
@@ -112,7 +128,7 @@ export const Sidebar = ({
         <Button
           variant={"ghost"}
           size={isCollapsed ? "icon" : "default"}
-          onClick={() => {}}
+          onClick={onLogout}
         >
           <LogOut className={cn("size-4", isCollapsed && "mr-2")} />
           <span className="hidden md:block">Logout</span>

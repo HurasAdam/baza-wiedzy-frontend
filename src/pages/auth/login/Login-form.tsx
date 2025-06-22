@@ -1,3 +1,4 @@
+import { Loader } from "@/components/Loader";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,16 +19,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { loginSchema } from "@/validation/login.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
 
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 
 interface LoginFormProps {
   onSubmit: () => Promise<void>;
+  isLoading: boolean;
 }
 
 export type LoginFormData = z.infer<typeof loginSchema>;
-const LoginForm = ({ onSubmit }: LoginFormProps) => {
+const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -95,7 +98,14 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
               />
 
               <Button type="submit" className="w-full cursor-pointer">
-                Login
+                {isLoading ? (
+                  <span className="flex items-center gap-2">
+                    Logowanie
+                    <Loader2 className="animate-spin" />
+                  </span>
+                ) : (
+                  "Zaloguj"
+                )}
               </Button>
             </form>
           </Form>
