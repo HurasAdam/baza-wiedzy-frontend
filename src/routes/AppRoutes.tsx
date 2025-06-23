@@ -3,10 +3,13 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthRoute } from "./auth.route";
 import { protectedRoutePaths } from "./routes";
 
-import ProtectedRoute from "./protected.route";
 import AppLayout from "@/layouts/app/app.layout";
 import BaseLayout from "@/layouts/base/base.layout";
 import { PAGES } from "@/pages";
+import AdminLayout from "../layouts/admin/admin.layout";
+import AdminDashboard from "../pages/admin-panel/admin-dashboard";
+import AdminProtectedRoute from "./admin.protected.route";
+import ProtectedRoute from "./protected.route";
 
 export function AppRoutes() {
   return (
@@ -34,6 +37,14 @@ export function AppRoutes() {
             ))}
             {/* Tutaj 404 dla zalogowanych na nieznane ścieżki */}
             <Route path="*" element={<PAGES.NotFoundPage />} />
+          </Route>
+        </Route>
+
+        {/* Ochrona admin panelu */}
+        <Route element={<AdminProtectedRoute />}>
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<Navigate to="dashboard" replace />} />
+            <Route path="dashboard" element={<AdminDashboard />} />
           </Route>
         </Route>
       </Routes>
