@@ -42,9 +42,10 @@ export function Dropdown({
         {/* <DropdownMenuLabel></DropdownMenuLabel> */}
 
         <DropdownMenuGroup>
-          {options.map(({ icon, label, actionHandler }) => {
+          {options.map(({ icon, label, actionHandler }, index) => {
             return (
               <DropdownMenuItem
+                key={index} // <- tutaj albo lepiej unikalny klucz z label
                 className="cursor-pointer"
                 onClick={() => actionHandler()}
               >

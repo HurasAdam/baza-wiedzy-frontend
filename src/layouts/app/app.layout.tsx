@@ -1,9 +1,9 @@
+import { SettingsModal } from "@/components/settings/settings-modal";
+import { CreateWorkspaceModal } from "@/components/workspace/CreateWorkspaceModal";
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./components/Header";
 import { Sidebar } from "./components/Sidebar";
-import { SettingsModal } from "@/components/settings/settings-modal";
-import { useState } from "react";
-import { CreateWorkspaceModal } from "@/components/workspace/CreateWorkspaceModal";
 
 const AppLayout = () => {
   const [isCreatingWorkspace, setIsCreatingWorkspace] = useState(false);
@@ -16,7 +16,7 @@ const AppLayout = () => {
       <div className="flex flex-1 flex-col h-full">
         <Header
           onCreateWorkspace={() => setIsCreatingWorkspace(true)}
-          setIsSettingsModalOpen={setIsSettingsModalOpen}
+          onOpenSettingsModal={() => setIsSettingsModalOpen(true)}
         />
 
         <main className="flex-1 overflow-y-auto h-full w-full bg-background">

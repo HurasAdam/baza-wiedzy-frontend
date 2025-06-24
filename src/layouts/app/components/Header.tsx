@@ -9,7 +9,8 @@ import {
   User,
 } from "lucide-react";
 
-import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu";
+import { Dropdown } from "@/components/Dropdown";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -19,27 +20,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useAuthQuery, useLogoutMutation } from "@/hooks/auth/use-auth";
 import { Separator } from "@/components/ui/separator";
-import { Dropdown } from "@/components/Dropdown";
-import { getAvatarFallbackText } from "@/utils/avatar";
 import queryClient from "@/config/query.client";
+import { useAuthQuery, useLogoutMutation } from "@/hooks/auth/use-auth";
+import { getAvatarFallbackText } from "@/utils/avatar";
+import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 interface HeaderProps {
-  onWorkspaceSelected: (workspace: any) => void;
-  selectedWorkspace: {};
   onCreateWorkspace: () => void;
+  onOpenSettingsModal: () => void;
 }
 
 const workspaces = [];
-const Header = ({
-  onWorkspaceSelected,
-  setIsSettingsModalOpen,
-  onCreateWorkspace,
-}: HeaderProps) => {
+const Header = ({ onOpenSettingsModal, onCreateWorkspace }: HeaderProps) => {
   const { data: user } = useAuthQuery();
 
   const initials = getAvatarFallbackText(user?.name);
@@ -55,7 +50,7 @@ const Header = ({
         toast.success("Zostałeś pomyślnie wylogowany");
       },
       onError: (err) => {
-        // optionalnego obsłużenia błędu
+        toast.error("Wystąpił błąd. Spróbuj ponownie");
       },
     });
   };
@@ -93,12 +88,12 @@ const Header = ({
     {
       label: "Panel Admina",
       icon: <User />,
-      actionHandler: () => {},
+      actionHandler: () => navigate("/admin"),
     },
     {
       label: "Ustawienia",
       icon: <Settings />,
-      actionHandler: () => setIsSettingsModalOpen(true),
+      actionHandler: () => onOpenSettingsModal(),
     },
     { label: "Wyloguj się", icon: <LogOut />, actionHandler: () => onLogout() },
   ];
