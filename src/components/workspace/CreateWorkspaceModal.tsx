@@ -55,8 +55,6 @@ export const CreateWorkspaceModal = ({
     },
   });
 
-  console.log("CZY OTWARTY", isCreatingWorkspace);
-
   const onSubmit = (data: WorkspaceForm) => {
     // mutate(data, {
     //   onSuccess: (data: any) => {

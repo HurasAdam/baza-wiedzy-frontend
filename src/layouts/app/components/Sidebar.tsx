@@ -16,13 +16,13 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-import { Link, useNavigate } from "react-router-dom";
+import { ThemeToggle } from "@/components/Theme-toggle";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { SidebarNav } from "./Sidebar-nav";
-import { ThemeToggle } from "@/components/Theme-toggle";
-import { useLogoutMutation } from "@/hooks/auth/use-auth";
 import queryClient from "@/config/query.client";
+import { useLogoutMutation } from "@/hooks/auth/use-auth";
+import { Link, useNavigate } from "react-router-dom";
+import { SidebarNav } from "./Sidebar-nav";
 
 const navItems = [
   {
@@ -57,7 +57,7 @@ const navItems = [
   },
   {
     title: "Złote myśli",
-    href: "/settings",
+    href: "/memes",
     icon: Smile,
   },
 ];
@@ -65,7 +65,7 @@ const navItems = [
 export const Sidebar = ({
   currentWorkspace,
 }: {
-  currentWorkspace: Workspace | null;
+  currentWorkspace?: Workspace | null;
 }) => {
   //   const { user, logout } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
