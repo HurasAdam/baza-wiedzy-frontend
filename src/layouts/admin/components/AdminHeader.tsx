@@ -1,8 +1,6 @@
 // import { useAuth } from "@/provider/auth-context";
 
 import {
-  Bell,
-  ChevronDown,
   LogOut,
   LucideCircleFadingPlus,
   LucidePhone,
@@ -11,7 +9,6 @@ import {
   User,
 } from "lucide-react";
 
-import { Dropdown } from "@/components/Dropdown";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -36,7 +33,11 @@ interface HeaderProps {
 }
 
 const workspaces = [];
-const Header = ({ onOpenSettingsModal, onCreateWorkspace }: HeaderProps) => {
+
+const AdminHeader = ({
+  onOpenSettingsModal,
+  onCreateWorkspace,
+}: HeaderProps) => {
   const { data: user } = useAuthQuery();
 
   const initials = getAvatarFallbackText(user?.name);
@@ -143,34 +144,18 @@ const Header = ({ onOpenSettingsModal, onCreateWorkspace }: HeaderProps) => {
           <Button className="cursor-pointer" variant="ghost" size="icon">
             <LucidePhone />
           </Button>
-          <Button className="cursor-pointer" variant="ghost" size="icon">
-            <Bell />
+          <Button
+            onClick={onOpenSettingsModal}
+            className="cursor-pointer"
+            variant="ghost"
+            size="icon"
+          >
+            <Settings />
           </Button>
-
-          <Dropdown
-            position={{
-              align: "end",
-              side: "bottom",
-              sideOffset: 7,
-              alignOffset: 0,
-            }}
-            options={profileMenuOptions}
-            triggerBtn={
-              <div className="rounded-full flex items-center gap-0.5 cursor-pointer bg-muted/90 p-1 hover:bg-muted">
-                <Avatar className="size-6 bg-primary">
-                  <AvatarImage src={user} alt={user?.name} />
-                  <AvatarFallback className="text-base font-sembibold bg-primary text-primary-foreground">
-                    {initials}
-                  </AvatarFallback>
-                </Avatar>
-                <ChevronDown className="chevron-icon h-4 w-4" />
-              </div>
-            }
-          />
         </div>
       </div>
     </div>
   );
 };
 
-export default Header;
+export default AdminHeader;

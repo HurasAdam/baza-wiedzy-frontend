@@ -1,6 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Crown, LayoutDashboard, LogOut, Settings, Users } from "lucide-react";
+import {
+  Crown,
+  LayoutDashboard,
+  LucideArrowBigLeft,
+  Settings,
+  Users,
+} from "lucide-react";
 import { useLocation, useNavigate } from "react-router";
 
 import {
@@ -85,11 +91,12 @@ export const AdminSidebar = ({ isCollapsed }: SidebarProps) => {
       {/* -------- FOOTER -------- */}
       <div className="border-t pt-4 mt-6">
         <Button
+          onClick={() => navigate("/dashboard")}
           variant="ghost"
-          className="w-full justify-start text-destructive hover:bg-destructive/10"
+          className="cursor-pointer w-full justify-start text-primary/80 hover:bg-primary/15"
         >
-          <LogOut className="w-5 h-5 mr-0 md:mr-2" />
-          {!isCollapsed && <span>Wyloguj się</span>}
+          <LucideArrowBigLeft className="w-5 h-5 mr-0 md:mr-2" />
+          {!isCollapsed && <span>Powrót do BW</span>}
         </Button>
       </div>
     </aside>
