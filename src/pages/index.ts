@@ -1,9 +1,10 @@
+import { ArticlesPage } from "./articles/ArticlesPage";
 import { ForgotPasswordPage } from "./auth/forgot-password/ForgotPasswordPage";
 import { LoginPage } from "./auth/login/LoginPage";
 import { DashboardPage } from "./dashboard/DashboardPage";
-import { ArticlesPage } from "./articles/ArticlesPage";
-import { TopicRegisterPage } from "./TopicRegister/TopicRegisterPage";
+import { JstProjectsPage } from "./jst-projects/JstProjectsPage";
 import { NotFoundPage } from "./notFound/NotFoungPage";
+import { TopicRegisterPage } from "./TopicRegister/TopicRegisterPage";
 
 export const PAGES = {
   LoginPage,
@@ -12,4 +13,5 @@ export const PAGES = {
   ArticlesPage,
   TopicRegisterPage,
   NotFoundPage,
+  JstProjectsPage,
 };

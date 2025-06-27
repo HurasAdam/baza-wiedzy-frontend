@@ -42,7 +42,7 @@ const navItems = [
   },
   {
     title: "Szkoły projektowe",
-    href: `/members`,
+    href: `/jst-projects`,
     icon: School,
   },
   {
