@@ -143,7 +143,7 @@ const Header = ({ onOpenSettingsModal, onCreateWorkspace }: HeaderProps) => {
           <Button className="cursor-pointer" variant="ghost" size="icon">
             <LucidePhone />
           </Button>
-          <Button className="cursor-pointer" variant="ghost" size="icon">
+          <Button className="cursor-pointer " variant="ghost" size="icon">
             <Bell />
           </Button>
 
@@ -156,8 +156,8 @@ const Header = ({ onOpenSettingsModal, onCreateWorkspace }: HeaderProps) => {
             }}
             options={profileMenuOptions}
             triggerBtn={
-              <div className="rounded-full flex items-center gap-0.5 cursor-pointer bg-muted/90 p-1 hover:bg-muted">
-                <Avatar className="size-6 bg-primary">
+              <div className="rounded-full flex items-center gap-0.5 cursor-pointer bg-muted/90 py-1 px-1.5 hover:bg-muted ml-0.5">
+                <Avatar className="size-6.5 bg-primary">
                   <AvatarImage src={user} alt={user?.name} />
                   <AvatarFallback className="text-base font-sembibold bg-primary text-primary-foreground">
                     {initials}

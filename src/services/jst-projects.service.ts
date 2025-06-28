@@ -1,9 +1,10 @@
 import api from "@/config/api.client";
+import type { IJstProject } from "../types";
 
 const BASE_URL = "/projects";
 
-const find = (params: URLSearchParams) => {
-  return api.get(BASE_URL, { params });
+const find = (): Promise<IJstProject[]> => {
+  return api.get(BASE_URL);
 };
 
 export const jstProjectsService = {
