@@ -3,4 +3,6 @@ export const PROTECTED_ROUTES = {
   ARTICLES: "/articles",
   REGISTER_TOPIC: "/register-topic",
   JST_PROJECTS: "/jst-projects",
+  STATISTICS: "/statistics",
+  MY_ENTRIES: "my-entries",
 };

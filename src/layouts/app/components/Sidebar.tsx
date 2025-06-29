@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import type { Workspace } from "@/types";
 import {
   BookUser,
+  ChartColumnDecreasing,
   ChevronsLeft,
   ChevronsRight,
   Layers,
@@ -10,9 +11,11 @@ import {
   ListCheck,
   LogOut,
   Newspaper,
+  RectangleEllipsis,
   School,
   Smile,
   Star,
+  UserRoundPen,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -51,9 +54,25 @@ const navItems = [
     icon: BookUser,
   },
   {
+    title: "Moje wpisy",
+    href: `/my-entries`,
+    icon: UserRoundPen,
+  },
+  {
+    title: "Statystyki",
+    href: `/statistics`,
+    icon: ChartColumnDecreasing,
+  },
+
+  {
     title: "Ulubione",
     href: "/settings",
     icon: Star,
+  },
+  {
+    title: "do zweryfikowania",
+    href: "/articles-pending",
+    icon: RectangleEllipsis,
   },
   {
     title: "Złote myśli",

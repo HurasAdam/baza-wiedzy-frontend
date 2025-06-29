@@ -9,4 +9,6 @@ export const protectedRoutePaths = [
     path: PROTECTED_ROUTES.REGISTER_TOPIC,
     element: <PAGES.TopicRegisterPage />,
   },
+  { path: PROTECTED_ROUTES.STATISTICS, element: <PAGES.StatisticsPage /> },
+  { path: PROTECTED_ROUTES.MY_ENTRIES, element: <PAGES.MyEntriesPage /> },
 ];
