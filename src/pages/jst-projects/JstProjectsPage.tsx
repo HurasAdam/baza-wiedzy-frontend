@@ -1,5 +1,8 @@
-import { ChevronsUp, Filter, Mail, MapPin, School } from "lucide-react";
+import { ChevronsUp, Filter, Mail, MapPin, Plus, School } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Dropdown } from "../../components/Dropdown";
+import { JstProjectModal } from "../../components/jst-project/jst-project-modal";
+import { JstSchoolModal } from "../../components/jst-school/jst-school-modal";
 import EmptyState from "../../components/shared/EmptyState";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
@@ -27,6 +30,12 @@ const placeholderMap: Record<FilterField, string> = {
 };
 
 export const JstProjectsPage = () => {
+  const [isCreatingJstSchool, setIsCreatingJstSchool] =
+    useState<boolean>(false);
+
+  const [isCreatingJstProject, setIsCreatingJstProject] =
+    useState<boolean>(false);
+
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
     null
   );
@@ -43,7 +52,13 @@ export const JstProjectsPage = () => {
     }
   }, [projects, selectedProjectId]);
 
-  console.log("SCHOOLS", schools);
+  const onCreateJstSchool = (): void => {
+    setIsCreatingJstSchool(true);
+  };
+
+  const onCreateJstProject = (): void => {
+    setIsCreatingJstProject(true);
+  };
 
   const filterOptions: {
     value: FilterField;
@@ -67,15 +82,47 @@ export const JstProjectsPage = () => {
     },
   ];
 
+  const dropdownOptions = [
+    {
+      label: "Dodaj projekt",
+      icon: <Plus className="w-4 h-4" />,
+      actionHandler: () => {
+        onCreateJstProject();
+      },
+    },
+    {
+      label: "Dodaj szkołę",
+      icon: <Plus className="w-4 h-4" />,
+      actionHandler: () => {
+        onCreateJstSchool();
+      },
+    },
+  ];
+
+  const triggerBtn = (
+    <Button
+      variant="default"
+      className="flex items-center gap-1 cursor-pointer"
+    >
+      Dodaj <Plus className="w-4 h-4" />
+    </Button>
+  );
+
   return (
     <div className="flex w-full ">
       <div className="w-full">
-        <h1 className="text-xl font-semibold mb-6 text-foreground flex items-center gap-1.5">
-          <School className="w-6 h-6" /> Szkoły projektowe
-        </h1>
+        <div className="flex justify-between">
+          <h1 className="text-xl font-semibold mb-6 text-foreground flex items-center gap-1.5">
+            <School className="w-6 h-6" /> Szkoły projektowe
+          </h1>
 
-        {/* Tabs */}
-
+          <Dropdown
+            triggerBtn={triggerBtn}
+            options={dropdownOptions}
+            position={{ align: "end" }}
+          />
+          {/* Tabs */}
+        </div>
         <div className="flex flex-wrap gap-2 border-b mb-8">
           {isLoading ? (
             <ProjectTabsSkeleton tabsCount={4} />
@@ -159,6 +206,17 @@ export const JstProjectsPage = () => {
           )}
         </div>
       </div>
+
+      <JstSchoolModal
+        projects={projects}
+        isCreatingJstSchool={isCreatingJstSchool}
+        setIsCreatingJstSchool={setIsCreatingJstSchool}
+      />
+
+      <JstProjectModal
+        isCreatingJstProject={isCreatingJstProject}
+        setIsCreatingJstProject={setIsCreatingJstProject}
+      />
     </div>
   );
 };
