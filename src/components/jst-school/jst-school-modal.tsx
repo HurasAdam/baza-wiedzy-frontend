@@ -19,10 +19,11 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 
-import { useState } from "react";
+import type { AxiosError } from "axios";
 import { toast } from "sonner";
 import queryClient from "../../config/query.client";
 import { useCreateJstSchoolMutation } from "../../hooks/jst-schools/use-jst-schools";
+import type { IJstProject } from "../../types";
 import { jstSchoolSchema } from "../../validation/jst-school.schema";
 import {
   Select,
@@ -33,7 +34,7 @@ import {
 } from "../ui/select";
 
 interface CreateWorkspaceProps {
-  projects: [];
+  projects: IJstProject[];
   isCreatingJstSchool: boolean;
   setIsCreatingJstSchool: (isCreatingWorkspace: boolean) => void;
 }
@@ -45,8 +46,7 @@ export const JstSchoolModal = ({
   isCreatingJstSchool,
   setIsCreatingJstSchool,
 }: CreateWorkspaceProps) => {
-  const [selectedProjectId, setSelectedProjectId] = useState<string>("");
-
+  // --- use form ----//
   const form = useForm<JstSchoolForm>({
     resolver: zodResolver(jstSchoolSchema),
     defaultValues: {
@@ -58,24 +58,12 @@ export const JstSchoolModal = ({
       jstProjectId: "",
     },
   });
-  console.log("PROEJKTY", projects);
+
   const { mutate } = useCreateJstSchoolMutation();
 
+  // --- form handler --- //
   const onSubmit = (data: JstSchoolForm) => {
     const { jstProjectId, ...restData } = data;
-    // mutate(data, {
-    //   onSuccess: (data: any) => {
-    //     form.reset();
-    //     setIsCreatingWorkspace(false);
-    //     toast.success("Workspace created successfully");
-    //     navigate(`/workspaces/${data._id}`);
-    //   },
-    //   onError: (error: any) => {
-    //     const errorMessage = error.response.data.message;
-    //     toast.error(errorMessage);
-    //     console.log(error);
-    //   },
-    // });
 
     mutate(
       { projectId: jstProjectId, data: restData },
@@ -87,7 +75,8 @@ export const JstSchoolModal = ({
           queryClient.invalidateQueries({ queryKey: ["jst-schools"] });
         },
         onError: (error) => {
-          const { status } = error;
+          const axiosError = error as AxiosError<{ message?: string }>;
+          const status = axiosError.response?.status;
 
           if (status === 409) {
             toast.error(
@@ -97,7 +86,7 @@ export const JstSchoolModal = ({
                   alignItems: "center",
                   gap: "12px",
                   fontFamily: "Inter, sans-serif",
-                  color: "#991b1b", // ciemniejszy czerwony
+                  color: "#991b1b",
                   fontSize: "14px",
                 }}
               >
@@ -137,7 +126,7 @@ export const JstSchoolModal = ({
               <FormField
                 control={form.control}
                 name="jstProjectId"
-                render={({ field, fieldState }) => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel>Projekt</FormLabel>
                     <FormControl>
@@ -161,7 +150,7 @@ export const JstSchoolModal = ({
                   </FormItem>
                 )}
               />
-
+              {/* --------- name ------- */}
               <FormField
                 control={form.control}
                 name="name"
@@ -178,7 +167,7 @@ export const JstSchoolModal = ({
                   </FormItem>
                 )}
               />
-
+              {/* --------- szId ------- */}
               <FormField
                 control={form.control}
                 name="szId"
@@ -192,6 +181,8 @@ export const JstSchoolModal = ({
                   </FormItem>
                 )}
               />
+
+              {/* --------- adres ------- */}
               <FormField
                 control={form.control}
                 name="adres"
@@ -208,7 +199,7 @@ export const JstSchoolModal = ({
                   </FormItem>
                 )}
               />
-
+              {/* --------- email ------- */}
               <FormField
                 control={form.control}
                 name="email"
@@ -228,7 +219,7 @@ export const JstSchoolModal = ({
                 )}
               />
 
-              {/* --------------------------------------------------- */}
+              {/* --------- phone ------- */}
               <FormField
                 control={form.control}
                 name="phone"

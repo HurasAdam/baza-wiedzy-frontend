@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import type { JstSchoolForm } from "../../components/jst-school/jst-school-modal";
+
 import { jstSchoolsService } from "../../services/jst-schools.service";
+import type { JstSchoolCreateData } from "../../types";
 
 export const useCreateJstSchoolMutation = () => {
   return useMutation({
@@ -9,7 +10,7 @@ export const useCreateJstSchoolMutation = () => {
       data,
     }: {
       projectId: string;
-      data: JstSchoolForm;
+      data: JstSchoolCreateData;
     }) => jstSchoolsService.create(projectId, data),
   });
 };

@@ -20,6 +20,7 @@ import {
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 
+import type { AxiosError } from "axios";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import queryClient from "../../config/query.client";
@@ -58,7 +59,8 @@ export const JstProjectModal = ({
         queryClient.invalidateQueries({ queryKey: ["jst-projects"] });
       },
       onError: (error) => {
-        const { status } = error;
+        const axiosError = error as AxiosError<{ message?: string }>;
+        const status = axiosError.response?.status;
         if (status === 409) {
           toast.error(
             <div

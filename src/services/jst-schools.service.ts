@@ -1,10 +1,10 @@
 import api from "@/config/api.client";
-import type { JstSchoolForm } from "../components/jst-school/jst-school-modal";
-import type { IJstSchool } from "../types";
+
+import type { IJstSchool, JstSchoolCreateData } from "../types";
 
 const baseUrl = "/projects";
 
-const create = async (id: string, formData: JstSchoolForm) => {
+const create = async (id: string, formData: JstSchoolCreateData) => {
   return api.post(`${baseUrl}/${id}/schools`, formData);
 };
 
