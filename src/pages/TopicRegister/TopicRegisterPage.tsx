@@ -1,7 +1,10 @@
 import { ClipboardList, Plus } from "lucide-react";
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Dropdown } from "../../components/Dropdown";
+import { ProductModal } from "../../components/product/product-modal";
 import EmptyState from "../../components/shared/EmptyState";
+import { TopicModal } from "../../components/topic/topic-modal";
 import { Button } from "../../components/ui/button";
 import { useFindProductsQuery } from "../../hooks/products/use-products";
 import { useFindTopicsQuery } from "../../hooks/topics/use-topics";
@@ -10,6 +13,9 @@ import RegisterTopicSkeletonCards from "./components/register-topic-skeleton-car
 import { TopicFiltersPanel } from "./components/topic-filters-panel";
 
 export const TopicRegisterPage = () => {
+  const [isCreatingProduct, setIsCreatingProduct] = useState<boolean>(false);
+  const [isCreatingTopic, setIsCreatingTopic] = useState<boolean>(false);
+
   const [params, setParams] = useSearchParams();
   const product = params.get("product") || "";
   const title = params.get("title") || "";
@@ -19,21 +25,29 @@ export const TopicRegisterPage = () => {
     title,
     product,
   });
-  const { data: products } = useFindProductsQuery();
+  const { data: products = [] } = useFindProductsQuery();
+
+  const onCreateProduct = (): void => {
+    setIsCreatingProduct(true);
+  };
+
+  const onCreateTopic = (): void => {
+    setIsCreatingTopic(true);
+  };
 
   const dropdownOptions = [
     {
       label: "Dodaj produkt",
       icon: <Plus className="w-4 h-4" />,
       actionHandler: () => {
-        // onCreateJstProject();
+        onCreateProduct();
       },
     },
     {
       label: "Dodaj temat",
       icon: <Plus className="w-4 h-4" />,
       actionHandler: () => {
-        // onCreateJstSchool();
+        onCreateTopic();
       },
     },
   ];
@@ -119,6 +133,17 @@ export const TopicRegisterPage = () => {
           />
         </div>
       </div>
+
+      <ProductModal
+        isCreatingProduct={isCreatingProduct}
+        setIsCreatingProduct={setIsCreatingProduct}
+      />
+
+      <TopicModal
+        products={products}
+        isCreatingTopic={isCreatingTopic}
+        setIsCreatingTopic={setIsCreatingTopic}
+      />
     </div>
   );
 };
