@@ -75,8 +75,7 @@ export const JstSchoolModal = ({
           queryClient.invalidateQueries({ queryKey: ["jst-schools"] });
         },
         onError: (error) => {
-          const axiosError = error as AxiosError<{ message?: string }>;
-          const status = axiosError.response?.status;
+          const { status } = error as AxiosError;
 
           if (status === 409) {
             toast.error(
@@ -208,7 +207,6 @@ export const JstSchoolModal = ({
                     <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input
-                        className="bg-input"
                         type="email"
                         {...field}
                         placeholder="Wprowadź oficjalny adres email szkoły"
@@ -228,7 +226,6 @@ export const JstSchoolModal = ({
                     <FormLabel>Telefon kontaktowy</FormLabel>
                     <FormControl>
                       <Input
-                        className="bg-input"
                         type="text"
                         {...field}
                         placeholder="Wprowadź oficjalny telefon kontaktowy"

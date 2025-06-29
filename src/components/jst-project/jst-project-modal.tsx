@@ -59,8 +59,7 @@ export const JstProjectModal = ({
         queryClient.invalidateQueries({ queryKey: ["jst-projects"] });
       },
       onError: (error) => {
-        const axiosError = error as AxiosError<{ message?: string }>;
-        const status = axiosError.response?.status;
+        const { status } = error as AxiosError;
         if (status === 409) {
           toast.error(
             <div
