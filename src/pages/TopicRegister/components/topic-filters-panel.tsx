@@ -27,7 +27,7 @@ export const TopicFiltersPanel: React.FC<TopicFiltersPanelProps> = ({
 }) => {
   return (
     <aside
-      className="w-80 bg-card rounded-md shadow-md p-6 sticky top-6 h-fit flex flex-col gap-4 border border-border/60"
+      className="w-80 bg-muted/40 rounded-md shadow-md p-6 sticky top-6 h-fit flex flex-col gap-4 border border-border/60   max-h-[calc(100vh-155px)]"
       role="complementary"
       aria-label="Panel filtrów"
     >
@@ -72,7 +72,10 @@ export const TopicFiltersPanel: React.FC<TopicFiltersPanelProps> = ({
           flex flex-col gap-1
           border-t border-border/30 pt-4
           max-h-[calc(100vh-200px)]
+          scrollbar-custom
           overflow-y-auto
+          pr-2
+          
         "
       >
         <ul className="flex flex-col gap-1">
