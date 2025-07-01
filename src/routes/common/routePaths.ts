@@ -5,4 +5,5 @@ export const PROTECTED_ROUTES = {
   JST_PROJECTS: "/jst-projects",
   STATISTICS: "/statistics",
   MY_ENTRIES: "my-entries",
+  FUNNY_MESSAGES: "funny-messages",
 };

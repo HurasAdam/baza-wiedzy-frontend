@@ -76,7 +76,7 @@ const navItems = [
   },
   {
     title: "Złote myśli",
-    href: "/memes",
+    href: "/funny-messages",
     icon: Smile,
   },
 ];
