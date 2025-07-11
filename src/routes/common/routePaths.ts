@@ -6,4 +6,5 @@ export const PROTECTED_ROUTES = {
   STATISTICS: "/statistics",
   MY_ENTRIES: "my-entries",
   FUNNY_MESSAGES: "funny-messages",
+  CREATE_ARTICLE: "articles/new",
 };

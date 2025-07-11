@@ -137,7 +137,12 @@ const Header = ({ onOpenSettingsModal, onCreateWorkspace }: HeaderProps) => {
         </DropdownMenu>
 
         <div className="flex items-center gap-2">
-          <Button className="cursor-pointer" variant="ghost" size="icon">
+          <Button
+            onClick={() => navigate("articles/new")}
+            className="cursor-pointer"
+            variant="ghost"
+            size="icon"
+          >
             <LucideCircleFadingPlus />
           </Button>
           <Button className="cursor-pointer" variant="ghost" size="icon">
