@@ -7,13 +7,38 @@ export interface Article {
   title: string;
   tags: Tag[];
   isVerified: boolean;
+  updatedAt: string;
   createdBy: {
     _id: string;
     name: string;
     surname: string;
   };
   clientDescription?: string;
+  verifiedBy?: {
+    _id: string;
+    name: string;
+    surname: string;
+    isActive: boolean;
+  };
   employeeDescription?: string;
+  viewsCounter: number;
+  isTrashed: boolean;
+  product: IProduct;
+  category: ProductCategory;
+  createdAt: string;
+  isFavourite: boolean;
+}
+
+export interface ArticleListItem {
+  _id: string;
+  title: string;
+  tags: Tag[];
+  isVerified: boolean;
+  createdBy: {
+    _id: string;
+    name: string;
+    surname: string;
+  };
   viewsCounter: number;
   isTrashed: boolean;
   product: IProduct;

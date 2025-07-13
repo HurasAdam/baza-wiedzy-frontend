@@ -9,12 +9,31 @@ export const useCreateArticleMutation = () => {
   });
 };
 
+export const useArticleToggleFavouriteMutation = () => {
+  return useMutation<AxiosResponse, AxiosError, ArticleCreateDto>({
+    mutationFn: (id) => articlesService.markArticleAsFavourite({ id }),
+  });
+};
+
 export const useFindArticlesQuery = () => {
   return useQuery({
     queryKey: ["articles"],
     queryFn: () => {
       return articlesService.getAllArticles();
     },
+    refetchOnWindowFocus: false,
+    staleTime: 0,
+    retry: false,
+  });
+};
+
+export const useFindArticleQuery = (articleId: string) => {
+  return useQuery({
+    queryKey: ["article", articleId],
+    queryFn: () => {
+      return articlesService.getArticle({ id: articleId });
+    },
+
     refetchOnWindowFocus: false,
     staleTime: 0,
     retry: false,

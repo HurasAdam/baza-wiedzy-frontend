@@ -1,6 +1,7 @@
 import api from "@/config/api.client";
 import { buildUrl } from "@/utils/build-url";
 import type { AxiosResponse } from "axios";
+import type { Article } from "../types/article";
 import type { ArticleCreateDto } from "../validation/article.schema";
 
 const baseUrl = "/articles";
@@ -31,7 +32,7 @@ export const createArticle = async (
   return await api.post(baseUrl, formData);
 };
 
-export const getArticle = ({ id }) => {
+export const getArticle = ({ id }: { id: string }): Promise<Article> => {
   return api.get(buildUrl(baseUrl, id));
 };
 
