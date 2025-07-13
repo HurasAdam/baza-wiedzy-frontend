@@ -16,11 +16,11 @@ export const useArticleToggleFavouriteMutation = () => {
   });
 };
 
-export const useFindArticlesQuery = () => {
+export const useFindArticlesQuery = (params?: URLSearchParams) => {
   return useQuery({
-    queryKey: ["articles"],
+    queryKey: ["articles", params?.toString()],
     queryFn: () => {
-      return articlesService.getAllArticles();
+      return articlesService.getAllArticles(params);
     },
     refetchOnWindowFocus: false,
     staleTime: 0,
