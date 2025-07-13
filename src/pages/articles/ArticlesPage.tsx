@@ -14,11 +14,11 @@ export const ArticlesPage: React.FC = () => {
   const { data, isLoading, isError } = useFindArticlesQuery();
   const { mutate } = useArticleToggleFavouriteMutation();
 
-  const toggleFavourite = (id) => {
+  const toggleFavourite = (id: string) => {
     setPendingId(id);
     mutate(id, {
       onSuccess: (data) => {
-        queryClient.invalidateQueries(["articles"]);
+        queryClient.invalidateQueries({ queryKey: ["articles"], exact: true });
         toast.success(data?.message || "Zaktualizowano ulubione");
       },
       onSettled: () => {

@@ -46,3 +46,7 @@ export interface ArticleListItem {
   createdAt: string;
   isFavourite: boolean;
 }
+
+export type ToggleFavouriteResponse = {
+  message: string;
+};

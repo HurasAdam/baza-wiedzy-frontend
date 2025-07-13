@@ -1,7 +1,7 @@
 import api from "@/config/api.client";
 import { buildUrl } from "@/utils/build-url";
 import type { AxiosResponse } from "axios";
-import type { Article } from "../types/article";
+import type { Article, ToggleFavouriteResponse } from "../types/article";
 import type { ArticleCreateDto } from "../validation/article.schema";
 
 const baseUrl = "/articles";
@@ -36,7 +36,7 @@ export const getArticle = ({ id }: { id: string }): Promise<Article> => {
   return api.get(buildUrl(baseUrl, id));
 };
 
-export const getArticleHistory = ({ id }) => {
+export const getArticleHistory = ({ id }: { id: string }) => {
   return api.get(buildUrl(baseUrl, id, "history"));
 };
 
@@ -44,7 +44,11 @@ export const verifyArticle = ({ id, isVerified }) => {
   return api.post(buildUrl(baseUrl, id, "verify"), { isVerified });
 };
 
-export const markArticleAsFavourite = ({ id }) => {
+export const markArticleAsFavourite = ({
+  id,
+}: {
+  id: string;
+}): Promise<ToggleFavouriteResponse> => {
   return api.post(buildUrl(baseUrl, id, "markAsFavourite"));
 };
 

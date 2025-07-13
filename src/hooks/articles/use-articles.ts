@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import type { AxiosError, AxiosResponse } from "axios";
 import { articlesService } from "../../services/articles.service";
+import type { ToggleFavouriteResponse } from "../../types/article";
 import type { ArticleCreateDto } from "../../validation/article.schema";
 
 export const useCreateArticleMutation = () => {
@@ -10,7 +11,7 @@ export const useCreateArticleMutation = () => {
 };
 
 export const useArticleToggleFavouriteMutation = () => {
-  return useMutation<AxiosResponse, AxiosError, ArticleCreateDto>({
+  return useMutation<ToggleFavouriteResponse, AxiosError, string>({
     mutationFn: (id) => articlesService.markArticleAsFavourite({ id }),
   });
 };
