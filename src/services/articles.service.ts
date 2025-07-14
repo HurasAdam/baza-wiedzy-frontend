@@ -44,6 +44,22 @@ export const verifyArticle = ({ id, isVerified }) => {
   return api.post(buildUrl(baseUrl, id, "verify"), { isVerified });
 };
 
+export const aproveOne = ({ id }: { id: string }) => {
+  return api.post(buildUrl(baseUrl, id, "aprove"));
+};
+export const rejectOne = ({
+  articleId,
+  rejectionReason,
+}: {
+  articleId: string;
+  rejectionReason: string;
+}) => {
+  console.log("SERIS", articleId, rejectionReason);
+  return api.post(buildUrl(baseUrl, articleId, "reject"), {
+    rejectionReason,
+  });
+};
+
 export const markArticleAsFavourite = ({
   id,
 }: {
@@ -111,4 +127,6 @@ export const articlesService = {
   getUsersChangedArticleStats,
   getArticleHistoryItem,
   findByUser,
+  aproveOne,
+  rejectOne,
 };

@@ -16,3 +16,8 @@ export type ArticleFormData = z.infer<typeof articleSchema>;
 export type ArticleCreateDto = Omit<ArticleFormData, "tags"> & {
   tags: string[];
 };
+
+export type RejectArticleDto = {
+  articleId: string;
+  rejectionReason: string;
+};

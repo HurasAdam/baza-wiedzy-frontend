@@ -2,11 +2,26 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import type { AxiosError, AxiosResponse } from "axios";
 import { articlesService } from "../../services/articles.service";
 import type { ToggleFavouriteResponse } from "../../types/article";
-import type { ArticleCreateDto } from "../../validation/article.schema";
+import type {
+  ArticleCreateDto,
+  RejectArticleDto,
+} from "../../validation/article.schema";
 
 export const useCreateArticleMutation = () => {
   return useMutation<AxiosResponse, AxiosError, ArticleCreateDto>({
     mutationFn: (data) => articlesService.createArticle(data),
+  });
+};
+
+export const useAproveArticleMutation = () => {
+  return useMutation<AxiosResponse, AxiosError, string>({
+    mutationFn: (id) => articlesService.aproveOne({ id }),
+  });
+};
+
+export const useRejectArticleMutation = () => {
+  return useMutation<AxiosResponse, AxiosError, RejectArticleDto>({
+    mutationFn: (data) => articlesService.rejectOne(data),
   });
 };
 

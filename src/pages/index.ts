@@ -8,6 +8,7 @@ import { FunnyMessages } from "./funny-messages/FunnyMessages";
 import { JstProjectsPage } from "./jst-projects/JstProjectsPage";
 import { MyEntriesPage } from "./my-entries/MyEntriesPage";
 import { NotFoundPage } from "./notFound/NotFoungPage";
+import { PendingArticles } from "./pending-articles/PendingArticles";
 import { StatisticsPage } from "./statistics/StatisticsPage";
 import { TopicRegisterPage } from "./TopicRegister/TopicRegisterPage";
 
@@ -24,4 +25,5 @@ export const PAGES = {
   MyEntriesPage,
   FunnyMessages,
   CreateArticlePage,
+  PendingArticles,
 };
