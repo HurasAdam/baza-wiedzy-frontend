@@ -112,12 +112,13 @@ export const CreateArticlePage = () => {
   return (
     tags && (
       <ArticleForm
+        onCancel={() => navigate(-1)}
         products={formattedProducts}
         categories={formattedCategoriesBySelectedProduct}
         onProductChange={setSelectedProductId}
         tags={formattedTags}
         loadingCategories={loadingCategories}
-        onSave={onSave}
+        onCreate={onSave}
       />
     )
   );

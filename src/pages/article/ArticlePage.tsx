@@ -8,6 +8,7 @@ import {
   UserIcon,
   XCircleIcon,
 } from "lucide-react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
@@ -26,6 +27,7 @@ import {
   TabsTrigger,
 } from "../../components/ui/tabs";
 import { useFindArticleQuery } from "../../hooks/articles/use-articles";
+import { EditArticlePage } from "../edit-article/EditArticlePage";
 
 const getFileIcon = (type: string) => {
   switch (type.toLowerCase()) {
@@ -44,7 +46,12 @@ const getFileIcon = (type: string) => {
 
 export const ArticlePage = () => {
   const { id } = useParams<{ id: string }>();
+  const [activeTab, setActiveTab] = useState("main");
   const { data: article, isLoading, isError, error } = useFindArticleQuery(id);
+
+  const onEditCancel = () => {
+    setActiveTab("main");
+  };
 
   if (isLoading) {
     return (
@@ -69,81 +76,85 @@ export const ArticlePage = () => {
   }
 
   return (
-    <div className="mx-auto ">
+    <div className="mx-auto">
       <Card className="shadow-lg min-h-[calc(100vh)]">
-        <CardHeader className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
-          <div>
-            <CardTitle className="text-2xl font-semibold">
-              {article.title}
-            </CardTitle>
-            <CardDescription className="text-sm text-muted-foreground mt-2.5">
-              <span
-                className={`font-medium ${
-                  article.isVerified ? "text-emerald-600" : "text-foreground"
-                } `}
-              >
-                {article.isVerified ? (
-                  <span className="flex items-center gap-1">
-                    <CheckCircleIcon className="w-4 h-4" />
-                    Zweryfikowany
-                  </span>
-                ) : (
-                  <span className="flex items-center gap-1">
-                    <XCircleIcon className="w-4 h-4" />
-                    Oczekuje na weryfikację
-                  </span>
-                )}
-              </span>
-            </CardDescription>
-          </div>
-        </CardHeader>
-        <Tabs defaultValue="main" className="w-full ">
-          <section className="flex px-5 mb-10 flex-wrap sm:flex-nowrap justify-start sm:justify-between items-start gap-2 flex-col sm:flex-row">
-            {/* Lewa strona: badge */}
-            <div className="flex flex-wrap gap-2">
-              <Badge
-                style={{ backgroundColor: article.product.labelColor }}
-                className="text-white"
-              >
-                Produkt: {article.product.name}
-              </Badge>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          {activeTab !== "edit" && (
+            <>
+              <CardHeader className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+                <div>
+                  <CardTitle className="text-2xl font-semibold">
+                    {article.title}
+                  </CardTitle>
+                  <CardDescription className="text-sm text-muted-foreground mt-2.5">
+                    <span
+                      className={`font-medium ${
+                        article.isVerified
+                          ? "text-emerald-600"
+                          : "text-foreground"
+                      } `}
+                    >
+                      {article.isVerified ? (
+                        <span className="flex items-center gap-1">
+                          <CheckCircleIcon className="w-4 h-4" />
+                          Zweryfikowany
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-1">
+                          <XCircleIcon className="w-4 h-4" />
+                          Oczekuje na weryfikację
+                        </span>
+                      )}
+                    </span>
+                  </CardDescription>
+                </div>
+              </CardHeader>
 
-              <Badge className="bg-muted text-foreground">
-                Kategoria: {article.category.name}
-              </Badge>
+              <section className="flex px-5 mb-10 flex-wrap sm:flex-nowrap justify-start sm:justify-between items-start gap-2 flex-col sm:flex-row">
+                {/* Lewa strona: badge */}
+                <div className="flex flex-wrap gap-2">
+                  <Badge
+                    style={{ backgroundColor: article.product.labelColor }}
+                    className="text-white"
+                  >
+                    Produkt: {article.product.name}
+                  </Badge>
 
-              <Badge className="bg-secondary text-white flex items-center">
-                Wyświetleń: {article.viewsCounter}
-                <EyeIcon className="w-4 h-4 ml-1" />
-              </Badge>
-            </div>
+                  <Badge className="bg-muted text-foreground">
+                    Kategoria: {article.category.name}
+                  </Badge>
 
-            {/* Prawa strona: tagi */}
-            <div className="flex flex-wrap gap-2 sm:justify-end">
-              {article.tags.map((tag) => (
-                <Badge
-                  key={tag._id}
-                  className="bg-accent text-muted-foreground"
-                >
-                  {tag.name}
-                </Badge>
-              ))}
-            </div>
-          </section>
+                  <Badge className="bg-secondary text-white flex items-center">
+                    Wyświetleń: {article.viewsCounter}
+                    <EyeIcon className="w-4 h-4 ml-1" />
+                  </Badge>
+                </div>
 
-          <TabsList className="mb-0.5  bg-transparent">
-            <div className="mx-4 bg-muted p-1.5 rounded-lg">
-              <TabsTrigger value="main">Dane główne</TabsTrigger>
+                {/* Prawa strona: tagi */}
+                <div className="flex flex-wrap gap-2 sm:justify-end">
+                  {article.tags.map((tag) => (
+                    <Badge
+                      key={tag._id}
+                      className="bg-accent text-muted-foreground"
+                    >
+                      {tag.name}
+                    </Badge>
+                  ))}
+                </div>
+              </section>
 
-              <TabsTrigger value="attachments">Załączniki</TabsTrigger>
-              <TabsTrigger value="history">Historia zmian</TabsTrigger>
-            </div>
-          </TabsList>
+              <TabsList className="mb-0.5  bg-transparent">
+                <div className="mx-4 bg-muted p-1.5 rounded-lg">
+                  <TabsTrigger value="main">Dane główne</TabsTrigger>
+                  <TabsTrigger value="attachments">Załączniki</TabsTrigger>
+                  <TabsTrigger value="history">Historia zmian</TabsTrigger>
+                </div>
+              </TabsList>
+            </>
+          )}
 
           <TabsContent value="main" className="space-y-6">
             <CardContent className="space-y-6">
-              {/* BADGE + TAGI  */}
-
               <Separator />
 
               <section>
@@ -179,7 +190,7 @@ export const ArticlePage = () => {
                   </h3>
                   <p className="flex items-center gap-2 text-sm text-muted-foreground">
                     <UserIcon className="w-5 h-5" />
-                    {article.verifiedBy.name} {article.verifiedBy.surname}{" "}
+                    {article.verifiedBy.name} {article.verifiedBy.surname}
                     {article.verifiedBy.isActive ? (
                       <Badge className="bg-green-500 text-white ml-2">
                         Aktywny
@@ -211,7 +222,11 @@ export const ArticlePage = () => {
               </section>
 
               <div className="flex justify-end space-x-2">
-                <Button variant="outline" size="sm">
+                <Button
+                  onClick={() => setActiveTab("edit")}
+                  variant="outline"
+                  size="sm"
+                >
                   Edytuj
                 </Button>
                 <Button variant="default" size="sm">
@@ -290,6 +305,17 @@ export const ArticlePage = () => {
                   </div>
                 </div>
               ))}
+            </CardContent>
+          </TabsContent>
+
+          <TabsContent value="edit">
+            {/* Tu tylko formularz / czysty widok edycji */}
+
+            <CardContent className="space-y-6">
+              <EditArticlePage
+                onEditCancel={onEditCancel}
+                articleId={article._id}
+              />
             </CardContent>
           </TabsContent>
         </Tabs>

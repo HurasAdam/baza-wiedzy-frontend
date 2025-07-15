@@ -68,8 +68,8 @@ export const markArticleAsFavourite = ({
   return api.post(buildUrl(baseUrl, id, "markAsFavourite"));
 };
 
-export const updateArticle = ({ id, formData }) => {
-  return api.put(buildUrl(baseUrl, id), formData);
+export const updateArticle = ({ articleId, dto }) => {
+  return api.put(buildUrl(baseUrl, articleId), dto);
 };
 
 export const deleteArticle = ({ id }) => {

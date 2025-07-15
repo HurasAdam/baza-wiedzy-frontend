@@ -13,6 +13,12 @@ export const useCreateArticleMutation = () => {
   });
 };
 
+export const useUpdateArticleMutation = () => {
+  return useMutation<AxiosResponse, AxiosError, ArticleCreateDto>({
+    mutationFn: (data) => articlesService.updateArticle(data),
+  });
+};
+
 export const useAproveArticleMutation = () => {
   return useMutation<AxiosResponse, AxiosError, string>({
     mutationFn: (id) => articlesService.aproveOne({ id }),

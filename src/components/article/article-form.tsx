@@ -1,5 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CloudUpload, Loader, Paperclip } from "lucide-react";
+import {
+  ArrowLeft,
+  CloudUpload,
+  Loader,
+  Paperclip,
+  Pencil,
+  Plus,
+  Save,
+} from "lucide-react";
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { cn } from "../../lib/utils";
@@ -44,11 +52,16 @@ const dropZoneConfig = {
 };
 
 interface ArticleFormProps {
+  onCancel: () => void;
   article?: Article;
   tags: SelectOption[];
   products: SelectOption[];
   categories: SelectOption[];
-  onSave: ({ formData }: { formData: ArticleFormData }) => void;
+  onCreate?: (payload: { formData: ArticleFormData }) => void;
+  onUpdate?: (payload: {
+    articleId: string;
+    formData: ArticleFormData;
+  }) => void;
   className?: string;
   onProductChange: (productId: string) => void;
   loadingCategories: boolean;
@@ -56,11 +69,13 @@ interface ArticleFormProps {
 }
 
 const ArticleForm = ({
+  onCancel,
   article,
   tags,
   products,
   categories,
-  onSave,
+  onCreate,
+  onUpdate,
   isLoading,
   className,
   onProductChange,
@@ -69,12 +84,14 @@ const ArticleForm = ({
   const form = useForm<ArticleFormData>({
     resolver: zodResolver(articleSchema),
     defaultValues: {
-      title: "",
-      product: "",
-      category: "",
-      tags: [],
-      clientDescription: "",
-      employeeDescription: "",
+      title: article ? article?.title : "",
+      product: article ? article?.product?._id : "",
+      category: article ? article?.category?._id : "",
+      tags: article
+        ? article.tags.map((tag) => ({ label: tag.name, value: tag._id }))
+        : [],
+      clientDescription: article ? article?.clientDescription : "",
+      employeeDescription: article ? article?.employeeDescription : "",
       file: [],
     },
   });
@@ -82,8 +99,18 @@ const ArticleForm = ({
   const [files, setFiles] = useState<File[] | null>(null);
 
   const onSubmit: SubmitHandler<ArticleFormData> = (values) => {
-    onSave({ formData: values });
+    if (article) {
+      if (onUpdate) {
+        onUpdate({ articleId: article._id, formData: values });
+      }
+    } else {
+      if (onCreate) {
+        onCreate({ formData: values });
+      }
+    }
   };
+
+  const { isDirty } = form.formState;
 
   return (
     <>
@@ -93,6 +120,70 @@ const ArticleForm = ({
           className={`flex ${className} gap-10 h-full `}
         >
           <div className=" space-y-7 h-full w-[60%] ">
+            {article ? (
+              <span className="text-foreground font-medium flex items-center gap-2 ">
+                <Button
+                  className="disabled:opacity-100 disabled:cursor-default"
+                  disabled={true}
+                  variant="outline"
+                  size="icon"
+                >
+                  <Pencil />
+                </Button>
+                Edytuj artykuł{" "}
+                <span className="text-muted-foreground text-sm ml-1">
+                  {article.title}
+                </span>
+              </span>
+            ) : (
+              <span className="text-foreground font-medium flex items-center gap-2 ">
+                <Button
+                  className="disabled:opacity-100 disabled:cursor-default"
+                  disabled={true}
+                  variant="outline"
+                  size="icon"
+                >
+                  <Plus />
+                </Button>
+                Dodaj artykuł{" "}
+                <span className="text-muted-foreground text-sm ml-1"></span>
+              </span>
+            )}
+            <div className="flex justify-between mt-2.5">
+              <Button
+                onClick={onCancel}
+                type="button"
+                className="cursor-pointer"
+                variant="outline"
+              >
+                <ArrowLeft />
+                Wróć
+              </Button>
+              {article && (
+                <Button
+                  disabled={article && !isDirty}
+                  type="submit"
+                  variant="outline"
+                  className="cursor-pointer"
+                >
+                  {isLoading && <Loader className="animate-spin " />}
+                  <Save />
+                  Zapisz
+                </Button>
+              )}
+              {!article && (
+                <Button
+                  disabled={article && !isDirty}
+                  type="submit"
+                  variant="outline"
+                  className="cursor-pointer"
+                >
+                  {isLoading && <Loader className="animate-spin " />}
+                  <Save />
+                  Utwórz
+                </Button>
+              )}
+            </div>
             <FormField
               control={form.control}
               name="title"
@@ -116,7 +207,6 @@ const ArticleForm = ({
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="employeeDescription"
@@ -144,7 +234,6 @@ const ArticleForm = ({
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="clientDescription"
@@ -173,23 +262,13 @@ const ArticleForm = ({
                 </FormItem>
               )}
             />
-
-            <div className="flex justify-between">
+            <div className="flex justify-between ">
               <p className="text-xs text-muted-foreground italic">
                 Pola oznaczone <span className="text-primary">*</span> są
                 wymagane.
               </p>
-              <Button
-                disabled={article && !isDirty}
-                type="submit"
-                className="bg-primary/70 hover:bg-primary/90"
-              >
-                {isLoading && <Loader className="animate-spin " />}
-                {article ? "Zapisz" : "Utwórz"}
-              </Button>
             </div>
           </div>
-
           <div className=" space-y-7 border rounded-lg p-7 w-[38%]">
             <FormField
               control={form.control}
