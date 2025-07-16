@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { PendingArticleRejectionModal } from "../../components/pending-articles/pending-article-rejection-modal";
+import { Alert } from "../../components/shared/alert-modal";
 import { NoDataFound } from "../../components/shared/NoDataFound";
 import queryClient from "../../config/query.client";
 import {
@@ -27,14 +28,20 @@ export const PendingArticles: React.FC = () => {
   const [rejectedArticleId, setRejectedArticleId] = useState<null | string>(
     null
   );
+  const [approvedArticleId, setApprovedArticleId] = useState<null | string>(
+    null
+  );
   const [isCreatingArticleRejection, setIsCreatingArticleRejection] =
+    useState<boolean>(false);
+  const [isCreatinArticleApprove, setIsCreatingArticleApprove] =
     useState<boolean>(false);
   const { data, isLoading, isError } = useFindArticlesQuery(params);
   const { data: products = [] } = useFindProductsQuery();
 
   const { data: categories } = useFindCategoriesByProductQuery(selectedProduct);
 
-  const { mutate } = useAproveArticleMutation();
+  const { mutate: approveMutate, isPending: isApproveLoading } =
+    useAproveArticleMutation();
   const { mutate: rejectionMutate } = useRejectArticleMutation();
 
   const changeTitleHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,16 +86,25 @@ export const PendingArticles: React.FC = () => {
   };
 
   const onArticleAprove = (id: string) => {
-    setPendingId(id);
-    mutate(id, {
-      onSuccess: (data) => {
-        queryClient.invalidateQueries({ queryKey: ["articles"] });
-        toast.success(data?.message || "Zaktualizowano ulubione");
-      },
-      onSettled: () => {
-        setPendingId(null);
-      },
-    });
+    setApprovedArticleId(id);
+    setIsCreatingArticleApprove(true);
+  };
+
+  const onArticleAproveConfirm = () => {
+    setPendingId(approvedArticleId);
+    if (approvedArticleId) {
+      approveMutate(approvedArticleId, {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["articles"] });
+          toast.success("Artykuł został zatwierdzony.");
+        },
+        onSettled: () => {
+          setPendingId(null);
+          setApprovedArticleId(null);
+          setIsCreatingArticleApprove(false);
+        },
+      });
+    }
   };
 
   const onArticleReject = (articleId: string) => {
@@ -120,6 +136,11 @@ export const PendingArticles: React.FC = () => {
 
     setIsCreatingArticleRejection(false);
     setRejectedArticleId(null);
+  };
+
+  const onCloseArticleApproveAlert = () => {
+    setIsCreatingArticleApprove(false);
+    setApprovedArticleId(null);
   };
 
   return (
@@ -185,6 +206,16 @@ export const PendingArticles: React.FC = () => {
         isCreatingArticleRejection={isCreatingArticleRejection}
         setIsCreatingArticleRejection={setIsCreatingArticleRejection}
       />
+      <Alert
+        isOpen={isCreatinArticleApprove}
+        isLoading={isApproveLoading}
+        type="info"
+        title="Zatwierdź artykuł"
+        onCancel={onCloseArticleApproveAlert}
+        onConfirm={onArticleAproveConfirm}
+      >
+        Czy na pewno chcesz zatwierdzić ten artykuł?
+      </Alert>
     </div>
   );
 };

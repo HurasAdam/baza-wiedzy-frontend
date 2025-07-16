@@ -34,6 +34,9 @@ export interface ArticleListItem {
   title: string;
   tags: Tag[];
   isVerified: boolean;
+  status: "approved" | "rejected" | "pending";
+  rejectionReason: string | null;
+  rejectedBy: string | null;
   createdBy: {
     _id: string;
     name: string;

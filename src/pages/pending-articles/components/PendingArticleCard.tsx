@@ -31,6 +31,7 @@ const PendingArticleCard = ({
 
           <div className="flex gap-2 shrink-0">
             <Button
+              className="cursor-pointer"
               onClick={() => onApprove(article._id)}
               variant="outline"
               size="sm"
@@ -43,6 +44,7 @@ const PendingArticleCard = ({
               )}
             </Button>
             <Button
+              className="cursor-pointer"
               onClick={() => onReject(article._id)}
               variant="outline"
               size="sm"
