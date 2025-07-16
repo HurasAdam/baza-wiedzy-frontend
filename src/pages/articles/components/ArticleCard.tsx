@@ -32,8 +32,8 @@ const ArticleCard = ({
                 variant="ghost"
                 size="icon"
                 onClick={(e) => {
-                  e.preventDefault(); // nie pozwala klikowi odpalić Link
-                  e.stopPropagation(); // nie pozwala klikowi "przelecieć" wyżej
+                  e.preventDefault();
+                  e.stopPropagation();
                   toggleFavourite(article._id);
                 }}
               >

@@ -11,8 +11,8 @@ import {
 import { useFindCategoriesByProductQuery } from "../../hooks/product-categories/use-product-categories";
 import { useFindProductsQuery } from "../../hooks/products/use-products";
 import type { ArticleListItem } from "../../types/article";
-import ArticleCard from "./components/ArticleCard";
 import ArticlesFilterBar from "./components/Articles-filterBar";
+import TableArticleCard from "./components/TableArticleCard";
 
 export const ArticlesPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -80,10 +80,21 @@ export const ArticlesPage: React.FC = () => {
   };
 
   return (
-    <div className="flex gap-6">
+    <div className="flex flex-col gap-6">
       {/* ------ State Loaders ------ */}
-
-      <div className="flex-grow flex flex-col gap-4 py-4">
+      {/* ------ Filter Bar ------ */}
+      <ArticlesFilterBar
+        selectedTitle={titleParam}
+        selectedProduct={selectedProduct}
+        selectedCategory={selectedCategory}
+        onTitleChange={changeTitleHandler}
+        onProductChange={changeProductHandler}
+        onCategoryChange={changeCategoryHandler}
+        products={products}
+        categories={categories}
+        onResetAll={onResetAllFilters}
+      />
+      <div className="flex-grow flex flex-col h-fit bg-card border border-border divide-y divide-border">
         {isLoading && (
           <div className="flex items-center flex-col gap-0.5 justify-center">
             <Loader className="animate-spin w-7 h-7" />
@@ -112,27 +123,13 @@ export const ArticlesPage: React.FC = () => {
           )}
 
         {data?.data.map((article: ArticleListItem) => (
-          <ArticleCard
-            key={article._id}
+          <TableArticleCard
             article={article}
             toggleFavourite={toggleFavourite}
             toggleFavouriteLoading={pendingId === article._id}
           />
         ))}
       </div>
-
-      {/* ------ Filter Bar ------ */}
-      <ArticlesFilterBar
-        selectedTitle={titleParam}
-        selectedProduct={selectedProduct}
-        selectedCategory={selectedCategory}
-        onTitleChange={changeTitleHandler}
-        onProductChange={changeProductHandler}
-        onCategoryChange={changeCategoryHandler}
-        products={products}
-        categories={categories}
-        onResetAll={onResetAllFilters}
-      />
     </div>
   );
 };
