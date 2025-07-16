@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "../../../components/ui/select";
 import { Switch } from "../../../components/ui/switch";
+import { cn } from "../../../lib/utils";
 import type { IProduct } from "../../../types/product";
 import type { ProductCategory } from "../../../types/product-category";
 
@@ -41,7 +42,6 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
   onResetAll,
   onToggleChange = () => {},
   categories,
-  tags = ["Tag 1", "Tag 2", "Tag 3"],
 }) => {
   const [isChecked, setIsChecked] = useState(false);
 
@@ -49,73 +49,101 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
     setIsChecked(checked);
     onToggleChange(checked);
   };
-
+  const hasFilters = selectedTitle || selectedProduct || selectedCategory;
   return (
-    <aside className="w-66 bg-card/50 p-6 border rounded-md shadow-md sticky top-4 h-[calc(100vh-1rem)] overflow-auto flex flex-col gap-6">
-      {/* ------ Title ------ */}
-      <Input
-        placeholder="Search articles..."
-        value={selectedTitle}
-        onChange={onTitleChange}
-        className="w-full"
-      />
+    <div className="w-full border border-border bg-card/60 rounded-md p-4 shadow-sm mb-4">
+      <div className="flex flex-wrap items-center gap-4">
+        {/* Search */}
+        <div className="relative w-64">
+          <Input
+            value={selectedTitle}
+            onChange={onTitleChange}
+            placeholder="Szukaj artykułów..."
+            className="pl-10"
+          />
+          <span className="absolute left-3 top-2.5 text-muted-foreground">
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M21 21l-4.35-4.35M16 10a6 6 0 11-12 0 6 6 0 0112 0z"
+              />
+            </svg>
+          </span>
+        </div>
 
-      {/* ------ Product ------ */}
-      <Select onValueChange={onProductChange} value={selectedProduct}>
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder="Wybierz produkt" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectItem className="bg-rose-800/85" value="__clear__">
-              <XIcon /> Wyczyść produkt
-            </SelectItem>
-            {products.map(({ _id, name }) => (
-              <SelectItem key={_id} value={_id}>
-                {name}
+        {/* Product select */}
+        <Select onValueChange={onProductChange} value={selectedProduct}>
+          <SelectTrigger className="w-56">
+            <SelectValue placeholder="Produkt" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value="__clear__">
+                <XIcon className="w-4 h-4 mr-1" />
+                Wyczyść produkt
               </SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-
-      {/* ------ Product - category ------ */}
-      <Select
-        disabled={!selectedProduct}
-        onValueChange={onCategoryChange}
-        value={selectedCategory}
-      >
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder="Wybierz kategorie" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectItem className="bg-rose-800/85" value="__clear__">
-              <XIcon /> Wyczyść kategorie
-            </SelectItem>
-            {categories &&
-              categories.map(({ _id, name }) => (
+              {products.map(({ _id, name }) => (
                 <SelectItem key={_id} value={_id}>
                   {name}
                 </SelectItem>
               ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
 
-      <div className="flex items-center space-x-3">
-        <Switch checked={isChecked} onCheckedChange={handleToggleChange} />
-        <span className="select-none text-gray-700">Only favourites</span>
+        {/* Category select */}
+        <Select
+          onValueChange={onCategoryChange}
+          value={selectedCategory}
+          disabled={!selectedProduct}
+        >
+          <SelectTrigger className="w-56">
+            <SelectValue placeholder="Kategoria" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value="__clear__">
+                <XIcon className="w-4 h-4 mr-1" />
+                Wyczyść kategorię
+              </SelectItem>
+              {categories?.map(({ _id, name }) => (
+                <SelectItem key={_id} value={_id}>
+                  {name}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+
+        {/* Toggle Favourites */}
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Switch checked={isChecked} onCheckedChange={handleToggleChange} />
+          <span>Ulubione</span>
+        </div>
+
+        {/* Reset Button */}
+        <Button
+          onClick={onResetAll}
+          disabled={!hasFilters}
+          className={cn(
+            "ml-auto inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors",
+            hasFilters
+              ? "bg-muted text-foreground hover:bg-muted/80 border border-border shadow-sm"
+              : "bg-muted text-muted-foreground border border-border disabled:opacity-70 cursor-not-allowed opacity-50"
+          )}
+        >
+          <XIcon className="h-4 w-4 stroke-[2] text-foreground" />
+          Wyczyść filtry
+        </Button>
       </div>
-      <Button
-        variant="outline"
-        onClick={onResetAll}
-        className="self-start mt-2"
-      >
-        Wyczyść filtry
-      </Button>
-    </aside>
+    </div>
   );
 };
-
 export default ArticlesFilterBar;
