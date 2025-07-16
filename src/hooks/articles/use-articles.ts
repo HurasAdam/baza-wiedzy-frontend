@@ -61,3 +61,16 @@ export const useFindArticleQuery = (articleId: string) => {
     retry: false,
   });
 };
+
+export const useFindArticlesCreatedByUserQuery = (query) => {
+  return useQuery({
+    queryKey: ["user-articles", query],
+    queryFn: () => {
+      return articlesService.findAllByUser(query);
+    },
+
+    refetchOnWindowFocus: false,
+    staleTime: 0,
+    retry: false,
+  });
+};

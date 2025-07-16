@@ -107,6 +107,11 @@ const getArticleHistoryItem = ({ id }) => {
   return api.get(buildUrl(baseUrl, "history", id));
 };
 
+const findAllByUser = (query: any) => {
+  console.log(query, "UTUTUT");
+  return api.get(buildUrl(baseUrl, "my"), { params: query });
+};
+
 export const articlesService = {
   getAllArticles,
   createArticle,
@@ -129,4 +134,5 @@ export const articlesService = {
   findByUser,
   aproveOne,
   rejectOne,
+  findAllByUser,
 };
