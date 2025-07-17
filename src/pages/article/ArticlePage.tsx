@@ -5,6 +5,9 @@ import {
   FileIcon,
   FileImageIcon,
   FileTextIcon,
+  SquarePen,
+  Star,
+  Trash2,
   UserIcon,
   XCircleIcon,
 } from "lucide-react";
@@ -12,22 +15,17 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
+import { Card, CardContent } from "../../components/ui/card";
+import { Tabs, TabsContent } from "../../components/ui/tabs";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/card";
-import { Separator } from "../../components/ui/separator";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../../components/ui/tabs";
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../../components/ui/tooltip";
 import { useFindArticleQuery } from "../../hooks/articles/use-articles";
 import { EditArticlePage } from "../edit-article/EditArticlePage";
+import { ArticlePageSkeleton } from "./skeleton/ArticlePageSkeleton";
 
 const getFileIcon = (type: string) => {
   switch (type.toLowerCase()) {
@@ -53,15 +51,7 @@ export const ArticlePage = () => {
     setActiveTab("main");
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-full">
-        <p className="text-muted-foreground animate-pulse">
-          Ładowanie artykułu...
-        </p>
-      </div>
-    );
-  }
+  if (isLoading) return <ArticlePageSkeleton />;
 
   if (isError) {
     return (
@@ -77,249 +67,276 @@ export const ArticlePage = () => {
 
   return (
     <div className="mx-auto">
-      <Card className="shadow-lg min-h-[calc(100vh)]">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+      <div className="sticky top-0 bg-background z-10 p-4 border-b flex flex-col gap-3">
+        {/* Tytuł na pełną szerokość */}
+        <h1 className="text-2xl font-bold text-foreground truncate">
+          {article.title}
+        </h1>
+
+        {/* Rząd poniżej: po lewej status, po prawej przyciski */}
+        <div className="flex justify-between items-center flex-wrap gap-3">
+          {/* Status weryfikacji */}
+          <div className="flex items-center gap-1.5">
+            {article.isVerified ? (
+              <Badge className="bg-emerald-100 text-emerald-700 border border-emerald-300 flex items-center whitespace-nowrap">
+                <CheckCircleIcon className="w-4 h-4 mr-1" /> Zweryfikowany
+              </Badge>
+            ) : (
+              <Badge className="bg-yellow-100 text-yellow-800 border border-yellow-300 flex items-center whitespace-nowrap">
+                <XCircleIcon className="w-4 h-4 mr-1" /> Oczekuje na weryfikację
+              </Badge>
+            )}
+            <Badge
+              variant="secondary"
+              className="flex items-center whitespace-nowrap"
+            >
+              <EyeIcon className="w-4 h-4 mr-1" /> {article.viewsCounter}{" "}
+              wyświetleń
+            </Badge>
+          </div>
+          {/* Kontener na przyciski — tutaj może być ich wiele */}
+          {activeTab === "edit" && (
+            <div className="flex gap-2 flex-wrap justify-end flex-grow max-w-full">
+              <Button
+                onClick={() => setActiveTab("main")}
+                size="sm"
+                variant="destructive"
+              >
+                Anuluj
+              </Button>
+              {/* Tutaj możesz dodawać kolejne przyciski */}
+            </div>
+          )}{" "}
           {activeTab !== "edit" && (
-            <>
-              <CardHeader className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
-                <div>
-                  <CardTitle className="text-2xl font-semibold">
-                    {article.title}
-                  </CardTitle>
-                  <CardDescription className="text-sm text-muted-foreground mt-2.5">
-                    <span
-                      className={`font-medium ${
-                        article.isVerified
-                          ? "text-emerald-600"
-                          : "text-foreground"
-                      } `}
+            <TooltipProvider>
+              <div className="flex gap-2 items-center">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      onClick={() => setActiveTab("edit")}
                     >
-                      {article.isVerified ? (
-                        <span className="flex items-center gap-1">
-                          <CheckCircleIcon className="w-4 h-4" />
-                          Zweryfikowany
-                        </span>
-                      ) : (
-                        <span className="flex items-center gap-1">
-                          <XCircleIcon className="w-4 h-4" />
-                          Oczekuje na weryfikację
-                        </span>
-                      )}
-                    </span>
-                  </CardDescription>
-                </div>
-              </CardHeader>
-
-              <section className="flex px-5 mb-10 flex-wrap sm:flex-nowrap justify-start sm:justify-between items-start gap-2 flex-col sm:flex-row">
-                {/* Lewa strona: badge */}
-                <div className="flex flex-wrap gap-2">
-                  <Badge
-                    style={{ backgroundColor: article.product.labelColor }}
-                    className="text-white"
-                  >
-                    Produkt: {article.product.name}
-                  </Badge>
-
-                  <Badge className="bg-muted text-foreground">
-                    Kategoria: {article.category.name}
-                  </Badge>
-
-                  <Badge className="bg-secondary text-white flex items-center">
-                    Wyświetleń: {article.viewsCounter}
-                    <EyeIcon className="w-4 h-4 ml-1" />
-                  </Badge>
-                </div>
-
-                {/* Prawa strona: tagi */}
-                <div className="flex flex-wrap gap-2 sm:justify-end">
-                  {article.tags.map((tag) => (
-                    <Badge
-                      key={tag._id}
-                      className="bg-accent text-muted-foreground"
+                      <Star className="w-4 h-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Dodaj do ulubionych</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      onClick={() => setActiveTab("edit")}
                     >
-                      {tag.name}
-                    </Badge>
-                  ))}
-                </div>
-              </section>
+                      <SquarePen className="w-4 h-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Edytuj</TooltipContent>
+                </Tooltip>
 
-              <TabsList className="mb-0.5  bg-transparent">
-                <div className="mx-4 bg-muted p-1.5 rounded-lg">
-                  <TabsTrigger value="main">Dane główne</TabsTrigger>
-                  <TabsTrigger value="attachments">Załączniki</TabsTrigger>
-                  <TabsTrigger value="history">Historia zmian</TabsTrigger>
-                </div>
-              </TabsList>
-            </>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button size="icon" variant="destructive">
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Usuń</TooltipContent>
+                </Tooltip>
+              </div>
+            </TooltipProvider>
           )}
+        </div>
 
-          <TabsContent value="main" className="space-y-6">
-            <CardContent className="space-y-6">
-              <Separator />
+        {/* Meta info (produkt, kategoria, wyświetlenia, tagi) pod tym */}
+        <div className="flex justify-between mt-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge variant="outline" className="whitespace-nowrap">
+              Produkt: {article.product.name}
+            </Badge>
+            <Badge variant="outline" className="whitespace-nowrap">
+              Kategoria: {article.category.name}
+            </Badge>
+            {article.tags.map((tag) => (
+              <Badge
+                key={tag._id}
+                variant="ghost"
+                className="whitespace-nowrap"
+              >
+                # {tag.name}
+              </Badge>
+            ))}
+          </div>
 
+          {activeTab !== "edit" ? (
+            <div className="flex bg-muted rounded-xl px-2 py-1 gap-1">
+              <button
+                className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                  activeTab === "main"
+                    ? "bg-background text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+                onClick={() => setActiveTab("main")}
+              >
+                Dane główne
+              </button>
+              <button
+                className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                  activeTab === "attachments"
+                    ? "bg-background text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+                onClick={() => setActiveTab("attachments")}
+              >
+                Załączniki
+              </button>
+              <button
+                className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                  activeTab === "history"
+                    ? "bg-background text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+                onClick={() => setActiveTab("history")}
+              >
+                Historia zmian
+              </button>
+            </div>
+          ) : (
+            <div className="h-10" />
+          )}
+        </div>
+      </div>
+
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        {activeTab === "edit" ? <div className="h-5"></div> : <div></div>}
+        {activeTab !== "edit" ? (
+          <div className="flex bg-muted rounded-xl px-2 py-1 gap-1">
+            <button
+              className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                activeTab === "main"
+                  ? "bg-background text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+              onClick={() => setActiveTab("main")}
+            >
+              Wersja 1
+            </button>
+            <button
+              className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                activeTab === "attachments"
+                  ? "bg-background text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+              onClick={() => setActiveTab("attachments")}
+            >
+              Wersja 2
+            </button>
+            <button
+              className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                activeTab === "history"
+                  ? "bg-background text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+              onClick={() => setActiveTab("history")}
+            >
+              Wersja 3
+            </button>
+          </div>
+        ) : (
+          <div className="h-10" />
+        )}
+        <TabsContent value="main">
+          <Card className="mt-6">
+            <CardContent className="space-y-6 p-6">
               <section>
-                <h3 className="text-lg font-medium mb-2">Opis pracownika</h3>
+                <h3 className="text-lg font-semibold mb-1">Opis pracownika</h3>
                 <p className="text-base text-foreground">
                   {article.employeeDescription}
                 </p>
               </section>
 
-              <Separator />
-
               <section>
-                <h3 className="text-lg font-medium mb-2">Opis klienta</h3>
-                <p className="text-base text-foreground break-words whitespace-pre-wrap">
+                <h3 className="text-lg font-semibold mb-1">Opis klienta</h3>
+                <p className="whitespace-pre-wrap text-foreground">
                   {article.clientDescription}
                 </p>
               </section>
 
-              <Separator />
-
               <section>
-                <h3 className="text-lg font-medium mb-2">Twórca artykułu</h3>
+                <h3 className="text-lg font-semibold mb-1">Twórca artykułu</h3>
                 <p className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <UserIcon className="w-5 h-5" />
-                  {article.createdBy.name} {article.createdBy.surname}
+                  <UserIcon className="w-5 h-5" /> {article.createdBy.name}{" "}
+                  {article.createdBy.surname}
                 </p>
               </section>
 
               {article.verifiedBy && (
                 <section>
-                  <h3 className="text-lg font-medium mb-2">
+                  <h3 className="text-lg font-semibold mb-1">
                     Zweryfikowany przez
                   </h3>
                   <p className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <UserIcon className="w-5 h-5" />
-                    {article.verifiedBy.name} {article.verifiedBy.surname}
-                    {article.verifiedBy.isActive ? (
-                      <Badge className="bg-green-500 text-white ml-2">
-                        Aktywny
-                      </Badge>
-                    ) : (
-                      <Badge className="bg-red-500 text-white ml-2">
-                        Nieaktywny
-                      </Badge>
-                    )}
+                    <UserIcon className="w-5 h-5" /> {article.verifiedBy.name}{" "}
+                    {article.verifiedBy.surname}
                   </p>
                 </section>
               )}
-
-              <Separator />
-
-              <section className="flex justify-between text-xs text-muted-foreground">
-                <div>
-                  <strong>Utworzono:</strong>{" "}
-                  <time dateTime={article.createdAt}>
-                    {new Date(article.createdAt).toLocaleString("pl-PL")}
-                  </time>
-                </div>
-                <div>
-                  <strong>Ostatnia aktualizacja:</strong>{" "}
-                  <time dateTime={article.updatedAt}>
-                    {new Date(article.updatedAt).toLocaleString("pl-PL")}
-                  </time>
-                </div>
-              </section>
-
-              <div className="flex justify-end space-x-2">
-                <Button
-                  onClick={() => setActiveTab("edit")}
-                  variant="outline"
-                  size="sm"
-                >
-                  Edytuj
-                </Button>
-                <Button variant="default" size="sm">
-                  Usuń
-                </Button>
-              </div>
             </CardContent>
-          </TabsContent>
+          </Card>
+        </TabsContent>
 
-          <TabsContent value="history">
-            <CardContent className="space-y-6">
-              <p className="text-muted-foreground text-sm">
-                (Przykładowa treść) Historia zmian będzie tutaj. Możesz tu dodać
-                np. listę edycji, zmiany statusu itd.
-              </p>
-            </CardContent>
-          </TabsContent>
-
-          <TabsContent value="attachments">
-            <CardContent className="space-y-4">
-              <h3 className="text-lg font-medium mb-4">Załączniki</h3>
-
-              {[
-                {
-                  name: "instrukcja-obslugi.pdf",
-                  type: "PDF",
-                  size: "1.2 MB",
-                  createdAt: "2025-07-01T12:34:00",
-                  url: "#",
-                },
-                {
-                  name: "zdjecie-maszyny.jpg",
-                  type: "Obraz",
-                  size: "2.5 MB",
-                  createdAt: "2025-07-02T09:10:00",
-                  url: "#",
-                },
-                {
-                  name: "protokol-serwisowy.docx",
-                  type: "Dokument Word",
-                  size: "900 KB",
-                  createdAt: "2025-07-04T16:15:00",
-                  url: "#",
-                },
-              ].map((file, i) => (
+        <TabsContent value="attachments">
+          <Card className="mt-6">
+            <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
+              {[].map((file) => (
                 <div
-                  key={i}
-                  className="flex items-center gap-6 p-4 border rounded-lg shadow-sm hover:shadow-md transition-shadow"
+                  key={file._id}
+                  className="border rounded-xl p-4 flex flex-col items-center text-center bg-muted/50 hover:bg-muted transition-colors"
                 >
-                  {/* Ikona pliku */}
-                  <div className="flex-shrink-0">{getFileIcon(file.type)}</div>
-
-                  {/* Informacje o pliku */}
-                  <div className="flex flex-col flex-grow">
-                    <span className="text-lg font-semibold text-foreground ">
-                      {file.name}
-                    </span>
-                    <div className="text-sm text-muted-foreground mt-1 flex flex-wrap gap-4">
-                      <span>Typ: {file.type}</span>
-                      <span>Rozmiar: {file.size}</span>
-                      <span>
-                        Dodano:{" "}
-                        {new Date(file.createdAt).toLocaleString("pl-PL")}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Akcje */}
-                  <div className="flex flex-col gap-2 ml-auto">
-                    <Button variant="outline" size="sm" asChild>
-                      <a href={file.url} download>
-                        <DownloadIcon className="w-4 h-4 mr-1 inline" />
-                        Pobierz
-                      </a>
-                    </Button>
-                  </div>
+                  {getFileIcon(file.type)}
+                  <p className="text-sm font-medium mt-2 line-clamp-2">
+                    {file.name}
+                  </p>
+                  <Button
+                    className="mt-3 w-full"
+                    size="sm"
+                    variant="secondary"
+                    onClick={() => window.open(file.url, "_blank")}
+                  >
+                    <DownloadIcon className="w-4 h-4 mr-1" /> Pobierz
+                  </Button>
                 </div>
               ))}
             </CardContent>
-          </TabsContent>
+          </Card>
+        </TabsContent>
 
-          <TabsContent value="edit">
-            {/* Tu tylko formularz / czysty widok edycji */}
-
-            <CardContent className="space-y-6">
-              <EditArticlePage
-                onEditCancel={onEditCancel}
-                articleId={article._id}
-              />
+        <TabsContent value="history">
+          <Card className="mt-6">
+            <CardContent className="divide-y p-6">
+              {[].map((item) => (
+                <div key={item._id} className="py-4 first:pt-0 last:pb-0">
+                  <p className="text-sm text-muted-foreground">
+                    <UserIcon className="w-4 h-4 inline mr-1" />{" "}
+                    {item.modifiedBy.name} {item.modifiedBy.surname}
+                  </p>
+                  <p className="text-sm text-foreground">{item.description}</p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {new Date(item.date).toLocaleString()}
+                  </p>
+                </div>
+              ))}
             </CardContent>
-          </TabsContent>
-        </Tabs>
-      </Card>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="edit">
+          <EditArticlePage
+            articleId={article._id}
+            onEditCancel={onEditCancel}
+          />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
