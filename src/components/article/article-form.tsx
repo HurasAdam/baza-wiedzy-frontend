@@ -52,7 +52,7 @@ const dropZoneConfig = {
 };
 
 interface ArticleFormProps {
-  onCancel: () => void;
+  onCancel?: () => void;
   article?: Article;
   tags: SelectOption[];
   products: SelectOption[];
@@ -149,16 +149,18 @@ const ArticleForm = ({
                 <span className="text-muted-foreground text-sm ml-1"></span>
               </span>
             )}
-            <div className="flex justify-between mt-2.5">
-              <Button
-                onClick={onCancel}
-                type="button"
-                className="cursor-pointer"
-                variant="outline"
-              >
-                <ArrowLeft />
-                Wróć
-              </Button>
+            <div className="flex justify-end mt-2.5">
+              {onCancel && (
+                <Button
+                  onClick={onCancel}
+                  type="button"
+                  className="cursor-pointer"
+                  variant="outline"
+                >
+                  <ArrowLeft />
+                  Wróć
+                </Button>
+              )}
               {article && (
                 <Button
                   disabled={article && !isDirty}

@@ -89,6 +89,7 @@ export const EditArticlePage = ({
               </div>,
               { duration: 6200 }
             );
+            return;
           } else {
             toast.error("Wystąpił błąd, spróbuj ponownie");
           }
@@ -134,25 +135,7 @@ export const EditArticlePage = ({
   return (
     tags && (
       <div className="space-y-4">
-        {/* <div className="flex items-center gap-2">
-          <Button
-            className="cursor-pointer"
-            variant="outline"
-            onClick={onEditCancel}
-          >
-            <ArrowLeft />
-            Wróć
-          </Button>
-          <div className="flex space-x-2 items-center">
-            <span> Edytuj artykuł</span>
-
-            <span className="font-medium text-xs text-muted-foreground">
-              {article.title}
-            </span>
-          </div>
-        </div> */}
         <ArticleForm
-          onCancel={onEditCancel}
           isLoading={isUpdatedLoading}
           article={article}
           products={formattedProducts}
