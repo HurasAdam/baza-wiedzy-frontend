@@ -226,7 +226,7 @@ export const ArticlePage = () => {
                   key={desc.version}
                   onClick={() => setActiveVersion(index)}
                   className={cn(
-                    "px-3 py-1.5 text-sm rounded-md transition-colors min-w-30 max-w-30",
+                    "px-3 py-1.5 text-sm rounded-md transition-colors min-w-32 max-w-30 truncate  overflow-hidden",
                     activeVersion === index
                       ? "bg-background text-foreground shadow-sm"
                       : "text-muted-foreground hover:text-foreground"
