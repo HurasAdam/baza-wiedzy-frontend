@@ -161,7 +161,6 @@ const ArticleForm = ({
                   </FormLabel>
                   <FormControl>
                     <Input
-                      className="bg-input"
                       placeholder="Wprowadź tytuł artykułu..."
                       type="text"
                       {...field}
@@ -210,7 +209,7 @@ const ArticleForm = ({
                   <FormControl>
                     <Textarea
                       placeholder="➔ Wprowadź uwagi i wskazówki..."
-                      className="resize-none min-h-[100px] bg-input"
+                      className="resize-none min-h-[100px] "
                       {...field}
                     />
                   </FormControl>
@@ -251,11 +250,7 @@ const ArticleForm = ({
                     <FormItem>
                       <FormLabel>Nazwa wersji</FormLabel>
                       <FormControl>
-                        <Input
-                          className="bg-input"
-                          placeholder="Wpisz nazwę wersji"
-                          {...field}
-                        />
+                        <Input placeholder="Wpisz nazwę wersji" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -271,7 +266,7 @@ const ArticleForm = ({
                       <FormControl>
                         <Textarea
                           placeholder={`➔ Treść odpowiedzi wersji ${index + 1}`}
-                          className="resize-none min-h-[200px] bg-input"
+                          className="resize-none min-h-[200px] "
                           {...field}
                         />
                       </FormControl>
@@ -329,7 +324,7 @@ const ArticleForm = ({
                         onProductChange?.(value);
                       }}
                     >
-                      <SelectTrigger className="bg-input">
+                      <SelectTrigger className="w-56 min-w-56">
                         <SelectValue placeholder="➔ Wybierz produkt" />
                       </SelectTrigger>
                       <SelectContent>
@@ -361,7 +356,7 @@ const ArticleForm = ({
                       onValueChange={field.onChange}
                       disabled={loadingCategories}
                     >
-                      <SelectTrigger className="bg-input">
+                      <SelectTrigger className="w-56 min-w-56">
                         {loadingCategories ? (
                           <div className="flex items-center space-x-2">
                             <Loader className="animate-spin h-4 w-4" />

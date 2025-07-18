@@ -1,4 +1,5 @@
 import type { AxiosError } from "axios";
+import { Plus } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -111,15 +112,31 @@ export const CreateArticlePage = () => {
 
   return (
     tags && (
-      <ArticleForm
-        onCancel={() => navigate(-1)}
-        products={formattedProducts}
-        categories={formattedCategoriesBySelectedProduct}
-        onProductChange={setSelectedProductId}
-        tags={formattedTags}
-        loadingCategories={loadingCategories}
-        onCreate={onSave}
-      />
+      <>
+        <header className=" px-8 py-8  flex items-center space-x-6">
+          <div className="rounded-lg p-3 bg-primary/90 text-primary-foreground">
+            <Plus className="w-5 h-5" />
+          </div>
+          <div>
+            <h1 className="text-xl font-bold leading-tight tracking-tight text-foreground">
+              Dodaj nowy artykuł
+            </h1>
+            <p className="mt-2 max-w-xl text-sm font-normal text-muted-foreground">
+              Wprowadź szczegóły artykułu, aby go utworzyć i przypisać do
+              produktu.
+            </p>
+          </div>
+        </header>
+        <ArticleForm
+          onCancel={() => navigate(-1)}
+          products={formattedProducts}
+          categories={formattedCategoriesBySelectedProduct}
+          onProductChange={setSelectedProductId}
+          tags={formattedTags}
+          loadingCategories={loadingCategories}
+          onCreate={onSave}
+        />
+      </>
     )
   );
 };
