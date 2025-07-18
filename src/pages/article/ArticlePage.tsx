@@ -24,6 +24,7 @@ import {
   TooltipTrigger,
 } from "../../components/ui/tooltip";
 import { useFindArticleQuery } from "../../hooks/articles/use-articles";
+import { cn } from "../../lib/utils";
 import { EditArticlePage } from "../edit-article/EditArticlePage";
 import { ArticlePageSkeleton } from "./skeleton/ArticlePageSkeleton";
 
@@ -45,6 +46,7 @@ const getFileIcon = (type: string) => {
 export const ArticlePage = () => {
   const { id } = useParams<{ id: string }>();
   const [activeTab, setActiveTab] = useState("main");
+  const [activeVersion, setActiveVersion] = useState(0);
   const { data: article, isLoading, isError, error } = useFindArticleQuery(id);
 
   const onEditCancel = () => {
@@ -65,9 +67,15 @@ export const ArticlePage = () => {
     return <p className="text-center mt-10">Artykuł nie znaleziony</p>;
   }
 
+  const sortedDescriptions = [...article.responseVariants].sort(
+    (a, b) => a.version - b.version
+  );
+
+  const currentDescription = sortedDescriptions[activeVersion];
+
   return (
     <div className="mx-auto">
-      <div className="sticky top-0 bg-background z-10 p-4 border-b flex flex-col gap-3">
+      <div className="bg-background z-10 p-4 border-b flex flex-col gap-3">
         {/* Tytuł na pełną szerokość */}
         <h1 className="text-2xl font-bold text-foreground truncate">
           {article.title}
@@ -211,36 +219,26 @@ export const ArticlePage = () => {
         {activeTab === "edit" ? <div className="h-5"></div> : <div></div>}
         {activeTab !== "edit" ? (
           <div className="flex bg-muted rounded-xl px-2 py-1 gap-1">
-            <button
-              className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-                activeTab === "main"
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-              onClick={() => setActiveTab("main")}
-            >
-              Wersja 1
-            </button>
-            <button
-              className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-                activeTab === "attachments"
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-              onClick={() => setActiveTab("attachments")}
-            >
-              Wersja 2
-            </button>
-            <button
-              className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-                activeTab === "history"
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-              onClick={() => setActiveTab("history")}
-            >
-              Wersja 3
-            </button>
+            {sortedDescriptions.map((desc, index) => {
+              console.log("DESC", desc);
+              return (
+                <button
+                  key={desc.version}
+                  onClick={() => setActiveVersion(index)}
+                  className={cn(
+                    "px-3 py-1.5 text-sm rounded-md transition-colors min-w-30 max-w-30",
+                    activeVersion === index
+                      ? "bg-background text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  {}
+                  {desc.variantName?.trim()
+                    ? desc.variantName
+                    : `Wersja ${desc.version}`}
+                </button>
+              );
+            })}
           </div>
         ) : (
           <div className="h-10" />
@@ -258,7 +256,7 @@ export const ArticlePage = () => {
               <section>
                 <h3 className="text-lg font-semibold mb-1">Opis klienta</h3>
                 <p className="whitespace-pre-wrap text-foreground">
-                  {article.clientDescription}
+                  {currentDescription?.variantContent}
                 </p>
               </section>
 
