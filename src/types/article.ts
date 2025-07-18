@@ -13,7 +13,11 @@ export interface Article {
     name: string;
     surname: string;
   };
-  clientDescription?: string;
+  responseVariants: {
+    variantName?: string;
+    version: number;
+    variantContent: string;
+  }[]; // <-- to jest nowa struktura
   verifiedBy?: {
     _id: string;
     name: string;

@@ -2,15 +2,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ArrowLeft,
   CloudUpload,
+  Info,
+  Link,
   Loader,
+  MessageCircle,
   Paperclip,
   Pencil,
   Plus,
   Save,
+  Trash2,
 } from "lucide-react";
 import { useState } from "react";
-import { useForm, type SubmitHandler } from "react-hook-form";
-import { cn } from "../../lib/utils";
+import { useFieldArray, useForm, type SubmitHandler } from "react-hook-form";
 import type { SelectOption } from "../../pages/create-article/CreateArticlePage";
 import type { Article } from "../../types/article";
 import {
@@ -26,6 +29,13 @@ import {
 import MultipleSelector from "../shared/multiple-selector";
 import { RequiredLabel } from "../shared/required-label";
 import { Button } from "../ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
 import {
   Form,
   FormControl,
@@ -47,7 +57,7 @@ import { Textarea } from "../ui/textarea";
 
 const dropZoneConfig = {
   maxFiles: 5,
-  maxSize: 1024 * 1024 * 4,
+  maxSize: 1024 * 1024 * 4, // 4MB
   multiple: true,
 };
 
@@ -84,131 +94,111 @@ const ArticleForm = ({
   const form = useForm<ArticleFormData>({
     resolver: zodResolver(articleSchema),
     defaultValues: {
-      title: article ? article?.title : "",
-      product: article ? article?.product?._id : "",
-      category: article ? article?.category?._id : "",
+      title: article?.title ?? "",
+      product: article?.product?._id ?? "",
+      category: article?.category?._id ?? "",
       tags: article
         ? article.tags.map((tag) => ({ label: tag.name, value: tag._id }))
         : [],
-      clientDescription: article ? article?.clientDescription : "",
-      employeeDescription: article ? article?.employeeDescription : "",
-      file: [],
+      responseVariants: article?.responseVariants.map((cd) => ({
+        version:
+          typeof cd.version === "number"
+            ? cd.version
+            : parseInt(cd.version ?? "1", 10),
+        variantContent: cd.variantContent ?? "",
+        variantName: cd.variantName ?? "",
+      })) ?? [{ version: 1, variantContent: "", variantName: "" }],
+      employeeDescription: article?.employeeDescription ?? "",
+      file: [], // Pliki w formie — synchronizowane ze stanem
     },
   });
 
-  const [files, setFiles] = useState<File[] | null>(null);
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "responseVariants",
+  });
 
-  const onSubmit: SubmitHandler<ArticleFormData> = (values) => {
-    if (article) {
-      if (onUpdate) {
-        onUpdate({ articleId: article._id, formData: values });
-      }
-    } else {
-      if (onCreate) {
-        onCreate({ formData: values });
-      }
-    }
-  };
+  const [files, setFiles] = useState<File[]>(article?.file ?? []);
 
   const { isDirty } = form.formState;
 
+  const onSubmit: SubmitHandler<ArticleFormData> = (values) => {
+    values.file = files;
+
+    if (article && onUpdate) {
+      onUpdate({ articleId: article._id, formData: values });
+    } else if (onCreate) {
+      onCreate({ formData: values });
+    }
+  };
+
   return (
-    <>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className={`flex ${className} gap-10 h-full `}
-        >
-          <div className=" space-y-7 h-full w-[60%] ">
-            {article ? (
-              <span className="text-foreground font-medium flex items-center gap-2 ">
-                <Button
-                  className="disabled:opacity-100 disabled:cursor-default"
-                  disabled={true}
-                  variant="outline"
-                  size="icon"
-                >
-                  <Pencil />
-                </Button>
-                Edytuj artykuł{" "}
-                <span className="text-muted-foreground text-sm ml-1">
-                  {article.title}
-                </span>
-              </span>
-            ) : (
-              <span className="text-foreground font-medium flex items-center gap-2 ">
-                <Button
-                  className="disabled:opacity-100 disabled:cursor-default"
-                  disabled={true}
-                  variant="outline"
-                  size="icon"
-                >
-                  <Plus />
-                </Button>
-                Dodaj artykuł{" "}
-                <span className="text-muted-foreground text-sm ml-1"></span>
-              </span>
-            )}
-            <div className="flex justify-end mt-2.5">
-              {onCancel && (
-                <Button
-                  onClick={onCancel}
-                  type="button"
-                  className="cursor-pointer"
-                  variant="outline"
-                >
-                  <ArrowLeft />
-                  Wróć
-                </Button>
-              )}
-              {article && (
-                <Button
-                  disabled={article && !isDirty}
-                  type="submit"
-                  variant="outline"
-                  className="cursor-pointer"
-                >
-                  {isLoading && <Loader className="animate-spin " />}
-                  <Save />
-                  Zapisz
-                </Button>
-              )}
-              {!article && (
-                <Button
-                  disabled={article && !isDirty}
-                  type="submit"
-                  variant="outline"
-                  className="cursor-pointer"
-                >
-                  {isLoading && <Loader className="animate-spin " />}
-                  <Save />
-                  Utwórz
-                </Button>
-              )}
-            </div>
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className={`flex flex-col gap-6 ${className}`}
+      >
+        {/* Nagłówek z tytułem i przyciskami */}
+        <Card className="p-6">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Pencil className="w-5 h-5 text-primary/90" />
+              <CardTitle className="text-lg font-semibold">
+                Nazwa artykułu
+              </CardTitle>
+            </CardTitle>
+          </CardHeader>
+
+          <CardContent className="flex flex-col gap-4">
+            {/* Tytuł */}
             <FormField
               control={form.control}
               name="title"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    <RequiredLabel> Tytuł</RequiredLabel>
+                    <RequiredLabel>Tytuł</RequiredLabel>
                   </FormLabel>
                   <FormControl>
                     <Input
+                      className="bg-input"
                       placeholder="Wprowadź tytuł artykułu..."
                       type="text"
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>
-                    {" "}
-                    Wprowadź unikalny tytuł artykułu.
-                  </FormDescription>
-                  <FormMessage className="text-xs" />
+                  <FormMessage />
                 </FormItem>
               )}
             />
+
+            <div className="flex justify-end gap-2">
+              {onCancel && (
+                <Button type="button" onClick={onCancel} variant="outline">
+                  <ArrowLeft className="w-4 h-4 mr-1" /> Wróć
+                </Button>
+              )}
+              <Button
+                type="submit"
+                variant="default"
+                disabled={article ? !isDirty : false}
+              >
+                {isLoading && <Loader className="animate-spin w-4 h-4 mr-2" />}
+                <Save className="w-4 h-4 mr-1" />
+                {article ? "Zapisz" : "Utwórz"}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="p-6 space-y-6">
+          <CardHeader className="flex items-center gap-2">
+            <Info className="w-5 h-5 text-primary/90" />
+            <CardTitle className="text-lg font-semibold">
+              Uwagi i opis dla pracownika
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
             <FormField
               control={form.control}
               name="employeeDescription"
@@ -220,58 +210,109 @@ const ArticleForm = ({
                   <FormControl>
                     <Textarea
                       placeholder="➔ Wprowadź uwagi i wskazówki..."
-                      className="resize-none min-h-[100px]"
+                      className="resize-none min-h-[100px] bg-input"
                       {...field}
                     />
                   </FormControl>
                   <FormDescription>
-                    {" "}
-                    Pole przeznaczone na wewnętrzne uwagi i komentarze dotyczące
-                    artykułu{" "}
-                    <span className="text-xs text-foreground/55">
-                      (dla pracowników)
-                    </span>
+                    Wewnętrzne uwagi widoczne tylko dla pracowników.
                   </FormDescription>
-                  <FormMessage className="text-xs" />
+                  <FormMessage />
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="clientDescription"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    <RequiredLabel>Odpowiedź dla klienta</RequiredLabel>
-                  </FormLabel>
-                  <FormControl>
-                    {/* <Editor
-                    value={field.value} // provide current value
-                    onChange={field.onChange} // use form onChange handler
-                  /> */}
-                    <Textarea
-                      placeholder="➔ Wprowadź treść odpowiedzi dla klienta..."
-                      className="resize-none min-h-[420px]"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription className="text-sm">
-                    Wpisz treść odpowiedzi, która zostanie przekazana klientowi.
-                    Upewnij się, że jest zrozumiała i zawiera wszystkie istotne
-                    informacje.
-                  </FormDescription>
-                  <FormMessage className="text-xs" />
-                </FormItem>
-              )}
-            />
-            <div className="flex justify-between ">
-              <p className="text-xs text-muted-foreground italic">
-                Pola oznaczone <span className="text-primary">*</span> są
-                wymagane.
-              </p>
-            </div>
-          </div>
-          <div className=" space-y-7 border rounded-lg p-7 w-[38%]">
+          </CardContent>
+        </Card>
+
+        <div className="flex flex-col gap-4">
+          {fields.map((item, index) => (
+            <Card key={item.id} className="p-6 space-y-2.5 relative mb-4">
+              <CardHeader className="flex items-center gap-2">
+                <MessageCircle className="w-5 h-5 text-primary/90" />
+                <CardTitle className="text-lg font-semibold">Treść</CardTitle>
+              </CardHeader>
+
+              <Button
+                type="button"
+                variant="ghost"
+                className="absolute top-3 right-5 py-0 hover:bg-primary cursor-pointer"
+                onClick={() => remove(index)}
+                aria-label={`Usuń wariant odpowiedzi numer ${index + 1}`}
+                disabled={fields.length === 1}
+              >
+                <Trash2 />
+              </Button>
+
+              <CardContent className="space-y-7">
+                <FormField
+                  control={form.control}
+                  name={`responseVariants.${index}.variantName`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nazwa wersji</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="bg-input"
+                          placeholder="Wpisz nazwę wersji"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name={`responseVariants.${index}.variantContent`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Treść odpowiedzi</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder={`➔ Treść odpowiedzi wersji ${index + 1}`}
+                          className="resize-none min-h-[200px] bg-input"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </CardContent>
+            </Card>
+          ))}
+
+          <Button
+            type="button"
+            variant="outline"
+            disabled={fields.length >= 4} // ograniczenie do 4 wersji
+            onClick={() => {
+              const current = form.getValues("responseVariants") ?? [];
+              const nextVersion =
+                Math.max(...current.map((v) => v.version || 0), 0) + 1;
+              append({
+                version: nextVersion,
+                variantContent: "",
+                variantName: "",
+              });
+            }}
+          >
+            <Plus className="w-4 h-4 mr-2" />{" "}
+            {fields.length >= 4
+              ? "Osiągnięto maksymalny limit wersji"
+              : "Dodaj wersję odpowiedzi"}
+          </Button>
+        </div>
+
+        {/* Powiązania */}
+        <Card className="p-6 space-y-6">
+          <CardHeader className="flex items-center gap-2">
+            <Link className="w-5 h-5 text-primary/90" />
+            <CardTitle className="text-lg font-semibold">Powiązania</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Produkt */}
             <FormField
               control={form.control}
               name="product"
@@ -284,14 +325,13 @@ const ArticleForm = ({
                     <Select
                       value={field.value}
                       onValueChange={(value) => {
-                        field.onChange(value); // aktualizuje stan formularza
-                        onProductChange?.(value); // aktualizuje stan wyżej, dzięki czemu odświeżają się kategorie
+                        field.onChange(value);
+                        onProductChange?.(value);
                       }}
                     >
-                      <SelectTrigger className="w-full">
+                      <SelectTrigger className="bg-input">
                         <SelectValue placeholder="➔ Wybierz produkt" />
                       </SelectTrigger>
-
                       <SelectContent>
                         {products.map(({ label, value }) => (
                           <SelectItem key={value} value={value}>
@@ -301,164 +341,127 @@ const ArticleForm = ({
                       </SelectContent>
                     </Select>
                   </FormControl>
-                  <FormDescription className="text-sm">
-                    Wybierz produkt, do którego zostanie przypisany artykuł.
-                  </FormDescription>
-                  <FormMessage className="text-xs" />
+                  <FormMessage />
                 </FormItem>
               )}
             />
 
-            <div
-              className={cn(
-                !form.watch("product") && "pointer-events-none opacity-50"
-              )}
-            >
-              <FormField
-                control={form.control}
-                name="category"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      <RequiredLabel>Kategoria</RequiredLabel>
-                    </FormLabel>
-                    <FormControl>
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}
-                        disabled={loadingCategories}
-                      >
-                        <SelectTrigger className="w-full">
-                          {loadingCategories ? (
-                            <div className="flex items-center space-x-2">
-                              <Loader className="animate-spin h-4 w-4 text-muted-foreground" />
-                              <span>Ładowanie kategorii...</span>
-                            </div>
-                          ) : (
-                            <SelectValue placeholder="➔ Wybierz kategorie" />
-                          )}
-                        </SelectTrigger>
-
-                        {!loadingCategories && (
-                          <SelectContent>
-                            {categories.map(({ label, value }) => (
-                              <SelectItem key={value} value={value}>
-                                {label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
+            {/* Kategoria */}
+            <FormField
+              control={form.control}
+              name="category"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    <RequiredLabel>Kategoria</RequiredLabel>
+                  </FormLabel>
+                  <FormControl>
+                    <Select
+                      value={field.value}
+                      onValueChange={field.onChange}
+                      disabled={loadingCategories}
+                    >
+                      <SelectTrigger className="bg-input">
+                        {loadingCategories ? (
+                          <div className="flex items-center space-x-2">
+                            <Loader className="animate-spin h-4 w-4" />
+                            <span>Ładowanie kategorii...</span>
+                          </div>
+                        ) : (
+                          <SelectValue placeholder="➔ Wybierz kategorię" />
                         )}
-                      </Select>
-                    </FormControl>
-                    <FormDescription className="text-sm">
-                      Wybierz jedną z kategorii dla wybranego produktu
-                    </FormDescription>
-                    <FormMessage className="text-xs" />
-                  </FormItem>
-                )}
-              />
-            </div>
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categories.map(({ label, value }) => (
+                          <SelectItem key={value} value={value}>
+                            {label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
+            {/* Tagi */}
             <FormField
               control={form.control}
               name="tags"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    <RequiredLabel>Tag</RequiredLabel>
+                    <RequiredLabel>Tagi</RequiredLabel>
                   </FormLabel>
                   <FormControl>
                     <MultipleSelector
-                      placeholder={
-                        field.value && field.value.length > 0
-                          ? ""
-                          : "➔ Wybierz tag"
-                      }
+                      placeholder="➔ Wybierz tag"
                       badgeClassName="bg-foreground text-background"
                       className="bg-background text-foreground"
                       value={field.value}
-                      defaultOptions={tags && tags}
-                      onChange={(selected) =>
-                        field.onChange(selected.map((item) => item))
-                      }
+                      defaultOptions={tags}
+                      onChange={field.onChange}
                     />
                   </FormControl>
-                  <FormDescription className="text-sm">
-                    Wybierz jeden lub więcej tagów, które najlepiej opisują
-                    temat artykułu.
-                  </FormDescription>
-                  <FormMessage className="text-xs" />
+                  <FormMessage />
                 </FormItem>
               )}
             />
+          </CardContent>
+        </Card>
 
+        {/* Załączniki */}
+        <Card className="p-6 space-y-6">
+          <CardHeader className="flex items-center gap-2">
+            <Paperclip className="w-5 h-5 text-primary/90" />
+            <CardTitle className="text-lg font-semibold">Załączniki</CardTitle>
+            <CardDescription>Maksymalnie 5 plików do 4MB każdy</CardDescription>
+          </CardHeader>
+
+          <CardContent>
             <FormField
               control={form.control}
-              name="name_2536348418"
-              render={({ field }) => (
+              name="file"
+              render={() => (
                 <FormItem>
-                  <FormLabel>
-                    Dodaj załącznik{" "}
-                    <span className="text-foreground/65 text-xs">
-                      (Opcjonalnie)
-                    </span>
-                  </FormLabel>
                   <FormControl>
                     <FileUploader
                       value={files}
                       onValueChange={setFiles}
                       dropzoneOptions={dropZoneConfig}
-                      className="relative bg-background rounded-lg p-2"
                     >
-                      <FileInput
-                        id="fileInput"
-                        className="outline-dashed outline-1 outline-slate-500"
-                      >
-                        <div className="flex items-center justify-center flex-col p-6 w-full ">
+                      <FileInput>
+                        <div className="flex items-center justify-center flex-col p-6 w-full">
                           <CloudUpload className="text-gray-500 w-10 h-10" />
-                          <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
+                          <p className="mb-1 text-sm text-gray-500">
                             <span className="font-semibold">
-                              Kliknij, aby przesłać plik
+                              Kliknij lub przeciągnij plik
                             </span>
-                            &nbsp; lub przeciągnij i upuść go tutaj
                           </p>
                           <p className="text-xs text-muted-foreground">
-                            SVG, PNG, JPG or GIF
+                            SVG, PNG, JPG, GIF
                           </p>
                         </div>
                       </FileInput>
                       <FileUploaderContent>
-                        {files &&
-                          files.length > 0 &&
-                          files.map((file, i) => (
-                            <FileUploaderItem key={i} index={i}>
-                              <Paperclip className="h-4 w-4 stroke-current " />
-                              <span>{file.name}</span>
-                            </FileUploaderItem>
-                          ))}
+                        {files?.map((file, i) => (
+                          <FileUploaderItem key={i} index={i}>
+                            <Paperclip className="h-4 w-4" />
+                            <span>{file.name}</span>
+                          </FileUploaderItem>
+                        ))}
                       </FileUploaderContent>
                     </FileUploader>
                   </FormControl>
-
-                  <FormDescription className="text-xs flex flex-col px-2">
-                    <span>
-                      Wybierz plik, który chcesz przesłać jako załącznik.
-                      Obsługiwane formaty: SVG, PNG, JPG, GIF.
-                    </span>
-                    <span>
-                      Maksymalny rozmiar pojedynczego pliku wynosi 4 MB, a
-                      liczba przesyłanych plików nie może przekroczyć 5.
-                    </span>
-                  </FormDescription>
-
-                  <FormMessage className="text-xs" />
+                  <FormMessage />
                 </FormItem>
               )}
             />
-          </div>
-        </form>
-      </Form>
-    </>
+          </CardContent>
+        </Card>
+      </form>
+    </Form>
   );
 };
 
