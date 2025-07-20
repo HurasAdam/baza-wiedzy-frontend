@@ -6,7 +6,7 @@ import type { StatusKey } from "../MyEntriesPage";
 interface StatusBarProps {
   currentStatus: StatusKey;
   setCurrentStatus: (key: StatusKey) => void;
-  statuses: { key: string; label: string; icon: JSX.Element }[];
+  statuses: { key: StatusKey; label: string; icon: JSX.Element }[]; // <-- tu zmiana
 }
 
 const StatusBar = ({
