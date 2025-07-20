@@ -26,7 +26,7 @@ const statuses: { key: StatusKey; label: string; icon: JSX.Element }[] = [
   },
 ];
 
-export type StatusKey = "approved" | "pending" | "rejected";
+export type StatusKey = "approved" | "pending" | "rejected" | "draft";
 
 export const MyEntriesPage = () => {
   const [currentStatus, setCurrentStatus] = useState<StatusKey>("approved");
