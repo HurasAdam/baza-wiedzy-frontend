@@ -9,6 +9,7 @@ import {
   Star,
   Trash2,
   UserIcon,
+  UserRoundCheck,
   XCircleIcon,
 } from "lucide-react";
 import { useState } from "react";
@@ -75,149 +76,149 @@ export const ArticlePage = () => {
 
   return (
     <div className="mx-auto">
-      <div className="bg-background z-10 p-4 border-b flex flex-col gap-3">
-        {/* Tytuł na pełną szerokość */}
-        <h1 className="text-2xl font-bold text-foreground truncate">
-          {article.title}
-        </h1>
+      {activeTab !== "edit" && (
+        <div className="bg-background z-10 p-4 border-b flex flex-col gap-3">
+          {/* Tytuł na pełną szerokość */}
+          <h1 className="text-2xl font-bold text-foreground truncate">
+            {article.title}
+          </h1>
 
-        {/* Rząd poniżej: po lewej status, po prawej przyciski */}
-        <div className="flex justify-between items-center flex-wrap gap-3">
-          {/* Status weryfikacji */}
-          <div className="flex items-center gap-1.5">
-            {article.isVerified ? (
-              <Badge className="bg-emerald-100 text-emerald-700 border border-emerald-300 flex items-center whitespace-nowrap">
-                <CheckCircleIcon className="w-4 h-4 mr-1" /> Zweryfikowany
-              </Badge>
-            ) : (
-              <Badge className="bg-yellow-100 text-yellow-800 border border-yellow-300 flex items-center whitespace-nowrap">
-                <XCircleIcon className="w-4 h-4 mr-1" /> Oczekuje na weryfikację
-              </Badge>
-            )}
-            <Badge
-              variant="secondary"
-              className="flex items-center whitespace-nowrap"
-            >
-              <EyeIcon className="w-4 h-4 mr-1" /> {article.viewsCounter}{" "}
-              wyświetleń
-            </Badge>
-          </div>
-          {/* Kontener na przyciski — tutaj może być ich wiele */}
-          {activeTab === "edit" && (
-            <div className="flex gap-2 flex-wrap justify-end flex-grow max-w-full">
-              <Button
-                onClick={() => setActiveTab("main")}
-                size="sm"
-                variant="destructive"
-              >
-                Anuluj
-              </Button>
-              {/* Tutaj możesz dodawać kolejne przyciski */}
-            </div>
-          )}{" "}
-          {activeTab !== "edit" && (
-            <TooltipProvider>
-              <div className="flex gap-2 items-center">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      size="icon"
-                      variant="outline"
-                      onClick={() => setActiveTab("edit")}
-                    >
-                      <Star className="w-4 h-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Dodaj do ulubionych</TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      size="icon"
-                      variant="outline"
-                      onClick={() => setActiveTab("edit")}
-                    >
-                      <SquarePen className="w-4 h-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Edytuj</TooltipContent>
-                </Tooltip>
-
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button size="icon" variant="destructive">
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Usuń</TooltipContent>
-                </Tooltip>
-              </div>
-            </TooltipProvider>
-          )}
-        </div>
-
-        {/* Meta info (produkt, kategoria, wyświetlenia, tagi) pod tym */}
-        <div className="flex justify-between mt-2">
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge variant="outline" className="whitespace-nowrap">
-              Produkt: {article.product.name}
-            </Badge>
-            <Badge variant="outline" className="whitespace-nowrap">
-              Kategoria: {article.category.name}
-            </Badge>
-            {article.tags.map((tag) => (
+          {/* Rząd poniżej: po lewej status, po prawej przyciski */}
+          <div className="flex justify-between items-center flex-wrap gap-3">
+            {/* Status weryfikacji */}
+            <div className="flex items-center gap-1.5">
+              {article.isVerified ? (
+                <Badge className="bg-emerald-100 text-emerald-700 border border-emerald-300 flex items-center whitespace-nowrap">
+                  <CheckCircleIcon className="w-4 h-4 mr-1" /> Zweryfikowany
+                </Badge>
+              ) : (
+                <Badge className="bg-yellow-100 text-yellow-800 border border-yellow-300 flex items-center whitespace-nowrap">
+                  <XCircleIcon className="w-4 h-4 mr-1" /> Oczekuje na
+                  weryfikację
+                </Badge>
+              )}
               <Badge
-                key={tag._id}
-                variant="ghost"
-                className="whitespace-nowrap"
+                variant="secondary"
+                className="flex items-center whitespace-nowrap"
               >
-                # {tag.name}
+                <EyeIcon className="w-4 h-4 mr-1" /> {article.viewsCounter}{" "}
+                wyświetleń
               </Badge>
-            ))}
+            </div>
+            {/* Kontener na przyciski — tutaj może być ich wiele */}
+            {activeTab === "edit" && (
+              <div className="flex gap-2 flex-wrap justify-end flex-grow max-w-full">
+                <Button
+                  onClick={() => setActiveTab("main")}
+                  size="sm"
+                  variant="destructive"
+                >
+                  Anuluj
+                </Button>
+                {/* Tutaj możesz dodawać kolejne przyciski */}
+              </div>
+            )}{" "}
+            {activeTab !== "edit" && (
+              <TooltipProvider>
+                <div className="flex gap-2 items-center">
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        onClick={() => setActiveTab("edit")}
+                      >
+                        <Star className="w-4 h-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Dodaj do ulubionych</TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        onClick={() => setActiveTab("edit")}
+                      >
+                        <SquarePen className="w-4 h-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Edytuj</TooltipContent>
+                  </Tooltip>
+
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button size="icon" variant="destructive">
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Usuń</TooltipContent>
+                  </Tooltip>
+                </div>
+              </TooltipProvider>
+            )}
           </div>
 
-          {activeTab !== "edit" ? (
-            <div className="flex bg-muted rounded-xl px-2 py-1 gap-1">
-              <button
-                className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-                  activeTab === "main"
-                    ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-                onClick={() => setActiveTab("main")}
-              >
-                Dane główne
-              </button>
-              <button
-                className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-                  activeTab === "attachments"
-                    ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-                onClick={() => setActiveTab("attachments")}
-              >
-                Załączniki
-              </button>
-              <button
-                className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-                  activeTab === "history"
-                    ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-                onClick={() => setActiveTab("history")}
-              >
-                Historia zmian
-              </button>
+          {/* Meta info (produkt, kategoria, wyświetlenia, tagi) pod tym */}
+          <div className="flex justify-between mt-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge variant="outline" className="whitespace-nowrap">
+                Produkt: {article.product.name}
+              </Badge>
+              <Badge variant="outline" className="whitespace-nowrap">
+                Kategoria: {article.category.name}
+              </Badge>
+              {article.tags.map((tag) => (
+                <Badge
+                  key={tag._id}
+                  variant="outline"
+                  className="whitespace-nowrap"
+                >
+                  # {tag.name}
+                </Badge>
+              ))}
             </div>
-          ) : (
-            <div className="h-10" />
-          )}
+
+            {activeTab !== "edit" && (
+              <div className="flex bg-muted rounded-xl px-2 py-1 gap-1">
+                <button
+                  className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                    activeTab === "main"
+                      ? "bg-background text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                  onClick={() => setActiveTab("main")}
+                >
+                  Dane główne
+                </button>
+                <button
+                  className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                    activeTab === "attachments"
+                      ? "bg-background text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                  onClick={() => setActiveTab("attachments")}
+                >
+                  Załączniki
+                </button>
+                <button
+                  className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                    activeTab === "history"
+                      ? "bg-background text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                  onClick={() => setActiveTab("history")}
+                >
+                  Historia zmian
+                </button>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        {activeTab === "edit" ? <div className="h-5"></div> : <div></div>}
-        {activeTab !== "edit" ? (
+        {activeTab !== "edit" && (
           <div className="flex bg-muted rounded-xl px-2 py-1 gap-1">
             {sortedDescriptions.map((desc, index) => {
               console.log("DESC", desc);
@@ -240,8 +241,6 @@ export const ArticlePage = () => {
               );
             })}
           </div>
-        ) : (
-          <div className="h-10" />
         )}
         <TabsContent value="main">
           <Card className="mt-6">
@@ -255,13 +254,13 @@ export const ArticlePage = () => {
 
               <section>
                 <h3 className="text-lg font-semibold mb-1">Opis klienta</h3>
-                <p className="whitespace-pre-wrap text-foreground">
+                <p className="whitespace-pre-wrap text-foreground break-all">
                   {currentDescription?.variantContent}
                 </p>
               </section>
 
               <section>
-                <h3 className="text-lg font-semibold mb-1">Twórca artykułu</h3>
+                <h3 className="text-lg font-semibold mb-1">Autor artykułu</h3>
                 <p className="flex items-center gap-2 text-sm text-muted-foreground">
                   <UserIcon className="w-5 h-5" /> {article.createdBy.name}{" "}
                   {article.createdBy.surname}
@@ -274,8 +273,8 @@ export const ArticlePage = () => {
                     Zweryfikowany przez
                   </h3>
                   <p className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <UserIcon className="w-5 h-5" /> {article.verifiedBy.name}{" "}
-                    {article.verifiedBy.surname}
+                    <UserRoundCheck className="w-5 h-5" />{" "}
+                    {article.verifiedBy.name} {article.verifiedBy.surname}
                   </p>
                 </section>
               )}
