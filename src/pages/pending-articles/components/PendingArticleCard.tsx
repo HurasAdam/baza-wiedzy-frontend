@@ -1,4 +1,5 @@
 import { Loader } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Badge } from "../../../components/ui/badge";
 import { Button } from "../../../components/ui/button";
 import { Card, CardContent } from "../../../components/ui/card";
@@ -17,6 +18,12 @@ const PendingArticleCard = ({
   onReject: (id: string) => void;
   loading?: boolean;
 }) => {
+  const navigate = useNavigate();
+
+  const onPreview = () => {
+    navigate(`/articles/${article._id}`);
+  };
+
   return (
     <Card
       key={article._id}
@@ -70,17 +77,21 @@ const PendingArticleCard = ({
             {article.category.name}
           </div>
         </div>
-
-        {/* Tagi */}
-        <div className="flex flex-wrap gap-1">
-          {article.tags.map((tag) => (
-            <Badge
-              key={tag._id}
-              className="bg-accent text-muted-foreground rounded-full px-2 py-0.5 text-[10px] max-w-full overflow-hidden text-ellipsis whitespace-nowrap"
-            >
-              {tag.name}
-            </Badge>
-          ))}
+        <div className="flex justify-between w-full">
+          {/* Tagi */}
+          <div className="flex flex-wrap gap-1">
+            {article.tags.map((tag) => (
+              <Badge
+                key={tag._id}
+                className="bg-accent text-muted-foreground rounded-full px-2 py-0.5 text-[10px] max-w-full overflow-hidden text-ellipsis whitespace-nowrap"
+              >
+                {tag.name}
+              </Badge>
+            ))}
+          </div>
+          <Button className="cursor-pointer" onClick={onPreview}>
+            Wyświetl
+          </Button>
         </div>
       </CardContent>
     </Card>
