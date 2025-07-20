@@ -1,6 +1,11 @@
-import { HeartIcon, Loader } from "lucide-react";
+import { FileTextIcon, HeartIcon, Loader } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "../../../components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "../../../components/ui/tooltip";
 import { cn } from "../../../lib/utils";
 
 const statusLabels: Record<string, string> = {
@@ -19,6 +24,7 @@ export interface Article {
   rejectedBy: string | null;
   createdBy: Author;
   viewsCounter: number;
+  responseVariantsCount: number;
   isTrashed: boolean;
   product: Product;
   category: Category;
@@ -77,29 +83,47 @@ const TableArticleCard = ({
           </span>
         </div>
 
-        <Button
-          className="cursor-pointer"
-          variant="ghost"
-          size="icon"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            toggleFavourite(article._id);
-          }}
-        >
-          {toggleFavouriteLoading ? (
-            <Loader className="animate-spin" />
-          ) : (
-            <HeartIcon
-              className={cn(
-                "h-4 w-4",
-                article.isFavourite
-                  ? "text-primary/65 fill-primary/65"
-                  : "text-muted-foreground"
-              )}
-            />
+        <div className="flex items-center gap-40">
+          {/* Wersje odpowiedzi */}
+          {article.responseVariantsCount > 1 && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center gap-1 text-muted-foreground text-xs">
+                  <FileTextIcon className="w-4 h-4" />
+                  <span>{article.responseVariantsCount}</span>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent side="top">
+                Liczba wersji odpowiedzi w tym artykule
+              </TooltipContent>
+            </Tooltip>
           )}
-        </Button>
+
+          {/* Ulubione */}
+          <Button
+            className="cursor-pointer hover:bg-background"
+            variant="ghost"
+            size="icon"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              toggleFavourite(article._id);
+            }}
+          >
+            {toggleFavouriteLoading ? (
+              <Loader className="animate-spin" />
+            ) : (
+              <HeartIcon
+                className={cn(
+                  "h-4 w-4",
+                  article.isFavourite
+                    ? "text-primary/65 fill-primary/65"
+                    : "text-muted-foreground"
+                )}
+              />
+            )}
+          </Button>
+        </div>
       </div>
     </Link>
   );
