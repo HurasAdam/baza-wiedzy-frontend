@@ -1,5 +1,5 @@
 import type { AxiosError } from "axios";
-import { Plus } from "lucide-react";
+import { Loader, Plus } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -12,10 +12,15 @@ import type { IProduct } from "../../types/product";
 import type { ProductCategory } from "../../types/product-category";
 import type { Tag } from "../../types/tags";
 import { mapToSelectOptions } from "../../utils/form-mappers";
-import type {
-  ArticleCreateDto,
-  ArticleFormData,
+import {
+  articleSchema,
+  type ArticleCreateDto,
+  type ArticleFormData,
 } from "../../validation/article.schema";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormProvider, useForm } from "react-hook-form";
+import { Button } from "../../components/ui/button";
 
 export type SelectOption = {
   label: string;
@@ -33,9 +38,10 @@ export const CreateArticlePage = () => {
     useFindCategoriesByProductQuery(selectedProductId);
   const { data: tags, isLoading: loadingTags } = useFindTagsQuery();
 
-  const { mutate } = useCreateArticleMutation();
+  const { mutate, isPending: isCreateLoading } = useCreateArticleMutation();
 
-  const onSave = ({ formData }: { formData: ArticleFormData }) => {
+  const onSave = (formData: ArticleFormData) => {
+    console.log(formData.tags);
     const dto: ArticleCreateDto = {
       ...formData,
       tags: formData.tags.map(
@@ -82,6 +88,27 @@ export const CreateArticlePage = () => {
     });
   };
 
+  const form = useForm<ArticleFormData>({
+    resolver: zodResolver(articleSchema),
+    defaultValues: {
+      title: "",
+      product: "",
+      category: "",
+      tags: [],
+      responseVariants: [
+        {
+          version: 1,
+          variantName: "",
+          variantContent: "",
+        },
+      ],
+      employeeDescription: "",
+      file: [],
+    },
+  });
+
+  const handleSubmit = form.handleSubmit(onSave);
+
   const formattedProducts: SelectOption[] = mapToSelectOptions<IProduct>(
     products,
     (p) => p.name,
@@ -113,29 +140,52 @@ export const CreateArticlePage = () => {
   return (
     tags && (
       <>
-        <header className=" px-8 py-8  flex items-center space-x-6">
-          <div className="rounded-lg p-3 bg-primary/90 text-primary-foreground">
-            <Plus className="w-5 h-5" />
+        <header className="px-2.5 py-8 flex  space-x-6 bg-background justify-between">
+          <div className="flex gap-6 items-start">
+            <div className="rounded-lg p-3 bg-primary/90 text-primary-foreground">
+              <Plus className="w-5 h-5 " />
+            </div>
+            <div>
+              <h1 className="text-lg flex items-center font-bold leading-tight tracking-tight text-foreground mb-1">
+                Dodaj nowy artykuł
+              </h1>
+              <p className="text-sm text-muted-foreground max-w-2xl">
+                Zaktualizuj szczegóły artykułu, przypisz go do produktu i
+                dostosuj jego metadane.
+              </p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-foreground">
-              Dodaj nowy artykuł
-            </h1>
-            <p className="mt-2 max-w-xl text-sm font-normal text-muted-foreground">
-              Wprowadź szczegóły artykułu, aby go utworzyć i przypisać do
-              produktu.
-            </p>
+
+          {/* 🔽 PRZYCISKI */}
+          <div className="flex justify-end gap-3 mt-6 px-2">
+            <Button variant="outline" onClick={() => navigate(-1)}>
+              Anuluj
+            </Button>
+            <Button
+              variant="default"
+              onClick={handleSubmit}
+              disabled={isCreateLoading}
+            >
+              {isCreateLoading ? (
+                <div className="flex items-center gap-2">
+                  <Loader className="animate-spin w-4 h-4" />
+                  Zapisuję...
+                </div>
+              ) : (
+                "Zapisz"
+              )}
+            </Button>
           </div>
         </header>
-        <ArticleForm
-          onCancel={() => navigate(-1)}
-          products={formattedProducts}
-          categories={formattedCategoriesBySelectedProduct}
-          onProductChange={setSelectedProductId}
-          tags={formattedTags}
-          loadingCategories={loadingCategories}
-          onCreate={onSave}
-        />
+        <FormProvider {...form}>
+          <ArticleForm
+            products={formattedProducts}
+            categories={formattedCategoriesBySelectedProduct}
+            onProductChange={setSelectedProductId}
+            tags={formattedTags}
+            loadingCategories={loadingCategories}
+          />
+        </FormProvider>
       </>
     )
   );

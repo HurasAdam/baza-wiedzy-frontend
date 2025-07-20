@@ -1,8 +1,12 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import type { AxiosError } from "axios";
+import { ChevronRight, Edit3, Loader } from "lucide-react";
 import { useEffect, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import ArticleForm from "../../components/article/article-form";
+import { Button } from "../../components/ui/button";
 import queryClient from "../../config/query.client";
 import {
   useFindArticleQuery,
@@ -15,9 +19,10 @@ import type { IProduct } from "../../types/product";
 import type { ProductCategory } from "../../types/product-category";
 import type { Tag } from "../../types/tags";
 import { mapToSelectOptions } from "../../utils/form-mappers";
-import type {
-  ArticleCreateDto,
-  ArticleFormData,
+import {
+  articleSchema,
+  type ArticleCreateDto,
+  type ArticleFormData,
 } from "../../validation/article.schema";
 
 export type SelectOption = {
@@ -98,6 +103,33 @@ export const EditArticlePage = ({
     );
   };
 
+  const handleSave = (formData: ArticleFormData) =>
+    onSave({ articleId, formData });
+
+  const form = useForm<ArticleFormData>({
+    resolver: zodResolver(articleSchema),
+    defaultValues: {
+      title: article?.title ?? "",
+      product: article?.product?._id ?? "",
+      category: article?.category?._id ?? "",
+      tags: article
+        ? article.tags.map((tag) => ({ label: tag.name, value: tag._id }))
+        : [],
+      responseVariants: article?.responseVariants.map((cd) => ({
+        version:
+          typeof cd.version === "number"
+            ? cd.version
+            : parseInt(cd.version ?? "1", 10),
+        variantContent: cd.variantContent ?? "",
+        variantName: cd.variantName ?? "",
+      })) ?? [{ version: 1, variantContent: "", variantName: "" }],
+      employeeDescription: article?.employeeDescription ?? "",
+      file: [],
+    },
+  });
+  const { isDirty } = form.formState;
+  const handleSubmit = form.handleSubmit(handleSave);
+
   const formattedProducts: SelectOption[] = mapToSelectOptions<IProduct>(
     products,
     (p) => p.name,
@@ -127,25 +159,66 @@ export const EditArticlePage = ({
     return (
       <div className="flex justify-center items-center h-screen">
         <div className="loader">Ładowanie...</div>
-        {/* Możesz podmienić na swój spinner lub ikonę */}
       </div>
     );
   }
 
   return (
     tags && (
-      <div className="space-y-4">
-        <ArticleForm
-          isLoading={isUpdatedLoading}
-          article={article}
-          products={formattedProducts}
-          categories={formattedCategoriesBySelectedProduct}
-          onProductChange={setSelectedProductId}
-          tags={formattedTags}
-          loadingCategories={loadingCategories}
-          onUpdate={onSave}
-        />
-      </div>
+      <>
+        <header className="px-2.5 py-8 flex  space-x-6 bg-background justify-between">
+          <div className="flex gap-6 items-start">
+            <div className="rounded-lg p-3 bg-primary/90 text-primary-foreground">
+              <Edit3 className="w-5 h-5 " />
+            </div>
+            <div>
+              <h1 className="text-lg flex items-center font-bold leading-tight tracking-tight text-foreground mb-1">
+                Edycja artykułu{" "}
+                <ChevronRight className="w-5 h-5 mx-2 text-primary animate-pulse" />
+                <span className="text-foreground  undercover font-medium">
+                  {article ? article.title : "Ładowanie"}
+                </span>
+              </h1>
+              <p className="text-sm text-muted-foreground max-w-2xl">
+                Zaktualizuj szczegóły artykułu, przypisz go do produktu i
+                dostosuj jego metadane.
+              </p>
+            </div>
+          </div>
+
+          {/* 🔽 PRZYCISKI */}
+          <div className="flex justify-end gap-3 mt-6 px-2">
+            <Button variant="outline" onClick={onEditCancel}>
+              Anuluj
+            </Button>
+            <Button
+              variant="default"
+              onClick={handleSubmit}
+              disabled={isUpdatedLoading || !isDirty}
+            >
+              {isUpdatedLoading ? (
+                <div className="flex items-center gap-2">
+                  <Loader className="animate-spin w-4 h-4" />
+                  Zapisuję...
+                </div>
+              ) : (
+                "Zapisz"
+              )}
+            </Button>
+          </div>
+        </header>
+        <FormProvider {...form}>
+          <ArticleForm
+            isLoading={isUpdatedLoading}
+            article={article}
+            products={formattedProducts}
+            categories={formattedCategoriesBySelectedProduct}
+            onProductChange={setSelectedProductId}
+            tags={formattedTags}
+            loadingCategories={loadingCategories}
+          />
+        </FormProvider>
+      </>
     )
   );
 };
