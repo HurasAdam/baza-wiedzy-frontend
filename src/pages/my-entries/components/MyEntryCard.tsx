@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Button } from "../../../components/ui/button";
 import {
   Tooltip,
@@ -63,6 +64,11 @@ const MyEntryCard = ({
   label,
   onOpenRejectionReason,
 }: MyEntryCardProps) => {
+  const navigate = useNavigate();
+  const onPreview = () => {
+    navigate(`/articles/${article._id}`);
+  };
+
   const renderStatus = () => {
     const baseClasses = "text-xs font-medium px-2 py-0.5 rounded";
 
@@ -71,7 +77,7 @@ const MyEntryCard = ({
       pending: "bg-yellow-100 text-yellow-800",
       rejected: "bg-red-100 text-red-800",
     }[label];
-    console.log(label, "LABEL");
+
     return (
       <Tooltip>
         <TooltipTrigger asChild>
@@ -107,6 +113,7 @@ const MyEntryCard = ({
         </div>
 
         <div className="flex items-center gap-6">
+          {renderStatus()}
           {label === "rejected" && article.rejectionReason && (
             <Button
               size="sm"
@@ -117,7 +124,10 @@ const MyEntryCard = ({
               Uwagi
             </Button>
           )}
-          {renderStatus()}
+
+          <Button onClick={onPreview} size="sm" className="cursor-pointer">
+            Wyświetl
+          </Button>
         </div>
       </div>
     </>
