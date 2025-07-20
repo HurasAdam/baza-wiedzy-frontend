@@ -8,6 +8,7 @@ export interface Article {
   tags: Tag[];
   isVerified: boolean;
   updatedAt: string;
+  status: "approved" | "rejected" | "pending" | "draft";
   createdBy: {
     _id: string;
     name: string;
