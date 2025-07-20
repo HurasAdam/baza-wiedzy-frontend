@@ -1,12 +1,14 @@
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { CheckCircle, Clock, Loader, XCircle } from "lucide-react";
+import type { JSX } from "react";
 import { useState } from "react";
+import ArticleRejectionReasonModal from "../../components/my-entries/article-rejection-reason-modal";
 import { NoDataFound } from "../../components/shared/NoDataFound";
 import { useFindArticlesCreatedByUserQuery } from "../../hooks/articles/use-articles";
 import MyEntryCard, { type Article } from "./components/MyEntryCard";
 import StatusBar from "./components/StatusBar";
 
-const statuses = [
+const statuses: { key: StatusKey; label: string; icon: JSX.Element }[] = [
   {
     key: "approved",
     label: "Zatwierdzone",
@@ -28,12 +30,25 @@ export type StatusKey = "approved" | "pending" | "rejected";
 
 export const MyEntriesPage = () => {
   const [currentStatus, setCurrentStatus] = useState<StatusKey>("approved");
+  const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
+  const [openRejectionReasonModal, setOpenRejectionReasonModal] =
+    useState(false);
 
   const { data, isLoading, error } = useFindArticlesCreatedByUserQuery({
     status: currentStatus,
     limit: 50,
     page: 1,
   });
+
+  const onOpenRejectionReason = (article: Article) => {
+    setSelectedArticle(article);
+    setOpenRejectionReasonModal(true);
+  };
+
+  const onCloseRejectionReasonModal = () => {
+    setOpenRejectionReasonModal(false);
+    setSelectedArticle(null);
+  };
 
   return (
     <div className="mx-auto pb-10">
@@ -93,13 +108,24 @@ export const MyEntriesPage = () => {
               )}
 
               {data?.data?.map((article: Article) => (
-                <MyEntryCard article={article} label={key} />
+                <MyEntryCard
+                  onOpenRejectionReason={onOpenRejectionReason}
+                  article={article}
+                  label={key}
+                />
               ))}
             </div>
           </TabsContent>
         ))}
       </Tabs>
       <div>More</div>
+      {selectedArticle && (
+        <ArticleRejectionReasonModal
+          article={selectedArticle}
+          open={openRejectionReasonModal}
+          setOpen={onCloseRejectionReasonModal}
+        />
+      )}
     </div>
   );
 };

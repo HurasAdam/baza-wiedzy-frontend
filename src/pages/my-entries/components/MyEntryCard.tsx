@@ -1,3 +1,9 @@
+import { Button } from "../../../components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "../../../components/ui/tooltip";
 import { cn } from "../../../lib/utils";
 
 const statusLabels: Record<string, string> = {
@@ -13,13 +19,13 @@ export interface Article {
   isVerified: boolean;
   status: "approved" | "rejected" | "pending";
   rejectionReason: string | null;
-  rejectedBy: string | null;
+  rejectedBy: Author | null;
   createdBy: Author;
   viewsCounter: number;
   isTrashed: boolean;
   product: Product;
   category: Category;
-  createdAt: string; // ISO date string
+  createdAt: string;
   isFavourite: boolean;
 }
 
@@ -47,39 +53,74 @@ interface Category {
 }
 
 interface MyEntryCardProps {
+  onOpenRejectionReason: (article: Article) => void;
   article: Article;
-  label: string;
+  label: "approved" | "rejected" | "pending";
 }
 
-const MyEntryCard = ({ article, label }: MyEntryCardProps) => {
-  return (
-    <div
-      key={article._id}
-      className="flex justify-between items-center px-4 py-3 text-sm hover:bg-muted transition-colors cursor-pointer"
-      title={`Autor: ${article.createdBy.name}`}
-    >
-      <div className="flex flex-col overflow-hidden">
-        <span className="font-medium text-foreground truncate">
-          {article.title}
-        </span>
-        <span className="text-muted-foreground text-xs">
-          {article.product.name}
-        </span>
-      </div>
+const MyEntryCard = ({
+  article,
+  label,
+  onOpenRejectionReason,
+}: MyEntryCardProps) => {
+  const renderStatus = () => {
+    const baseClasses = "text-xs font-medium px-2 py-0.5 rounded";
 
-      <span
-        className={cn(
-          "text-xs font-medium px-2 py-0.5 rounded",
-          label === "approved"
-            ? "bg-green-200/75 text-teal-900"
-            : label === "pending"
-            ? "bg-amber-200/75 text-amber-900"
-            : "bg-rose-200/75 text-rose-900"
+    const statusColor = {
+      approved: "bg-green-100 text-green-800",
+      pending: "bg-yellow-100 text-yellow-800",
+      rejected: "bg-red-100 text-red-800",
+    }[label];
+    console.log(label, "LABEL");
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <span className={cn(baseClasses, statusColor)}>
+            {statusLabels[label]}
+          </span>
+        </TooltipTrigger>
+        {label === "rejected" && article.rejectedBy && (
+          <TooltipContent className="text-sm p-3">
+            <div>
+              <span className="font-semibold">Odrzucony przez:</span>{" "}
+              {article.rejectedBy.name} {article.rejectedBy.surname}
+            </div>
+          </TooltipContent>
         )}
+      </Tooltip>
+    );
+  };
+
+  return (
+    <>
+      <div
+        key={article._id}
+        className="flex justify-between items-center px-4 py-3 text-sm hover:bg-muted transition-colors rounded-md"
       >
-        {statusLabels[label]}
-      </span>
-    </div>
+        <div className="flex flex-col overflow-hidden">
+          <span className="font-medium text-foreground truncate">
+            {article.title}
+          </span>
+          <span className="text-muted-foreground text-xs">
+            {article.product.name}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-6">
+          {label === "rejected" && article.rejectionReason && (
+            <Button
+              size="sm"
+              variant="link"
+              className="text-sm text-muted-foreground hover:text-primary underline-offset-2"
+              onClick={() => onOpenRejectionReason(article)}
+            >
+              Uwagi
+            </Button>
+          )}
+          {renderStatus()}
+        </div>
+      </div>
+    </>
   );
 };
 
