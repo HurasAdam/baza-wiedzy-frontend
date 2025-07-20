@@ -14,6 +14,9 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "sonner";
+import { PendingArticleRejectionModal } from "../../components/pending-articles/pending-article-rejection-modal";
+import { Alert } from "../../components/shared/alert-modal";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "../../components/ui/card";
@@ -24,9 +27,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../../components/ui/tooltip";
-import { useFindArticleQuery } from "../../hooks/articles/use-articles";
+import queryClient from "../../config/query.client";
+import {
+  useAproveArticleMutation,
+  useFindArticleQuery,
+  useRejectArticleMutation,
+} from "../../hooks/articles/use-articles";
 import { cn } from "../../lib/utils";
 import { EditArticlePage } from "../edit-article/EditArticlePage";
+import { ArticleVerificationBanner } from "./components/ArticleVerificationBanner";
 import { ArticlePageSkeleton } from "./skeleton/ArticlePageSkeleton";
 
 const getFileIcon = (type: string) => {
@@ -50,8 +59,67 @@ export const ArticlePage = () => {
   const [activeVersion, setActiveVersion] = useState(0);
   const { data: article, isLoading, isError, error } = useFindArticleQuery(id);
 
+  const [isCreatinArticleApprove, setIsCreatingArticleApprove] =
+    useState<boolean>(false);
+  const [isCreatingArticleRejection, setIsCreatingArticleRejection] =
+    useState<boolean>(false);
+
+  const { mutate: approveMutate, isPending: isApproveLoading } =
+    useAproveArticleMutation();
+  const { mutate: rejectionMutate } = useRejectArticleMutation();
+
   const onEditCancel = () => {
     setActiveTab("main");
+  };
+
+  const onArticleAproveConfirm = () => {
+    if (!article) return;
+    approveMutate(article._id, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["article", article._id] });
+        toast.success("Artykuł został zatwierdzony.");
+      },
+      onSettled: () => {
+        setIsCreatingArticleApprove(false);
+      },
+    });
+  };
+
+  const onArticleRejectConfirm = ({
+    rejectionReason,
+  }: {
+    rejectionReason: string;
+  }) => {
+    if (article) {
+      rejectionMutate(
+        { articleId: article._id, rejectionReason },
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["articles"] });
+            toast.success(
+              "Artykuł został odrzucony, uwagi zostały wysłane do autora artykułu"
+            );
+          },
+          onSettled: () => {
+            setIsCreatingArticleRejection(false);
+          },
+        }
+      );
+    }
+
+    setIsCreatingArticleRejection(false);
+  };
+
+  const onArticleAprove = () => {
+    setIsCreatingArticleApprove(true);
+  };
+
+  const onArticleReject = () => {
+    setIsCreatingArticleRejection(true);
+  };
+
+  const onCloseArticleApproveAlert = () => {
+    setIsCreatingArticleApprove(false);
   };
 
   if (isLoading) return <ArticlePageSkeleton />;
@@ -76,25 +144,39 @@ export const ArticlePage = () => {
 
   return (
     <div className="mx-auto">
+      {["pending", "draft"].includes(article.status) &&
+        activeTab !== "edit" && (
+          <ArticleVerificationBanner
+            status={article.status}
+            onApprove={onArticleAprove}
+            onReject={onArticleReject}
+          />
+        )}
+
       {activeTab !== "edit" && (
         <div className="bg-background z-10 p-4 border-b flex flex-col gap-3">
-          {/* Tytuł na pełną szerokość */}
+          {/* ---- Title -----*/}
           <h1 className="text-2xl font-bold text-foreground truncate">
             {article.title}
           </h1>
 
-          {/* Rząd poniżej: po lewej status, po prawej przyciski */}
+          {/* ---- Status ----*/}
           <div className="flex justify-between items-center flex-wrap gap-3">
             {/* Status weryfikacji */}
             <div className="flex items-center gap-1.5">
-              {article.isVerified ? (
+              {article.status === "approved" && (
                 <Badge className="bg-emerald-100 text-emerald-700 border border-emerald-300 flex items-center whitespace-nowrap">
                   <CheckCircleIcon className="w-4 h-4 mr-1" /> Zweryfikowany
                 </Badge>
-              ) : (
+              )}
+              {article.status === "pending" && (
                 <Badge className="bg-yellow-100 text-yellow-800 border border-yellow-300 flex items-center whitespace-nowrap">
-                  <XCircleIcon className="w-4 h-4 mr-1" /> Oczekuje na
-                  weryfikację
+                  <XCircleIcon className="w-4 h-4 mr-1" /> Wymaga weryfikacji
+                </Badge>
+              )}
+              {article.status === "draft" && (
+                <Badge className="bg-destructive/10 text-rose-800/95 border border-destructive/30 flex items-center whitespace-nowrap">
+                  <XCircleIcon className="w-4 h-4 mr-1" /> Wymaga zatwierdzenia
                 </Badge>
               )}
               <Badge
@@ -105,7 +187,7 @@ export const ArticlePage = () => {
                 wyświetleń
               </Badge>
             </div>
-            {/* Kontener na przyciski — tutaj może być ich wiele */}
+            {/* ---- Edit mode action buttons ----- */}
             {activeTab === "edit" && (
               <div className="flex gap-2 flex-wrap justify-end flex-grow max-w-full">
                 <Button
@@ -115,9 +197,9 @@ export const ArticlePage = () => {
                 >
                   Anuluj
                 </Button>
-                {/* Tutaj możesz dodawać kolejne przyciski */}
               </div>
             )}{" "}
+            {/* --------- Main action buttons ------ */}
             {activeTab !== "edit" && (
               <TooltipProvider>
                 <div className="flex gap-2 items-center">
@@ -159,7 +241,7 @@ export const ArticlePage = () => {
             )}
           </div>
 
-          {/* Meta info (produkt, kategoria, wyświetlenia, tagi) pod tym */}
+          {/* ---- Product/Category/Tag Badges ----- */}
           <div className="flex justify-between mt-2">
             <div className="flex flex-wrap items-center gap-2">
               <Badge variant="outline" className="whitespace-nowrap">
@@ -334,6 +416,22 @@ export const ArticlePage = () => {
           />
         </TabsContent>
       </Tabs>
+      <Alert
+        isOpen={isCreatinArticleApprove}
+        isLoading={isApproveLoading}
+        type="info"
+        title="Zatwierdź artykuł"
+        onCancel={onCloseArticleApproveAlert}
+        onConfirm={onArticleAproveConfirm}
+      >
+        Czy na pewno chcesz zatwierdzić ten artykuł?
+      </Alert>
+
+      <PendingArticleRejectionModal
+        onSubmit={onArticleRejectConfirm}
+        isCreatingArticleRejection={isCreatingArticleRejection}
+        setIsCreatingArticleRejection={setIsCreatingArticleRejection}
+      />
     </div>
   );
 };
