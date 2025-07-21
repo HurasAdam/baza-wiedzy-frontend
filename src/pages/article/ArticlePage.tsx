@@ -37,6 +37,7 @@ import { cn } from "../../lib/utils";
 import { EditArticlePage } from "../edit-article/EditArticlePage";
 import { ArticleVerificationBanner } from "./components/ArticleVerificationBanner";
 import { ArticlePageSkeleton } from "./skeleton/ArticlePageSkeleton";
+import { RejectedArticleBanner } from "./components/RejectedArticleBanner";
 
 const getFileIcon = (type: string) => {
   switch (type.toLowerCase()) {
@@ -144,6 +145,16 @@ export const ArticlePage = () => {
 
   return (
     <div className="mx-auto">
+
+{activeTab !== "edit" && article.status === "rejected" && (
+  <RejectedArticleBanner
+    rejectionReason={article.rejectionReason}
+    isResubmitting={isApproveLoading}
+    onResubmit={onArticleAprove}
+  />
+)}
+
+
       {["pending", "draft"].includes(article.status) &&
         activeTab !== "edit" && (
           <ArticleVerificationBanner
@@ -177,6 +188,11 @@ export const ArticlePage = () => {
               {article.status === "draft" && (
                 <Badge className="bg-destructive/10 text-rose-800/95 border border-destructive/30 flex items-center whitespace-nowrap">
                   <XCircleIcon className="w-4 h-4 mr-1" /> Wymaga zatwierdzenia
+                </Badge>
+              )}
+                 {article.status === "rejected" && (
+                <Badge className="bg-destructive/10 text-rose-800/95 border border-destructive/30 flex items-center whitespace-nowrap">
+                  <XCircleIcon className="w-4 h-4 mr-1" /> Odrzucony
                 </Badge>
               )}
               <Badge
