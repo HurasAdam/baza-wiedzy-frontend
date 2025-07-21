@@ -19,13 +19,13 @@ interface Props {
   onCancel: () => void;
   onConfirm: () => void;
   requireConfirmation?: boolean;
-  type?: "warning" | "info" | "success";
+  type?: "warning" | "info" | "success"|"default";
   title?: string;
   isLoading: boolean;
 }
 const titleColors = {
   warning: "text-rose-700/90",
-
+default:"text-foreground",
   info: "text-indigo-800/80",
   success: "text-green-700/85",
 };
@@ -36,7 +36,7 @@ export function Alert({
   onConfirm,
   children,
   requireConfirmation = false,
-  type = "warning",
+  type = "default",
   isLoading,
 }: Props) {
   const [isChecked, setIsChecked] = useState(false);
