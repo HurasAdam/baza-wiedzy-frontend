@@ -15,7 +15,7 @@ const statuses: { key: StatusKey; label: string; icon: JSX.Element }[] = [
     icon: <CheckCircle className="w-4 h-4 mr-1" />,
   },
   {
-    key: "pending",
+    key: "draft",
     label: "Oczekujące",
     icon: <Clock className="w-4 h-4 mr-1" />,
   },
