@@ -36,8 +36,8 @@ import {
 import { cn } from "../../lib/utils";
 import { EditArticlePage } from "../edit-article/EditArticlePage";
 import { ArticleVerificationBanner } from "./components/ArticleVerificationBanner";
-import { ArticlePageSkeleton } from "./skeleton/ArticlePageSkeleton";
 import { RejectedArticleBanner } from "./components/RejectedArticleBanner";
+import { ArticlePageSkeleton } from "./skeleton/ArticlePageSkeleton";
 
 const getFileIcon = (type: string) => {
   switch (type.toLowerCase()) {
@@ -145,15 +145,13 @@ export const ArticlePage = () => {
 
   return (
     <div className="mx-auto">
-
-{activeTab !== "edit" && article.status === "rejected" && (
-  <RejectedArticleBanner
-    rejectionReason={article.rejectionReason}
-    isResubmitting={isApproveLoading}
-    onResubmit={onArticleAprove}
-  />
-)}
-
+      {activeTab !== "edit" && article.status === "rejected" && (
+        <RejectedArticleBanner
+          article={article}
+          isResubmitting={isApproveLoading}
+          onResubmit={onArticleAprove}
+        />
+      )}
 
       {["pending", "draft"].includes(article.status) &&
         activeTab !== "edit" && (
@@ -190,7 +188,7 @@ export const ArticlePage = () => {
                   <XCircleIcon className="w-4 h-4 mr-1" /> Wymaga zatwierdzenia
                 </Badge>
               )}
-                 {article.status === "rejected" && (
+              {article.status === "rejected" && (
                 <Badge className="bg-destructive/10 text-rose-800/95 border border-destructive/30 flex items-center whitespace-nowrap">
                   <XCircleIcon className="w-4 h-4 mr-1" /> Odrzucony
                 </Badge>
@@ -352,7 +350,7 @@ export const ArticlePage = () => {
 
               <section>
                 <h3 className="text-lg font-semibold mb-1">Opis klienta</h3>
-                <p className="whitespace-pre-wrap text-foreground break-all">
+                <p className="whitespace-pre-wrap text-foreground break-words">
                   {currentDescription?.variantContent}
                 </p>
               </section>
