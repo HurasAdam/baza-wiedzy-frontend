@@ -66,7 +66,7 @@ const navItems = [
 
   {
     title: "Ulubione",
-    href: "/settings",
+    href: "/favorites-articles",
     icon: Star,
   },
   {

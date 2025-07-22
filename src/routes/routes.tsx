@@ -11,6 +11,10 @@ export const protectedRoutePaths = [
     element: <PAGES.PendingArticles />,
   },
   {
+    path: PROTECTED_ROUTES.FAVORITES_ARTICLES,
+    element: <PAGES.FavoritesArticlesPage />,
+  },
+  {
     path: PROTECTED_ROUTES.REGISTER_TOPIC,
     element: <PAGES.TopicRegisterPage />,
   },

@@ -4,6 +4,7 @@ import { ForgotPasswordPage } from "./auth/forgot-password/ForgotPasswordPage";
 import { LoginPage } from "./auth/login/LoginPage";
 import { CreateArticlePage } from "./create-article/CreateArticlePage";
 import { DashboardPage } from "./dashboard/DashboardPage";
+import { FavoritesArticlesPage } from "./favorites-articles/FavoritesArticlesPage";
 import { FunnyMessages } from "./funny-messages/FunnyMessages";
 import { JstProjectsPage } from "./jst-projects/JstProjectsPage";
 import { MyEntriesPage } from "./my-entries/MyEntriesPage";
@@ -26,4 +27,5 @@ export const PAGES = {
   FunnyMessages,
   CreateArticlePage,
   PendingArticles,
+  FavoritesArticlesPage,
 };

@@ -9,4 +9,5 @@ export const PROTECTED_ROUTES = {
   MY_ENTRIES: "my-entries",
   FUNNY_MESSAGES: "funny-messages",
   CREATE_ARTICLE: "articles/new",
+  FAVORITES_ARTICLES: "favorites-articles",
 };
