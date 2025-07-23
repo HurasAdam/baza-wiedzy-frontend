@@ -12,6 +12,8 @@ import { NotFoundPage } from "./notFound/NotFoungPage";
 import { PendingArticles } from "./pending-articles/PendingArticles";
 import { StatisticsPage } from "./statistics/StatisticsPage";
 import { TopicRegisterPage } from "./TopicRegister/TopicRegisterPage";
+import { UsersPage } from "./admin-panel/admin-users";
+import { ProductsPage } from "./admin-panel/admin-products";
 
 export const PAGES = {
   LoginPage,
@@ -28,4 +30,6 @@ export const PAGES = {
   CreateArticlePage,
   PendingArticles,
   FavoritesArticlesPage,
+  UsersPage,
+  ProductsPage
 };

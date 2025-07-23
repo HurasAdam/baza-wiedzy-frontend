@@ -45,6 +45,8 @@ export function AppRoutes() {
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="manage-users" element={<PAGES.UsersPage />} />
+            <Route path="manage-products" element={<PAGES.ProductsPage />} />
           </Route>
         </Route>
       </Routes>
