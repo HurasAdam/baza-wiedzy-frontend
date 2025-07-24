@@ -12,8 +12,8 @@ import {
   UserRoundCheck,
   XCircleIcon,
 } from "lucide-react";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { PendingArticleRejectionModal } from "../../components/pending-articles/pending-article-rejection-modal";
 import { Alert } from "../../components/shared/alert-modal";
@@ -34,6 +34,7 @@ import {
   useRejectArticleMutation,
 } from "../../hooks/articles/use-articles";
 import { cn } from "../../lib/utils";
+import { generateMockHistory, getEventConfig } from "../../utils/article-event";
 import { EditArticlePage } from "../edit-article/EditArticlePage";
 import { ArticleVerificationBanner } from "./components/ArticleVerificationBanner";
 import { RejectedArticleBanner } from "./components/RejectedArticleBanner";
@@ -59,6 +60,7 @@ export const ArticlePage = () => {
   const [activeTab, setActiveTab] = useState("main");
   const [activeVersion, setActiveVersion] = useState(0);
   const { data: article, isLoading, isError, error } = useFindArticleQuery(id);
+  const mockHistory = useMemo(() => generateMockHistory(20), []);
 
   const [isCreatinArticleApprove, setIsCreatingArticleApprove] =
     useState<boolean>(false);
@@ -144,7 +146,7 @@ export const ArticlePage = () => {
   const currentDescription = sortedDescriptions[activeVersion];
 
   return (
-    <div className="mx-auto">
+    <div className="mx-auto pb-6">
       {activeTab !== "edit" && article.status === "rejected" && (
         <RejectedArticleBanner
           article={article}
@@ -163,14 +165,14 @@ export const ArticlePage = () => {
         )}
 
       {activeTab !== "edit" && (
-        <div className="bg-background z-10 p-4 border-b flex flex-col gap-3">
+        <div className="bg-background z-10 p-4  flex flex-col gap-3">
           {/* ---- Title -----*/}
           <h1 className="text-2xl font-bold text-foreground truncate">
             {article.title}
           </h1>
 
           {/* ---- Status ----*/}
-          <div className="flex justify-between items-center flex-wrap gap-3">
+          <div className="flex justify-between items-center flex-wrap gap-3 ">
             {/* Status weryfikacji */}
             <div className="flex items-center gap-1.5">
               {article.status === "approved" && (
@@ -405,20 +407,60 @@ export const ArticlePage = () => {
         </TabsContent>
 
         <TabsContent value="history">
-          <Card className="mt-6">
-            <CardContent className="divide-y p-6">
-              {[].map((item) => (
-                <div key={item._id} className="py-4 first:pt-0 last:pb-0">
-                  <p className="text-sm text-muted-foreground">
-                    <UserIcon className="w-4 h-4 inline mr-1" />{" "}
-                    {item.modifiedBy.name} {item.modifiedBy.surname}
-                  </p>
-                  <p className="text-sm text-foreground">{item.description}</p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {new Date(item.date).toLocaleString()}
-                  </p>
-                </div>
-              ))}
+          <Card className="mt-6 bg-transparent shadow-none pr-4">
+            <CardContent className="p-0">
+              <ul className="relative border-l-2 border-border">
+                {mockHistory.map((item) => {
+                  const { Icon, bgClass } = getEventConfig(item.type);
+
+                  return (
+                    <li key={item.id} className="mb-3 ml-8">
+                      {/* Ikona na osi czasu */}
+                      <span
+                        className={`
+                  absolute -left-4 flex items-center justify-center
+                  w-8 h-8 ${bgClass} rounded-full
+                  ring-4 ring-background shadow-lg
+                `}
+                      >
+                        <Icon className="w-4 h-4 text-primary-foreground" />
+                      </span>
+
+                      {/* Karta */}
+                      <div className="relative bg-card p-4 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-200">
+                        <div className="flex justify-between items-start mb-1">
+                          {/* Event action + user */}
+                          <div className="flex flex-col">
+                            {/* Akcja (np. "Edycja artykułu") */}
+                            <div className="flex items-center space-x-1 text-sm font-medium text-foreground">
+                              <Icon className="w-4 h-4" />
+                              <span>{item.action}</span>
+                            </div>
+                            {/* Nazwisko niżej, mniejsze */}
+                            <span className="mt-1 text-xs text-muted-foreground">
+                              {item.user}
+                            </span>
+                          </div>
+
+                          {/* Data i szczegóły */}
+                          <div className="flex items-center space-x-2">
+                            <time className="text-xs text-muted-foreground">
+                              {item.date}
+                            </time>
+                            <Link
+                              to={`/articles/${article._id}/history/${item.id}`}
+                              className="text-primary text-sm hover:text-primary/80"
+                              aria-label="Zobacz szczegóły"
+                            >
+                              →
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
             </CardContent>
           </Card>
         </TabsContent>
