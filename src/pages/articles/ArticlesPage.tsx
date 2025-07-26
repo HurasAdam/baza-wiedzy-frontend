@@ -21,7 +21,7 @@ export const ArticlesPage: React.FC = () => {
   const selectedCategory = searchParams.get("category") || "";
   const [pendingId, setPendingId] = useState<string | null>(null);
   const { data, isLoading, isError } = useFindArticlesQuery(searchParams);
-  const { data: products = [] } = useFindProductsQuery();
+  const { data: products = [] } = useFindProductsQuery(null);
 
   const { data: categories } = useFindCategoriesByProductQuery(selectedProduct);
 

@@ -7,14 +7,12 @@ export const useCreateProductMutation = () => {
     mutationFn: (data: ProductForm) => productsService.create(data),
   });
 };
-
-export const useFindProductsQuery = (params: URLSearchParams) => {
+export const useFindProductsQuery = (params?: URLSearchParams | null) => {
   return useQuery({
-    queryKey: ["products", params.toString()],
+    queryKey: ["products", params ? params.toString() : "all"],
     queryFn: () => {
-      return productsService.find(params);
+      return productsService.find(params || undefined);
     },
-
     refetchOnWindowFocus: false,
     staleTime: 0,
     retry: false,
