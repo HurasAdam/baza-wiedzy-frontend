@@ -8,11 +8,11 @@ export const useCreateProductMutation = () => {
   });
 };
 
-export const useFindProductsQuery = () => {
+export const useFindProductsQuery = (params: URLSearchParams) => {
   return useQuery({
-    queryKey: ["products"],
+    queryKey: ["products", params.toString()],
     queryFn: () => {
-      return productsService.find();
+      return productsService.find(params);
     },
 
     refetchOnWindowFocus: false,
