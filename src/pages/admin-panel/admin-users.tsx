@@ -160,9 +160,43 @@ export const UsersPage = () => {
     <div className="mx-auto pb-6">
       <div className="bg-background z-10 flex flex-col gap-4 mb-4">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-semibold text-foreground flex items-center gap-2">
-            <Users /> Użytkownicy
-          </h1>
+          <div className="flex items-center gap-6">
+            <h1 className="text-2xl font-semibold text-foreground flex items-center gap-2">
+              <Users className="text-muted-foreground" /> Użytkownicy
+            </h1>
+            <div className="flex gap-2 pt-2.5 flex-wrap px-2 h-6 mb-3">
+              {selectedRole && (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  {selectedRole === "admin" && "Administrator"}
+                  {selectedRole === "editor" && "Redaktor"}
+                  {selectedRole === "user" && "Użytkownik"}
+
+                  <button
+                    onClick={() => setSelectedRole(null)}
+                    className="hover:text-destructive"
+                    aria-label="Usuń filtr roli"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </Badge>
+              )}
+
+              {selectedStatus && (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  {selectedStatus === "active" && "Aktywni"}
+                  {selectedStatus === "inactive" && "Nieaktywni"}
+
+                  <button
+                    onClick={() => setSelectedStatus(null)}
+                    className="hover:text-destructive"
+                    aria-label="Usuń filtr statusu"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </Badge>
+              )}
+            </div>
+          </div>
 
           <Dropdown
             triggerBtn={triggerBtn}
@@ -172,7 +206,7 @@ export const UsersPage = () => {
         </div>
       </div>
 
-      <div className="flex bg-muted/40 rounded-lg px-3 py-2 gap-3 items-center flex-wrap">
+      <div className="flex bg-muted/40 rounded-lg px-3 py-2 gap-3 items-center flex-wrap mb-4">
         {/* Wyszukiwanie */}
         <Input
           placeholder="Szukaj użytkownika..."
@@ -230,39 +264,6 @@ export const UsersPage = () => {
         <Badge variant="outline" className="ml-auto">
           Znaleziono: {users.length}
         </Badge>
-      </div>
-
-      <div className="flex gap-2 mt-3 flex-wrap px-2 h-6 mb-3">
-        {selectedRole && (
-          <Badge variant="secondary" className="flex items-center gap-1">
-            {selectedRole === "admin" && "Administrator"}
-            {selectedRole === "editor" && "Redaktor"}
-            {selectedRole === "user" && "Użytkownik"}
-
-            <button
-              onClick={() => setSelectedRole(null)}
-              className="hover:text-destructive"
-              aria-label="Usuń filtr roli"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </Badge>
-        )}
-
-        {selectedStatus && (
-          <Badge variant="secondary" className="flex items-center gap-1">
-            {selectedStatus === "active" && "Aktywni"}
-            {selectedStatus === "inactive" && "Nieaktywni"}
-
-            <button
-              onClick={() => setSelectedStatus(null)}
-              className="hover:text-destructive"
-              aria-label="Usuń filtr statusu"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </Badge>
-        )}
       </div>
 
       <Card className=" bg-transparent shadow-none pr-4">
