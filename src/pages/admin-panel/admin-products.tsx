@@ -15,14 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Dropdown } from "@/components/Dropdown";
 
 import { useFindProductsQuery } from "@/hooks/products/use-products";
-
-const dropdownOptions = [
-  {
-    label: "Dodaj produkt",
-    icon: <Plus className="w-4 h-4" />,
-    actionHandler: () => toast.info("Dodaj produkt (TODO: modal)"),
-  },
-];
+import { ProductModal } from "@/components/product/product-modal";
 
 const triggerBtn = (
   <Button variant="default" className="flex items-center gap-1">
@@ -32,6 +25,7 @@ const triggerBtn = (
 
 export const ProductsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [isCreatingProduct, setIsCreatingProduct] = useState<boolean>(false);
 
   const params = useMemo(() => {
     const searchParams = new URLSearchParams();
@@ -45,6 +39,20 @@ export const ProductsPage = () => {
     isError,
     error,
   } = useFindProductsQuery(params);
+
+  const onCreateProduct = (): void => {
+    setIsCreatingProduct(true);
+  };
+
+  const dropdownOptions = [
+    {
+      label: "Dodaj produkt",
+      icon: <Plus className="w-4 h-4" />,
+      actionHandler: () => {
+        onCreateProduct();
+      },
+    },
+  ];
 
   return (
     <div className="mx-auto pb-6">
@@ -152,6 +160,10 @@ export const ProductsPage = () => {
           </ul>
         )}
       </div>
+      <ProductModal
+        isCreatingProduct={isCreatingProduct}
+        setIsCreatingProduct={setIsCreatingProduct}
+      />
     </div>
   );
 };
