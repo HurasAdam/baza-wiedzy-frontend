@@ -3,9 +3,11 @@ import { cn } from "@/lib/utils";
 import {
   Box,
   Crown,
+  Hash,
+  LandPlot,
   LayoutDashboard,
   LucideArrowBigLeft,
-  Settings,
+  MessageSquareWarning,
   Users,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router";
@@ -25,7 +27,13 @@ const adminLinks = [
   { title: "Start", href: "/admin/dashboard", icon: LayoutDashboard },
   { title: "Użytkownicy", href: "/admin/manage-users", icon: Users },
   { title: "Produkty", href: "/admin/manage-products", icon: Box },
-  { title: "Tagi", href: "/admin/manage-tags", icon: Box },
+  { title: "Tagi", href: "/admin/manage-tags", icon: Hash },
+  { title: "Projekty JST", href: "/admin/manage-jstprojects", icon: LandPlot },
+  {
+    title: "Zgłoszenia",
+    href: "/admin/manage-reports",
+    icon: MessageSquareWarning,
+  },
 ];
 
 export const AdminSidebar = ({ isCollapsed }: SidebarProps) => {

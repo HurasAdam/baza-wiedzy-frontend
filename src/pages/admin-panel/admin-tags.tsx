@@ -56,7 +56,7 @@ export const TagsPage = () => {
       <div className="bg-background z-10 flex flex-col gap-4 mb-4">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold text-foreground flex items-center gap-2">
-            <Hash className="w-6 h-6 text-primary" /> Tagi
+            <Hash className="w-6 h-6 text-muted-foreground" /> Tagi
           </h1>
           <Dropdown
             triggerBtn={triggerBtn}

@@ -15,6 +15,8 @@ import { TopicRegisterPage } from "./TopicRegister/TopicRegisterPage";
 import { UsersPage } from "./admin-panel/admin-users";
 import { ProductsPage } from "./admin-panel/admin-products";
 import { TagsPage } from "./admin-panel/admin-tags";
+import { JstAdminProjectsPage } from "./admin-panel/admin-jst-projects";
+import { AdminUserReportsPage } from "./admin-panel/admin-issue-report";
 
 export const PAGES = {
   LoginPage,
@@ -34,4 +36,6 @@ export const PAGES = {
   UsersPage,
   ProductsPage,
   TagsPage,
+  JstAdminProjectsPage,
+  AdminUserReportsPage,
 };

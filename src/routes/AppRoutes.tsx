@@ -48,6 +48,14 @@ export function AppRoutes() {
             <Route path="manage-users" element={<PAGES.UsersPage />} />
             <Route path="manage-products" element={<PAGES.ProductsPage />} />
             <Route path="manage-tags" element={<PAGES.TagsPage />} />
+            <Route
+              path="manage-jstprojects"
+              element={<PAGES.JstAdminProjectsPage />}
+            />
+            <Route
+              path="manage-reports"
+              element={<PAGES.AdminUserReportsPage />}
+            />
           </Route>
         </Route>
       </Routes>

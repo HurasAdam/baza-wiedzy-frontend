@@ -2,20 +2,19 @@ import {
   Box,
   Ellipsis,
   FileIcon,
+  LandPlot,
   Loader,
   Plus,
   XCircleIcon,
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dropdown } from "@/components/Dropdown";
-
-import { useFindProductsQuery } from "@/hooks/products/use-products";
-import { ProductModal } from "@/components/product/product-modal";
+import { useFindJstProjectsQuery } from "@/hooks/jst-projects/use-jst-projects";
+import { JstProjectModal } from "@/components/jst-project/jst-project-modal";
 
 const triggerBtn = (
   <Button variant="default" className="flex items-center gap-1">
@@ -23,9 +22,10 @@ const triggerBtn = (
   </Button>
 );
 
-export const ProductsPage = () => {
+export const JstAdminProjectsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [isCreatingProduct, setIsCreatingProduct] = useState<boolean>(false);
+  const [isCreatingJstProject, setIsCreatingJstProject] =
+    useState<boolean>(false);
 
   const params = useMemo(() => {
     const searchParams = new URLSearchParams();
@@ -34,22 +34,22 @@ export const ProductsPage = () => {
   }, [searchTerm]);
 
   const {
-    data: products = [],
+    data: jstprojects = [],
     isLoading,
     isError,
     error,
-  } = useFindProductsQuery(params);
+  } = useFindJstProjectsQuery();
 
-  const onCreateProduct = (): void => {
-    setIsCreatingProduct(true);
+  const onCreateJstProject = (): void => {
+    setIsCreatingJstProject(true);
   };
 
   const dropdownOptions = [
     {
-      label: "Dodaj produkt",
+      label: "Dodaj projekt",
       icon: <Plus className="w-4 h-4" />,
       actionHandler: () => {
-        onCreateProduct();
+        onCreateJstProject();
       },
     },
   ];
@@ -60,7 +60,7 @@ export const ProductsPage = () => {
       <div className="bg-background z-10 flex flex-col gap-4 mb-4">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold text-foreground flex items-center gap-2">
-            <Box className="w-6 h-6 text-muted-foreground" /> Produkty
+            <LandPlot className="w-6 h-6 text-muted-foreground" /> Projekty JST
           </h1>
           <Dropdown
             triggerBtn={triggerBtn}
@@ -72,7 +72,7 @@ export const ProductsPage = () => {
         {/* Filters */}
         <div className="flex bg-muted/40 rounded-lg px-3 py-2 gap-3 items-center flex-wrap">
           <Input
-            placeholder="Szukaj produktu..."
+            placeholder="Szukaj projektu..."
             className="w-64"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -81,12 +81,12 @@ export const ProductsPage = () => {
             Resetuj
           </Button>
           <Badge variant="outline" className="ml-auto">
-            Znaleziono: {products.length}
+            Znaleziono: {jstprojects.length}
           </Badge>
         </div>
       </div>
 
-      {/* Products List */}
+      {/* Projects List */}
       <div className="bg-card border rounded-xl overflow-hidden">
         {isLoading && (
           <div className="flex justify-center py-10">
@@ -96,35 +96,31 @@ export const ProductsPage = () => {
 
         {isError && (
           <p className="text-destructive text-center py-10">
-            {(error as Error)?.message || "Błąd podczas ładowania produktów"}
+            {(error as Error)?.message || "Błąd podczas ładowania projektów"}
           </p>
         )}
 
-        {!isLoading && !isError && products.length === 0 && (
-          <p className="text-center py-10">Nie znaleziono produktów</p>
+        {!isLoading && !isError && jstprojects.length === 0 && (
+          <p className="text-center py-10">Nie znaleziono projektów</p>
         )}
 
-        {!isLoading && !isError && products.length > 0 && (
+        {!isLoading && !isError && jstprojects.length > 0 && (
           <ul className="divide-y divide-border">
-            {products.map((product) => (
+            {jstprojects.map((project) => (
               <li
-                key={product._id}
+                key={project._id}
                 className="flex items-center justify-between px-4 py-3 hover:bg-muted/40 transition group"
               >
                 {/* Left */}
                 <div className="flex items-center gap-3">
-                  {/* Colored Dot */}
-                  <span
-                    className="inline-block w-5 h-5 rounded-full"
-                    style={{ backgroundColor: product.labelColor }}
-                  ></span>
+                  <LandPlot className="w-5 h-5 text-muted-foreground" />
 
                   <div className="flex flex-col">
                     <span className="text-sm font-medium text-foreground">
-                      {product.name}
+                      {project.name}
                     </span>
-                    <span className="text-xs text-muted-foreground">
-                      Artykuły: {product.articlesCount}
+                    <span className="text-xs text-muted-foreground flex items-center gap-1">
+                      Szkoły: {project.schoolsCount ?? 0}
                     </span>
                   </div>
                 </div>
@@ -145,12 +141,12 @@ export const ProductsPage = () => {
                     {
                       label: "Edytuj",
                       icon: <FileIcon className="w-4 h-4" />,
-                      actionHandler: () => toast.info(`Edytuj ${product.name}`),
+                      actionHandler: () => toast.info(`Edytuj ${project.name}`),
                     },
                     {
                       label: "Usuń",
                       icon: <XCircleIcon className="w-4 h-4 text-red-500" />,
-                      actionHandler: () => toast.error(`Usuń ${product.name}`),
+                      actionHandler: () => toast.error(`Usuń ${project.name}`),
                     },
                   ]}
                   position={{ align: "end" }}
@@ -160,9 +156,10 @@ export const ProductsPage = () => {
           </ul>
         )}
       </div>
-      <ProductModal
-        isCreatingProduct={isCreatingProduct}
-        setIsCreatingProduct={setIsCreatingProduct}
+
+      <JstProjectModal
+        isCreatingJstProject={isCreatingJstProject}
+        setIsCreatingJstProject={setIsCreatingJstProject}
       />
     </div>
   );
