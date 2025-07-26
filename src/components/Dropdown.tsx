@@ -4,14 +4,8 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-
-type DropdownOption = {
-  label?: string | React.ReactNode;
-  icon?: React.ReactNode;
-  actionHandler: () => void;
-  disabled?: boolean;
-};
 
 type DropdownPosition = {
   align?: "start" | "center" | "end";
@@ -20,40 +14,50 @@ type DropdownPosition = {
   alignOffset?: number;
 };
 
+type DropdownOption = {
+  label?: string | React.ReactNode;
+  icon?: React.ReactNode;
+  actionHandler: () => void;
+  disabled?: boolean;
+};
+
 export function Dropdown({
   triggerBtn,
   options = [],
   position = { align: "center" },
+  withSeparators = false, // nowy prop
 }: {
   triggerBtn: React.ReactNode;
   options: DropdownOption[];
   position: DropdownPosition;
+  withSeparators?: boolean; // opcjonalny prop
 }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{triggerBtn}</DropdownMenuTrigger>
       <DropdownMenuContent
         className="w-52"
-        side={position?.side || "bottom"} // Ustawienie pozycji "side" z props, domyślnie "bottom"
-        align={position?.align || "center"} // Ustawienie pozycji "align" z props, domyślnie "start"
-        sideOffset={position?.sideOffset || 1} // Domyślne przesunięcie w pionie
-        alignOffset={position?.alignOffset || 0} // Domyślne przesunięcie w poziomie
+        side={position?.side || "bottom"}
+        align={position?.align || "center"}
+        sideOffset={position?.sideOffset || 1}
+        alignOffset={position?.alignOffset || 0}
       >
-        {/* <DropdownMenuLabel></DropdownMenuLabel> */}
-
         <DropdownMenuGroup>
-          {options.map(({ icon, label, actionHandler }, index) => {
-            return (
+          {options.map(({ icon, label, actionHandler }, index) => (
+            <div key={index}>
               <DropdownMenuItem
-                key={index} // <- tutaj albo lepiej unikalny klucz z label
                 className="cursor-pointer"
                 onClick={() => actionHandler()}
               >
                 <div className="mr-2 w-4 h-4 flex items-center">{icon}</div>
                 <span>{label}</span>
               </DropdownMenuItem>
-            );
-          })}
+
+              {withSeparators && index < options.length - 1 && (
+                <DropdownMenuSeparator />
+              )}
+            </div>
+          ))}
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
