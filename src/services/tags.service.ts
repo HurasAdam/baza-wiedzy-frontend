@@ -4,7 +4,7 @@ import { buildUrl } from "@/utils/build-url";
 import type { TagListResponse } from "../types/tags";
 const baseUrl = "/tags";
 
-export const find = (params: URLSearchParams): Promise<TagListResponse> => {
+export const find = (params?: URLSearchParams): Promise<TagListResponse> => {
   return api.get(baseUrl, { params });
 };
 

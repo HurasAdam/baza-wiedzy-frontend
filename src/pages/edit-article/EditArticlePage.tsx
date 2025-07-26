@@ -49,11 +49,11 @@ export const EditArticlePage = ({
   const [selectedProductId, setSelectedProductId] = useState<string | null>(
     null
   );
-  const { data: products = [] } = useFindProductsQuery();
+  const { data: products = [] } = useFindProductsQuery(null);
 
   const { data: categories = [], isLoading: loadingCategories } =
     useFindCategoriesByProductQuery(selectedProductId);
-  const { data: tags, isLoading: loadingTags } = useFindTagsQuery();
+  const { data: tags, isLoading: loadingTags } = useFindTagsQuery(null);
 
   const { mutate, isPending: isUpdatedLoading } = useUpdateArticleMutation();
 
