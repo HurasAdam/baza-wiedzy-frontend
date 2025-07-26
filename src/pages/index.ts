@@ -14,6 +14,7 @@ import { StatisticsPage } from "./statistics/StatisticsPage";
 import { TopicRegisterPage } from "./TopicRegister/TopicRegisterPage";
 import { UsersPage } from "./admin-panel/admin-users";
 import { ProductsPage } from "./admin-panel/admin-products";
+import { TagsPage } from "./admin-panel/admin-tags";
 
 export const PAGES = {
   LoginPage,
@@ -31,5 +32,6 @@ export const PAGES = {
   PendingArticles,
   FavoritesArticlesPage,
   UsersPage,
-  ProductsPage
+  ProductsPage,
+  TagsPage,
 };

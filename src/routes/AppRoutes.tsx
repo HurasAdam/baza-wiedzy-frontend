@@ -47,6 +47,7 @@ export function AppRoutes() {
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="manage-users" element={<PAGES.UsersPage />} />
             <Route path="manage-products" element={<PAGES.ProductsPage />} />
+            <Route path="manage-tags" element={<PAGES.TagsPage />} />
           </Route>
         </Route>
       </Routes>

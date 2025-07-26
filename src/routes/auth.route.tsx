@@ -8,11 +8,10 @@ export const AuthRoute = () => {
 
   if (isLoading) return <Loader />;
 
-  // ✅ Zalogowany użytkownik, nie powinien być na auth-routach
   if (authData) {
     return <Navigate to="/dashboard" replace />;
   }
 
-  // 👇 WAŻNE: domyślny fallback (zwraca Outlet dla publicznych tras)
+  // ---- Domyślny fallback (zwraca Outlet dla publicznych tras) ----
   return <Outlet />;
 };

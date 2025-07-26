@@ -22,9 +22,10 @@ interface SidebarProps {
 }
 
 const adminLinks = [
-  { title: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
+  { title: "Start", href: "/admin/dashboard", icon: LayoutDashboard },
   { title: "Użytkownicy", href: "/admin/manage-users", icon: Users },
   { title: "Produkty", href: "/admin/manage-products", icon: Box },
+  { title: "Tagi", href: "/admin/manage-tags", icon: Box },
 ];
 
 export const AdminSidebar = ({ isCollapsed }: SidebarProps) => {
