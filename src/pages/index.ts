@@ -12,7 +12,7 @@ import { NotFoundPage } from "./notFound/NotFoungPage";
 import { PendingArticles } from "./pending-articles/PendingArticles";
 import { StatisticsPage } from "./statistics/StatisticsPage";
 import { TopicRegisterPage } from "./TopicRegister/TopicRegisterPage";
-import { UsersPage } from "./admin-panel/admin-users";
+import { UsersPage } from "./admin-panel/admin-users/admin-users";
 import { ProductsPage } from "./admin-panel/admin-products";
 import { TagsPage } from "./admin-panel/admin-tags";
 import { JstAdminProjectsPage } from "./admin-panel/admin-jst-projects";

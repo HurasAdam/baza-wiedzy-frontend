@@ -2,9 +2,6 @@ import {
   CheckCircleIcon,
   Ellipsis,
   EyeIcon,
-  FileIcon,
-  FileImageIcon,
-  FileTextIcon,
   KeyRound,
   Loader,
   Plus,
@@ -17,18 +14,21 @@ import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
-import { Alert } from "../../components/shared/alert-modal";
-import { Badge } from "../../components/ui/badge";
-import { Button } from "../../components/ui/button";
-import { Card, CardContent } from "../../components/ui/card";
+import { Alert } from "../../../components/shared/alert-modal";
+import { Badge } from "../../../components/ui/badge";
+import { Button } from "../../../components/ui/button";
+import { Card, CardContent } from "../../../components/ui/card";
 
-import queryClient from "../../config/query.client";
+import queryClient from "../../../config/query.client";
 import {
   useAproveArticleMutation,
   useRejectArticleMutation,
-} from "../../hooks/articles/use-articles";
+} from "../../../hooks/articles/use-articles";
 
-import { useFindUsers } from "@/hooks/users/use-users";
+import {
+  useFindUsers,
+  useResetUserPasswordMutation,
+} from "@/hooks/users/use-users";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -38,6 +38,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Dropdown } from "@/components/Dropdown";
+import UserListItemCard from "./components/userList-item-card";
 
 const getUserDropdownOptions = (user) => [
   {
@@ -109,6 +110,7 @@ export const UsersPage = () => {
   }, [selectedRole, selectedStatus, searchTerm]);
 
   const { data: users = [], isLoading, isError, error } = useFindUsers(params);
+  const { mutate: resetUserPasswordMutation } = useResetUserPasswordMutation();
 
   const { mutate: approveMutate, isPending: isApproveLoading } =
     useAproveArticleMutation();
@@ -288,53 +290,10 @@ export const UsersPage = () => {
           {!isLoading && !isError && users.length > 0 && (
             <ul className="space-y-4">
               {users.map((user) => (
-                <li
-                  key={user._id} // upewnij się, że id to _id
-                  className={`flex items-start gap-4 border-l-2 pl-4 ${
-                    user.isActive ? "border-green-500" : "border-border"
-                  }`}
-                >
-                  {/* Avatar */}
-                  <div className="w-16 h-16 rounded-md flex items-center justify-center bg-muted shadow-md">
-                    <User className="w-6 h-6 text-foreground" />
-                  </div>
-
-                  {/* Card */}
-                  <div className="flex-1 bg-card p-4 rounded-2xl shadow hover:shadow-lg transition">
-                    <div className="flex justify-between items-start mb-1">
-                      <div className="flex flex-col">
-                        <div className="text-sm font-medium text-foreground space-x-1.5">
-                          <span>{user.name}</span>
-                          <span>{user.surname}</span>
-                        </div>
-
-                        <span className="mt-1 text-xs text-muted-foreground">
-                          {user?.role?.name}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center space-x-2">
-                        <time className="text-xs text-muted-foreground">
-                          {user.date}
-                        </time>
-                        <Dropdown
-                          withSeparators={true}
-                          triggerBtn={
-                            <Button
-                              className="cursor-pointer"
-                              variant="ghost"
-                              size="icon"
-                            >
-                              <Ellipsis />
-                            </Button>
-                          }
-                          options={getUserDropdownOptions(user)}
-                          position={{ align: "end" }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </li>
+                <UserListItemCard
+                  user={user}
+                  resetUserPasswordMutation={resetUserPasswordMutation}
+                />
               ))}
             </ul>
           )}

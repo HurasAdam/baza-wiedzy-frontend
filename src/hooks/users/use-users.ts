@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { usersService } from "../../services/users.service";
 
 export const useFindUsers = (params?: URLSearchParams) => {
@@ -25,5 +25,13 @@ export const useFindUserFavoritesArticlesQuery = (params?: URLSearchParams) => {
     refetchOnWindowFocus: false,
     staleTime: 0,
     retry: false,
+  });
+};
+
+export const useResetUserPasswordMutation = () => {
+  return useMutation({
+    mutationFn: (userId: string) => {
+      return usersService.resetUserPassword(userId);
+    },
   });
 };
