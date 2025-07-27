@@ -20,11 +20,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useNavigate } from "react-router-dom";
 
 type IssueType = "" | "bug" | "proposal";
 type IssueStatus = "" | "pending" | "in-progress" | "resolved" | "rejected";
 
 export const AdminUserReportsPage = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState<IssueType>("");
   const [filterStatus, setFilterStatus] = useState<IssueStatus>("");
@@ -236,7 +238,7 @@ export const AdminUserReportsPage = () => {
                         label: "Szczegóły",
                         icon: <Bug className="w-4 h-4" />,
                         actionHandler: () =>
-                          toast.info(`Otwórz ${report.title}`),
+                          navigate(`/admin/manage-reports/${report._id}`),
                       },
                       {
                         label: "Usuń",

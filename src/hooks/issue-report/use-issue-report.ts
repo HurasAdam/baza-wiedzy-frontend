@@ -18,3 +18,15 @@ export const useFindIssueReportsQuery = (params?: URLSearchParams) => {
     retry: false,
   });
 };
+
+export const useFindIssueReportQuery = (issueReportId: string) => {
+  return useQuery({
+    queryKey: ["issue-report", issueReportId],
+    queryFn: () => {
+      return issueReportsService.findOne(issueReportId);
+    },
+    refetchOnWindowFocus: false,
+    staleTime: 0,
+    retry: false,
+  });
+};

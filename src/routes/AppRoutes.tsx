@@ -54,6 +54,10 @@ export function AppRoutes() {
               path="manage-reports"
               element={<PAGES.AdminUserReportsPage />}
             />
+            <Route
+              path="manage-reports/:id"
+              element={<PAGES.AdminIssueReportDetailsPage />}
+            />
 
             <Route
               path="manage-registertopics"

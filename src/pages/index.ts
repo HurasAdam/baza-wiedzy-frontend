@@ -16,8 +16,9 @@ import { UsersPage } from "./admin-panel/admin-users/admin-users";
 import { ProductsPage } from "./admin-panel/admin-products";
 import { TagsPage } from "./admin-panel/admin-tags";
 import { JstAdminProjectsPage } from "./admin-panel/admin-jst-projects";
-import { AdminUserReportsPage } from "./admin-panel/admin-issue-report";
+import { AdminUserReportsPage } from "./admin-panel/admin-issue-report/admin-issue-reports";
 import { AdminTopicsPage } from "./admin-panel/admin-topics/admin-topics";
+import { AdminIssueReportDetailsPage } from "./admin-panel/admin-issue-report/admin-issue-report-detailsPage";
 
 export const PAGES = {
   LoginPage,
@@ -40,4 +41,5 @@ export const PAGES = {
   JstAdminProjectsPage,
   AdminUserReportsPage,
   AdminTopicsPage,
+  AdminIssueReportDetailsPage,
 };

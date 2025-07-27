@@ -12,7 +12,12 @@ const find = async (params?: URLSearchParams) => {
   return api.get(BASE_URL, { params });
 };
 
+const findOne = async (issueReportId: string) => {
+  return api.get(`${BASE_URL}/${issueReportId}`);
+};
+
 export const issueReportsService = {
   sendIssueReport,
   find,
+  findOne,
 };
