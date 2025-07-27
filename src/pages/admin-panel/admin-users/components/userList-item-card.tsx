@@ -16,7 +16,9 @@ import {
   AlertTriangle,
   CircleCheckBig,
   CircleX,
+  EyeIcon,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 interface DropdownOption {
@@ -30,7 +32,7 @@ interface UserRole {
   _id: string;
 }
 
-interface User {
+export interface IUser {
   is2FAEnabled: boolean;
   isActive: boolean;
   isEmailVerified: boolean;
@@ -45,33 +47,32 @@ interface User {
 }
 
 interface UserListItemCardProps {
-  user: User;
-  resetUserPasswordMutation: (
-    userId: string,
-    options?: UseMutationOptions
-  ) => void;
+  user: IUser;
+  onRequestResetPassword: (user: IUser) => void;
+  onRequestAccountStatustoggle: (user: IUser) => void;
 }
 
 const UserListItemCard = ({
   user,
-  resetUserPasswordMutation,
+
+  onRequestResetPassword,
+  onRequestAccountStatustoggle,
 }: UserListItemCardProps) => {
+  const navigate = useNavigate();
+
   const getUserDropdownOptions = (): DropdownOption[] => [
+    {
+      label: "Pokaż więcej",
+      icon: <EyeIcon className="w-4 h-4" />,
+      actionHandler: () => {
+        navigate(`/admin/manage-users/${user._id}`);
+      },
+    },
     {
       label: "Zresetuj hasło",
       icon: <KeyRound className="w-4 h-4" />,
       actionHandler: () => {
-        resetUserPasswordMutation(user._id, {
-          onSuccess: () => {
-            toast.success(
-              `Hasło użytkownika ${user.name} ${user.surname} zostało zresetowane`
-            );
-            queryClient.invalidateQueries({ queryKey: ["users"] });
-          },
-          onError: () => {
-            toast.error("Błąd podczas resetowania hasła");
-          },
-        });
+        onRequestResetPassword(user);
       },
     },
     {
@@ -82,17 +83,7 @@ const UserListItemCard = ({
         <CircleCheckBig className="w-4 h-4 text-green-600" />
       ),
       actionHandler: () => {
-        resetUserPasswordMutation(user._id, {
-          onSuccess: () => {
-            toast.success(
-              `Hasło użytkownika ${user.name} ${user.surname} zostało zresetowane`
-            );
-            queryClient.invalidateQueries({ queryKey: ["users"] });
-          },
-          onError: () => {
-            toast.error("Błąd podczas resetowania hasła");
-          },
-        });
+        onRequestAccountStatustoggle(user);
       },
     },
   ];

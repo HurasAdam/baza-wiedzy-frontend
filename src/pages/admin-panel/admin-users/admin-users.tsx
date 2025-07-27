@@ -1,31 +1,14 @@
-import {
-  CheckCircleIcon,
-  Ellipsis,
-  EyeIcon,
-  KeyRound,
-  Loader,
-  Plus,
-  User,
-  Users,
-  X,
-  XCircleIcon,
-} from "lucide-react";
+import { Loader, Plus, Users, X } from "lucide-react";
 import { useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
 import { toast } from "sonner";
-
 import { Alert } from "../../../components/shared/alert-modal";
 import { Badge } from "../../../components/ui/badge";
 import { Button } from "../../../components/ui/button";
 import { Card, CardContent } from "../../../components/ui/card";
-
 import queryClient from "../../../config/query.client";
 import {
-  useAproveArticleMutation,
-  useRejectArticleMutation,
-} from "../../../hooks/articles/use-articles";
-
-import {
+  useDisableUserAccountMutation,
+  useEnableUserAccountMutation,
   useFindUsers,
   useResetUserPasswordMutation,
 } from "@/hooks/users/use-users";
@@ -38,39 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Dropdown } from "@/components/Dropdown";
-import UserListItemCard from "./components/userList-item-card";
-
-const getUserDropdownOptions = (user) => [
-  {
-    label: "Pokaż więcej",
-    icon: <EyeIcon className="w-4 h-4" />,
-    actionHandler: () => {
-      console.log("Więcej dla", user.name);
-    },
-  },
-  {
-    label: "Zresetuj hasło",
-    icon: <KeyRound className="w-4 h-4" />,
-    actionHandler: () => {
-      console.log("Reset hasła dla", user.name);
-    },
-  },
-  {
-    label: user.isActive ? "Wyłącz konto" : "Włącz konto",
-    icon: user.isActive ? (
-      <XCircleIcon className="w-4 h-4 text-red-500" />
-    ) : (
-      <CheckCircleIcon className="w-4 h-4 text-green-500" />
-    ),
-    actionHandler: () => {
-      console.log(
-        user.isActive ? "Wyłączam konto" : "Włączam konto",
-        user.name
-      );
-      // TODO: Wywołaj API do zmiany statusu
-    },
-  },
-];
+import UserListItemCard, { type IUser } from "./components/userList-item-card";
 
 const dropdownOptions = [
   {
@@ -92,10 +43,20 @@ const triggerBtn = (
 );
 
 export const UsersPage = () => {
+  type ActionType = "RESET_PASSWORD" | "TOGGLE_ACCOUNT";
+  interface PendingAction {
+    type: ActionType;
+    user: IUser;
+  }
+  // -- Alert state --
+  const [pendingAction, setPendingAction] = useState<PendingAction | null>(
+    null
+  );
+
+  // -- Filter State --
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
-
   const params = useMemo(() => {
     const searchParams = new URLSearchParams();
     if (selectedRole) searchParams.append("role", selectedRole);
@@ -110,53 +71,65 @@ export const UsersPage = () => {
   }, [selectedRole, selectedStatus, searchTerm]);
 
   const { data: users = [], isLoading, isError, error } = useFindUsers(params);
-  const { mutate: resetUserPasswordMutation } = useResetUserPasswordMutation();
+  const {
+    mutate: resetUserPasswordMutation,
+    isPending: isResetPasswordLoading,
+  } = useResetUserPasswordMutation();
+  const {
+    mutate: disableUserAccountMutation,
+    isPending: isDisableAccountLoading,
+  } = useDisableUserAccountMutation();
 
-  const { mutate: approveMutate, isPending: isApproveLoading } =
-    useAproveArticleMutation();
-  const { mutate: rejectionMutate } = useRejectArticleMutation();
+  const {
+    mutate: enableUserAccountMutation,
+    isPending: isEnableAccountLoading,
+  } = useEnableUserAccountMutation();
 
-  const onEditCancel = () => {
-    setActiveTab("main");
-  };
+  // --- Alert confirmation handler ---
+  const onConfirm = () => {
+    if (!pendingAction) return;
+    const { type, user } = pendingAction;
 
-  const onArticleAproveConfirm = () => {
-    if (!article) return;
-    approveMutate(article._id, {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["article", article._id] });
-        toast.success("Artykuł został zatwierdzony.");
-      },
-      onSettled: () => {
-        setIsCreatingArticleApprove(false);
-      },
-    });
-  };
-
-  const onArticleRejectConfirm = ({
-    rejectionReason,
-  }: {
-    rejectionReason: string;
-  }) => {
-    if (article) {
-      rejectionMutate(
-        { articleId: article._id, rejectionReason },
-        {
-          onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["articles"] });
-            toast.success(
-              "Artykuł został odrzucony, uwagi zostały wysłane do autora artykułu"
-            );
-          },
-          onSettled: () => {
-            setIsCreatingArticleRejection(false);
-          },
-        }
-      );
+    if (type === "RESET_PASSWORD") {
+      resetUserPasswordMutation(user._id, {
+        onSuccess: () => toast.success("Hasło zresetowane"),
+        onError: () =>
+          toast.error(
+            "Podczas resetowania hasła wystąpił błąd, spróbuj ponownie"
+          ),
+        onSettled: () => {
+          queryClient.invalidateQueries({ queryKey: ["users"] });
+          setPendingAction(null);
+        },
+      });
+    } else {
+      const fn = user.isActive
+        ? disableUserAccountMutation
+        : enableUserAccountMutation;
+      fn(user._id, {
+        onSuccess: () =>
+          toast.success(
+            `Konto użytkownika ${user.name} ${user.surname} zostało ${
+              user.isActive ? "wyłączone" : "włączone"
+            }`
+          ),
+        onError: () =>
+          toast.error(
+            "Podczas zmiany statusu konta wystąpił błąd, spróbuj ponownie."
+          ),
+        onSettled: () => {
+          queryClient.invalidateQueries({ queryKey: ["users"] });
+          setPendingAction(null);
+        },
+      });
     }
-
-    setIsCreatingArticleRejection(false);
   };
+  // --- open reset password alert ---
+  const onRequestReset = (user: IUser) =>
+    setPendingAction({ type: "RESET_PASSWORD", user });
+  // --- open emable/disable account alert ---
+  const onRequestToggle = (user: IUser) =>
+    setPendingAction({ type: "TOGGLE_ACCOUNT", user });
 
   return (
     <div className="mx-auto pb-6">
@@ -209,7 +182,7 @@ export const UsersPage = () => {
       </div>
 
       <div className="flex bg-muted/40 rounded-lg px-3 py-2 gap-3 items-center flex-wrap mb-4">
-        {/* Wyszukiwanie */}
+        {/* --- Keyword Filter ---*/}
         <Input
           placeholder="Szukaj użytkownika..."
           className="w-48"
@@ -289,16 +262,64 @@ export const UsersPage = () => {
 
           {!isLoading && !isError && users.length > 0 && (
             <ul className="space-y-4">
-              {users.map((user) => (
+              {users.map((user: IUser) => (
                 <UserListItemCard
+                  onRequestResetPassword={onRequestReset}
+                  onRequestAccountStatustoggle={onRequestToggle}
                   user={user}
-                  resetUserPasswordMutation={resetUserPasswordMutation}
                 />
               ))}
             </ul>
           )}
         </CardContent>
       </Card>
+
+      {pendingAction && (
+        <Alert
+          isOpen={!!pendingAction}
+          isLoading={
+            isResetPasswordLoading ||
+            isDisableAccountLoading ||
+            isEnableAccountLoading
+          }
+          type="warning"
+          title={
+            pendingAction?.type === "RESET_PASSWORD"
+              ? "Resetowanie hasła użytkownika"
+              : pendingAction.user.isActive
+              ? "Dezaktywacja konta użytkownika"
+              : "Aktywacja konta użytkownika"
+          }
+          onCancel={() => setPendingAction(null)}
+          onConfirm={onConfirm}
+        >
+          {pendingAction?.type === "RESET_PASSWORD" ? (
+            <>
+              Czy na pewno chcesz zresetować hasło użytkownika&nbsp;
+              <strong>
+                {pendingAction.user.name} {pendingAction.user.surname}
+              </strong>
+              ?<br />
+              Reset przywróci hasło do domyślnej wartości z konfiguracji i
+              wymusi na użytkowniku ustawienie nowego hasła przy następnym
+              logowaniu.
+            </>
+          ) : (
+            <>
+              Czy na pewno chcesz{" "}
+              {pendingAction.user.isActive ? "zdezaktywować" : "aktywować"}{" "}
+              konto użytkownika&nbsp;
+              <strong>
+                {pendingAction.user.name} {pendingAction.user.surname}
+              </strong>
+              ?<br />
+              {pendingAction.user.isActive
+                ? "Użytkownik straci dostęp do systemu."
+                : "Użytkownik odzyska dostęp do systemu."}
+            </>
+          )}
+        </Alert>
+      )}
     </div>
   );
 };

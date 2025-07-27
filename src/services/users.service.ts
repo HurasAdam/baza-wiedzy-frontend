@@ -17,8 +17,17 @@ export const resetUserPassword = (userId: string): Promise<void> => {
   return api.post(`${adminBaseUrl}/${userId}/reset-password`);
 };
 
+export const disableUserAccount = (userId: string): Promise<void> => {
+  return api.post(`${adminBaseUrl}/${userId}/disable`);
+};
+export const enableUserAccount = (userId: string): Promise<void> => {
+  return api.post(`${adminBaseUrl}/${userId}/enable`);
+};
+
 export const usersService = {
   findMyFavorites,
   findUsers,
   resetUserPassword,
+  disableUserAccount,
+  enableUserAccount,
 };

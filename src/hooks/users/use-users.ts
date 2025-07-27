@@ -35,3 +35,19 @@ export const useResetUserPasswordMutation = () => {
     },
   });
 };
+
+export const useDisableUserAccountMutation = () => {
+  return useMutation({
+    mutationFn: (userId: string) => {
+      return usersService.disableUserAccount(userId);
+    },
+  });
+};
+
+export const useEnableUserAccountMutation = () => {
+  return useMutation({
+    mutationFn: (userId: string) => {
+      return usersService.enableUserAccount(userId);
+    },
+  });
+};
