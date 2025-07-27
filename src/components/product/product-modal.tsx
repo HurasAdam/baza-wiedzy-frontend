@@ -25,6 +25,7 @@ import { toast } from "sonner";
 import queryClient from "../../config/query.client";
 import { useCreateProductMutation } from "../../hooks/products/use-products";
 import { productSchema } from "../../validation/product.schema";
+import { ProductForm } from "./product-form";
 
 interface CreateWorkspaceProps {
   isCreatingProduct: boolean;
@@ -32,20 +33,20 @@ interface CreateWorkspaceProps {
   closeOnOutsideClick?: boolean;
 }
 
-export const colorOptions = [
-  "#FF5733", // Red-Orange
-  "#33C1FF", // Blue
-  "#28A745", // Green
-  "#FFC300", // Yellow
-  "#8E44AD", // Purple
-  "#E67E22", // Orange
-  "#2ECC71", // Light Green
-  "#D72631", // Strong Red
-  "#1B998B", // Teal
-  "#F4D35E", // Soft Yellow
-  "#4A90E2", // Soft Blue
-  "#F08A5D", // Coral
-];
+// export const colorOptions = [
+//   "#FF5733", // Red-Orange
+//   "#33C1FF", // Blue
+//   "#28A745", // Green
+//   "#FFC300", // Yellow
+//   "#8E44AD", // Purple
+//   "#E67E22", // Orange
+//   "#2ECC71", // Light Green
+//   "#D72631", // Strong Red
+//   "#1B998B", // Teal
+//   "#F4D35E", // Soft Yellow
+//   "#4A90E2", // Soft Blue
+//   "#F08A5D", // Coral
+// ];
 
 export type ProductForm = z.infer<typeof productSchema>;
 
@@ -54,21 +55,11 @@ export const ProductModal = ({
   setIsCreatingProduct,
   closeOnOutsideClick,
 }: CreateWorkspaceProps) => {
-  const form = useForm<ProductForm>({
-    resolver: zodResolver(productSchema),
-    defaultValues: {
-      name: "",
-      labelColor: colorOptions[0],
-      banner: "xcz",
-    },
-  });
-
-  const { mutate } = useCreateProductMutation();
+  const { mutate, isPending } = useCreateProductMutation();
 
   const onSubmit = (data: ProductForm) => {
     mutate(data, {
       onSuccess: () => {
-        form.reset();
         setIsCreatingProduct(false);
         queryClient.invalidateQueries({ queryKey: ["products"] });
         toast.success("Produkt został dodany");
@@ -124,58 +115,12 @@ export const ProductModal = ({
           <DialogTitle>Utwórz produkt</DialogTitle>
         </DialogHeader>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="space-y-4 py-4">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nazwa</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Nazwa produktu" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="labelColor"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Kolor etykiety</FormLabel>
-                    <FormControl>
-                      <div className="flex gap-3 flex-wrap">
-                        {colorOptions.map((color) => (
-                          <div
-                            key={color}
-                            onClick={() => field.onChange(color)}
-                            className={cn(
-                              "w-6 h-6 rounded-sm cursor-pointer hover:opacity-80 transition-all duration-300",
-                              field.value === color &&
-                                "ring-2 ring-offset-2 ring-blue-500"
-                            )}
-                            style={{ backgroundColor: color }}
-                          ></div>
-                        ))}
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <DialogFooter className="my-2">
-              <Button className="cursor-pointer" type="submit">
-                Utwórz
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
+        <ProductForm
+          defaultValues={{ name: "", labelColor: "#FF5733", banner: "xyz" }}
+          onSubmit={onSubmit}
+          submitText="Utwórz"
+          isSubmitting={isPending}
+        />
       </DialogContent>
     </Dialog>
   );
