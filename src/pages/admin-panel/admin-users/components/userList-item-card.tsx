@@ -62,7 +62,7 @@ const UserListItemCard = ({
 
   const getUserDropdownOptions = (): DropdownOption[] => [
     {
-      label: "Pokaż więcej",
+      label: "Wyświetl szczegóły",
       icon: <EyeIcon className="w-4 h-4" />,
       actionHandler: () => {
         navigate(`/admin/manage-users/${user._id}`);

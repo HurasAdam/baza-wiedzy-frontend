@@ -7,7 +7,7 @@ export const create = (data: topicForm) => {
   return api.post(baseUrl, data);
 };
 
-export const find = (params: Record<string, string>): Promise<ITopic[]> => {
+export const find = (params: URLSearchParams): Promise<ITopic[]> => {
   // title, produst params
   return api.get(baseUrl, { params });
 };

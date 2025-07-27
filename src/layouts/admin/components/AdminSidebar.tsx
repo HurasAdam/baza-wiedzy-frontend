@@ -6,6 +6,7 @@ import {
   Hash,
   LandPlot,
   LayoutDashboard,
+  ListChecks,
   LucideArrowBigLeft,
   MessageSquareWarning,
   Users,
@@ -29,6 +30,11 @@ const adminLinks = [
   { title: "Produkty", href: "/admin/manage-products", icon: Box },
   { title: "Tagi", href: "/admin/manage-tags", icon: Hash },
   { title: "Projekty JST", href: "/admin/manage-jstprojects", icon: LandPlot },
+  {
+    title: "Lista tematów",
+    href: "/admin/manage-registertopics",
+    icon: ListChecks,
+  },
   {
     title: "Zgłoszenia",
     href: "/admin/manage-reports",

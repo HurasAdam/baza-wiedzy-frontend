@@ -8,9 +8,9 @@ export const useCreateTopicMutation = () => {
   });
 };
 
-export const useFindTopicsQuery = (params: Record<string, string>) => {
+export const useFindTopicsQuery = (params: URLSearchParams) => {
   return useQuery({
-    queryKey: ["topics", params],
+    queryKey: ["topics", params.toString()],
     queryFn: () => {
       return topicsService.find(params);
     },

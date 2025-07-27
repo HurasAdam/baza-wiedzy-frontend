@@ -1,8 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-
 import { AuthRoute } from "./auth.route";
 import { protectedRoutePaths } from "./routes";
-
 import AppLayout from "@/layouts/app/app.layout";
 import BaseLayout from "@/layouts/base/base.layout";
 import { PAGES } from "@/pages";
@@ -35,7 +33,7 @@ export function AppRoutes() {
             {protectedRoutePaths.map(({ path, element }) => (
               <Route key={path} path={path} element={element} />
             ))}
-            {/* Tutaj 404 dla zalogowanych na nieznane ścieżki */}
+            {/*  404 dla zalogowanych na nieznane ścieżki */}
             <Route path="*" element={<PAGES.NotFoundPage />} />
           </Route>
         </Route>
@@ -55,6 +53,11 @@ export function AppRoutes() {
             <Route
               path="manage-reports"
               element={<PAGES.AdminUserReportsPage />}
+            />
+
+            <Route
+              path="manage-registertopics"
+              element={<PAGES.AdminTopicsPage />}
             />
           </Route>
         </Route>
