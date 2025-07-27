@@ -76,7 +76,7 @@ export const AdminSidebar = ({ isCollapsed }: SidebarProps) => {
       <nav className="flex-1 space-y-1">
         <TooltipProvider>
           {adminLinks.map(({ title, href, icon: Icon }) => {
-            const isActive = location.pathname === href;
+            const isActive = location.pathname.startsWith(href);
 
             return (
               <Tooltip key={href} delayDuration={100}>
