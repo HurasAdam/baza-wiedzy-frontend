@@ -1,10 +1,10 @@
 import api from "@/config/api.client";
 import type { FunnyMessageForm } from "../components/funny-messages/funny-message-modal";
-import type { FindFunnyMessagesResponse } from "../types/funny-message";
 
 const BASE_URL = "/issue-report";
 
-const sendIssueReport = async (formData: FunnyMessageForm) => {
+const sendIssueReport = async ({ formData }: FunnyMessageForm) => {
+  console.log(formData, "PRESEND DATA");
   return api.post(BASE_URL, formData);
 };
 

@@ -4,10 +4,12 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./components/Header";
 import { Sidebar } from "./components/Sidebar";
+import { SendIssueReportModal } from "@/components/issue-report/send-issue-report-modal";
 
 const AppLayout = () => {
   const [isCreatingWorkspace, setIsCreatingWorkspace] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  const [isCreatingIssueReport, setIsCreatingIssueReport] = useState(false);
 
   return (
     <div className="flex h-screen w-full">
@@ -17,6 +19,7 @@ const AppLayout = () => {
         <Header
           onCreateWorkspace={() => setIsCreatingWorkspace(true)}
           onOpenSettingsModal={() => setIsSettingsModalOpen(true)}
+          onOpenCreateIssueReport={() => setIsCreatingIssueReport(true)}
         />
 
         <main className="flex-1 overflow-y-auto h-full w-full bg-background scrollbar-custom">
@@ -34,6 +37,10 @@ const AppLayout = () => {
       <CreateWorkspaceModal
         isCreatingWorkspace={isCreatingWorkspace}
         setIsCreatingWorkspace={setIsCreatingWorkspace}
+      />
+      <SendIssueReportModal
+        isCreatingIssueReport={isCreatingIssueReport}
+        setIsCreatingIssueReport={setIsCreatingIssueReport}
       />
     </div>
   );

@@ -1,5 +1,3 @@
-// import { useAuth } from "@/provider/auth-context";
-
 import {
   Bell,
   ChevronDown,
@@ -32,11 +30,16 @@ import { toast } from "sonner";
 
 interface HeaderProps {
   onCreateWorkspace: () => void;
+  onOpenCreateIssueReport: () => void;
   onOpenSettingsModal: () => void;
 }
 
 const workspaces = [];
-const Header = ({ onOpenSettingsModal, onCreateWorkspace }: HeaderProps) => {
+const Header = ({
+  onOpenSettingsModal,
+  onCreateWorkspace,
+  onOpenCreateIssueReport,
+}: HeaderProps) => {
   const { data: user } = useAuthQuery();
 
   const initials = getAvatarFallbackText(user?.name);
@@ -137,6 +140,18 @@ const Header = ({ onOpenSettingsModal, onCreateWorkspace }: HeaderProps) => {
         </DropdownMenu>
 
         <div className="flex items-center gap-2">
+          {/* FEEDBACK BUTTON */}
+          <Button
+            onClick={onOpenCreateIssueReport}
+            variant="outline"
+            size="sm"
+            className="relative mr-4"
+          >
+            🐞 Zgłoś problem
+            <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-[10px] px-1 py-0.5 rounded">
+              Beta
+            </span>
+          </Button>
           <Button
             onClick={() => navigate("articles/new")}
             className="cursor-pointer"
@@ -148,6 +163,7 @@ const Header = ({ onOpenSettingsModal, onCreateWorkspace }: HeaderProps) => {
           <Button className="cursor-pointer" variant="ghost" size="icon">
             <LucidePhone />
           </Button>
+
           <Button className="cursor-pointer " variant="ghost" size="icon">
             <Bell />
           </Button>
