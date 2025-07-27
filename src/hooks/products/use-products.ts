@@ -7,11 +7,34 @@ export const useCreateProductMutation = () => {
     mutationFn: (data: ProductForm) => productsService.create(data),
   });
 };
+export const useUpdateProductMutation = () => {
+  return useMutation({
+    mutationFn: ({
+      productId,
+      data,
+    }: {
+      productId: string;
+      data: ProductForm;
+    }) => productsService.updateOne({ productId, data }),
+  });
+};
+
 export const useFindProductsQuery = (params?: URLSearchParams | null) => {
   return useQuery({
     queryKey: ["products", params ? params.toString() : "all"],
     queryFn: () => {
       return productsService.find(params || undefined);
+    },
+    refetchOnWindowFocus: false,
+    staleTime: 0,
+    retry: false,
+  });
+};
+export const useFindProductQuery = (productId: string) => {
+  return useQuery({
+    queryKey: ["products", productId],
+    queryFn: () => {
+      return productsService.findOne(productId);
     },
     refetchOnWindowFocus: false,
     staleTime: 0,

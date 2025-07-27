@@ -16,6 +16,7 @@ import { Dropdown } from "@/components/Dropdown";
 
 import { useFindProductsQuery } from "@/hooks/products/use-products";
 import { ProductModal } from "@/components/product/product-modal";
+import { EditProductModal } from "@/components/product/edit-product-modal";
 
 const triggerBtn = (
   <Button variant="default" className="flex items-center gap-1">
@@ -26,6 +27,9 @@ const triggerBtn = (
 export const ProductsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isCreatingProduct, setIsCreatingProduct] = useState<boolean>(false);
+
+  const [isEditingProduct, setIsEditingProduct] = useState(false);
+  const [editingProductId, setEditingProductId] = useState<string | null>(null);
 
   const params = useMemo(() => {
     const searchParams = new URLSearchParams();
@@ -42,6 +46,11 @@ export const ProductsPage = () => {
 
   const onCreateProduct = (): void => {
     setIsCreatingProduct(true);
+  };
+
+  const onEditProduct = (productId: string): void => {
+    setEditingProductId(productId);
+    setIsEditingProduct(true);
   };
 
   const dropdownOptions = [
@@ -145,7 +154,7 @@ export const ProductsPage = () => {
                     {
                       label: "Edytuj",
                       icon: <FileIcon className="w-4 h-4" />,
-                      actionHandler: () => toast.info(`Edytuj ${product.name}`),
+                      actionHandler: () => onEditProduct(product._id),
                     },
                     {
                       label: "Usuń",
@@ -164,6 +173,13 @@ export const ProductsPage = () => {
         isCreatingProduct={isCreatingProduct}
         setIsCreatingProduct={setIsCreatingProduct}
       />
+      {editingProductId && (
+        <EditProductModal
+          productId={editingProductId}
+          isEditingProduct={isEditingProduct}
+          setIsEditingProduct={setIsEditingProduct}
+        />
+      )}
     </div>
   );
 };
