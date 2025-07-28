@@ -20,6 +20,7 @@ import { AdminUserReportsPage } from "./admin-panel/admin-issue-report/admin-iss
 import { AdminTopicsPage } from "./admin-panel/admin-topics/admin-topics";
 import { AdminIssueReportDetailsPage } from "./admin-panel/admin-issue-report/admin-issue-report-detailsPage";
 import { AdminAccountsPage } from "./admin-panel/admin-admin-accounts/admin-admin-accounts";
+import { AdminRolesPage } from "./admin-panel/admin-roles/admin-roles";
 export const PAGES = {
   LoginPage,
   ForgotPasswordPage,
@@ -43,4 +44,5 @@ export const PAGES = {
   AdminTopicsPage,
   AdminIssueReportDetailsPage,
   AdminAccountsPage,
+  AdminRolesPage,
 };

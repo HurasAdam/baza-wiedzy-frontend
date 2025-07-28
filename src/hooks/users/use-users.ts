@@ -15,6 +15,19 @@ export const useFindUsers = (params?: URLSearchParams) => {
   });
 };
 
+export const useFindRoles = (params?: URLSearchParams) => {
+  return useQuery({
+    queryKey: ["roles", params?.toString()],
+    queryFn: () => {
+      return usersService.findRoles(params);
+    },
+
+    refetchOnWindowFocus: false,
+    staleTime: 0,
+    retry: false,
+  });
+};
+
 export const useFindAdmins = (params?: URLSearchParams) => {
   return useQuery({
     queryKey: ["admins", params?.toString()],
