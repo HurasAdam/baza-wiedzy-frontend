@@ -17,6 +17,7 @@ import {
   CircleCheckBig,
   CircleX,
   EyeIcon,
+  Crown,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -109,9 +110,15 @@ const UserListItemCard = ({
       }`}
     >
       {/* Avatar */}
-      <div className="w-16 h-16 rounded-md flex items-center justify-center bg-muted shadow-md">
-        <User className="w-6 h-6 text-foreground" />
-      </div>
+      {user.role && (
+        <div className="w-16 h-16 rounded-md flex items-center justify-center bg-muted shadow-md">
+          {user.role.name === "ADMIN" ? (
+            <Crown className="w-6 h-6 text-foreground" />
+          ) : (
+            <User className="w-6 h-6 text-foreground" />
+          )}
+        </div>
+      )}
 
       {/* Card */}
       <div className="flex-1 bg-card p-4 rounded-2xl shadow hover:shadow-lg transition">

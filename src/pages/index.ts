@@ -19,7 +19,7 @@ import { JstAdminProjectsPage } from "./admin-panel/admin-jst-projects";
 import { AdminUserReportsPage } from "./admin-panel/admin-issue-report/admin-issue-reports";
 import { AdminTopicsPage } from "./admin-panel/admin-topics/admin-topics";
 import { AdminIssueReportDetailsPage } from "./admin-panel/admin-issue-report/admin-issue-report-detailsPage";
-
+import { AdminAccountsPage } from "./admin-panel/admin-admin-accounts/admin-admin-accounts";
 export const PAGES = {
   LoginPage,
   ForgotPasswordPage,
@@ -42,4 +42,5 @@ export const PAGES = {
   AdminUserReportsPage,
   AdminTopicsPage,
   AdminIssueReportDetailsPage,
+  AdminAccountsPage,
 };

@@ -63,6 +63,7 @@ export function AppRoutes() {
               path="manage-registertopics"
               element={<PAGES.AdminTopicsPage />}
             />
+            <Route path="manage-admins" element={<PAGES.AdminAccountsPage />} />
           </Route>
         </Route>
       </Routes>

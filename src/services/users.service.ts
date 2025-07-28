@@ -1,11 +1,15 @@
 import api from "@/config/api.client";
 import { buildUrl } from "../utils/build-url";
 const baseUrl = "/users";
-const adminBaseUrl = "/admin/users";
+const adminBaseUrl = "/admin";
 
 export const findUsers = (params?: URLSearchParams): Promise => {
   // title, produst params
   return api.get(buildUrl(baseUrl), { params });
+};
+
+export const findAdmins = (params?: URLSearchParams) => {
+  return api.get(`${adminBaseUrl}/admins`, { params });
 };
 
 export const findMyFavorites = (params?: URLSearchParams): Promise => {
@@ -14,14 +18,14 @@ export const findMyFavorites = (params?: URLSearchParams): Promise => {
 };
 
 export const resetUserPassword = (userId: string): Promise<void> => {
-  return api.post(`${adminBaseUrl}/${userId}/reset-password`);
+  return api.post(`${adminBaseUrl}/${baseUrl}/${userId}/reset-password`);
 };
 
 export const disableUserAccount = (userId: string): Promise<void> => {
-  return api.post(`${adminBaseUrl}/${userId}/disable`);
+  return api.post(`${adminBaseUrl}/${baseUrl}/${userId}/disable`);
 };
 export const enableUserAccount = (userId: string): Promise<void> => {
-  return api.post(`${adminBaseUrl}/${userId}/enable`);
+  return api.post(`${adminBaseUrl}/${baseUrl}/${userId}/enable`);
 };
 
 export const usersService = {
@@ -30,4 +34,5 @@ export const usersService = {
   resetUserPassword,
   disableUserAccount,
   enableUserAccount,
+  findAdmins,
 };

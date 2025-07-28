@@ -1,18 +1,22 @@
 import api from "@/config/api.client";
-import type { FunnyMessageForm } from "../components/funny-messages/funny-message-modal";
+
+import type { IssueReport, IssueReportFormData } from "@/types/issue-report";
 
 const BASE_URL = "/issue-report";
 
-const sendIssueReport = async ({ formData }: FunnyMessageForm) => {
-  console.log(formData, "PRESEND DATA");
-  return api.post(BASE_URL, formData);
+const sendIssueReport = async ({
+  formData,
+}: {
+  formData: IssueReportFormData;
+}) => {
+  return api.post(BASE_URL, { ...formData });
 };
 
-const find = async (params?: URLSearchParams) => {
+const find = async (params?: URLSearchParams): Promise<IssueReport[]> => {
   return api.get(BASE_URL, { params });
 };
 
-const findOne = async (issueReportId: string) => {
+const findOne = async (issueReportId: string): Promise<IssueReport> => {
   return api.get(`${BASE_URL}/${issueReportId}`);
 };
 

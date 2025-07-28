@@ -9,6 +9,7 @@ import {
   ListChecks,
   LucideArrowBigLeft,
   MessageSquareWarning,
+  ShieldCheck,
   Users,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router";
@@ -27,6 +28,7 @@ interface SidebarProps {
 const adminLinks = [
   { title: "Start", href: "/admin/dashboard", icon: LayoutDashboard },
   { title: "Użytkownicy", href: "/admin/manage-users", icon: Users },
+  { title: "Administratorzy", href: "/admin/manage-admins", icon: ShieldCheck },
   { title: "Produkty", href: "/admin/manage-products", icon: Box },
   { title: "Tagi", href: "/admin/manage-tags", icon: Hash },
   { title: "Projekty JST", href: "/admin/manage-jstprojects", icon: LandPlot },

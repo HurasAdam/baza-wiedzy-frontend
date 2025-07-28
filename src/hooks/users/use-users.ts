@@ -15,6 +15,19 @@ export const useFindUsers = (params?: URLSearchParams) => {
   });
 };
 
+export const useFindAdmins = (params?: URLSearchParams) => {
+  return useQuery({
+    queryKey: ["admins", params?.toString()],
+    queryFn: () => {
+      return usersService.findAdmins(params);
+    },
+
+    refetchOnWindowFocus: false,
+    staleTime: 0,
+    retry: false,
+  });
+};
+
 export const useFindUserFavoritesArticlesQuery = (params?: URLSearchParams) => {
   return useQuery({
     queryKey: ["favorite-articles", params?.toString()],
