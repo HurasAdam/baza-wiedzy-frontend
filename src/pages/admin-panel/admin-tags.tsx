@@ -19,14 +19,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
-const dropdownOptions = [
-  {
-    label: "Dodaj tag",
-    icon: <Plus className="w-4 h-4" />,
-    actionHandler: () => toast.info("Dodaj tag (TODO: modal)"),
-  },
-];
+import { TagModal } from "@/components/tag/tag-modal";
+import { EditTagModal } from "@/components/tag/edit-tag-modal";
 
 const triggerBtn = (
   <Button variant="default" className="flex items-center gap-1">
@@ -35,6 +29,9 @@ const triggerBtn = (
 );
 
 export const TagsPage = () => {
+  const [isCreatingTag, setIsCreatingTag] = useState<boolean>(false);
+  const [isEditingTag, setIsEditingTag] = useState(false);
+  const [editingTagId, setEditingTagId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
 
   const params = useMemo(() => {
@@ -49,6 +46,26 @@ export const TagsPage = () => {
     isError,
     error,
   } = useFindTagsQuery(params);
+
+  const onCreateTag = (): void => {
+    setIsCreatingTag(true);
+  };
+
+  const onEditTag = (tagID: string): void => {
+    console.log("DUPA", tagID);
+    setEditingTagId(tagID);
+    setIsEditingTag(true);
+  };
+
+  const dropdownOptions = [
+    {
+      label: "Dodaj tag",
+      icon: <Plus className="w-4 h-4" />,
+      actionHandler: () => {
+        onCreateTag();
+      },
+    },
+  ];
 
   return (
     <div className="mx-auto pb-6">
@@ -143,7 +160,7 @@ export const TagsPage = () => {
                       {
                         label: "Edytuj",
                         icon: <FileIcon className="w-4 h-4" />,
-                        actionHandler: () => toast.info(`Edytuj ${tag.name}`),
+                        actionHandler: () => onEditTag(tag._id),
                       },
                       {
                         label: "Usuń",
@@ -159,6 +176,17 @@ export const TagsPage = () => {
           </ul>
         )}
       </div>
+      <TagModal
+        isCreatingTag={isCreatingTag}
+        setIsCreatingTag={setIsCreatingTag}
+      />
+      {editingTagId && (
+        <EditTagModal
+          tagId={editingTagId}
+          isEditingTag={isEditingTag}
+          setIsEditingTag={setIsEditingTag}
+        />
+      )}
     </div>
   );
 };
