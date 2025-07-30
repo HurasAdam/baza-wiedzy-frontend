@@ -1,31 +1,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
-import { Button } from "../ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "../ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 
 import type { AxiosError } from "axios";
-import { Loader2 } from "lucide-react";
+
 import { toast } from "sonner";
 import queryClient from "../../config/query.client";
 import { useCreateJstProjectMutation } from "../../hooks/jst-projects/use-jst-projects";
 import { jstProjectSchema } from "../../validation/jst-project.schema";
+import JstProjectForm from "./jst-project-form";
 
 interface CreateWorkspaceProps {
   closeOnOutsideClick?: boolean;
@@ -107,59 +91,12 @@ export const JstProjectModal = ({
           <DialogTitle>Utwórz projekt JST</DialogTitle>
         </DialogHeader>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="space-y-4 py-4">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nazwa</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Nazwa projektu" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Opis</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        {...field}
-                        placeholder="Opis projektu"
-                        rows={3}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <DialogFooter>
-              <Button
-                className="cursor-pointer"
-                type="submit"
-                disabled={isPending}
-              >
-                {isPending ? (
-                  <span className="flex items-center gap-1.5">
-                    <Loader2 className="animate-spin" />
-                    Zapisuje
-                  </span>
-                ) : (
-                  "Utwóz"
-                )}
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
+        <JstProjectForm
+          defaultValues={{ name: "", description: "" }}
+          onSubmit={onSubmit}
+          submitText="Utwórz"
+          isSubmitting={isPending}
+        />
       </DialogContent>
     </Dialog>
   );
