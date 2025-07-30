@@ -3,41 +3,45 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import type { AxiosError } from "axios";
 import { toast } from "sonner";
 import queryClient from "../../config/query.client";
-
 import { productSchema } from "../../validation/product.schema";
-
 import { Loader } from "lucide-react";
 import { ProductForm } from "../product/product-form";
-import { useFindTagQuery, useUpdateTagMutation } from "@/hooks/tags/use-tags";
-import { TagForm, type TagFormData } from "./tag-form";
+import JstProjectForm, { type JstProjectFormData } from "./jst-project-form";
+import {
+  useFindJstProjectQuery,
+  useUpdateJstProjectMutation,
+} from "@/hooks/jst-projects/use-jst-projects";
 
-interface CreateWorkspaceProps {
-  tagId: string;
-  isEditingTag: boolean;
-  setIsEditingTag: (isEditingProduct: boolean) => void;
+interface EditJstProjectModalProps {
+  projectId: string;
+  isEditingJstProject: boolean;
+  setIsEditingJstProject: (isEditingProduct: boolean) => void;
   closeOnOutsideClick?: boolean;
 }
 
 export type ProductForm = z.infer<typeof productSchema>;
 
-export const EditTagModal = ({
-  tagId,
-  isEditingTag,
-  setIsEditingTag,
+export const EditJstProjectModal = ({
+  projectId,
+  isEditingJstProject,
+  setIsEditingJstProject,
   closeOnOutsideClick,
-}: CreateWorkspaceProps) => {
-  const { data: tag, isLoading: isProductLoading } = useFindTagQuery(tagId);
-  const { mutate, isPending } = useUpdateTagMutation();
+}: EditJstProjectModalProps) => {
+  const { data: jstProject, isLoading: isJstProjectLoading } =
+    useFindJstProjectQuery(projectId);
+  const { mutate, isPending } = useUpdateJstProjectMutation();
 
-  const onSubmit = (data: TagFormData) => {
-    if (!tag) return;
+  const onSubmit = (data: JstProjectFormData) => {
+    if (!jstProject) return;
     mutate(
-      { tagId: tag._id, data },
+      { jstProjectId: jstProject._id, data },
       {
         onSuccess: () => {
-          setIsEditingTag(false);
-          queryClient.invalidateQueries({ queryKey: ["tags"] });
-          queryClient.invalidateQueries({ queryKey: ["tag", tag._id] });
+          setIsEditingJstProject(false);
+          queryClient.invalidateQueries({ queryKey: ["jst-projects"] });
+          queryClient.invalidateQueries({
+            queryKey: ["jst-project", jstProject._id],
+          });
           toast.success("Zmiany zostały zapisane.");
         },
         onError: (error) => {
@@ -77,7 +81,11 @@ export const EditTagModal = ({
   };
 
   return (
-    <Dialog open={isEditingTag} onOpenChange={setIsEditingTag} modal={true}>
+    <Dialog
+      open={isEditingJstProject}
+      onOpenChange={setIsEditingJstProject}
+      modal={true}
+    >
       <DialogContent
         {...(!closeOnOutsideClick
           ? { onInteractOutside: (e) => e.preventDefault() }
@@ -87,15 +95,15 @@ export const EditTagModal = ({
         <DialogHeader>
           <DialogTitle>
             {" "}
-            {isProductLoading ? (
+            {isJstProjectLoading ? (
               <div className="h-5  ">Edytuj tag: </div>
             ) : (
-              `Edytuj produkt: ${tag.name} `
+              `Edytuj projekt JST: ${jstProject.name} `
             )}
           </DialogTitle>
         </DialogHeader>
 
-        {isProductLoading ? (
+        {isJstProjectLoading ? (
           // ==== SKELETON ====
           <div className="space-y-6 justify-between  py-6 px-4 h-34">
             <div className=" flex justify-center my-12">
@@ -104,13 +112,14 @@ export const EditTagModal = ({
           </div>
         ) : (
           // ==== REAL FORM ====
-          <TagForm
+          <JstProjectForm
             defaultValues={{
-              name: tag && tag!.name,
+              name: jstProject!.name,
+              description: jstProject!.description,
             }}
             onSubmit={onSubmit}
-            submitText="Zapisz"
             isSubmitting={isPending}
+            submitText="Zapisz"
           />
         )}
       </DialogContent>

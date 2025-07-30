@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Dropdown } from "@/components/Dropdown";
 import { useFindJstProjectsQuery } from "@/hooks/jst-projects/use-jst-projects";
 import { JstProjectModal } from "@/components/jst-project/jst-project-modal";
+import { EditJstProjectModal } from "@/components/jst-project/edit-jst-project-modal";
 
 const triggerBtn = (
   <Button variant="default" className="flex items-center gap-1">
@@ -26,6 +27,10 @@ export const JstAdminProjectsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isCreatingJstProject, setIsCreatingJstProject] =
     useState<boolean>(false);
+  const [isEditingJstProject, setIsEditingJstProject] = useState(false);
+  const [editingJstProjectId, setEditingJstProjectId] = useState<string | null>(
+    null
+  );
 
   const params = useMemo(() => {
     const searchParams = new URLSearchParams();
@@ -38,10 +43,15 @@ export const JstAdminProjectsPage = () => {
     isLoading,
     isError,
     error,
-  } = useFindJstProjectsQuery();
+  } = useFindJstProjectsQuery(params);
 
   const onCreateJstProject = (): void => {
     setIsCreatingJstProject(true);
+  };
+
+  const onEditJstProject = (productId: string): void => {
+    setEditingJstProjectId(productId);
+    setIsEditingJstProject(true);
   };
 
   const dropdownOptions = [
@@ -141,7 +151,7 @@ export const JstAdminProjectsPage = () => {
                     {
                       label: "Edytuj",
                       icon: <FileIcon className="w-4 h-4" />,
-                      actionHandler: () => toast.info(`Edytuj ${project.name}`),
+                      actionHandler: () => onEditJstProject(project._id),
                     },
                     {
                       label: "Usuń",
@@ -161,6 +171,13 @@ export const JstAdminProjectsPage = () => {
         isCreatingJstProject={isCreatingJstProject}
         setIsCreatingJstProject={setIsCreatingJstProject}
       />
+      {editingJstProjectId && (
+        <EditJstProjectModal
+          projectId={editingJstProjectId}
+          isEditingJstProject={isEditingJstProject}
+          setIsEditingJstProject={setIsEditingJstProject}
+        />
+      )}
     </div>
   );
 };

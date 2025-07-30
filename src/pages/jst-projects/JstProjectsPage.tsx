@@ -1,5 +1,5 @@
 import { ChevronsUp, Filter, Mail, MapPin, Plus, School } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Dropdown } from "../../components/Dropdown";
 import { JstProjectModal } from "../../components/jst-project/jst-project-modal";
 import { JstSchoolModal } from "../../components/jst-school/jst-school-modal";
@@ -30,8 +30,15 @@ const placeholderMap: Record<FilterField, string> = {
 };
 
 export const JstProjectsPage = () => {
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [isCreatingJstSchool, setIsCreatingJstSchool] =
     useState<boolean>(false);
+
+  const params = useMemo(() => {
+    const searchParams = new URLSearchParams();
+    if (searchTerm) searchParams.append("name", searchTerm);
+    return searchParams;
+  }, [searchTerm]);
 
   const [isCreatingJstProject, setIsCreatingJstProject] =
     useState<boolean>(false);
@@ -42,7 +49,7 @@ export const JstProjectsPage = () => {
   const [filterField, setFilterField] = useState<FilterField>("name");
   const [filterQuery, setFilterQuery] = useState("");
 
-  const { data: projects = [], isLoading } = useFindJstProjectsQuery();
+  const { data: projects = [], isLoading } = useFindJstProjectsQuery(params);
   const { data: schools = [], isLoading: isSchoolsLoading } =
     useFindJstSchoolsQuery(selectedProjectId, { [filterField]: filterQuery });
 
