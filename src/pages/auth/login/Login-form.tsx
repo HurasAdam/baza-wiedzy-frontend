@@ -26,7 +26,7 @@ import { Link } from "react-router-dom";
 import type z from "zod";
 
 interface LoginFormProps {
-  onSubmit: () => Promise<void>;
+  onSubmit: (values: LoginFormData) => void;
   isLoading: boolean;
 }
 

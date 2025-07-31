@@ -20,6 +20,11 @@ export const LoginPage = () => {
         if (status === 401) {
           toast.error("Nieprawidłowy email lub hasło.");
           return;
+        } else if (status === 403) {
+          toast.error(
+            "Twoje konto zostało wyłączone. Skontaktuj się z administratorem."
+          );
+          return;
         } else {
           toast.error("Wystąpił błąd... spróbuj ponownie");
           return;
