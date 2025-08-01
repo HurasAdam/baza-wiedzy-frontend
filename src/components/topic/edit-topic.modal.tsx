@@ -3,41 +3,49 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import type { AxiosError } from "axios";
 import { toast } from "sonner";
 import queryClient from "../../config/query.client";
-
-import { productSchema } from "../../validation/product.schema";
+import {
+  useFindProductQuery,
+  useUpdateProductMutation,
+} from "../../hooks/products/use-products";
 
 import { Loader } from "lucide-react";
-import { ProductForm } from "../product/product-form";
-import { useFindTagQuery, useUpdateTagMutation } from "@/hooks/tags/use-tags";
-import { TagForm, type TagFormData } from "./tag-form";
+import { TopicForm } from "./topic-form";
+import type { IProduct } from "@/types/product";
+import type { topicSchema } from "@/validation/topic.schema";
+import {
+  useFindTopicQuery,
+  useUpdateTopicMutation,
+} from "@/hooks/topics/use-topics";
 
 interface CreateWorkspaceProps {
-  tagId: string;
-  isEditingTag: boolean;
-  setIsEditingTag: (isEditingProduct: boolean) => void;
+  products: IProduct[];
+  topicId: string;
+  isEditingTopic: boolean;
+  setIsEditingTopic: (isEditingTopic: boolean) => void;
   closeOnOutsideClick?: boolean;
 }
 
-export type ProductForm = z.infer<typeof productSchema>;
+export type topicFormData = z.infer<typeof topicSchema>;
 
-export const EditTagModal = ({
-  tagId,
-  isEditingTag,
-  setIsEditingTag,
+export const EditTopicModal = ({
+  products,
+  topicId,
+  isEditingTopic,
+  setIsEditingTopic,
   closeOnOutsideClick,
 }: CreateWorkspaceProps) => {
-  const { data: tag, isLoading: isProductLoading } = useFindTagQuery(tagId);
-  const { mutate, isPending } = useUpdateTagMutation();
+  const { data: topic, isLoading: isProductLoading } =
+    useFindTopicQuery(topicId);
+  const { mutate, isPending } = useUpdateTopicMutation();
 
-  const onSubmit = (data: TagFormData) => {
-    if (!tag) return;
+  const onSubmit = (data: topicFormData) => {
+    if (!topic) return;
     mutate(
-      { tagId: tag._id, data },
+      { topicId: topic._id, data },
       {
         onSuccess: () => {
-          setIsEditingTag(false);
-          queryClient.invalidateQueries({ queryKey: ["tags"] });
-          queryClient.invalidateQueries({ queryKey: ["tag", tag._id] });
+          setIsEditingTopic(false);
+          queryClient.invalidateQueries({ queryKey: ["topics"] });
           toast.success("Zmiany zostały zapisane.");
         },
         onError: (error) => {
@@ -60,8 +68,8 @@ export const EditTagModal = ({
                     Błąd: Duplikat produktu
                   </div>
                   <div style={{ opacity: 0.8 }}>
-                    Tag o tej nazwie już istnieje, nazwa produktu musi być
-                    unikalna
+                    Temat rozmowy o tej nazwie już istnieje, nazwa nazwa tematu
+                    musi być unikalna
                   </div>
                 </div>
               </div>,
@@ -77,7 +85,7 @@ export const EditTagModal = ({
   };
 
   return (
-    <Dialog open={isEditingTag} onOpenChange={setIsEditingTag} modal={true}>
+    <Dialog open={isEditingTopic} onOpenChange={setIsEditingTopic} modal={true}>
       <DialogContent
         {...(!closeOnOutsideClick
           ? { onInteractOutside: (e) => e.preventDefault() }
@@ -88,28 +96,29 @@ export const EditTagModal = ({
           <DialogTitle>
             {" "}
             {isProductLoading ? (
-              <div className="h-5  ">Edytuj tag: </div>
+              <div className="h-5  ">Edytuj produkt: </div>
             ) : (
-              `Edytuj produkt: ${tag?.name} `
+              `Edytuj temat rozmowy: ${topic?.title} `
             )}
           </DialogTitle>
         </DialogHeader>
 
         {isProductLoading ? (
           // ==== SKELETON ====
-          <div className="space-y-6 justify-between  py-6 px-4 h-34">
+          <div className="space-y-6 justify-between  py-6 px-4 h-53">
             <div className=" flex justify-center my-12">
               <Loader className="animate-spin" />
             </div>
           </div>
         ) : (
           // ==== REAL FORM ====
-          <TagForm
-            defaultValues={{
-              name: tag && tag!.name,
-            }}
+          <TopicForm
+            products={products}
             onSubmit={onSubmit}
-            submitText="Zapisz"
+            defaultValues={{
+              title: topic!.title,
+              product: topic!.product._id, // <-- tylko ID
+            }}
             isSubmitting={isPending}
           />
         )}

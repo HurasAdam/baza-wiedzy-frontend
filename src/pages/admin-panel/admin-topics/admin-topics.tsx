@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/select";
 import { useFindProductsQuery } from "@/hooks/products/use-products";
 import { TopicModal } from "@/components/topic/topic-modal";
+import { EditTopicModal } from "@/components/topic/edit-topic.modal";
 
 const triggerBtn = (
   <Button variant="default" className="flex items-center gap-1">
@@ -35,7 +36,9 @@ export const AdminTopicsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [productFilter, setProductFilter] = useState("");
 
+  const [isEditingTopic, setIsEditingTopic] = useState(false);
   const [isCreatingTopic, setIsCreatingTopic] = useState(false);
+  const [editingTopicId, setEditingTopicId] = useState<string | null>(null);
 
   const params = useMemo(() => {
     const searchParams = new URLSearchParams();
@@ -60,6 +63,11 @@ export const AdminTopicsPage = () => {
 
   const onCreateTopic = (): void => {
     setIsCreatingTopic(true);
+  };
+
+  const onEditTopic = (topicId: string): void => {
+    setEditingTopicId(topicId);
+    setIsEditingTopic(true);
   };
 
   const dropdownOptions = [
@@ -181,8 +189,7 @@ export const AdminTopicsPage = () => {
                       {
                         label: "Edytuj",
                         icon: <FileIcon className="w-4 h-4" />,
-                        actionHandler: () =>
-                          toast.info(`Edytuj ${topic.title}`),
+                        actionHandler: () => onEditTopic(topic._id),
                       },
                       {
                         label: "Usuń",
@@ -204,6 +211,14 @@ export const AdminTopicsPage = () => {
         isCreatingTopic={isCreatingTopic}
         setIsCreatingTopic={setIsCreatingTopic}
       />
+      {editingTopicId && (
+        <EditTopicModal
+          products={products}
+          isEditingTopic={isEditingTopic}
+          setIsEditingTopic={setIsEditingTopic}
+          topicId={editingTopicId}
+        />
+      )}
     </div>
   );
 };

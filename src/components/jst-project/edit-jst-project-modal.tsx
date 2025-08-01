@@ -98,7 +98,7 @@ export const EditJstProjectModal = ({
             {isJstProjectLoading ? (
               <div className="h-5  ">Edytuj tag: </div>
             ) : (
-              `Edytuj projekt JST: ${jstProject.name} `
+              `Edytuj projekt JST: ${jstProject?.name} `
             )}
           </DialogTitle>
         </DialogHeader>

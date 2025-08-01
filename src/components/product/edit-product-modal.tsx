@@ -94,7 +94,7 @@ export const EditProductModal = ({
             {isProductLoading ? (
               <div className="h-5  ">Edytuj produkt: </div>
             ) : (
-              `Edytuj produkt: ${product.name} `
+              `Edytuj produkt: ${product?.name} `
             )}
           </DialogTitle>
         </DialogHeader>
