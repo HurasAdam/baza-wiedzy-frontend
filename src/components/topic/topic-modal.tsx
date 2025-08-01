@@ -32,6 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { TopicForm } from "./topic-form";
 
 interface CreateWorkspaceProps {
   isCreatingTopic: boolean;
@@ -52,7 +53,7 @@ export const colorOptions = [
   "#34495E", // Navy
 ];
 
-export type topicForm = z.infer<typeof topicSchema>;
+export type topicFormData = z.infer<typeof topicSchema>;
 
 export const TopicModal = ({
   isCreatingTopic,
@@ -60,20 +61,11 @@ export const TopicModal = ({
   closeOnOutsideClick = false,
   products,
 }: CreateWorkspaceProps) => {
-  const form = useForm<topicForm>({
-    resolver: zodResolver(topicSchema),
-    defaultValues: {
-      title: "",
-      product: "",
-    },
-  });
+  const { mutate, isPending } = useCreateTopicMutation();
 
-  const { mutate } = useCreateTopicMutation();
-
-  const onSubmit = (data: topicForm) => {
+  const onSubmit = (data: topicFormData) => {
     mutate(data, {
       onSuccess: () => {
-        form.reset();
         setIsCreatingTopic(false);
         toast.success("Temat rozmowy został dodany");
         queryClient.invalidateQueries({ queryKey: ["topics"] });
@@ -128,59 +120,12 @@ export const TopicModal = ({
           <DialogTitle>Utwórz temat rozmowy</DialogTitle>
         </DialogHeader>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="space-y-4 py-4">
-              <FormField
-                control={form.control}
-                name="product"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Produkt</FormLabel>
-                    <FormControl>
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="-- Wybierz produkt --" />
-                        </SelectTrigger>
-                        <SelectContent side="bottom">
-                          {products?.map((product) => (
-                            <SelectItem key={product?._id} value={product?._id}>
-                              {product?.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nazwa</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Nazwa tematu" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <DialogFooter>
-              <Button className="cursor-pointer" type="submit">
-                Utwórz
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
+        <TopicForm
+          products={products}
+          onSubmit={onSubmit}
+          defaultValues={{ title: "", product: "" }}
+          isSubmitting={isPending}
+        />
       </DialogContent>
     </Dialog>
   );
