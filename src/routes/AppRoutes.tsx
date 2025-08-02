@@ -8,6 +8,9 @@ import AdminLayout from "../layouts/admin/admin.layout";
 import AdminDashboard from "../pages/admin-panel/admin-dashboard";
 import AdminProtectedRoute from "./admin.protected.route";
 import ProtectedRoute from "./protected.route";
+import AccountOnboardingLayout from "@/layouts/account-onboarding/account-onboarding-layout";
+import { OnboardingPage } from "@/pages/onboarding/OnboardingPage";
+import { AccountOnboardingRoute } from "./account.onboarding.route";
 
 export function AppRoutes() {
   return (
@@ -23,6 +26,12 @@ export function AppRoutes() {
             />
 
             <Route path="*" element={<Navigate to="/login" replace />} />
+          </Route>
+        </Route>
+
+        <Route element={<AccountOnboardingRoute />}>
+          <Route element={<AccountOnboardingLayout />}>
+            <Route path="/account-onboarding" element={<OnboardingPage />} />
           </Route>
         </Route>
 

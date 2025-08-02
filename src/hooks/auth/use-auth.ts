@@ -15,6 +15,12 @@ export const useLogoutMutation = () => {
   });
 };
 
+export const useChangePasswordMutation = () => {
+  return useMutation({
+    mutationFn: (data) => authService.changePassword(data),
+  });
+};
+
 export const useAuthQuery = () => {
   return useQuery({
     queryKey: ["authUser"],

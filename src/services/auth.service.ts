@@ -12,6 +12,10 @@ const verifyMe = () => {
   return api.get(`users/me`);
 };
 
+const changePassword = (data) => {
+  return api.post(`users/change-password`, data);
+};
+
 const logout = () => {
   return api.get(buildUrl(BASE_URL, "logout"));
 };
@@ -20,4 +24,5 @@ export const authService = {
   login,
   verifyMe,
   logout,
+  changePassword,
 };
