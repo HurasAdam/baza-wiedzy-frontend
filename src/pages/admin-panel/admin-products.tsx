@@ -1,6 +1,7 @@
 import {
   Box,
   Ellipsis,
+  Eye,
   FileIcon,
   Loader,
   Plus,
@@ -17,6 +18,7 @@ import { Dropdown } from "@/components/Dropdown";
 import { useFindProductsQuery } from "@/hooks/products/use-products";
 import { ProductModal } from "@/components/product/product-modal";
 import { EditProductModal } from "@/components/product/edit-product-modal";
+import { useNavigate } from "react-router-dom";
 
 const triggerBtn = (
   <Button variant="default" className="flex items-center gap-1">
@@ -27,6 +29,7 @@ const triggerBtn = (
 export const ProductsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isCreatingProduct, setIsCreatingProduct] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const [isEditingProduct, setIsEditingProduct] = useState(false);
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
@@ -151,6 +154,12 @@ export const ProductsPage = () => {
                     </Button>
                   }
                   options={[
+                    {
+                      label: "Wyświetl szczególy",
+                      icon: <Eye className="w-4 h-4" />,
+                      actionHandler: () =>
+                        navigate(`/admin/manage-products/${product._id}`),
+                    },
                     {
                       label: "Edytuj",
                       icon: <FileIcon className="w-4 h-4" />,

@@ -32,7 +32,7 @@ export const useFindProductsQuery = (params?: URLSearchParams | null) => {
 };
 export const useFindProductQuery = (productId: string) => {
   return useQuery({
-    queryKey: ["products", productId],
+    queryKey: ["product", productId],
     queryFn: () => {
       return productsService.findOne(productId);
     },

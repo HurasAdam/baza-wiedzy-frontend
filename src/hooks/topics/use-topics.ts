@@ -16,11 +16,11 @@ export const useUpdateTopicMutation = () => {
   });
 };
 
-export const useFindTopicsQuery = (params: URLSearchParams) => {
+export const useFindTopicsQuery = (params?: URLSearchParams) => {
   return useQuery({
-    queryKey: ["topics", params.toString()],
+    queryKey: ["topics", params ? params.toString() : "all"],
     queryFn: () => {
-      return topicsService.find(params);
+      return topicsService.find(params || undefined);
     },
 
     refetchOnWindowFocus: false,
