@@ -9,6 +9,7 @@ import { useUpdateProductMutation } from "@/hooks/products/use-products";
 import { toast } from "sonner";
 import queryClient from "@/config/query.client";
 import type { AxiosError } from "axios";
+import { CategoryModal } from "@/components/product-category/category-modal";
 
 interface ProductDetailsTabProps {
   product: {
@@ -93,94 +94,96 @@ export const ProductDetailsTab = ({ product }: ProductDetailsTabProps) => {
   const handleSubmit = form.handleSubmit(handleSave);
 
   return (
-    <Card>
-      <CardHeader className="flex items-center justify-between">
-        <CardTitle>Informacje o produkcie</CardTitle>
-        {isEditing ? (
-          <div className="flex gap-2">
-            <Button
-              size="sm"
-              className="gap-2"
-              onClick={handleSubmit}
-              disabled={!isDirty || isPending}
-            >
-              {isPending ? (
-                <Loader className="w-4 h-4 animate-spin" />
-              ) : (
-                <Check className="w-4 h-4" />
-              )}
-              Zapisz
-            </Button>
+    <>
+      <Card>
+        <CardHeader className="flex items-center justify-between">
+          <CardTitle>Informacje o produkcie</CardTitle>
+          {isEditing ? (
+            <div className="flex gap-2">
+              <Button
+                size="sm"
+                className="gap-2"
+                onClick={handleSubmit}
+                disabled={!isDirty || isPending}
+              >
+                {isPending ? (
+                  <Loader className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Check className="w-4 h-4" />
+                )}
+                Zapisz
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                className="gap-2"
+                onClick={() => setIsEditing(false)}
+              >
+                <X className="w-4 h-4" /> Anuluj
+              </Button>
+            </div>
+          ) : (
             <Button
               size="sm"
               variant="outline"
               className="gap-2"
-              onClick={() => setIsEditing(false)}
+              onClick={onEdit}
             >
-              <X className="w-4 h-4" /> Anuluj
+              <Pencil className="w-4 h-4" /> Edytuj
             </Button>
-          </div>
-        ) : (
-          <Button
-            size="sm"
-            variant="outline"
-            className="gap-2"
-            onClick={onEdit}
-          >
-            <Pencil className="w-4 h-4" /> Edytuj
-          </Button>
-        )}
-      </CardHeader>
+          )}
+        </CardHeader>
 
-      <CardContent className="space-y-4">
-        {isEditing && product ? (
-          <FormProvider {...form}>
-            <ProductDetailsForm />
-          </FormProvider>
-        ) : (
-          <>
-            <div>
-              <p className=" text-muted-foreground block text-sm font-medium mb-1">
-                Nazwa:
-              </p>
+        <CardContent className="space-y-4">
+          {isEditing && product ? (
+            <FormProvider {...form}>
+              <ProductDetailsForm />
+            </FormProvider>
+          ) : (
+            <>
+              <div>
+                <p className=" text-muted-foreground block text-sm font-medium mb-1">
+                  Nazwa:
+                </p>
 
-              <div className="h-10 flex items-center">
-                <p className="text-sm font-medium">{product.name}</p>
+                <div className="h-10 flex items-center">
+                  <p className="text-sm font-medium">{product.name}</p>
+                </div>
               </div>
-            </div>
 
-            <div>
-              <p className="text-muted-foreground block text-sm font-medium mb-1">
-                Kolor etykiety:
-              </p>
-              <div className="h-10 flex items-center gap-2">
-                <span
-                  className="inline-block w-8 h-8 rounded-full"
-                  style={{ backgroundColor: product.labelColor }}
-                />
-                <span className="text-sm">{product.labelColor}</span>
+              <div>
+                <p className="text-muted-foreground block text-sm font-medium mb-1">
+                  Kolor etykiety:
+                </p>
+                <div className="h-10 flex items-center gap-2">
+                  <span
+                    className="inline-block w-8 h-8 rounded-full"
+                    style={{ backgroundColor: product.labelColor }}
+                  />
+                  <span className="text-sm">{product.labelColor}</span>
+                </div>
               </div>
+            </>
+          )}
+
+          <Separator />
+
+          <div>
+            <p className="text-xs text-muted-foreground">Utworzony przez:</p>
+            <div className="flex items-center gap-1.5">
+              <p className="text-sm">{product.createdBy.name}</p>
+              <p className="text-sm">{product.createdBy.surname}</p>
             </div>
-          </>
-        )}
-
-        <Separator />
-
-        <div>
-          <p className="text-xs text-muted-foreground">Utworzony przez:</p>
-          <div className="flex items-center gap-1.5">
-            <p className="text-sm">{product.createdBy.name}</p>
-            <p className="text-sm">{product.createdBy.surname}</p>
           </div>
-        </div>
 
-        <div>
-          <p className="text-xs text-muted-foreground">Data utworzenia:</p>
-          <p className="text-sm">
-            {new Date(product.createdAt).toLocaleDateString()}
-          </p>
-        </div>
-      </CardContent>
-    </Card>
+          <div>
+            <p className="text-xs text-muted-foreground">Data utworzenia:</p>
+            <p className="text-sm">
+              {new Date(product.createdAt).toLocaleDateString()}
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    </>
   );
 };

@@ -1,6 +1,19 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { productCategoriesService } from "../../services/product-categories.service";
+import type { ProductCategoryFormData } from "@/validation/product-category.schema";
+
+export const useCreateProductCategorytMutation = () => {
+  return useMutation({
+    mutationFn: ({
+      productId,
+      data,
+    }: {
+      productId: string;
+      data: ProductCategoryFormData;
+    }) => productCategoriesService.create(productId, data),
+  });
+};
 
 export const useFindProductCategoriesQuery = () => {
   return useQuery({
