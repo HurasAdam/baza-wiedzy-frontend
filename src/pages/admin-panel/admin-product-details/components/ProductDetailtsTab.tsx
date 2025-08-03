@@ -9,7 +9,7 @@ import { useUpdateProductMutation } from "@/hooks/products/use-products";
 import { toast } from "sonner";
 import queryClient from "@/config/query.client";
 import type { AxiosError } from "axios";
-import { CategoryModal } from "@/components/product-category/category-modal";
+import type { ProductForm } from "@/components/product/product-modal";
 
 interface ProductDetailsTabProps {
   product: {
@@ -34,7 +34,8 @@ export const ProductDetailsTab = ({ product }: ProductDetailsTabProps) => {
     setIsEditing(true);
   };
 
-  const handleSave = (data) => onSave({ productId: product._id, data });
+  const handleSave = (data: ProductForm) =>
+    onSave({ productId: product._id, data });
 
   const form = useForm({
     defaultValues: {
@@ -45,7 +46,13 @@ export const ProductDetailsTab = ({ product }: ProductDetailsTabProps) => {
 
   const { isDirty } = form.formState;
 
-  const onSave = ({ productId, data }) => {
+  const onSave = ({
+    productId,
+    data,
+  }: {
+    productId: string;
+    data: ProductForm;
+  }) => {
     mutate(
       { productId, data },
       {

@@ -1,5 +1,8 @@
 import api from "@/config/api.client";
-import type { ProductCategory } from "../types/product-category";
+import type {
+  IProductCategory,
+  ProductCategory,
+} from "../types/product-category";
 import type { ProductCategoryFormData } from "@/validation/product-category.schema";
 
 const baseUrl = "/categories";
@@ -10,6 +13,13 @@ const create = async (productId: string, formData: ProductCategoryFormData) => {
 
 const find = (params?: URLSearchParams): Promise<[]> => {
   return api.get(baseUrl, { params });
+};
+const findOne = (categoryId: string): Promise<IProductCategory> => {
+  return api.get(`${baseUrl}/${categoryId}`);
+};
+
+const updateOne = (categoryId: string, formData: ProductCategoryFormData) => {
+  return api.put(`${baseUrl}/${categoryId}`, formData);
 };
 
 const findByProduct = (
@@ -22,5 +32,7 @@ const findByProduct = (
 export const productCategoriesService = {
   create,
   find,
+  findOne,
+  updateOne,
   findByProduct,
 };

@@ -1,25 +1,5 @@
-import { cn } from "@/lib/utils";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import type { z } from "zod";
-import { Button } from "../ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "../ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
-
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import type { AxiosError } from "axios";
 import { toast } from "sonner";
 import queryClient from "../../config/query.client";
@@ -32,21 +12,6 @@ interface CreateWorkspaceProps {
   setIsCreatingProduct: (isCreatingWorkspace: boolean) => void;
   closeOnOutsideClick?: boolean;
 }
-
-// export const colorOptions = [
-//   "#FF5733", // Red-Orange
-//   "#33C1FF", // Blue
-//   "#28A745", // Green
-//   "#FFC300", // Yellow
-//   "#8E44AD", // Purple
-//   "#E67E22", // Orange
-//   "#2ECC71", // Light Green
-//   "#D72631", // Strong Red
-//   "#1B998B", // Teal
-//   "#F4D35E", // Soft Yellow
-//   "#4A90E2", // Soft Blue
-//   "#F08A5D", // Coral
-// ];
 
 export type ProductForm = z.infer<typeof productSchema>;
 

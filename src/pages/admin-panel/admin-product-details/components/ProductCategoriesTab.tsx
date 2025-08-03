@@ -11,15 +11,25 @@ import { MoreHorizontal, Pencil, Plus, Trash2 } from "lucide-react";
 import { useFindCategoriesByProductQuery } from "@/hooks/product-categories/use-product-categories";
 import { useState } from "react";
 import { CategoryModal } from "@/components/product-category/category-modal";
+import { EditCategoryModal } from "@/components/product-category/edit-category.modal";
 
 export const ProductCategoriesTab = ({ productId }: { productId: string }) => {
   const [isCreatingCategory, setIsCreatingCategory] = useState(false);
+  const [isEditingCategory, setIsEditingCategory] = useState(false);
+  const [editingCategoryId, setEditingCategoryId] = useState<string | null>(
+    null
+  );
 
   const { data: categories, isLoading } =
     useFindCategoriesByProductQuery(productId);
 
   const onCreateCategory = () => {
     setIsCreatingCategory(true);
+  };
+
+  const onEditCategory = (categoryId: string): void => {
+    setEditingCategoryId(categoryId);
+    setIsEditingCategory(true);
   };
 
   if (isLoading) return <p>Ładowanie kategorii...</p>;
@@ -84,9 +94,7 @@ export const ProductCategoriesTab = ({ productId }: { productId: string }) => {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                      onClick={() => console.log(`Edytuj ${cat.name}`)}
-                    >
+                    <DropdownMenuItem onClick={() => onEditCategory(cat._id)}>
                       <Pencil className="w-4 h-4 mr-2" /> Edytuj
                     </DropdownMenuItem>
                     <DropdownMenuItem
@@ -107,6 +115,14 @@ export const ProductCategoriesTab = ({ productId }: { productId: string }) => {
           productId={productId}
           isCreatingCategory={isCreatingCategory}
           setIsCreatingCategory={setIsCreatingCategory}
+        />
+      )}
+      {editingCategoryId && productId && (
+        <EditCategoryModal
+          categoryId={editingCategoryId}
+          productId={productId}
+          isEditingCategory={isEditingCategory}
+          setIsEditingCategory={setIsEditingCategory}
         />
       )}
     </>

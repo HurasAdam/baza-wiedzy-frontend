@@ -15,6 +15,31 @@ export const useCreateProductCategorytMutation = () => {
   });
 };
 
+export const useUpdateProductCategorytMutation = () => {
+  return useMutation({
+    mutationFn: ({
+      categoryId,
+      data,
+    }: {
+      categoryId: string;
+      data: ProductCategoryFormData;
+    }) => productCategoriesService.updateOne(categoryId, data),
+  });
+};
+
+export const useFindProductCategoryQuery = (categoryId: string) => {
+  return useQuery({
+    queryKey: ["category", categoryId],
+    queryFn: () => {
+      return productCategoriesService.findOne(categoryId);
+    },
+
+    refetchOnWindowFocus: false,
+    staleTime: 0,
+    retry: false,
+  });
+};
+
 export const useFindProductCategoriesQuery = () => {
   return useQuery({
     queryKey: ["categories"],
