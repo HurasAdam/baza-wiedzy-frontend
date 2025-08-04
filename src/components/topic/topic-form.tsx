@@ -1,19 +1,19 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { productSchema } from "@/validation/product.schema";
-import type { z } from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import type { topicFormData } from "./topic-modal";
+import type { IProduct } from "@/types/product";
+import { productSchema } from "@/validation/product.schema";
+import { topicSchema } from "@/validation/topic.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import type { z } from "zod";
 import {
   Select,
   SelectContent,
@@ -21,8 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { topicSchema } from "@/validation/topic.schema";
-import type { IProduct } from "@/types/product";
+import type { topicFormData } from "./topic-modal";
 
 export const colorOptions = [
   "#FF5733",
@@ -47,6 +46,7 @@ interface TopicFormProps {
   onSubmit: (data: topicFormData) => void;
   submitText?: string;
   isSubmitting?: boolean;
+  productId?: string;
 }
 
 export const TopicForm = ({
@@ -55,10 +55,14 @@ export const TopicForm = ({
   onSubmit,
   submitText = "Zapisz",
   isSubmitting = false,
+  productId,
 }: TopicFormProps) => {
   const form = useForm<topicFormData>({
     resolver: zodResolver(topicSchema),
-    defaultValues,
+    defaultValues: {
+      ...defaultValues,
+      product: productId ?? defaultValues.product,
+    },
   });
 
   const isDirty = form.formState.isDirty;
@@ -74,18 +78,28 @@ export const TopicForm = ({
               <FormItem>
                 <FormLabel>Produkt</FormLabel>
                 <FormControl>
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="-- Wybierz produkt --" />
-                    </SelectTrigger>
-                    <SelectContent side="bottom">
-                      {products?.map((product) => (
-                        <SelectItem key={product?._id} value={product?._id}>
-                          {product?.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  {productId ? (
+                    <>
+                      <input type="hidden" {...field} value={productId} />
+                      <p className="text-sm text-muted-foreground">
+                        {products.find((p) => p._id === productId)?.name ??
+                          "Wybrany produkt"}
+                      </p>
+                    </>
+                  ) : (
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="-- Wybierz produkt --" />
+                      </SelectTrigger>
+                      <SelectContent side="bottom">
+                        {products?.map((product) => (
+                          <SelectItem key={product._id} value={product._id}>
+                            {product.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -107,7 +121,7 @@ export const TopicForm = ({
           />
         </div>
 
-        <div className="flex justify-end ">
+        <div className="flex justify-end">
           <Button type="submit" disabled={isSubmitting || !isDirty}>
             {isSubmitting ? "Zapisywanie..." : submitText}
           </Button>

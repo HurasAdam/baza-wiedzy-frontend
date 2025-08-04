@@ -1,23 +1,5 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import type { z } from "zod";
-import { Button } from "../ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "../ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 
 import type { AxiosError } from "axios";
 import { toast } from "sonner";
@@ -25,13 +7,6 @@ import queryClient from "../../config/query.client";
 import { useCreateTopicMutation } from "../../hooks/topics/use-topics";
 import type { IProduct } from "../../types/product";
 import { topicSchema } from "../../validation/topic.schema";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
 import { TopicForm } from "./topic-form";
 
 interface CreateWorkspaceProps {
@@ -39,6 +14,7 @@ interface CreateWorkspaceProps {
   setIsCreatingTopic: (isCreatingWorkspace: boolean) => void;
   closeOnOutsideClick?: boolean;
   products: IProduct[];
+  productId?: string;
 }
 
 // Define 8 predefined colors
@@ -60,6 +36,7 @@ export const TopicModal = ({
   setIsCreatingTopic,
   closeOnOutsideClick = false,
   products,
+  productId,
 }: CreateWorkspaceProps) => {
   const { mutate, isPending } = useCreateTopicMutation();
 
@@ -68,7 +45,12 @@ export const TopicModal = ({
       onSuccess: () => {
         setIsCreatingTopic(false);
         toast.success("Temat rozmowy został dodany");
-        queryClient.invalidateQueries({ queryKey: ["topics"] });
+
+        if (productId) {
+          queryClient.invalidateQueries({ queryKey: ["topics", productId] });
+        } else {
+          queryClient.invalidateQueries({ queryKey: ["topics"] });
+        }
       },
       onError: (error) => {
         const { status } = error as AxiosError;
@@ -125,6 +107,7 @@ export const TopicModal = ({
           onSubmit={onSubmit}
           defaultValues={{ title: "", product: "" }}
           isSubmitting={isPending}
+          productId={productId}
         />
       </DialogContent>
     </Dialog>
