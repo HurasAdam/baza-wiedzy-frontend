@@ -1,19 +1,23 @@
+import { Button } from "@/components/ui/button";
+import { useFindProductQuery } from "@/hooks/products/use-products";
+import { ArrowLeft, Loader, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, Loader, Trash2 } from "lucide-react";
-import { useFindProductQuery } from "@/hooks/products/use-products";
-import { ProductDetailsTab } from "./components/ProductDetailtsTab";
 import { ProductCategoriesTab } from "./components/ProductCategoriesTab";
-import { ProductTopicsTab } from "./components/ProductTopicsTab";
+import { ProductDetailsTab } from "./components/ProductDetailtsTab";
 import ProductTabCard from "./components/ProductTabCard";
+import { ProductTopicsTab } from "./components/ProductTopicsTab";
 
 export const AdminProductDetailsPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { data: product, isLoading: isProductLoading } =
-    useFindProductQuery(id);
+  const { data: product, isLoading: isProductLoading } = useFindProductQuery(
+    id!,
+    {
+      enabled: true,
+    }
+  );
 
   const [activeTab, setActiveTab] = useState<
     "details" | "categories" | "topics"

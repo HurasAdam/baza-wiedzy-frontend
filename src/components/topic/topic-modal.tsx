@@ -47,7 +47,12 @@ export const TopicModal = ({
         toast.success("Temat rozmowy został dodany");
 
         if (productId) {
-          queryClient.invalidateQueries({ queryKey: ["topics", productId] });
+          const params = new URLSearchParams();
+          params.append("product", productId);
+
+          queryClient.invalidateQueries({
+            queryKey: ["topics", params.toString()],
+          });
         } else {
           queryClient.invalidateQueries({ queryKey: ["topics"] });
         }

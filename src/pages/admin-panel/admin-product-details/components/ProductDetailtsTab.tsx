@@ -1,15 +1,15 @@
-import { useState } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
-import { Pencil, Check, X, Loader } from "lucide-react";
-import { ProductDetailsForm } from "./ProductDetailsForm";
-import { FormProvider, useForm } from "react-hook-form";
-import { useUpdateProductMutation } from "@/hooks/products/use-products";
-import { toast } from "sonner";
-import queryClient from "@/config/query.client";
-import type { AxiosError } from "axios";
 import type { ProductForm } from "@/components/product/product-modal";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import queryClient from "@/config/query.client";
+import { useUpdateProductMutation } from "@/hooks/products/use-products";
+import type { AxiosError } from "axios";
+import { Check, Loader, Pencil, X } from "lucide-react";
+import { useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { ProductDetailsForm } from "./ProductDetailsForm";
 
 interface ProductDetailsTabProps {
   product: {

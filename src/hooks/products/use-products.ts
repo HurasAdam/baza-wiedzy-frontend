@@ -1,6 +1,11 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  type UseQueryOptions,
+} from "@tanstack/react-query";
 import type { ProductForm } from "../../components/product/product-modal";
 import { productsService } from "../../services/products.service";
+import type { IProduct } from "../../types/product";
 
 export const useCreateProductMutation = () => {
   return useMutation({
@@ -30,14 +35,20 @@ export const useFindProductsQuery = (params?: URLSearchParams | null) => {
     retry: false,
   });
 };
-export const useFindProductQuery = (productId: string) => {
+
+export const useFindProductQuery = (
+  productId: string,
+  options?: Omit<
+    UseQueryOptions<IProduct, Error, IProduct, [string, string]>,
+    "queryKey" | "queryFn"
+  >
+) => {
   return useQuery({
     queryKey: ["product", productId],
-    queryFn: () => {
-      return productsService.findOne(productId);
-    },
+    queryFn: () => productsService.findOne(productId),
     refetchOnWindowFocus: false,
     staleTime: 0,
     retry: false,
+    ...options,
   });
 };

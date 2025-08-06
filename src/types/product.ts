@@ -4,4 +4,11 @@ export interface IProduct {
   labelColor: string;
   banner: string;
   articlesCount: number;
+
+  createdBy: {
+    name: string;
+    surname: string;
+  };
+  createdAt: string;
+  updatedAt: string;
 }
