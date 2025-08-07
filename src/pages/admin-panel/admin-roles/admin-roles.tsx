@@ -1,57 +1,32 @@
 import {
   Ellipsis,
   FileIcon,
-  Crown,
-  Gem,
-  Eye,
-  BicepsFlexed,
-  Hammer,
-  User,
   KeyRound,
   Loader,
   Lock,
   Plus,
+  User,
   XCircleIcon,
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
-import { Input } from "@/components/ui/input";
 import { Dropdown } from "@/components/Dropdown";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useFindRoles } from "@/hooks/users/use-users";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-
-const iconMap: Record<string, React.ElementType> = {
-  Crown: Crown,
-  Gem: Gem,
-  User: User,
-  Eye: Eye,
-  BicepsFlexed: BicepsFlexed,
-  Hammer: Hammer,
-};
-
-const dropdownOptions = [
-  {
-    label: "Dodaj role",
-    icon: <Plus className="w-4 h-4" />,
-    actionHandler: () => toast.info("Dodaj tag (TODO: modal)"),
-  },
-];
-
-const triggerBtn = (
-  <Button variant="default" className="flex items-center gap-1">
-    Dodaj <Plus className="w-4 h-4" />
-  </Button>
-);
+import { useNavigate } from "react-router-dom";
+import { iconMap } from "../../../constants/role-icons";
 
 export const AdminRolesPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
   const params = useMemo(() => {
     const searchParams = new URLSearchParams();
@@ -60,6 +35,19 @@ export const AdminRolesPage = () => {
   }, [searchTerm]);
 
   const { data: roles = [], isLoading, isError, error } = useFindRoles(params);
+  const dropdownOptions = [
+    {
+      label: "Dodaj role",
+      icon: <Plus className="w-4 h-4" />,
+      actionHandler: () => navigate("/admin/manage-roles/create"),
+    },
+  ];
+
+  const triggerBtn = (
+    <Button variant="default" className="flex items-center gap-1">
+      Dodaj <Plus className="w-4 h-4" />
+    </Button>
+  );
 
   return (
     <div className="mx-auto pb-6">

@@ -2,15 +2,16 @@ import { cn } from "@/lib/utils";
 // import { useAuth } from "@/provider/auth-context";
 import type { Workspace } from "@/types";
 import {
+  BookOpen,
   BookUser,
   ChartColumnDecreasing,
   ChevronsLeft,
   ChevronsRight,
+  Clipboard,
   Layers,
   LayoutDashboard,
   ListCheck,
   LogOut,
-  Newspaper,
   RectangleEllipsis,
   School,
   Smile,
@@ -34,15 +35,21 @@ const navItems = [
     icon: LayoutDashboard,
   },
   {
-    title: "Artykuły",
+    title: "Baza artykułów",
     href: "/articles",
-    icon: Newspaper,
+    icon: BookOpen,
+  },
+  {
+    title: "FAQ",
+    href: "/faq",
+    icon: ListCheck,
   },
   {
     title: "Rejestr tematów",
     href: "/register-topic",
-    icon: ListCheck,
+    icon: Clipboard,
   },
+
   {
     title: "Szkoły projektowe",
     href: `/jst-projects`,

@@ -1,28 +1,30 @@
 import { ArticlePage } from "../pages/article/ArticlePage";
+import { AdminAccountsPage } from "./admin-panel/admin-admin-accounts/admin-admin-accounts";
+import { AdminIssueReportDetailsPage } from "./admin-panel/admin-issue-report/admin-issue-report-detailsPage";
+import { AdminUserReportsPage } from "./admin-panel/admin-issue-report/admin-issue-reports";
+import { JstAdminProjectsPage } from "./admin-panel/admin-jst-projects";
+import { AdminProductDetailsPage } from "./admin-panel/admin-product-details/admin-product-details";
+import { ProductsPage } from "./admin-panel/admin-products";
+import { AdminRolesPage } from "./admin-panel/admin-roles/admin-roles";
+import { TagsPage } from "./admin-panel/admin-tags";
+import { AdminTopicsPage } from "./admin-panel/admin-topics/admin-topics";
+import { UsersPage } from "./admin-panel/admin-users/admin-users";
 import { ArticlesPage } from "./articles/ArticlesPage";
 import { ForgotPasswordPage } from "./auth/forgot-password/ForgotPasswordPage";
 import { LoginPage } from "./auth/login/LoginPage";
 import { CreateArticlePage } from "./create-article/CreateArticlePage";
+import { CreateRolePage } from "./create-role/CreateRolePage";
 import { DashboardPage } from "./dashboard/DashboardPage";
+import { FaqPage } from "./faq/FaqPage";
 import { FavoritesArticlesPage } from "./favorites-articles/FavoritesArticlesPage";
 import { FunnyMessages } from "./funny-messages/FunnyMessages";
 import { JstProjectsPage } from "./jst-projects/JstProjectsPage";
 import { MyEntriesPage } from "./my-entries/MyEntriesPage";
 import { NotFoundPage } from "./notFound/NotFoungPage";
+import { OnboardingPage } from "./onboarding/OnboardingPage";
 import { PendingArticles } from "./pending-articles/PendingArticles";
 import { StatisticsPage } from "./statistics/StatisticsPage";
 import { TopicRegisterPage } from "./TopicRegister/TopicRegisterPage";
-import { UsersPage } from "./admin-panel/admin-users/admin-users";
-import { ProductsPage } from "./admin-panel/admin-products";
-import { TagsPage } from "./admin-panel/admin-tags";
-import { JstAdminProjectsPage } from "./admin-panel/admin-jst-projects";
-import { AdminUserReportsPage } from "./admin-panel/admin-issue-report/admin-issue-reports";
-import { AdminTopicsPage } from "./admin-panel/admin-topics/admin-topics";
-import { AdminIssueReportDetailsPage } from "./admin-panel/admin-issue-report/admin-issue-report-detailsPage";
-import { AdminAccountsPage } from "./admin-panel/admin-admin-accounts/admin-admin-accounts";
-import { AdminRolesPage } from "./admin-panel/admin-roles/admin-roles";
-import { OnboardingPage } from "./onboarding/OnboardingPage";
-import { AdminProductDetailsPage } from "./admin-panel/admin-product-details/admin-product-details";
 export const PAGES = {
   LoginPage,
   ForgotPasswordPage,
@@ -49,4 +51,6 @@ export const PAGES = {
   AdminRolesPage,
   OnboardingPage,
   AdminProductDetailsPage,
+  FaqPage,
+  CreateRolePage,
 };

@@ -1,6 +1,6 @@
 import api from "@/config/api.client";
-import { buildUrl } from "../utils/build-url";
 import type { Role } from "@/types/roles";
+import { buildUrl } from "../utils/build-url";
 const baseUrl = "/users";
 const adminBaseUrl = "/admin";
 
@@ -15,6 +15,20 @@ export const findAdmins = (params?: URLSearchParams) => {
 
 export const findRoles = (params?: URLSearchParams): Promise<Role[]> => {
   return api.get(`${adminBaseUrl}/roles`, { params });
+};
+
+export const createRole = (
+  permissions: string[],
+  name: string,
+  iconKey: string,
+  labelColor: string
+) => {
+  return api.post(`${adminBaseUrl}/roles/create`, {
+    permissions,
+    name,
+    iconKey,
+    labelColor,
+  });
 };
 
 export const findMyFavorites = (params?: URLSearchParams): Promise => {
@@ -41,4 +55,5 @@ export const usersService = {
   enableUserAccount,
   findAdmins,
   findRoles,
+  createRole,
 };

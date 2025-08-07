@@ -77,3 +77,11 @@ export const useEnableUserAccountMutation = () => {
     },
   });
 };
+
+export const useCreateRoleMutation = () => {
+  return useMutation({
+    mutationFn: ({ permissions, name, labelColor, iconKey }) => {
+      return usersService.createRole(permissions, name, iconKey, labelColor);
+    },
+  });
+};

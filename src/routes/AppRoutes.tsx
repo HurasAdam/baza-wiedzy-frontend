@@ -1,16 +1,16 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { AuthRoute } from "./auth.route";
-import { protectedRoutePaths } from "./routes";
+import AccountOnboardingLayout from "@/layouts/account-onboarding/account-onboarding-layout";
 import AppLayout from "@/layouts/app/app.layout";
 import BaseLayout from "@/layouts/base/base.layout";
 import { PAGES } from "@/pages";
+import { OnboardingPage } from "@/pages/onboarding/OnboardingPage";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import AdminLayout from "../layouts/admin/admin.layout";
 import AdminDashboard from "../pages/admin-panel/admin-dashboard";
-import AdminProtectedRoute from "./admin.protected.route";
-import ProtectedRoute from "./protected.route";
-import AccountOnboardingLayout from "@/layouts/account-onboarding/account-onboarding-layout";
-import { OnboardingPage } from "@/pages/onboarding/OnboardingPage";
 import { AccountOnboardingRoute } from "./account.onboarding.route";
+import AdminProtectedRoute from "./admin.protected.route";
+import { AuthRoute } from "./auth.route";
+import ProtectedRoute from "./protected.route";
+import { protectedRoutePaths } from "./routes";
 
 export function AppRoutes() {
   return (
@@ -78,6 +78,10 @@ export function AppRoutes() {
             />
             <Route path="manage-admins" element={<PAGES.AdminAccountsPage />} />
             <Route path="manage-roles" element={<PAGES.AdminRolesPage />} />
+            <Route
+              path="manage-roles/create"
+              element={<PAGES.CreateRolePage />}
+            />
           </Route>
         </Route>
       </Routes>
