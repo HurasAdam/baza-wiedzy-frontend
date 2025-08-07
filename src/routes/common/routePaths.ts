@@ -13,4 +13,5 @@ export const PROTECTED_ROUTES = {
   MANAGE_USERS: "manage-users",
   MANAGE_PRODUCTS: "manage-products",
   ONBOARDING: "account-onboarding",
+  FAQ: "faq",
 };
