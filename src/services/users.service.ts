@@ -17,6 +17,10 @@ export const findRoles = (params?: URLSearchParams): Promise<Role[]> => {
   return api.get(`${adminBaseUrl}/roles`, { params });
 };
 
+const findPermissions = (): Promise<string[]> => {
+  return api.get(`${adminBaseUrl}/permissions`);
+};
+
 export const createRole = (
   permissions: string[],
   name: string,
@@ -56,4 +60,5 @@ export const usersService = {
   findAdmins,
   findRoles,
   createRole,
+  findPermissions,
 };

@@ -54,6 +54,18 @@ export const useFindUserFavoritesArticlesQuery = (params?: URLSearchParams) => {
   });
 };
 
+export const useFindPermissions = () => {
+  return useQuery({
+    queryKey: ["permissions"],
+    queryFn: () => {
+      return usersService.findPermissions();
+    },
+    refetchOnWindowFocus: false,
+    staleTime: 0,
+    retry: false,
+  });
+};
+
 export const useResetUserPasswordMutation = () => {
   return useMutation({
     mutationFn: (userId: string) => {

@@ -2,16 +2,16 @@ import { FormProvider, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-import { Switch } from "@/components/ui/switch";
 
 import type { AxiosError } from "axios";
 import { Check, Loader, PlusCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { iconOptions } from "../../constants/role-icons";
-import { useCreateRoleMutation } from "../../hooks/users/use-users";
+import {
+  useCreateRoleMutation,
+  useFindPermissions,
+} from "../../hooks/users/use-users";
+import RoleForm from "./components/role-form";
 
 const colorOptions = [
   { name: "Blue", value: "blue" },
@@ -23,32 +23,6 @@ const colorOptions = [
   { name: "Teal", value: "teal" },
 ];
 
-const PERMISSION_LABELS: Record<string, string> = {
-  ADD_ARTICLE: "Dodawanie artykułów",
-  EDIT_ARTICLE: "Edycja artykułów",
-  VERIFY_ARTICLE: "Zatwierdzanie artykułów",
-  UNVERIFY_ARTICLE: "Cofanie zatwierdzenia",
-  TRASH_ARTICLE: "Przenoszenie do kosza",
-  RESTORE_ARTICLE: "Przywracanie z kosza",
-  DELETE_ARTICLE: "Usuwanie artykułów",
-  VIEW_ARTICLE_HISTORY: "Przeglądanie historii",
-  REPORT_BUG: "Zgłaszanie błędów",
-  REPORT_PROPOSAL: "Zgłaszanie propozycji",
-  ADD_TAG: "Dodawanie tagów",
-  EDIT_TAG: "Edycja tagów",
-  DELETE_TAG: "Usuwanie tagów",
-  ADD_PRODUCT: "Dodawanie produktów",
-  EDIT_PRODUCT: "Edycja produktów",
-  DELETE_PRODUCT: "Usuwanie produktów",
-  ADD_CATEGORY: "Dodawanie kategorii",
-  EDIT_CATEGORY: "Edycja kategorii",
-  DELETE_CATEGORY: "Usuwanie kategorii",
-  ADD_TOPIC: "Dodawanie tematów",
-  EDIT_TOPIC: "Edycja tematów",
-  DELETE_TOPIC: "Usuwanie tematów",
-  READ_ONLY: "Tylko odczyt",
-};
-
 const colorClassMap: Record<string, string> = {
   blue: "bg-blue-800 border-blue-700",
   green: "bg-green-800 border-green-700",
@@ -59,7 +33,19 @@ const colorClassMap: Record<string, string> = {
   teal: "bg-teal-800 border-teal-700",
 };
 
-const availablePermissions = Object.keys(PERMISSION_LABELS);
+type Permission = {
+  key: string;
+  label: string;
+  category: string;
+};
+
+function groupPermissionsByCategory(permissions: Permission[]) {
+  return permissions.reduce<Record<string, Permission[]>>((acc, perm) => {
+    if (!acc[perm.category]) acc[perm.category] = [];
+    acc[perm.category].push(perm);
+    return acc;
+  }, {});
+}
 
 export const CreateRolePage = () => {
   const navigate = useNavigate();
@@ -80,18 +66,9 @@ export const CreateRolePage = () => {
     formState: { isDirty },
   } = form;
 
-  const selectedColor = watch("labelColor");
-  const selectedIcon = watch("iconKey");
-  const selectedPermissions = watch("permissions");
-
-  const togglePermission = (perm: string) => {
-    const updated = selectedPermissions.includes(perm)
-      ? selectedPermissions.filter((p) => p !== perm)
-      : [...selectedPermissions, perm];
-    setValue("permissions", updated, { shouldDirty: true });
-  };
-
   const { mutate, isPending } = useCreateRoleMutation();
+  const { data: permissions, isLoading: isPermissionsLoading } =
+    useFindPermissions();
 
   const onSubmit = handleSubmit((data) => {
     mutate(data, {
@@ -134,11 +111,18 @@ export const CreateRolePage = () => {
   });
 
   return (
-    <div className="mx-auto ">
+    <div className="mx-auto  ">
       <Card className="shadow-sm border border-border bg-card">
         <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 pb-6 border-b border-border">
           <div className="flex items-center gap-3">
-            <div className="rounded-md bg-primary/10 p-2 text-primary">
+            <div
+              className="rounded-md p-2"
+              style={{
+                backgroundColor:
+                  "color-mix(in srgb, var(--color-primary) 12%, transparent)",
+                color: "var(--color-primary)",
+              }}
+            >
               <PlusCircle className="w-7 h-7" />
             </div>
             <div>
@@ -168,108 +152,10 @@ export const CreateRolePage = () => {
 
         <CardContent>
           <FormProvider {...form}>
-            <form onSubmit={onSubmit} className="space-y-6 pt-1">
-              {/* Nazwa roli */}
-              <div className="space-y-1">
-                <p className="text-sm font-medium text-muted-foreground">
-                  Nazwa roli
-                </p>
-                <Input
-                  {...register("name", { required: true })}
-                  placeholder="Np. Moderator"
-                  className="h-9"
-                />
-              </div>
-
-              {/* Ikona roli */}
-              <div className="space-y-2">
-                <p className="text-sm font-medium text-muted-foreground">
-                  Ikona roli
-                </p>
-                <input type="hidden" {...register("iconKey")} />
-                <div className="flex flex-wrap gap-2">
-                  {iconOptions.map(({ name, icon: Icon }) => (
-                    <button
-                      type="button"
-                      key={name}
-                      onClick={() =>
-                        setValue("iconKey", name, { shouldDirty: true })
-                      }
-                      className={`w-11 h-11 flex items-center justify-center rounded border transition ${
-                        selectedIcon === name
-                          ? "border-ring ring-2 ring-ring ring-offset-1"
-                          : "border-border hover:bg-muted"
-                      }`}
-                      title={name}
-                    >
-                      <Icon className="w-4 h-4" />
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Kolor etykiety */}
-              <div className="space-y-2">
-                <p className="text-sm font-medium text-muted-foreground">
-                  Kolor etykiety
-                </p>
-                <input
-                  type="hidden"
-                  {...register("labelColor", { required: true })}
-                  value={selectedColor}
-                />
-                <div className="flex flex-wrap gap-2">
-                  {colorOptions.map(({ name, value }) => {
-                    const isSelected = selectedColor === value;
-                    const colorClasses =
-                      colorClassMap[value] || "bg-muted border-border";
-                    return (
-                      <span
-                        key={name}
-                        onClick={() =>
-                          setValue("labelColor", value, { shouldDirty: true })
-                        }
-                        className={`w-8 h-8 rounded-full border cursor-pointer transition-all duration-200 
-          ${isSelected ? "ring-2 ring-ring ring-offset-2" : "hover:scale-105"} 
-          ${colorClasses}`}
-                        title={name}
-                      />
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Uprawnienia  */}
-              <div className="space-y-4">
-                <p className="text-sm font-medium text-muted-foreground">
-                  Uprawnienia
-                </p>
-                <input type="hidden" {...register("permissions")} />
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {availablePermissions.map((perm) => (
-                    <label
-                      key={perm}
-                      className="flex items-center justify-between cursor-pointer rounded-md border border-border p-3 hover:bg-muted transition"
-                    >
-                      <span className="text-sm font-medium">
-                        {PERMISSION_LABELS[perm] || perm}
-                      </span>
-                      <Switch
-                        checked={selectedPermissions.includes(perm)}
-                        onCheckedChange={() => togglePermission(perm)}
-                        aria-label={`Przełącznik uprawnienia ${perm}`}
-                      />
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              <Separator />
-
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Po zapisaniu rola będzie dostępna do przypisania użytkownikom.
-              </p>
-            </form>
+            <RoleForm
+              isPermissionsLoading={isPermissionsLoading}
+              permissions={permissions}
+            />
           </FormProvider>
         </CardContent>
       </Card>
