@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import type { AxiosError } from "axios";
-import { Check, Loader, Pencil } from "lucide-react";
+import { Check, Loader, Pencil, X } from "lucide-react";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
@@ -117,19 +117,31 @@ export const EditRolePage = () => {
               </p>
             </div>
           </div>
-          <Button
-            size="default"
-            className="gap-2 whitespace-nowrap"
-            onClick={onSubmit}
-            disabled={!isDirty || isPending}
-          >
-            {isPending ? (
-              <Loader className="w-5 h-5 animate-spin" />
-            ) : (
-              <Check className="w-5 h-5" />
-            )}
-            Zapisz rolę
-          </Button>
+          <div className="space-x-3">
+            <Button
+              size="default"
+              className="gap-2 whitespace-nowrap"
+              onClick={onSubmit}
+              disabled={!isDirty || isPending}
+            >
+              {isPending ? (
+                <Loader className="w-5 h-5 animate-spin" />
+              ) : (
+                <Check className="w-5 h-5" />
+              )}
+              Zapisz
+            </Button>
+            <Button
+              size="default"
+              variant="outline"
+              className="gap-2 whitespace-nowrap"
+              onClick={() => navigate("/admin/manage-roles")}
+              disabled={isPending}
+            >
+              <X className="w-5 h-5" />
+              Anuluj
+            </Button>
+          </div>
         </CardHeader>
 
         <CardContent>
