@@ -1,5 +1,3 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 
@@ -24,20 +22,11 @@ export const JstProjectModal = ({
   isCreatingJstProject,
   setIsCreatingJstProject,
 }: CreateWorkspaceProps) => {
-  const form = useForm<JstProjectForm>({
-    resolver: zodResolver(jstProjectSchema),
-    defaultValues: {
-      name: "",
-      description: "",
-    },
-  });
-
   const { mutate, isPending } = useCreateJstProjectMutation();
 
   const onSubmit = (data: JstProjectForm) => {
     mutate(data, {
       onSuccess: () => {
-        form.reset();
         setIsCreatingJstProject(false);
         toast.success("Projekt został dodany");
         queryClient.invalidateQueries({ queryKey: ["jst-projects"] });

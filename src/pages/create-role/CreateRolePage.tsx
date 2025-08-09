@@ -1,10 +1,8 @@
-import { FormProvider, useForm } from "react-hook-form";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-
 import type { AxiosError } from "axios";
 import { Check, Loader, PlusCircle } from "lucide-react";
+import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import {
@@ -12,40 +10,6 @@ import {
   useFindPermissions,
 } from "../../hooks/users/use-users";
 import RoleForm from "./components/role-form";
-
-const colorOptions = [
-  { name: "Blue", value: "blue" },
-  { name: "Green", value: "green" },
-  { name: "Orange", value: "orange" },
-  { name: "Rose", value: "rose" },
-  { name: "Gray", value: "gray" },
-  { name: "Purple", value: "purple" },
-  { name: "Teal", value: "teal" },
-];
-
-const colorClassMap: Record<string, string> = {
-  blue: "bg-blue-800 border-blue-700",
-  green: "bg-green-800 border-green-700",
-  orange: "bg-orange-800 border-orange-700",
-  rose: "bg-rose-800 border-rose-700",
-  gray: "bg-gray-800 border-gray-700",
-  purple: "bg-purple-800 border-purple-700",
-  teal: "bg-teal-800 border-teal-700",
-};
-
-type Permission = {
-  key: string;
-  label: string;
-  category: string;
-};
-
-function groupPermissionsByCategory(permissions: Permission[]) {
-  return permissions.reduce<Record<string, Permission[]>>((acc, perm) => {
-    if (!acc[perm.category]) acc[perm.category] = [];
-    acc[perm.category].push(perm);
-    return acc;
-  }, {});
-}
 
 export const CreateRolePage = () => {
   const navigate = useNavigate();
@@ -59,9 +23,6 @@ export const CreateRolePage = () => {
   });
 
   const {
-    register,
-    watch,
-    setValue,
     handleSubmit,
     formState: { isDirty },
   } = form;
@@ -130,8 +91,7 @@ export const CreateRolePage = () => {
                 Dodaj nową rolę
               </h1>
               <p className="text-sm text-muted-foreground">
-                Utwórz niestandardową rolę i przypisz jej odpowiednie
-                uprawnienia
+                Utwórz własną rolę i przypisz jej odpowiednie uprawnienia
               </p>
             </div>
           </div>

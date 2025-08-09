@@ -2,21 +2,16 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Check, ChevronDown, ChevronUp } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { iconOptions } from "../../../constants/role-icons";
+import type { IPermission } from "../../../types/roles";
 
 export type CreateRoleFormValues = {
   name: string;
   labelColor: string;
   iconKey: string;
   permissions: string[];
-};
-
-type Permission = {
-  key: string;
-  label: string;
-  category: string;
 };
 
 const colorOptions = [
@@ -29,7 +24,6 @@ const colorOptions = [
   { name: "Teal", value: "teal" },
 ];
 
-// optional, you can remove hardcoded classes and rely on theme classes instead
 const colorClassMap: Record<string, string> = {
   blue: "bg-blue-800 border-blue-700",
   green: "bg-green-800 border-green-700",
@@ -40,8 +34,9 @@ const colorClassMap: Record<string, string> = {
   teal: "bg-teal-800 border-teal-700",
 };
 
-function groupPermissionsByCategory(permissions: Permission[]) {
-  return permissions.reduce<Record<string, Permission[]>>((acc, perm) => {
+// external pure function - ok to keep outside (stable reference)
+function groupPermissionsByCategory(permissions: IPermission[]) {
+  return permissions.reduce<Record<string, IPermission[]>>((acc, perm) => {
     if (!acc[perm.category]) acc[perm.category] = [];
     acc[perm.category].push(perm);
     return acc;
@@ -49,39 +44,53 @@ function groupPermissionsByCategory(permissions: Permission[]) {
 }
 
 interface RoleFormProps {
-  permissions: string[];
+  permissions: IPermission[]; // <- poprawiony typ
   isPermissionsLoading: boolean;
 }
 
-const RoleForm = ({ permissions, isPermissionsLoading }: RoleFormProps) => {
+const RoleForm = ({
+  permissions = [],
+  isPermissionsLoading,
+}: RoleFormProps) => {
   const { register, watch, setValue } = useFormContext<CreateRoleFormValues>();
   const selectedColor = watch("labelColor");
   const selectedIcon = watch("iconKey");
-  const selectedPermissions = watch("permissions");
+  const selectedPermissions = watch("permissions") ?? [];
 
-  const groupedPermissions = permissions
-    ? groupPermissionsByCategory(permissions)
-    : {};
+  const groupedPermissions = useMemo(
+    () => groupPermissionsByCategory(permissions || []),
+    [permissions]
+  );
 
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
 
   // toggle single permission
-  const togglePermission = (perm: string) => {
-    const updated = selectedPermissions.includes(perm)
-      ? selectedPermissions.filter((p) => p !== perm)
-      : [...selectedPermissions, perm];
-    setValue("permissions", updated, { shouldDirty: true });
-  };
+  const togglePermission = useCallback(
+    (perm: string) => {
+      const updated = selectedPermissions.includes(perm)
+        ? selectedPermissions.filter((p) => p !== perm)
+        : [...selectedPermissions, perm];
+      setValue("permissions", updated, { shouldDirty: true });
+    },
+    [selectedPermissions, setValue]
+  );
 
   // toggle all in category
-  const toggleAllInCategory = (category: string) => {
-    const perms = groupedPermissions[category] || [];
-    const allSelected = perms.every((p) => selectedPermissions.includes(p.key));
-    const newPermissions = new Set(selectedPermissions);
-    if (allSelected) perms.forEach((p) => newPermissions.delete(p.key));
-    else perms.forEach((p) => newPermissions.add(p.key));
-    setValue("permissions", Array.from(newPermissions), { shouldDirty: true });
-  };
+  const toggleAllInCategory = useCallback(
+    (category: string) => {
+      const perms = groupedPermissions[category] || [];
+      const allSelected = perms.every((p) =>
+        selectedPermissions.includes(p.key)
+      );
+      const newPermissions = new Set(selectedPermissions);
+      if (allSelected) perms.forEach((p) => newPermissions.delete(p.key));
+      else perms.forEach((p) => newPermissions.add(p.key));
+      setValue("permissions", Array.from(newPermissions), {
+        shouldDirty: true,
+      });
+    },
+    [groupedPermissions, selectedPermissions, setValue]
+  );
 
   const categoryCounts = useMemo(() => {
     const m: Record<string, { total: number; selected: number }> = {};
@@ -96,11 +105,17 @@ const RoleForm = ({ permissions, isPermissionsLoading }: RoleFormProps) => {
   }, [groupedPermissions, selectedPermissions]);
 
   return (
-    <form className="space-y-6 pt-1">
+    <form className="space-y-6 pt-1" aria-label="Role form">
       {/* Name */}
       <div className="space-y-1">
-        <p className="text-sm font-medium text-muted-foreground">Nazwa roli</p>
+        <label
+          className="text-sm font-medium text-muted-foreground"
+          htmlFor="role-name"
+        >
+          Nazwa roli
+        </label>
         <Input
+          id="role-name"
           {...register("name", { required: true })}
           placeholder="Np. Moderator"
           className="h-9"
@@ -232,7 +247,9 @@ const RoleForm = ({ permissions, isPermissionsLoading }: RoleFormProps) => {
                           aria-pressed={allSelected}
                           title={allSelected ? "Unselect all" : "Select all"}
                         >
-                          {allSelected ? "Clear" : "Select all"}
+                          {allSelected
+                            ? "Odznacz wszystkie"
+                            : "Zaznacz wszystkie"}
                         </button>
 
                         <button

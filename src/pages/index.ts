@@ -15,6 +15,7 @@ import { LoginPage } from "./auth/login/LoginPage";
 import { CreateArticlePage } from "./create-article/CreateArticlePage";
 import { CreateRolePage } from "./create-role/CreateRolePage";
 import { DashboardPage } from "./dashboard/DashboardPage";
+import { EditRolePage } from "./edit-role/EditRolePage";
 import { FaqPage } from "./faq/FaqPage";
 import { FavoritesArticlesPage } from "./favorites-articles/FavoritesArticlesPage";
 import { FunnyMessages } from "./funny-messages/FunnyMessages";
@@ -53,4 +54,5 @@ export const PAGES = {
   AdminProductDetailsPage,
   FaqPage,
   CreateRolePage,
+  EditRolePage,
 };

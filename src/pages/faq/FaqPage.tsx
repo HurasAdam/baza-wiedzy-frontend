@@ -116,7 +116,7 @@ export const FaqPage = () => {
       </div>
 
       {/* HEADER */}
-      <h1 className="text-2xl font-extrabold text-foreground mb-6">
+      <h1 className="text-xl font-extrabold text-foreground mb-6">
         FAQ — {activeCategory}
       </h1>
 
@@ -128,10 +128,10 @@ export const FaqPage = () => {
             value={`item-${idx}`}
             className="border border-border bg-card rounded-lg shadow-sm hover:shadow-md transition-shadow"
           >
-            <AccordionTrigger className="px-6 py-4 font-semibold text-lg text-left">
+            <AccordionTrigger className="px-6 py-4 font-semibold text-base text-left">
               {question}
             </AccordionTrigger>
-            <AccordionContent className="px-6 py-4 text-muted-foreground leading-relaxed prose max-w-none">
+            <AccordionContent className="px-6 py-4 text-muted-foreground text-base leading-relaxed prose max-w-none">
               {answer}
             </AccordionContent>
           </AccordionItem>

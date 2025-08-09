@@ -1,5 +1,5 @@
 import api from "@/config/api.client";
-import type { Role } from "@/types/roles";
+import type { Role, RoleFormData } from "@/types/roles";
 import { buildUrl } from "../utils/build-url";
 const baseUrl = "/users";
 const adminBaseUrl = "/admin";
@@ -15,6 +15,10 @@ export const findAdmins = (params?: URLSearchParams) => {
 
 export const findRoles = (params?: URLSearchParams): Promise<Role[]> => {
   return api.get(`${adminBaseUrl}/roles`, { params });
+};
+
+export const findRole = (roleId: string): Promise<Role> => {
+  return api.get(`${adminBaseUrl}/roles/${roleId}`);
 };
 
 const findPermissions = (): Promise<string[]> => {
@@ -33,6 +37,16 @@ export const createRole = (
     iconKey,
     labelColor,
   });
+};
+
+export const updateRole = ({
+  roleId,
+  payload,
+}: {
+  roleId: string;
+  payload: RoleFormData;
+}) => {
+  return api.put(`${adminBaseUrl}/roles/${roleId}`, payload);
 };
 
 export const findMyFavorites = (params?: URLSearchParams): Promise => {
@@ -59,6 +73,8 @@ export const usersService = {
   enableUserAccount,
   findAdmins,
   findRoles,
+  findRole,
   createRole,
+  updateRole,
   findPermissions,
 };

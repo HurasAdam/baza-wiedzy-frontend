@@ -82,6 +82,7 @@ export function AppRoutes() {
               path="manage-roles/create"
               element={<PAGES.CreateRolePage />}
             />
+            <Route path="manage-roles/:id" element={<PAGES.EditRolePage />} />
           </Route>
         </Route>
       </Routes>

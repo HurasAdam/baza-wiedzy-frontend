@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { usersService } from "../../services/users.service";
+import type { RoleFormData } from "../../types/roles";
 
 export const useFindUsers = (params?: URLSearchParams) => {
-  console.log("PARAMSY", params);
   return useQuery({
     queryKey: ["users", params?.toString()],
     queryFn: () => {
@@ -22,6 +22,19 @@ export const useFindRoles = (params?: URLSearchParams) => {
       return usersService.findRoles(params);
     },
 
+    refetchOnWindowFocus: false,
+    staleTime: 0,
+    retry: false,
+  });
+};
+
+export const useFindRole = (roleId: string) => {
+  return useQuery({
+    queryKey: ["role", roleId],
+    queryFn: () => {
+      return usersService.findRole(roleId);
+    },
+    enabled: !!roleId,
     refetchOnWindowFocus: false,
     staleTime: 0,
     retry: false,
@@ -92,8 +105,29 @@ export const useEnableUserAccountMutation = () => {
 
 export const useCreateRoleMutation = () => {
   return useMutation({
-    mutationFn: ({ permissions, name, labelColor, iconKey }) => {
+    mutationFn: ({
+      permissions,
+      name,
+      labelColor,
+      iconKey,
+    }: {
+      permissions: string[];
+      name: string;
+      labelColor: string;
+      iconKey: string;
+    }) => {
       return usersService.createRole(permissions, name, iconKey, labelColor);
+    },
+  });
+};
+
+export const useUpdateRoleMutation = () => {
+  return useMutation({
+    mutationFn: ({ roleId, data }: { roleId: string; data: RoleFormData }) => {
+      return usersService.updateRole({
+        roleId,
+        payload: data,
+      });
     },
   });
 };

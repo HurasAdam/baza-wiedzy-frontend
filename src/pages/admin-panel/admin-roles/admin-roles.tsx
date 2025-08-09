@@ -146,7 +146,7 @@ export const AdminRolesPage = () => {
                           label: "Edytuj",
                           icon: <FileIcon className="w-4 h-4" />,
                           actionHandler: () =>
-                            toast.info(`Edytuj ${role.name}`),
+                            navigate(`/admin/manage-roles/${role._id}`),
                         },
                         {
                           label: "Usuń",
