@@ -82,7 +82,7 @@ const navItems = [
     icon: RectangleEllipsis,
   },
   {
-    title: "Złote myśli",
+    title: "Złote wiadomości",
     href: "/funny-messages",
     icon: Smile,
   },
