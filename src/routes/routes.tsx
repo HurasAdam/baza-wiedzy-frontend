@@ -27,4 +27,8 @@ export const protectedRoutePaths = [
     path: PROTECTED_ROUTES.CREATE_ARTICLE,
     element: <PAGES.CreateArticlePage />,
   },
+  {
+    path: PROTECTED_ROUTES.CREATE_FAQ,
+    element: <PAGES.CreateFaqPage />,
+  },
 ];

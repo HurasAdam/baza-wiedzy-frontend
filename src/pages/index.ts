@@ -13,6 +13,7 @@ import { ArticlesPage } from "./articles/ArticlesPage";
 import { ForgotPasswordPage } from "./auth/forgot-password/ForgotPasswordPage";
 import { LoginPage } from "./auth/login/LoginPage";
 import { CreateArticlePage } from "./create-article/CreateArticlePage";
+import { CreateFaqPage } from "./create-faq/CreateFaqPage";
 import { CreateRolePage } from "./create-role/CreateRolePage";
 import { DashboardPage } from "./dashboard/DashboardPage";
 import { EditRolePage } from "./edit-role/EditRolePage";
@@ -55,4 +56,5 @@ export const PAGES = {
   FaqPage,
   CreateRolePage,
   EditRolePage,
+  CreateFaqPage,
 };
