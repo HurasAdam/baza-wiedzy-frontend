@@ -8,10 +8,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowDown, ArrowUp, Check, Plus, Trash2 } from "lucide-react";
+import { ArrowDown, ArrowUp, Check, Loader, Plus, Trash2 } from "lucide-react";
 import { useMemo, useRef } from "react";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { COLOR_TOKEN_MAP, COLORS, ICONS } from "../../constants/faq-icons";
 import { useCreateFaqMutaton } from "../../hooks/faq/use-faq";
 
@@ -53,8 +54,14 @@ export function CreateFaqPage() {
   const iconKeys = useMemo(() => Object.keys(ICONS), []);
 
   const addQuestion = () => append({ question: "", answer: "" });
-  const { mutate } = useCreateFaqMutaton();
-  const onSubmit = (data: FaqFormValues) => mutate(data);
+  const { mutate, isPending } = useCreateFaqMutaton();
+  const onSubmit = (data: FaqFormValues) =>
+    mutate(data, {
+      onSuccess: () => {
+        toast.success("FAQ zostało dodane");
+        navigate("/faq");
+      },
+    });
 
   const moveUp = (i: number) => i > 0 && move(i, i - 1);
   const moveDown = (i: number) => i < fields.length - 1 && move(i, i + 1);
@@ -73,11 +80,20 @@ export function CreateFaqPage() {
         </div>
 
         <div className="flex items-center gap-3">
-          <Button variant="outline" onClick={() => navigate(-1)}>
+          <Button
+            disabled={isPending}
+            variant="outline"
+            onClick={() => navigate(-1)}
+          >
             Anuluj
           </Button>
-          <Button onClick={handleSubmit(onSubmit)}>
-            <Check className="mr-2 h-4 w-4" /> Zapisz
+          <Button type="submit" onClick={handleSubmit(onSubmit)}>
+            {isPending ? (
+              <Loader className="animate-spin" />
+            ) : (
+              <Check className="mr-2 h-4 w-4" />
+            )}{" "}
+            Zapisz
           </Button>
         </div>
       </header>
@@ -141,6 +157,7 @@ export function CreateFaqPage() {
                       const active = watched.iconKey === k;
                       return (
                         <button
+                          type="button"
                           key={k}
                           ref={(el) => (iconRefs.current[k] = el)}
                           type="button"
@@ -235,7 +252,11 @@ export function CreateFaqPage() {
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-lg font-medium">Lista pytań</h3>
                   <div>
-                    <Button size="sm" onClick={() => addQuestion()}>
+                    <Button
+                      size="sm"
+                      type="button"
+                      onClick={() => addQuestion()}
+                    >
                       <Plus className="w-4 h-4 mr-2" /> Dodaj
                     </Button>
                   </div>

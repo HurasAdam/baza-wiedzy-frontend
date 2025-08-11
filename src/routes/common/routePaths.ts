@@ -14,5 +14,5 @@ export const PROTECTED_ROUTES = {
   MANAGE_PRODUCTS: "manage-products",
   ONBOARDING: "account-onboarding",
   FAQ: "faq",
-  CREATE_FAQ: "faq-create",
+  CREATE_FAQ: "faq/create",
 };
