@@ -1,9 +1,9 @@
 import type { Workspace } from "@/types";
 
-import { useLocation, useNavigate } from "react-router";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
+import { useLocation, useNavigate } from "react-router";
 
 interface SidebarNavProps extends React.HtmlHTMLAttributes<HTMLElement> {
   items: {
@@ -30,7 +30,9 @@ export const SidebarNav = ({
     <nav className={cn("flex flex-col gap-y-2", className)} {...props}>
       {items.map((el) => {
         const Icon = el.icon;
-        const isActive = location.pathname === el.href;
+        const isActive =
+          location.pathname === el.href ||
+          location.pathname.startsWith(el.href + "/");
 
         const handleClick = () => {
           if (el.href === "/workspaces") {

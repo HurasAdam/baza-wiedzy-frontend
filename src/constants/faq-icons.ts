@@ -1,20 +1,16 @@
 import {
   AppWindow,
-  ArrowDown,
-  ArrowUp,
   BellElectric,
-  Check,
+  Carrot,
   GraduationCap,
   LayoutPanelTop,
   LibraryBig,
   MonitorCheck,
-  Plus,
   Presentation,
   School,
   Smartphone,
   TableOfContents,
   Tag,
-  Trash2,
   TrendingUpDown,
 } from "lucide-react";
 
@@ -31,11 +27,7 @@ export const ICONS: Record<string, React.ElementType> = {
   TrendingUpDown,
   MonitorCheck,
   AppWindow,
-  ArrowDown,
-  ArrowUp,
-  Check,
-  Plus,
-  Trash2,
+  Carrot,
 };
 
 export const COLORS = [
