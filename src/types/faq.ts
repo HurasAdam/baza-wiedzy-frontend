@@ -14,8 +14,20 @@ export interface Faq {
   __v: number;
 }
 
+export interface CreateFaqItemResponse {
+  message: string;
+  data: FaqItem;
+}
+
 export interface FaqItem {
   _id: string;
+  question: string;
+  answer: string;
+}
+
+export interface FaqItemResponse {
+  _id: string;
+  faqId: string;
   question: string;
   answer: string;
 }

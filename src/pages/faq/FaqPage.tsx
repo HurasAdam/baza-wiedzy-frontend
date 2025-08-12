@@ -1,9 +1,11 @@
 import { Edit, HelpCircle, MoreHorizontal, Plus, Trash } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { Dropdown } from "../../components/Dropdown";
-import { FaqItemDescriptionModal } from "../../components/faq-item/faq-item-modal";
+import { FaqDescriptionModal } from "../../components/faq-description/faq-description-modal";
+import { EditFaqItemModal } from "../../components/faq-item/edit-faq-item-modal";
+import { FaqItemModal } from "../../components/faq-item/faq-item-modal";
 import { Alert } from "../../components/shared/alert-modal";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../components/ui/accordion";
 import { Button } from "../../components/ui/button";
@@ -30,8 +32,12 @@ interface DeleteActionData {
 }
 
 export function FaqPage() {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const urlFaqId = searchParams.get("id");
+  const [isCreatingFaqItem, setIsCreatingFaqItem] = useState(false);
+  const [isEditingFaqItem, setIsEditingFaqItem] = useState(false);
+  const [editingFaqItemId, setEditingFaqItemId] = useState<string | null>(null);
   const [pendingDeleteAction, setPendingDeleteAction] = useState<DeleteActionData | null>(null);
   const [isFaqItemDescriptionModalOpen, setIsFaqItemDescriptionModalOpen] = useState(false);
   const [selectedFaqItemDescriptionContent, setSelectedFaqItemDescriptionContent] = useState<string>("");
@@ -74,19 +80,27 @@ export function FaqPage() {
     setIsFaqItemDescriptionModalOpen(true);
   };
 
-  const handleCloseFaqItemDescription = () => {
+  const handleCloseFaqItemDescription = (): void => {
     setIsFaqItemDescriptionModalOpen(false);
     setSelectedFaqItemDescriptionContent("");
   };
 
-  const onDeleteRequest = (faqItem: FaqItem) => {
+  const onCreateFaqItemRequest = (): void => {
+    setIsCreatingFaqItem(true);
+  };
+  const onEditFaqItemRequest = (faqItemId: string): void => {
+    setEditingFaqItemId(faqItemId);
+    setIsEditingFaqItem(true);
+  };
+
+  const onDeleteRequest = (faqItem: FaqItem): void => {
     setPendingDeleteAction({
       question: faqItem.question,
       faqItemId: faqItem._id,
     });
   };
 
-  const OnResetDeleteAction = () => {
+  const OnResetDeleteAction = (): void => {
     setPendingDeleteAction(null);
   };
 
@@ -141,7 +155,10 @@ export function FaqPage() {
           </Popover>
 
           <div>
-            <h1 className="text-xl font-bold leading-tight">{activeCategory?.title || "FAQ"}</h1>
+            <h1 className="text-xl font-bold leading-tight">
+              {" "}
+              <span className="font-serif">FAQ</span> - {activeCategory?.title || "FAQ"}
+            </h1>
 
             {activeCategory?.description && (
               <Button
@@ -157,20 +174,39 @@ export function FaqPage() {
           </div>
         </div>
 
-        <Link to="/faq/create">
-          <Button variant="default" className="gap-2">
-            <Plus className="w-4 h-4" />
-            Dodaj FAQ
-          </Button>
-        </Link>
+        <Dropdown
+          triggerBtn={
+            <Button variant="default" className="flex items-center gap-1 cursor-pointer">
+              Dodaj <Plus className="w-4 h-4" />
+            </Button>
+          }
+          options={[
+            {
+              label: "Dodaj pytanie",
+              icon: <Plus className="w-4 h-4" />,
+              actionHandler: () => {
+                onCreateFaqItemRequest();
+              },
+            },
+
+            {
+              label: "Dodaj FAQ",
+              icon: <Plus className="w-4 h-4" />,
+              actionHandler: () => {
+                navigate("/faq/create");
+              },
+            },
+          ]}
+          position={{ align: "end" }}
+        />
       </div>
 
-      <Accordion type="single" collapsible className="mt-4 space-y-3">
+      <Accordion type="single" collapsible className="mt-4 space-y-3 pb pb-6">
         {faq?.items?.map((q: FaqItem, i: number) => (
           <AccordionItem
             key={q._id || i}
             value={`item-${i}`}
-            className="rounded-md py-1.5  border-l-2 border-l-border border-b border-t border-r  bg-card data-[state=open]:border-l-primary pl-4 mb-4 transition-colors duration-300"
+            className="rounded-md py-2  border-l-2 border-l-border border-b border-t border-r  bg-card data-[state=open]:border-l-primary pl-4 mb-4 transition-colors duration-300"
           >
             <AccordionTrigger className="px-4 py-3 text-left font-semibold cursor-pointer bg-card rounded-t-lg focus:outline-none ">
               {q.question}
@@ -178,7 +214,7 @@ export function FaqPage() {
             <AccordionContent className="px-4 py-4 text-sm text-muted-foreground border-t border-border flex justify-between items-start">
               <div className="flex flex-col gap-1.5 max-w-[90%]">
                 <span className="text-xs text-muted-foreground font-medium">Odpowiedź :</span>
-                <span>{q.answer}</span>
+                <span className="text-base">{q.answer}</span>
               </div>
 
               <Dropdown
@@ -192,7 +228,7 @@ export function FaqPage() {
                     label: "Edytuj",
                     icon: <Edit className="w-4 h-4" />,
                     actionHandler: () => {
-                      console.log("H");
+                      onEditFaqItemRequest(q._id);
                     },
                   },
                   {
@@ -210,7 +246,7 @@ export function FaqPage() {
         ))}
       </Accordion>
 
-      <FaqItemDescriptionModal
+      <FaqDescriptionModal
         isFaqItemDescriptionModalOpen={isFaqItemDescriptionModalOpen}
         setIsFaqItemDescriptionModalOpen={setIsFaqItemDescriptionModalOpen}
         content={selectedFaqItemDescriptionContent}
@@ -235,6 +271,19 @@ export function FaqPage() {
             systemu. Upewnij się, że chcesz kontynuować.
           </>
         </Alert>
+      )}
+
+      {faqs && (
+        <FaqItemModal faqs={faqs} isCreatingFaqItem={isCreatingFaqItem} setIsCreatingFaqItem={setIsCreatingFaqItem} />
+      )}
+
+      {editingFaqItemId && faqs && (
+        <EditFaqItemModal
+          faqs={faqs}
+          isEditingFaqItem={isEditingFaqItem}
+          faqItemId={editingFaqItemId}
+          setIsEditingFaqItem={setIsEditingFaqItem}
+        />
       )}
     </section>
   );
