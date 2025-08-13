@@ -1,12 +1,11 @@
-import type { z } from "zod";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
-
 import type { AxiosError } from "axios";
 import { toast } from "sonner";
+import type { z } from "zod";
 import queryClient from "../../config/query.client";
 import { useCreateFaqItemMutaton } from "../../hooks/faq-item/use-faq-item";
 import type { Faq } from "../../types/faq";
 import { topicSchema } from "../../validation/topic.schema";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { FaqItemForm } from "./faq-item-form";
 
 interface CreateWorkspaceProps {
@@ -40,13 +39,14 @@ export const FaqItemModal = ({
 }: CreateWorkspaceProps) => {
   const { mutate, isPending } = useCreateFaqItemMutaton();
 
-  const onSubmit = (data: topicFormData) => {
+  const onSubmit = (data: { question: string; answer: string; faqId: string }) => {
     mutate(data, {
-      onSuccess: ({ data }) => {
+      onSuccess: ({ faqId }) => {
         setIsCreatingFaqItem(false);
         toast.success("Pytanie zostało dodane");
-        console.log(data, "DATOWANKO");
-        queryClient.invalidateQueries({ queryKey: ["faq", data.faqId] });
+
+        queryClient.invalidateQueries({ queryKey: ["faq", faqId] });
+        return;
       },
       onError: (error) => {
         const { status } = error as AxiosError;
