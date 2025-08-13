@@ -20,10 +20,7 @@ export function AppRoutes() {
         <Route element={<AuthRoute />}>
           <Route path="auth" element={<BaseLayout />}>
             <Route path="login" element={<PAGES.LoginPage />} />
-            <Route
-              path="forgot-password"
-              element={<PAGES.ForgotPasswordPage />}
-            />
+            <Route path="forgot-password" element={<PAGES.ForgotPasswordPage />} />
 
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Route>
@@ -54,34 +51,18 @@ export function AppRoutes() {
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="manage-users" element={<PAGES.UsersPage />} />
             <Route path="manage-products" element={<PAGES.ProductsPage />} />
-            <Route
-              path="manage-products/:id"
-              element={<PAGES.AdminProductDetailsPage />}
-            />
+            <Route path="manage-products/:id" element={<PAGES.AdminProductDetailsPage />} />
             <Route path="manage-tags" element={<PAGES.TagsPage />} />
-            <Route
-              path="manage-jstprojects"
-              element={<PAGES.JstAdminProjectsPage />}
-            />
-            <Route
-              path="manage-reports"
-              element={<PAGES.AdminUserReportsPage />}
-            />
-            <Route
-              path="manage-reports/:id"
-              element={<PAGES.AdminIssueReportDetailsPage />}
-            />
+            <Route path="manage-jstprojects" element={<PAGES.JstAdminProjectsPage />} />
+            <Route path="manage-reports" element={<PAGES.AdminUserReportsPage />} />
+            <Route path="manage-reports/:id" element={<PAGES.AdminIssueReportDetailsPage />} />
 
-            <Route
-              path="manage-registertopics"
-              element={<PAGES.AdminTopicsPage />}
-            />
+            <Route path="manage-registertopics" element={<PAGES.AdminTopicsPage />} />
+
+            <Route path="manage-faqs" element={<PAGES.AdminFaqsListPage />} />
             <Route path="manage-admins" element={<PAGES.AdminAccountsPage />} />
             <Route path="manage-roles" element={<PAGES.AdminRolesPage />} />
-            <Route
-              path="manage-roles/create"
-              element={<PAGES.CreateRolePage />}
-            />
+            <Route path="manage-roles/create" element={<PAGES.CreateRolePage />} />
             <Route path="manage-roles/:id" element={<PAGES.EditRolePage />} />
           </Route>
         </Route>

@@ -156,8 +156,8 @@ export function FaqPage() {
 
           <div>
             <h1 className="text-xl font-bold leading-tight">
-              {" "}
-              <span className="font-serif">FAQ</span> - {activeCategory?.title || "FAQ"}
+              <span className="font-serif">FAQ</span> - {activeCategory?.title || "FAQ"}{" "}
+              <span className="text-sm text-muted-foreground">({activeCategory?.items ?? 0})</span>
             </h1>
 
             {activeCategory?.description && (

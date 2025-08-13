@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
+  BookOpen,
   Box,
   Crown,
   Hash,
@@ -15,12 +16,7 @@ import {
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router";
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../../../components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../../components/ui/tooltip";
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -42,6 +38,11 @@ const adminLinks = [
     title: "Lista tematów",
     href: "/admin/manage-registertopics",
     icon: ListChecks,
+  },
+  {
+    title: "Lista FAQ",
+    href: "/admin/manage-faqs",
+    icon: BookOpen,
   },
   {
     title: "Zgłoszenia",
@@ -74,9 +75,7 @@ export const AdminSidebar = ({ isCollapsed }: SidebarProps) => {
           <div className="p-2 bg-primary/10 rounded-full shadow-inner">
             <Crown className="w-5 h-5 text-primary" />
           </div>
-          <span className="text-lg font-bold text-foreground tracking-tight">
-            Panel Admina
-          </span>
+          <span className="text-lg font-bold text-foreground tracking-tight">Panel Admina</span>
         </div>
       </div>
 
@@ -95,17 +94,14 @@ export const AdminSidebar = ({ isCollapsed }: SidebarProps) => {
                     className={cn(
                       "w-full px-3 py-2 text-muted-foreground rounded-md transition hover:bg-accent hover:text-foreground",
                       isCollapsed ? "justify-center" : "justify-start",
-                      isActive &&
-                        "bg-accent text-primary font-medium border-l-4 border-primary"
+                      isActive && "bg-accent text-primary font-medium border-l-4 border-primary"
                     )}
                   >
                     <Icon className={cn("w-5 h-5", !isCollapsed && "mr-2")} />
                     {!isCollapsed && <span>{title}</span>}
                   </Button>
                 </TooltipTrigger>
-                {isCollapsed && (
-                  <TooltipContent side="right">{title}</TooltipContent>
-                )}
+                {isCollapsed && <TooltipContent side="right">{title}</TooltipContent>}
               </Tooltip>
             );
           })}

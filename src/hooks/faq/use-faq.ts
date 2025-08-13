@@ -7,10 +7,16 @@ export const useCreateFaqMutaton = () => {
   });
 };
 
-export const useFindFaqsQuery = () => {
+export const useSetDefaultFaqMutaton = () => {
+  return useMutation({
+    mutationFn: (faqId: string) => faqService.setDefault(faqId),
+  });
+};
+
+export const useFindFaqsQuery = (params?: URLSearchParams) => {
   return useQuery({
-    queryKey: ["faq"],
-    queryFn: () => faqService.find(),
+    queryKey: ["faq", params?.toString()],
+    queryFn: () => faqService.find(params),
   });
 };
 

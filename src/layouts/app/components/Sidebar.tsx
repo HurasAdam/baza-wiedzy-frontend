@@ -2,20 +2,20 @@ import { cn } from "@/lib/utils";
 // import { useAuth } from "@/provider/auth-context";
 import type { Workspace } from "@/types";
 import {
+  Archive,
   BookOpen,
   BookUser,
   ChartColumnDecreasing,
   ChevronsLeft,
   ChevronsRight,
   Clipboard,
+  HeartIcon,
   Layers,
   LayoutDashboard,
-  ListCheck,
   LogOut,
   RectangleEllipsis,
   School,
   Smile,
-  Star,
   UserRoundPen,
 } from "lucide-react";
 import { useState } from "react";
@@ -37,12 +37,12 @@ const navItems = [
   {
     title: "Baza artykułów",
     href: "/articles",
-    icon: BookOpen,
+    icon: Archive,
   },
   {
     title: "FAQ",
     href: "/faq",
-    icon: ListCheck,
+    icon: BookOpen,
   },
   {
     title: "Rejestr tematów",
@@ -74,7 +74,7 @@ const navItems = [
   {
     title: "Ulubione",
     href: "/favorites-articles",
-    icon: Star,
+    icon: HeartIcon,
   },
   {
     title: "do zweryfikowania",
@@ -88,11 +88,7 @@ const navItems = [
   },
 ];
 
-export const Sidebar = ({
-  currentWorkspace,
-}: {
-  currentWorkspace?: Workspace | null;
-}) => {
+export const Sidebar = ({ currentWorkspace }: { currentWorkspace?: Workspace | null }) => {
   //   const { user, logout } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const navigate = useNavigate();
@@ -122,9 +118,7 @@ export const Sidebar = ({
           {!isCollapsed && (
             <div className="flex items-center gap-2">
               <Layers className="size-6 text-sidebar-primary" />
-              <span className="font-semibold text-lg hidden md:block text-foreground">
-                Baza wiedzy
-              </span>
+              <span className="font-semibold text-lg hidden md:block text-foreground">Baza wiedzy</span>
             </div>
           )}
 
@@ -137,11 +131,7 @@ export const Sidebar = ({
           className="ml-auto hidden md:block"
           onClick={() => setIsCollapsed(!isCollapsed)}
         >
-          {isCollapsed ? (
-            <ChevronsRight className="size-4" />
-          ) : (
-            <ChevronsLeft className="size-4" />
-          )}
+          {isCollapsed ? <ChevronsRight className="size-4" /> : <ChevronsLeft className="size-4" />}
         </Button>
       </div>
 
@@ -158,11 +148,7 @@ export const Sidebar = ({
         <ThemeToggle />
       </div>
       <div>
-        <Button
-          variant={"ghost"}
-          size={isCollapsed ? "icon" : "default"}
-          onClick={onLogout}
-        >
+        <Button variant={"ghost"} size={isCollapsed ? "icon" : "default"} onClick={onLogout}>
           <LogOut className={cn("size-4", isCollapsed && "mr-2")} />
           <span className="hidden md:block">Logout</span>
         </Button>

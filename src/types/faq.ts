@@ -14,6 +14,20 @@ export interface Faq {
   __v: number;
 }
 
+export interface FindFaqResponse {
+  _id: string;
+  title: string;
+  description: string;
+  slug: string;
+  items: number;
+  labelColor: string;
+  isDefault: boolean;
+  iconKey: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface CreateFaqItemResponse {
   message: string;
   data: FaqItem;
