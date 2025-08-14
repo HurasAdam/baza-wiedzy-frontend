@@ -25,9 +25,7 @@ const FunnyMessageCard = ({ msg }: IFunyMessageProps) => {
 
       <div className="px-5 py-4 space-y-4">
         {msg.type === "single" && msg.entries[0] && (
-          <p className="whitespace-pre-wrap text-sm leading-relaxed">
-            {msg.entries[0].content}
-          </p>
+          <p className="whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground">{msg.entries[0].content}</p>
         )}
 
         {msg.type === "dialog" && (
@@ -62,16 +60,12 @@ const FunnyMessageCard = ({ msg }: IFunyMessageProps) => {
                       height: 0,
                       borderTop: "6px solid transparent",
                       borderBottom: "6px solid transparent",
-                      borderLeft: `8px solid ${
-                        isEmployee
-                          ? "var(--color-primary)"
-                          : "var(--color-muted-foreground)"
-                      }`,
+                      borderLeft: `8px solid ${isEmployee ? "var(--color-primary)" : "var(--color-muted-foreground)"}`,
                     }}
                   />
 
                   {/* --------- msg content ----- */}
-                  <div className="whitespace-pre-wrap flex-1 text-sm leading-relaxed text-card-foreground my-auto">
+                  <div className="whitespace-pre-wrap flex-1 text-sm leading-relaxed text-muted-foreground my-auto">
                     {entry.content}
                   </div>
                 </div>
