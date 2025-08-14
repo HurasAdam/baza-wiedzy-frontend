@@ -13,6 +13,12 @@ export const useSetDefaultFaqMutaton = () => {
   });
 };
 
+export const useUpdateFaqMutation = () => {
+  return useMutation({
+    mutationFn: ({ faqId, data }: { faqId: string; data: {} }) => faqService.updateOne(faqId, data),
+  });
+};
+
 export const useFindFaqsQuery = (params?: URLSearchParams) => {
   return useQuery({
     queryKey: ["faq", params?.toString()],

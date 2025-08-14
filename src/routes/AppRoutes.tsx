@@ -60,6 +60,7 @@ export function AppRoutes() {
             <Route path="manage-registertopics" element={<PAGES.AdminTopicsPage />} />
 
             <Route path="manage-faqs" element={<PAGES.AdminFaqsListPage />} />
+            <Route path="manage-faqs/:id" element={<PAGES.AdminFaqDetailsPage />} />
             <Route path="manage-admins" element={<PAGES.AdminAccountsPage />} />
             <Route path="manage-roles" element={<PAGES.AdminRolesPage />} />
             <Route path="manage-roles/create" element={<PAGES.CreateRolePage />} />

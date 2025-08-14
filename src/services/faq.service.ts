@@ -19,9 +19,14 @@ const setDefault = (faqId: string): Promise<void> => {
   return api.patch(`${BASE_URL}/${faqId}/set-default`);
 };
 
+const updateOne = (faqId: string, payload): Promise<void> => {
+  return api.patch(`${BASE_URL}/${faqId}`, payload);
+};
+
 export const faqService = {
   create,
   find,
   findOne,
   setDefault,
+  updateOne,
 };

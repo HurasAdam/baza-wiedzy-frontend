@@ -2,8 +2,9 @@ import { Dropdown } from "@/components/Dropdown";
 import { EditJstProjectModal } from "@/components/jst-project/edit-jst-project-modal";
 import { JstProjectModal } from "@/components/jst-project/jst-project-modal";
 import { Input } from "@/components/ui/input";
-import { BookOpen, Ellipsis, FileIcon, Loader, Plus, Star, StarIcon, XCircleIcon } from "lucide-react";
+import { BookOpen, Ellipsis, Eye, FlagTriangleRight, Loader, Plus, XCircleIcon } from "lucide-react";
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Badge } from "../../../components/ui/badge";
 import { Button } from "../../../components/ui/button";
@@ -17,6 +18,7 @@ const triggerBtn = (
 );
 
 export const AdminFaqsListPage = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [isCreatingJstProject, setIsCreatingJstProject] = useState<boolean>(false);
   const [isEditingJstProject, setIsEditingJstProject] = useState(false);
@@ -124,10 +126,9 @@ export const AdminFaqsListPage = () => {
                 <div className="flex items-center gap-20">
                   {faq.isDefault && (
                     <div className="flex items-center gap-1">
-                      <Star className="w-4 h-4 text-primary" />
+                      <FlagTriangleRight className="w-4 h-4 text-primary" />
                     </div>
                   )}
-
                   {/* Actions */}
                   <Dropdown
                     withSeparators
@@ -138,10 +139,11 @@ export const AdminFaqsListPage = () => {
                     }
                     options={[
                       {
-                        label: "Edytuj",
-                        icon: <FileIcon className="w-4 h-4" />,
-                        actionHandler: () => onEditJstProject(project._id),
+                        label: "Wyświetl szczególy",
+                        icon: <Eye className="w-4 h-4" />,
+                        actionHandler: () => navigate(`/admin/manage-faqs/${faq._id}`),
                       },
+
                       {
                         label: "Usuń",
                         icon: <XCircleIcon className="w-4 h-4 text-red-500" />,
@@ -152,7 +154,7 @@ export const AdminFaqsListPage = () => {
                         : [
                             {
                               label: "Ustaw jako domyślne",
-                              icon: <StarIcon className="w-4 h-4 text-yellow-500" />,
+                              icon: <FlagTriangleRight className="w-4 h-4 text-yellow-500" />,
                               actionHandler: () => onSetFaqAsDefault(faq._id),
                             },
                           ]),

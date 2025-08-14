@@ -3,55 +3,69 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import queryClient from "@/config/query.client";
-import { useUpdateProductMutation } from "@/hooks/products/use-products";
 import type { AxiosError } from "axios";
 import { Check, Loader, Pencil, X } from "lucide-react";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { ProductDetailsForm } from "./ProductDetailsForm";
+import { ICONS } from "../../../../constants/faq-icons";
+import { useUpdateFaqMutation } from "../../../../hooks/faq/use-faq";
+import { FaqDetailsForm } from "./FaqDetailsForm";
 
 interface ProductDetailsTabProps {
-  product: {
+  faq: {
     _id: string;
-    name: string;
+    title: string;
+    description?: string; // <- dodałem opcjonalne description w typach
+    slug?: string;
+    isDefault: boolean;
+    iconKey: string;
     labelColor: string;
-    createdBy: { name: string; surname: string };
+    status: string;
+    createdBy: { _id: string; name: string; surname: string };
     createdAt: string;
+    updatedAt?: string;
+    items: [];
   };
 }
 
-export const ProductDetailsTab = ({ product }: ProductDetailsTabProps) => {
+export const FaqDetailtsTab = ({ faq }: ProductDetailsTabProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
-  const { mutate, isPending } = useUpdateProductMutation();
+  const { mutate, isPending } = useUpdateFaqMutation();
+
+  const form = useForm({
+    defaultValues: {
+      title: faq && faq.title,
+      labelColor: faq && faq.labelColor,
+      iconKey: faq && faq.iconKey,
+      description: faq && faq.description, // <- domyślna wartość opisu
+      slug: faq && faq.slug,
+    },
+  });
 
   const onEdit = () => {
     form.reset({
-      name: product.name,
-      labelColor: product.labelColor,
+      title: faq.title,
+      labelColor: faq.labelColor,
+      iconKey: faq?.iconKey || Object.keys(ICONS)[0],
+      description: faq.description || "",
+      slug: faq.slug || "",
     });
     setIsEditing(true);
   };
 
-  const handleSave = (data: ProductForm) => onSave({ productId: product._id, data });
-
-  const form = useForm({
-    defaultValues: {
-      name: product && product.name,
-      labelColor: product && product.labelColor,
-    },
-  });
+  const handleSave = (data: ProductForm) => onSave({ faqId: faq._id, data });
 
   const { isDirty } = form.formState;
 
-  const onSave = ({ productId, data }: { productId: string; data: ProductForm }) => {
+  const onSave = ({ faqId, data }: { faqId: string; data: ProductForm }) => {
     mutate(
-      { productId, data },
+      { faqId, data },
       {
         onSuccess: () => {
           toast.success("Produkt został zaktualizowany");
-          queryClient.invalidateQueries({ queryKey: ["product", product._id] });
+          queryClient.invalidateQueries({ queryKey: ["faq", faqId] });
           form.reset();
           setIsEditing(false);
         },
@@ -94,7 +108,7 @@ export const ProductDetailsTab = ({ product }: ProductDetailsTabProps) => {
     <>
       <Card>
         <CardHeader className="flex items-center justify-between">
-          <CardTitle>Informacje o produkcie</CardTitle>
+          <CardTitle>Informacje o FAQ</CardTitle>
           {isEditing ? (
             <div className="flex gap-2">
               <Button size="sm" className="gap-2" onClick={handleSubmit} disabled={!isDirty || isPending}>
@@ -113,25 +127,46 @@ export const ProductDetailsTab = ({ product }: ProductDetailsTabProps) => {
         </CardHeader>
 
         <CardContent className="space-y-4">
-          {isEditing && product ? (
+          {isEditing && faq ? (
             <FormProvider {...form}>
-              <ProductDetailsForm />
+              <FaqDetailsForm />
             </FormProvider>
           ) : (
             <>
               <div>
-                <p className=" text-muted-foreground block text-sm font-medium mb-1">Nazwa:</p>
+                <p className=" text-muted-foreground block text-sm font-medium mb-1">Tytuł:</p>
 
                 <div className="h-10 flex items-center">
-                  <p className="text-sm font-medium">{product.name}</p>
+                  <p className="text-sm font-medium">{faq?.title}</p>
                 </div>
               </div>
-
+              <Separator />
+              {/* --- Opis FAQ ---*/}
+              <div>
+                <p className="text-muted-foreground block text-sm font-medium mb-1.5 ">Opis:</p>
+                <div className="text-sm text-forground whitespace-pre-wrap">
+                  {faq?.description && faq.description.trim() ? faq?.description : "Brak opisu"}
+                </div>
+              </div>
+              <Separator />
               <div>
                 <p className="text-muted-foreground block text-sm font-medium mb-1">Kolor etykiety:</p>
                 <div className="h-10 flex items-center gap-2">
-                  <span className="inline-block w-8 h-8 rounded-full" style={{ backgroundColor: product.labelColor }} />
-                  <span className="text-sm">{product.labelColor}</span>
+                  <span className="inline-block w-8 h-8 rounded-full" style={{ backgroundColor: faq?.labelColor }} />
+                  <span className="text-sm">{faq?.labelColor}</span>
+                </div>
+              </div>
+              <div>
+                <p className="text-muted-foreground block text-sm font-medium mb-1">Ikona:</p>
+                <div className="h-10 flex items-center gap-2">
+                  {(() => {
+                    const Icon = ICONS[faq?.iconKey || "HelpCircle"] || (ICONS.HelpCircle as any);
+                    return (
+                      <div className="border p-2 rounded-lg text-white  " style={{ backgroundColor: faq?.labelColor }}>
+                        <Icon className="w-6 h-6" />
+                      </div>
+                    );
+                  })()}
                 </div>
               </div>
             </>
@@ -142,15 +177,23 @@ export const ProductDetailsTab = ({ product }: ProductDetailsTabProps) => {
           <div>
             <p className="text-xs text-muted-foreground">Utworzony przez:</p>
             <div className="flex items-center gap-1.5">
-              <p className="text-sm">{product.createdBy.name}</p>
-              <p className="text-sm">{product.createdBy.surname}</p>
+              <p className="text-sm">{faq?.createdBy?.name}</p>
+              <p className="text-sm">{faq?.createdBy?.surname}</p>
             </div>
           </div>
 
           <div>
             <p className="text-xs text-muted-foreground">Data utworzenia:</p>
-            <p className="text-sm">{new Date(product.createdAt).toLocaleDateString()}</p>
+            <p className="text-sm">{new Date(faq?.createdAt).toLocaleDateString()}</p>
           </div>
+
+          {/* opcjonalnie: pokaż updatedAt jeśli jest */}
+          {faq?.updatedAt && (
+            <div>
+              <p className="text-xs text-muted-foreground">Zaktualizowano:</p>
+              <p className="text-sm">{new Date(faq?.updatedAt).toLocaleDateString()}</p>
+            </div>
+          )}
         </CardContent>
       </Card>
     </>

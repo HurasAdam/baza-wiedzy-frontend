@@ -1,5 +1,6 @@
 import { ArticlePage } from "../pages/article/ArticlePage";
 import { AdminAccountsPage } from "./admin-panel/admin-admin-accounts/admin-admin-accounts";
+import { AdminFaqDetailsPage } from "./admin-panel/admin-faq-details/admin-faq-details";
 import { AdminFaqsListPage } from "./admin-panel/admin-faqs/admin-faqs";
 import { AdminIssueReportDetailsPage } from "./admin-panel/admin-issue-report/admin-issue-report-detailsPage";
 import { AdminUserReportsPage } from "./admin-panel/admin-issue-report/admin-issue-reports";
@@ -59,4 +60,5 @@ export const PAGES = {
   CreateRolePage,
   EditRolePage,
   CreateFaqPage,
+  AdminFaqDetailsPage,
 };
