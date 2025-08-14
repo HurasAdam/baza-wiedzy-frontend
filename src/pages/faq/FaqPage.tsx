@@ -1,4 +1,4 @@
-import { Edit, HelpCircle, MoreHorizontal, Plus, Trash } from "lucide-react";
+import { Edit, HelpCircle, Loader, MoreHorizontal, Plus, Trash } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -7,8 +7,8 @@ import { FaqDescriptionModal } from "../../components/faq-description/faq-descri
 import { EditFaqItemModal } from "../../components/faq-item/edit-faq-item-modal";
 import { FaqItemModal } from "../../components/faq-item/faq-item-modal";
 import { Alert } from "../../components/shared/alert-modal";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../components/ui/accordion";
 import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "../../components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover";
 import queryClient from "../../config/query.client";
@@ -26,7 +26,7 @@ type FaqCategory = {
   isDefault?: boolean;
 };
 
-interface DeleteActionData {
+export interface DeleteActionData {
   question: string;
   faqItemId: string;
 }
@@ -62,7 +62,7 @@ export function FaqPage() {
   }, [urlFaqId, activeFaqId, setSearchParams]);
 
   // --- FAQ Fetch ---
-  const { data: faq } = useFindFaqQuery(activeFaqId || "");
+  const { data: faq, isLoading: isFaqLoading } = useFindFaqQuery(activeFaqId || "");
 
   // --- Delete FAQ Mutation ---
   const { mutate: deleteMutation, isPending: isDeletePending } = useDeleteFaqItemMutaton();
@@ -157,7 +157,7 @@ export function FaqPage() {
           <div>
             <h1 className="text-xl font-bold leading-tight">
               <span className="font-serif">FAQ</span> - {activeCategory?.title || "FAQ"}{" "}
-              <span className="text-sm text-muted-foreground">({activeCategory?.items ?? 0})</span>
+              {/* <span className="text-sm text-muted-foreground">({activeCategory?.items ?? 0})</span> */}
             </h1>
 
             {activeCategory?.description && (
@@ -182,14 +182,6 @@ export function FaqPage() {
           }
           options={[
             {
-              label: "Dodaj pytanie",
-              icon: <Plus className="w-4 h-4" />,
-              actionHandler: () => {
-                onCreateFaqItemRequest();
-              },
-            },
-
-            {
               label: "Dodaj FAQ",
               icon: <Plus className="w-4 h-4" />,
               actionHandler: () => {
@@ -201,50 +193,61 @@ export function FaqPage() {
         />
       </div>
 
-      <Accordion type="single" collapsible className="mt-4 space-y-3 pb pb-6">
-        {faq?.items?.map((q: FaqItem, i: number) => (
-          <AccordionItem
-            key={q._id || i}
-            value={`item-${i}`}
-            className="rounded-md py-2  border-l-2 border-l-border border-b border-t border-r  bg-card data-[state=open]:border-l-primary pl-4 mb-4 transition-colors duration-300"
-          >
-            <AccordionTrigger className="px-4 py-3 text-left font-semibold cursor-pointer bg-card rounded-t-lg focus:outline-none ">
-              {q.question}
-            </AccordionTrigger>
-            <AccordionContent className="px-4 py-4 text-sm text-muted-foreground border-t border-border flex justify-between items-start">
-              <div className="flex flex-col gap-1.5 max-w-[90%]">
-                <span className="text-xs text-muted-foreground font-medium">Odpowiedź :</span>
-                <span className="text-base">{q.answer}</span>
-              </div>
-
-              <Dropdown
-                triggerBtn={
-                  <Button size="icon" variant="ghost" aria-label="Opcje pytania" className="p-1 rounded ">
-                    <MoreHorizontal className="w-5 h-5 hover:text-primary" />
-                  </Button>
-                }
-                options={[
-                  {
-                    label: "Edytuj",
-                    icon: <Edit className="w-4 h-4" />,
-                    actionHandler: () => {
-                      onEditFaqItemRequest(q._id);
-                    },
-                  },
-                  {
-                    label: "Usuń",
-                    icon: <Trash className="w-4 h-4 text-rose-600/80" />,
-                    actionHandler: () => {
-                      onDeleteRequest(q);
-                    },
-                  },
-                ]}
-                position={{ align: "end" }}
-              />
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
+      <Card>
+        <CardHeader className="flex justify-between items-center">
+          <CardTitle>Pytania i odpowiedzi({faq?.items?.length})</CardTitle>
+          <Button onClick={onCreateFaqItemRequest} variant="outline" size="sm">
+            <Plus className="w-4 h-4 mr-1" /> Dodaj pytanie
+          </Button>
+        </CardHeader>
+        {isFaqLoading ? (
+          <CardContent className="mx-auto">
+            <Loader className="animate-spin" />
+          </CardContent>
+        ) : (
+          <CardContent>
+            <ul className="divide-y divide-border">
+              {faq?.items?.map((item) => (
+                <li key={item._id} className="flex justify-between items-start py-3">
+                  <div className="flex flex-col gap-1.5 px-0.5 py-2.5">
+                    <p className="text-base leading-[1.4644]  font-medium text-[var(--color-foreground)]">
+                      {item?.question}
+                    </p>
+                    <p className="text-[15px] leading-[1.4644]  text-[var(--color-muted-foreground)]">{item?.answer}</p>
+                  </div>
+                  {/* <Button variant="ghost" size="icon">
+                  <MoreHorizontal className="w-4 h-4" />
+                </Button> */}
+                  <Dropdown
+                    triggerBtn={
+                      <Button size="icon" variant="ghost" aria-label="Opcje pytania" className="p-1 rounded ">
+                        <MoreHorizontal className="w-5 h-5 hover:text-primary" />
+                      </Button>
+                    }
+                    options={[
+                      {
+                        label: "Edytuj",
+                        icon: <Edit className="w-4 h-4" />,
+                        actionHandler: () => {
+                          onEditFaqItemRequest(item._id);
+                        },
+                      },
+                      {
+                        label: "Usuń",
+                        icon: <Trash className="w-4 h-4 text-rose-600/80" />,
+                        actionHandler: () => {
+                          onDeleteRequest(item);
+                        },
+                      },
+                    ]}
+                    position={{ align: "end" }}
+                  />
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        )}
+      </Card>
 
       <FaqDescriptionModal
         isFaqItemDescriptionModalOpen={isFaqItemDescriptionModalOpen}
