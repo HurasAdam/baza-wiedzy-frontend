@@ -51,7 +51,7 @@ export const FaqDescriptionModal = ({
 
           {/* --- Description ---*/}
           <div className="text-sm font-medium text-muted-foreground mb-1">Opis</div>
-          <div className="prose prose-sm dark:prose-invert max-w-none">
+          <div className="prose prose-sm dark:prose-invert text-muted-foreground max-w-none">
             {descriptionContent.description || "Brak opisu"}
           </div>
         </DialogHeader>

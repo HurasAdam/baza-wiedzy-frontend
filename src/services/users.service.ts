@@ -25,12 +25,11 @@ const findPermissions = (): Promise<string[]> => {
   return api.get(`${adminBaseUrl}/permissions`);
 };
 
-export const createRole = (
-  permissions: string[],
-  name: string,
-  iconKey: string,
-  labelColor: string
-) => {
+const createUserAccout = (payload) => {
+  return api.post(`${adminBaseUrl}/create-account`, payload);
+};
+
+export const createRole = (permissions: string[], name: string, iconKey: string, labelColor: string) => {
   return api.post(`${adminBaseUrl}/roles/create`, {
     permissions,
     name,
@@ -39,13 +38,7 @@ export const createRole = (
   });
 };
 
-export const updateRole = ({
-  roleId,
-  payload,
-}: {
-  roleId: string;
-  payload: RoleFormData;
-}) => {
+export const updateRole = ({ roleId, payload }: { roleId: string; payload: RoleFormData }) => {
   return api.put(`${adminBaseUrl}/roles/${roleId}`, payload);
 };
 
@@ -74,6 +67,7 @@ export const usersService = {
   findAdmins,
   findRoles,
   findRole,
+  createUserAccout,
   createRole,
   updateRole,
   findPermissions,

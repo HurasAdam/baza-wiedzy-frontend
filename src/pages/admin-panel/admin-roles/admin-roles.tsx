@@ -1,13 +1,4 @@
-import {
-  Ellipsis,
-  FileIcon,
-  KeyRound,
-  Loader,
-  Lock,
-  Plus,
-  User,
-  XCircleIcon,
-} from "lucide-react";
+import { Ellipsis, FileIcon, KeyRound, Loader, Lock, Plus, User, XCircleIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -15,11 +6,7 @@ import { Dropdown } from "@/components/Dropdown";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useFindRoles } from "@/hooks/users/use-users";
 import { useNavigate } from "react-router-dom";
 import { iconMap } from "../../../constants/role-icons";
@@ -31,6 +18,7 @@ export const AdminRolesPage = () => {
   const params = useMemo(() => {
     const searchParams = new URLSearchParams();
     if (searchTerm) searchParams.append("name", searchTerm);
+    searchParams.append("includeAdmins", "true");
     return searchParams;
   }, [searchTerm]);
 
@@ -55,14 +43,9 @@ export const AdminRolesPage = () => {
       <div className="bg-background z-10 flex flex-col gap-4 mb-4">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold text-foreground flex items-center gap-2">
-            <KeyRound className="w-6 h-6 text-muted-foreground" /> Role i
-            uprawnienia
+            <KeyRound className="w-6 h-6 text-muted-foreground" /> Role i uprawnienia
           </h1>
-          <Dropdown
-            triggerBtn={triggerBtn}
-            options={dropdownOptions}
-            position={{ align: "end" }}
-          />
+          <Dropdown triggerBtn={triggerBtn} options={dropdownOptions} position={{ align: "end" }} />
         </div>
 
         {/* Filters */}
@@ -96,9 +79,7 @@ export const AdminRolesPage = () => {
           </p>
         )}
 
-        {!isLoading && !isError && roles.length === 0 && (
-          <p className="text-center py-10">Nie znaleziono roli</p>
-        )}
+        {!isLoading && !isError && roles.length === 0 && <p className="text-center py-10">Nie znaleziono roli</p>}
 
         {!isLoading && !isError && roles.length > 0 && (
           <ul className="divide-y divide-border">
@@ -113,9 +94,7 @@ export const AdminRolesPage = () => {
                   <div className="flex items-center gap-3">
                     <Icon className="w-5 h-5 text-muted-foreground" />
 
-                    <span className="text-sm font-medium text-foreground">
-                      {role.name}
-                    </span>
+                    <span className="text-sm font-medium text-foreground">{role.name}</span>
                   </div>
 
                   {/* Actions */}
@@ -133,11 +112,7 @@ export const AdminRolesPage = () => {
                     <Dropdown
                       withSeparators
                       triggerBtn={
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="opacity-0 group-hover:opacity-100 transition"
-                        >
+                        <Button variant="ghost" size="icon" className="opacity-0 group-hover:opacity-100 transition">
                           <Ellipsis className="w-4 h-4" />
                         </Button>
                       }
@@ -145,14 +120,11 @@ export const AdminRolesPage = () => {
                         {
                           label: "Edytuj",
                           icon: <FileIcon className="w-4 h-4" />,
-                          actionHandler: () =>
-                            navigate(`/admin/manage-roles/${role._id}`),
+                          actionHandler: () => navigate(`/admin/manage-roles/${role._id}`),
                         },
                         {
                           label: "Usuń",
-                          icon: (
-                            <XCircleIcon className="w-4 h-4 text-red-500" />
-                          ),
+                          icon: <XCircleIcon className="w-4 h-4 text-red-500" />,
                           actionHandler: () => toast.error(`Usuń ${role.name}`),
                         },
                       ]}

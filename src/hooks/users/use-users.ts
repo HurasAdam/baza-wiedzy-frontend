@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
+import type { UserAccountFormData } from "../../components/user-account/user-account-modal";
 import { usersService } from "../../services/users.service";
 import type { RoleFormData } from "../../types/roles";
 
@@ -99,6 +100,14 @@ export const useEnableUserAccountMutation = () => {
   return useMutation({
     mutationFn: (userId: string) => {
       return usersService.enableUserAccount(userId);
+    },
+  });
+};
+
+export const useCreateUserAccountMutation = () => {
+  return useMutation({
+    mutationFn: (data: UserAccountFormData) => {
+      return usersService.createUserAccout(data);
     },
   });
 };

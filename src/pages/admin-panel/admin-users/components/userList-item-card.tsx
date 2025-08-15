@@ -1,26 +1,8 @@
 import { Dropdown } from "@/components/Dropdown";
 import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import queryClient from "@/config/query.client";
-import type { UseMutationOptions } from "@tanstack/react-query";
-import {
-  Ellipsis,
-  KeyRound,
-  User,
-  Clock,
-  AlertTriangle,
-  CircleCheckBig,
-  CircleX,
-  EyeIcon,
-  Crown,
-} from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { AlertTriangle, CircleCheckBig, CircleX, Clock, Crown, Ellipsis, EyeIcon, KeyRound, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 
 interface DropdownOption {
   label: string;
@@ -53,12 +35,7 @@ interface UserListItemCardProps {
   onRequestAccountStatustoggle: (user: IUser) => void;
 }
 
-const UserListItemCard = ({
-  user,
-
-  onRequestResetPassword,
-  onRequestAccountStatustoggle,
-}: UserListItemCardProps) => {
+const UserListItemCard = ({ user, onRequestResetPassword, onRequestAccountStatustoggle }: UserListItemCardProps) => {
   const navigate = useNavigate();
 
   const getUserDropdownOptions = (): DropdownOption[] => [
@@ -105,9 +82,7 @@ const UserListItemCard = ({
   return (
     <li
       key={user._id}
-      className={`flex items-start gap-4 border-l-2 pl-4 ${
-        user.isActive ? "border-green-500" : "border-border"
-      }`}
+      className={`flex items-start gap-4 border-l-2 pl-4 ${user.isActive ? "border-green-500" : "border-border"}`}
     >
       {/* Avatar */}
       {user.role && (
@@ -134,10 +109,7 @@ const UserListItemCard = ({
                   <TooltipContent className="text-sm">
                     <div className="space-y-1">
                       <p>
-                        <span className="font-semibold">
-                          Ostatnie logowanie:
-                        </span>{" "}
-                        {formatLastLogin(user.lastLogin)}
+                        <span className="font-semibold">Ostatnie logowanie:</span> {formatLastLogin(user.lastLogin)}
                       </p>
                     </div>
                   </TooltipContent>
@@ -147,9 +119,7 @@ const UserListItemCard = ({
               <span>{user.surname}</span>
             </div>
 
-            <span className="mt-1 text-xs text-muted-foreground">
-              {user?.role?.name}
-            </span>
+            <span className="mt-1 text-xs text-muted-foreground">{user?.role?.name}</span>
           </div>
 
           <div className="flex items-center space-x-16">
