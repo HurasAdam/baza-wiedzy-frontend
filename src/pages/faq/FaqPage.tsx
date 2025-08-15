@@ -15,7 +15,7 @@ import queryClient from "../../config/query.client";
 import { COLOR_TOKEN_MAP, ICONS } from "../../constants/faq-icons";
 import { useDeleteFaqItemMutaton } from "../../hooks/faq-item/use-faq-item";
 import { useFindFaqQuery, useFindFaqsQuery } from "../../hooks/faq/use-faq";
-import type { FaqItem } from "../../types/faq";
+import type { Faq, FaqItem } from "../../types/faq";
 
 type FaqCategory = {
   _id: string;
@@ -40,7 +40,7 @@ export function FaqPage() {
   const [editingFaqItemId, setEditingFaqItemId] = useState<string | null>(null);
   const [pendingDeleteAction, setPendingDeleteAction] = useState<DeleteActionData | null>(null);
   const [isFaqItemDescriptionModalOpen, setIsFaqItemDescriptionModalOpen] = useState(false);
-  const [selectedFaqItemDescriptionContent, setSelectedFaqItemDescriptionContent] = useState<string>("");
+  const [selectedFaqDetailsContent, setSelectedFaqDetailsContent] = useState<Faq | null>(null);
 
   const { data: faqs } = useFindFaqsQuery();
 
@@ -74,15 +74,15 @@ export function FaqPage() {
     setOpen(false);
   };
 
-  const handleShowFaqItemDescription = (faqItem: FaqCategory | { description?: string }) => {
-    if (!faqItem.description) return;
-    setSelectedFaqItemDescriptionContent(faqItem.description);
+  const handleShowFaqDescriptionContent = (faq: Faq) => {
+    if (!faq) return;
+    setSelectedFaqDetailsContent(faq);
     setIsFaqItemDescriptionModalOpen(true);
   };
 
   const handleCloseFaqItemDescription = (): void => {
     setIsFaqItemDescriptionModalOpen(false);
-    setSelectedFaqItemDescriptionContent("");
+    setSelectedFaqDetailsContent(null);
   };
 
   const onCreateFaqItemRequest = (): void => {
@@ -116,7 +116,7 @@ export function FaqPage() {
   };
 
   return (
-    <section className="mx-auto bg-background h-full">
+    <section className="mx-auto bg-background h-full ">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
           <Popover open={open} onOpenChange={setOpen}>
@@ -160,11 +160,11 @@ export function FaqPage() {
               {/* <span className="text-sm text-muted-foreground">({activeCategory?.items ?? 0})</span> */}
             </h1>
 
-            {activeCategory?.description && (
+            {faq && (
               <Button
                 variant="link"
                 onClick={() => {
-                  handleShowFaqItemDescription(activeCategory);
+                  handleShowFaqDescriptionContent(faq);
                 }}
                 className="text-xs h-fit text-muted-foreground p-0"
               >
@@ -249,12 +249,14 @@ export function FaqPage() {
         )}
       </Card>
 
-      <FaqDescriptionModal
-        isFaqItemDescriptionModalOpen={isFaqItemDescriptionModalOpen}
-        setIsFaqItemDescriptionModalOpen={setIsFaqItemDescriptionModalOpen}
-        content={selectedFaqItemDescriptionContent}
-        onClose={handleCloseFaqItemDescription}
-      />
+      {selectedFaqDetailsContent && (
+        <FaqDescriptionModal
+          isFaqItemDescriptionModalOpen={isFaqItemDescriptionModalOpen}
+          setIsFaqItemDescriptionModalOpen={setIsFaqItemDescriptionModalOpen}
+          descriptionContent={selectedFaqDetailsContent}
+          onClose={handleCloseFaqItemDescription}
+        />
+      )}
 
       {pendingDeleteAction && (
         <Alert

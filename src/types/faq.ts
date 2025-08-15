@@ -6,7 +6,11 @@ export interface Faq {
   labelColor: string;
   isDefault: boolean;
   iconKey: string;
-  createdBy: string;
+  createdBy: {
+    _id: string;
+    name: string;
+    surname: string;
+  };
   status: string;
   createdAt: string;
   updatedAt: string;
