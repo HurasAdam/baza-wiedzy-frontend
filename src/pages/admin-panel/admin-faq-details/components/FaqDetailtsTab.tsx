@@ -4,12 +4,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import queryClient from "@/config/query.client";
 import type { AxiosError } from "axios";
-import { Check, Loader, Pencil, X } from "lucide-react";
+import { CalendarDays, Check, Loader, Pencil, X } from "lucide-react";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { ICONS } from "../../../../constants/faq-icons";
 import { useUpdateFaqMutation } from "../../../../hooks/faq/use-faq";
+import { formatDate } from "../../../../utils/format-date";
 import { FaqDetailsForm } from "./FaqDetailsForm";
 
 interface ProductDetailsTabProps {
@@ -174,26 +175,34 @@ export const FaqDetailtsTab = ({ faq }: ProductDetailsTabProps) => {
 
           <Separator />
 
-          <div>
-            <p className="text-xs text-muted-foreground">Utworzony przez:</p>
-            <div className="flex items-center gap-1.5">
-              <p className="text-sm">{faq?.createdBy?.name}</p>
-              <p className="text-sm">{faq?.createdBy?.surname}</p>
+          {/* --- Author Section --- */}
+          <div className="flex items-center gap-3  py-2 bg-muted/10 rounded-lg">
+            {/* Initials Circle */}
+            <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-lg font-bold text-primary">
+              {(() => {
+                const name = `${faq?.createdBy?.name || ""} ${faq?.createdBy?.surname || ""}`.trim();
+                return name
+                  ? name
+                      .split(" ")
+                      .map((n) => n[0]?.toUpperCase())
+                      .join("")
+                  : "?";
+              })()}
+            </div>
+
+            {/* Author Info */}
+            <div className="flex flex-col">
+              <span className="font-semibold text-foreground text-sm">
+                {faq?.createdBy?.name || ""} {faq?.createdBy?.surname || ""}
+              </span>
+
+              {/* Created At Section */}
+              <span className="flex items-center gap-1 text-xs text-muted-foreground mt-0.5">
+                <CalendarDays className="w-3 h-3" />
+                {faq?.createdAt && formatDate(faq.createdAt, { weekday: true, hours: true })}
+              </span>
             </div>
           </div>
-
-          <div>
-            <p className="text-xs text-muted-foreground">Data utworzenia:</p>
-            <p className="text-sm">{new Date(faq?.createdAt).toLocaleDateString()}</p>
-          </div>
-
-          {/* opcjonalnie: pokaż updatedAt jeśli jest */}
-          {faq?.updatedAt && (
-            <div>
-              <p className="text-xs text-muted-foreground">Zaktualizowano:</p>
-              <p className="text-sm">{new Date(faq?.updatedAt).toLocaleDateString()}</p>
-            </div>
-          )}
         </CardContent>
       </Card>
     </>
