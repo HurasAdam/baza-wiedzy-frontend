@@ -3,6 +3,19 @@ import type { UserAccountFormData } from "../../components/user-account/user-acc
 import { usersService } from "../../services/users.service";
 import type { RoleFormData } from "../../types/roles";
 
+export const useFindUser = (userId: string) => {
+  return useQuery({
+    queryKey: ["user", userId],
+    queryFn: () => {
+      return usersService.findUser(userId);
+    },
+
+    refetchOnWindowFocus: false,
+    staleTime: 0,
+    retry: false,
+  });
+};
+
 export const useFindUsers = (params?: URLSearchParams) => {
   return useQuery({
     queryKey: ["users", params?.toString()],

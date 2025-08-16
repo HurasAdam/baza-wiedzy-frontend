@@ -50,6 +50,7 @@ export function AppRoutes() {
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="manage-users" element={<PAGES.UsersPage />} />
+            <Route path="manage-users/:id" element={<PAGES.AdminUserDetailsPage />} />
             <Route path="manage-products" element={<PAGES.ProductsPage />} />
             <Route path="manage-products/:id" element={<PAGES.AdminProductDetailsPage />} />
             <Route path="manage-tags" element={<PAGES.TagsPage />} />

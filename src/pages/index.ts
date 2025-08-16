@@ -10,6 +10,7 @@ import { ProductsPage } from "./admin-panel/admin-products";
 import { AdminRolesPage } from "./admin-panel/admin-roles/admin-roles";
 import { TagsPage } from "./admin-panel/admin-tags";
 import { AdminTopicsPage } from "./admin-panel/admin-topics/admin-topics";
+import { AdminUserDetailsPage } from "./admin-panel/admin-user-details/admin-user-details";
 import { UsersPage } from "./admin-panel/admin-users/admin-users";
 import { ArticlesPage } from "./articles/ArticlesPage";
 import { ForgotPasswordPage } from "./auth/forgot-password/ForgotPasswordPage";
@@ -61,4 +62,5 @@ export const PAGES = {
   EditRolePage,
   CreateFaqPage,
   AdminFaqDetailsPage,
+  AdminUserDetailsPage,
 };
