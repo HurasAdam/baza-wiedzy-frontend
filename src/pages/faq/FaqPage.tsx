@@ -156,11 +156,11 @@ export function FaqPage() {
 
           <div>
             <h1 className="text-xl font-bold leading-tight">
-              <span className="font-serif">FAQ</span> - {activeCategory?.title || "FAQ"}{" "}
+              <span className="font-serif">FAQ</span> - {isFaqLoading ? "ŁADOWANIE" : activeCategory?.title || "FAQ"}
               {/* <span className="text-sm text-muted-foreground">({activeCategory?.items ?? 0})</span> */}
             </h1>
 
-            {faq && (
+            {faq ? (
               <Button
                 variant="link"
                 onClick={() => {
@@ -170,6 +170,12 @@ export function FaqPage() {
               >
                 więcej
               </Button>
+            ) : (
+              <div className="flex gap-0.5 ">
+                <div className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce"></div>
+                <div className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce"></div>
+                <div className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce"></div>
+              </div>
             )}
           </div>
         </div>
