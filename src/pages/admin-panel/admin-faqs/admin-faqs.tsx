@@ -1,6 +1,4 @@
 import { Dropdown } from "@/components/Dropdown";
-import { EditJstProjectModal } from "@/components/jst-project/edit-jst-project-modal";
-import { JstProjectModal } from "@/components/jst-project/jst-project-modal";
 import { Input } from "@/components/ui/input";
 import { BookOpen, Ellipsis, Eye, FlagTriangleRight, Loader, Plus, XCircleIcon } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -11,18 +9,9 @@ import { Button } from "../../../components/ui/button";
 import queryClient from "../../../config/query.client";
 import { useFindFaqsQuery, useSetDefaultFaqMutaton } from "../../../hooks/faq/use-faq";
 
-const triggerBtn = (
-  <Button variant="default" className="flex items-center gap-1">
-    Dodaj <Plus className="w-4 h-4" />
-  </Button>
-);
-
 export const AdminFaqsListPage = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
-  const [isCreatingJstProject, setIsCreatingJstProject] = useState<boolean>(false);
-  const [isEditingJstProject, setIsEditingJstProject] = useState(false);
-  const [editingJstProjectId, setEditingJstProjectId] = useState<string | null>(null);
 
   const params = useMemo(() => {
     const searchParams = new URLSearchParams();
@@ -32,15 +21,6 @@ export const AdminFaqsListPage = () => {
 
   const { data: faqs = [], isLoading, isError, error } = useFindFaqsQuery(params);
   const { mutate } = useSetDefaultFaqMutaton();
-
-  const onCreateJstProject = (): void => {
-    setIsCreatingJstProject(true);
-  };
-
-  const onEditJstProject = (productId: string): void => {
-    setEditingJstProjectId(productId);
-    setIsEditingJstProject(true);
-  };
 
   const onSetFaqAsDefault = (faqId: string) => {
     mutate(faqId, {
@@ -56,7 +36,7 @@ export const AdminFaqsListPage = () => {
       label: "Dodaj FAQ",
       icon: <Plus className="w-4 h-4" />,
       actionHandler: () => {
-        onCreateJstProject();
+        navigate("/admin/manage-faqs/create");
       },
     },
   ];
@@ -69,7 +49,15 @@ export const AdminFaqsListPage = () => {
           <h1 className="text-2xl font-semibold text-foreground flex items-center gap-2">
             <BookOpen className="w-6 h-6 text-muted-foreground" /> Lista FAQ
           </h1>
-          <Dropdown triggerBtn={triggerBtn} options={dropdownOptions} position={{ align: "end" }} />
+          <Dropdown
+            triggerBtn={
+              <Button variant="default" className="flex items-center gap-1">
+                Dodaj <Plus className="w-4 h-4" />
+              </Button>
+            }
+            options={dropdownOptions}
+            position={{ align: "end" }}
+          />
         </div>
 
         {/* Filters */}
@@ -167,15 +155,6 @@ export const AdminFaqsListPage = () => {
           </ul>
         )}
       </div>
-
-      <JstProjectModal isCreatingJstProject={isCreatingJstProject} setIsCreatingJstProject={setIsCreatingJstProject} />
-      {editingJstProjectId && (
-        <EditJstProjectModal
-          projectId={editingJstProjectId}
-          isEditingJstProject={isEditingJstProject}
-          setIsEditingJstProject={setIsEditingJstProject}
-        />
-      )}
     </div>
   );
 };

@@ -1,10 +1,5 @@
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
@@ -59,15 +54,14 @@ export function CreateFaqPage() {
     mutate(data, {
       onSuccess: () => {
         toast.success("FAQ zostało dodane");
-        navigate("/faq");
+        navigate(-1);
       },
     });
 
   const moveUp = (i: number) => i > 0 && move(i, i - 1);
   const moveDown = (i: number) => i < fields.length - 1 && move(i, i + 1);
 
-  const getColorVar = (key: string) =>
-    COLOR_TOKEN_MAP[key] || COLOR_TOKEN_MAP.gray;
+  const getColorVar = (key: string) => COLOR_TOKEN_MAP[key] || COLOR_TOKEN_MAP.gray;
 
   return (
     <div className="mx-auto ">
@@ -80,20 +74,11 @@ export function CreateFaqPage() {
         </div>
 
         <div className="flex items-center gap-3">
-          <Button
-            disabled={isPending}
-            variant="outline"
-            onClick={() => navigate(-1)}
-          >
+          <Button disabled={isPending} variant="outline" onClick={() => navigate(-1)}>
             Anuluj
           </Button>
           <Button type="submit" onClick={handleSubmit(onSubmit)}>
-            {isPending ? (
-              <Loader className="animate-spin" />
-            ) : (
-              <Check className="mr-2 h-4 w-4" />
-            )}{" "}
-            Zapisz
+            {isPending ? <Loader className="animate-spin" /> : <Check className="mr-2 h-4 w-4" />} Zapisz
           </Button>
         </div>
       </header>
@@ -105,9 +90,7 @@ export function CreateFaqPage() {
               <div className="flex flex-col gap-6">
                 {/* Tytuł */}
                 <div>
-                  <label className="text-sm font-medium text-muted-foreground">
-                    FAQ title
-                  </label>
+                  <label className="text-sm font-medium text-muted-foreground">FAQ title</label>
                   <Input
                     className="mt-2"
                     {...methods.register("title", { required: true })}
@@ -118,19 +101,11 @@ export function CreateFaqPage() {
                 {/* Slug + Description */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">
-                      Slug (opcjonalny)
-                    </label>
-                    <Input
-                      {...methods.register("slug")}
-                      placeholder="product-billing"
-                      className="mt-2"
-                    />
+                    <label className="text-sm font-medium text-muted-foreground">Slug (opcjonalny)</label>
+                    <Input {...methods.register("slug")} placeholder="product-billing" className="mt-2" />
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">
-                      Description
-                    </label>
+                    <label className="text-sm font-medium text-muted-foreground">Description</label>
                     <Textarea
                       {...methods.register("description")}
                       placeholder="Krótki opis"
@@ -143,12 +118,8 @@ export function CreateFaqPage() {
                 {/* Ikona */}
                 <div className="pt-2 pb-1 border-t border-border">
                   <div className="mb-3">
-                    <label className="text-sm font-medium text-muted-foreground">
-                      Ikona
-                    </label>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Wybierz ikonę reprezentującą FAQ
-                    </p>
+                    <label className="text-sm font-medium text-muted-foreground">Ikona</label>
+                    <p className="text-xs text-muted-foreground mt-1">Wybierz ikonę reprezentującą FAQ</p>
                   </div>
 
                   <div className="flex gap-2 flex-wrap">
@@ -163,18 +134,14 @@ export function CreateFaqPage() {
                           type="button"
                           aria-pressed={active}
                           title={k}
-                          onClick={() =>
-                            setValue("iconKey", k, { shouldDirty: true })
-                          }
+                          onClick={() => setValue("iconKey", k, { shouldDirty: true })}
                           className="w-10 h-10 p-1 rounded-md border flex items-center justify-center cursor-pointer transition"
                           style={
                             active
                               ? {
                                   backgroundColor: cssVar("--color-primary"),
                                   color: cssVar("--color-primary-foreground"),
-                                  boxShadow: `0 0 0 4px ${cssVar(
-                                    "--color-ring"
-                                  )}`,
+                                  boxShadow: `0 0 0 4px ${cssVar("--color-ring")}`,
                                   borderColor: "transparent",
                                 }
                               : {
@@ -194,12 +161,8 @@ export function CreateFaqPage() {
                   <div className="mt-5">
                     <div className="flex items-center justify-between mb-2">
                       <div>
-                        <label className="text-sm font-medium text-muted-foreground">
-                          Kolor
-                        </label>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Kolor pobierany z motywu (CSS vars)
-                        </p>
+                        <label className="text-sm font-medium text-muted-foreground">Kolor</label>
+                        <p className="text-xs text-muted-foreground mt-1">Kolor pobierany z motywu (CSS vars)</p>
                       </div>
                     </div>
 
@@ -212,19 +175,13 @@ export function CreateFaqPage() {
                             key={c}
                             type="button"
                             aria-pressed={active}
-                            onClick={() =>
-                              setValue("labelColor", c, { shouldDirty: true })
-                            }
+                            onClick={() => setValue("labelColor", c, { shouldDirty: true })}
                             title={c}
                             className="w-8 h-8 rounded-full border-2 flex items-center justify-center focus:outline-none transition-transform"
                             style={{
                               backgroundColor: bg,
-                              borderColor: active
-                                ? "transparent"
-                                : cssVar("--color-border"),
-                              boxShadow: active
-                                ? `0 0 0 4px ${cssVar("--color-ring")}`
-                                : undefined,
+                              borderColor: active ? "transparent" : cssVar("--color-border"),
+                              boxShadow: active ? `0 0 0 4px ${cssVar("--color-ring")}` : undefined,
                               transform: active ? "scale(1.06)" : undefined,
                             }}
                           >
@@ -252,11 +209,7 @@ export function CreateFaqPage() {
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-lg font-medium">Lista pytań</h3>
                   <div>
-                    <Button
-                      size="sm"
-                      type="button"
-                      onClick={() => addQuestion()}
-                    >
+                    <Button size="sm" type="button" onClick={() => addQuestion()}>
                       <Plus className="w-4 h-4 mr-2" /> Dodaj
                     </Button>
                   </div>
@@ -267,25 +220,15 @@ export function CreateFaqPage() {
                     <Card key={field.fieldId} className="p-4">
                       <div className="flex flex-col md:flex-row gap-4">
                         <div className="flex-1 min-w-0">
-                          <label className="text-sm font-medium text-muted-foreground">
-                            Pytanie
-                          </label>
+                          <label className="text-sm font-medium text-muted-foreground">Pytanie</label>
                           <Input
-                            {...methods.register(
-                              `questions.${idx}.question` as const,
-                              { required: true }
-                            )}
+                            {...methods.register(`questions.${idx}.question` as const, { required: true })}
                             className="mt-2"
                             placeholder={`Pytanie #${idx + 1}`}
                           />
-                          <label className="text-sm font-medium text-muted-foreground mt-4">
-                            Odpowiedź
-                          </label>
+                          <label className="text-sm font-medium text-muted-foreground mt-4">Odpowiedź</label>
                           <Textarea
-                            {...methods.register(
-                              `questions.${idx}.answer` as const,
-                              { required: true }
-                            )}
+                            {...methods.register(`questions.${idx}.answer` as const, { required: true })}
                             className="mt-2"
                             rows={4}
                             placeholder="Treść odpowiedzi..."
@@ -314,11 +257,7 @@ export function CreateFaqPage() {
                             </Button>
                           </div>
 
-                          <Button
-                            size="sm"
-                            variant="destructive"
-                            onClick={() => remove(idx)}
-                          >
+                          <Button size="sm" variant="destructive" onClick={() => remove(idx)}>
                             <Trash2 className="w-4 h-4" /> Usuń
                           </Button>
                         </div>
