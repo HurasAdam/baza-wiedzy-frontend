@@ -42,7 +42,7 @@ export function FaqPage() {
   const [isFaqItemDescriptionModalOpen, setIsFaqItemDescriptionModalOpen] = useState(false);
   const [selectedFaqDetailsContent, setSelectedFaqDetailsContent] = useState<Faq | null>(null);
 
-  const { data: faqs } = useFindFaqsQuery();
+  const { data: faqs, isLoading: isFaqsLoading } = useFindFaqsQuery();
 
   const [open, setOpen] = useState(false);
 
@@ -119,65 +119,70 @@ export function FaqPage() {
     <section className="mx-auto bg-background h-full ">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
-          <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild>
-              <div
-                className="w-14 h-14 rounded-xl flex items-center justify-center text-white shadow-sm cursor-pointer transition-transform hover:scale-105"
-                style={{
-                  backgroundColor: COLOR_TOKEN_MAP[activeCategory?.labelColor || "blue"] || "var(--color-primary)",
-                }}
-              >
-                <ActiveIcon className="w-7 h-7" />
-              </div>
-            </PopoverTrigger>
-            <PopoverContent className="p-0 w-64">
-              <Command>
-                <CommandList className="scrollbar-custom">
-                  <CommandEmpty>Brak FAQ</CommandEmpty>
-                  <CommandGroup heading="Wybierz FAQ">
-                    {faqs?.map((item) => {
-                      const Icon = ICONS[item.iconKey || "HelpCircle"] || HelpCircle;
-                      return (
-                        <CommandItem
-                          key={item._id}
-                          onSelect={() => handleSelectFaq(item._id)}
-                          className={`cursor-pointer ${item._id === activeFaqId ? "bg-accent" : ""}`}
-                        >
-                          <Icon className="w-4 h-4 mr-2" />
-                          <span>{item.title}</span>
-                        </CommandItem>
-                      );
-                    })}
-                  </CommandGroup>
-                </CommandList>
-              </Command>
-            </PopoverContent>
-          </Popover>
+          {isFaqsLoading && isFaqLoading ? (
+            <div className="w-14 h-14 rounded-xl flex bg-primary/90 items-center justify-center text-white shadow-sm cursor-pointer transition-transform hover:scale-105">
+              <Loader className="w-7 h-7 animate-spin" />
+            </div>
+          ) : (
+            <Popover open={open} onOpenChange={setOpen}>
+              <PopoverTrigger asChild>
+                <div
+                  className="w-14 h-14 rounded-xl flex items-center justify-center text-white shadow-sm cursor-pointer transition-transform hover:scale-105"
+                  style={{
+                    backgroundColor: COLOR_TOKEN_MAP[activeCategory?.labelColor || "blue"] || "var(--color-primary)",
+                  }}
+                >
+                  <ActiveIcon className="w-7 h-7" />
+                </div>
+              </PopoverTrigger>
+              <PopoverContent className="p-0 w-64">
+                <Command>
+                  <CommandList className="scrollbar-custom">
+                    <CommandEmpty>Brak FAQ</CommandEmpty>
+                    <CommandGroup heading="Wybierz FAQ">
+                      {faqs?.map((item) => {
+                        const Icon = ICONS[item.iconKey];
+                        return (
+                          <CommandItem
+                            key={item._id}
+                            onSelect={() => handleSelectFaq(item._id)}
+                            className={`cursor-pointer ${item._id === activeFaqId ? "bg-accent" : ""}`}
+                          >
+                            <Icon className="w-4 h-4 mr-2" />
+                            <span>{item.title}</span>
+                          </CommandItem>
+                        );
+                      })}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
+          )}
+          {isFaqLoading ? (
+            <div className="flex flex-col gap-2 ">
+              <div className="h-4.5 animate-pulse rounded min-w-[120px] lg:min-w-[300px] bg-muted"></div>
+              <div className="h-2.5 animate-pulse  rounded min-w-[120px] lg:min-w-[300px] bg-muted"></div>
+            </div>
+          ) : (
+            <div>
+              <h1 className="text-xl font-bold leading-tight">
+                <span className="font-serif">FAQ</span> - {activeCategory?.title}
+              </h1>
 
-          <div>
-            <h1 className="text-xl font-bold leading-tight">
-              <span className="font-serif">FAQ</span> - {isFaqLoading ? "ŁADOWANIE" : activeCategory?.title || "FAQ"}
-              {/* <span className="text-sm text-muted-foreground">({activeCategory?.items ?? 0})</span> */}
-            </h1>
-
-            {faq ? (
-              <Button
-                variant="link"
-                onClick={() => {
-                  handleShowFaqDescriptionContent(faq);
-                }}
-                className="text-xs h-fit text-muted-foreground p-0"
-              >
-                więcej
-              </Button>
-            ) : (
-              <div className="flex gap-0.5 ">
-                <div className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce"></div>
-                <div className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce"></div>
-                <div className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce"></div>
-              </div>
-            )}
-          </div>
+              {faq && (
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    handleShowFaqDescriptionContent(faq);
+                  }}
+                  className="text-xs h-fit text-muted-foreground p-0"
+                >
+                  więcej
+                </Button>
+              )}
+            </div>
+          )}
         </div>
 
         <Dropdown
@@ -221,9 +226,7 @@ export function FaqPage() {
                     </p>
                     <p className="text-[15px] leading-[1.4644]  text-[var(--color-muted-foreground)]">{item?.answer}</p>
                   </div>
-                  {/* <Button variant="ghost" size="icon">
-                  <MoreHorizontal className="w-4 h-4" />
-                </Button> */}
+
                   <Dropdown
                     triggerBtn={
                       <Button size="icon" variant="ghost" aria-label="Opcje pytania" className="p-1 rounded ">
