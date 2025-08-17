@@ -27,13 +27,13 @@ const triggerBtn = (
   </Button>
 );
 
-export const UsersPage = () => {
-  type ActionType = "RESET_PASSWORD" | "TOGGLE_ACCOUNT";
-  interface PendingAction {
-    type: ActionType;
-    user: IUser;
-  }
+export type ActionType = "RESET_PASSWORD" | "TOGGLE_ACCOUNT";
+export interface PendingAction {
+  type: ActionType;
+  user: IUser;
+}
 
+export const UsersPage = () => {
   const navigate = useNavigate();
 
   //  --- Create User Account state ---

@@ -1,4 +1,4 @@
-import { Ellipsis, FileIcon, KeyRound, Loader, Lock, Plus, User, XCircleIcon } from "lucide-react";
+import { Ellipsis, FileIcon, Loader, Lock, Plus, User, UserCog, XCircleIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -43,7 +43,7 @@ export const AdminRolesPage = () => {
       <div className="bg-background z-10 flex flex-col gap-4 mb-4">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold text-foreground flex items-center gap-2">
-            <KeyRound className="w-6 h-6 text-muted-foreground" /> Role i uprawnienia
+            <UserCog className="w-6 h-6 text-muted-foreground" /> Role i uprawnienia
           </h1>
           <Dropdown triggerBtn={triggerBtn} options={dropdownOptions} position={{ align: "end" }} />
         </div>

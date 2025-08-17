@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import type { UserAccountFormData } from "../../components/user-account/user-account-modal";
 import { usersService } from "../../services/users.service";
 import type { RoleFormData } from "../../types/roles";
+import type { EditUserInfoFormData } from "../../validation/edit-user-info.schema";
 
 export const useFindUser = (userId: string) => {
   return useQuery({
@@ -139,6 +140,14 @@ export const useCreateRoleMutation = () => {
       iconKey: string;
     }) => {
       return usersService.createRole(permissions, name, iconKey, labelColor);
+    },
+  });
+};
+
+export const useUpdateUserMutation = () => {
+  return useMutation({
+    mutationFn: ({ userId, payload }: { userId: string; payload: EditUserInfoFormData }) => {
+      return usersService.updateOne(userId, payload);
     },
   });
 };

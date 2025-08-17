@@ -15,10 +15,10 @@ export const AdminUserDetailsPage = () => {
   //   const { data: faq, isLoading: isProductLoading } = useFindFaqQuery(id!);
   const { data: faq, isLoading: isProductLoading } = useFindUser(id!);
 
-  const [activeTab, setActiveTab] = useState<"details" | "questionsAndAnswers" | "topics">("details");
+  const [activeTab, setActiveTab] = useState<"account" | "questionsAndAnswers" | "topics">("account");
 
-  const tabs: { key: "details" | "questionsAndAnswers" | "topics"; label: string }[] = [
-    { key: "details", label: "Szczegóły" },
+  const tabs: { key: "account" | "questionsAndAnswers" | "topics"; label: string }[] = [
+    { key: "account", label: "Dane konta" },
     { key: "questionsAndAnswers", label: "Pytania i odpowiedzi" },
   ];
 
@@ -67,7 +67,7 @@ export const AdminUserDetailsPage = () => {
 
           <div className="flex gap-3">
             <Button variant="destructive">
-              <Trash2 className="w-4 h-4 mr-2" /> Usuń FAQ
+              <Trash2 className="w-4 h-4 mr-2" /> Usuń
             </Button>
           </div>
         </div>
@@ -87,7 +87,7 @@ export const AdminUserDetailsPage = () => {
 
       {/* Tab content */}
       <div className="flex-1 py-6 min-h-[400px]">
-        {activeTab === "details" && <UserInfoTab user={faq} />}
+        {activeTab === "account" && <UserInfoTab user={faq} />}
 
         {activeTab === "questionsAndAnswers" && faq && <UserArticlesTab faqId={faq._id} questions={[]} />}
       </div>

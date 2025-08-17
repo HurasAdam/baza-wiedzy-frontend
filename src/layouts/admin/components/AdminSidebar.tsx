@@ -5,13 +5,13 @@ import {
   Box,
   Crown,
   Hash,
-  KeyRound,
   LandPlot,
   LayoutDashboard,
   ListChecks,
   LucideArrowBigLeft,
   MessageSquareWarning,
   ShieldCheck,
+  UserCog,
   Users,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router";
@@ -29,7 +29,7 @@ const adminLinks = [
   {
     title: "Role i uprawnienia",
     href: "/admin/manage-roles",
-    icon: KeyRound,
+    icon: UserCog,
   },
   { title: "Produkty", href: "/admin/manage-products", icon: Box },
   { title: "Tagi", href: "/admin/manage-tags", icon: Hash },
