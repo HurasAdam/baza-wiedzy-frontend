@@ -50,6 +50,10 @@ export const updateOne = (userId, payload) => {
   return api.put(`${baseUrl}/${userId}`, payload);
 };
 
+export const changeUserRole = (userId, roleId) => {
+  return api.put(`${adminBaseUrl}/users/${userId}/change-role`, roleId);
+};
+
 export const findMyFavorites = (params?: URLSearchParams): Promise<void> => {
   // title, produst params
   return api.get(buildUrl(baseUrl, "favourites-articles"), { params });
@@ -78,6 +82,7 @@ export const usersService = {
   findRole,
   createUserAccout,
   createRole,
+  changeUserRole,
   updateOne,
   updateRole,
   findPermissions,

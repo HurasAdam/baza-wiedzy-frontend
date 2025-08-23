@@ -162,3 +162,11 @@ export const useUpdateRoleMutation = () => {
     },
   });
 };
+
+export const useChangeUserRoleMutation = () => {
+  return useMutation({
+    mutationFn: ({ userId, data }: { userId: string; data: {} }) => {
+      return usersService.changeUserRole(userId, data);
+    },
+  });
+};

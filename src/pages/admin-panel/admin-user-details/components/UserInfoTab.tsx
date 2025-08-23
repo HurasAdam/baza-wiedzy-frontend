@@ -5,15 +5,17 @@ import { Dropdown } from "../../../../components/Dropdown";
 import { Alert } from "../../../../components/shared/alert-modal";
 import { Button } from "../../../../components/ui/button";
 import { Card } from "../../../../components/ui/card";
+import { UpdateUserRoleModal } from "../../../../components/user-role/update-user-role-modal";
 import queryClient from "../../../../config/query.client";
-import { iconMap } from "../../../../constants/role-icons";
 import {
   useDisableUserAccountMutation,
   useEnableUserAccountMutation,
   useResetUserPasswordMutation,
 } from "../../../../hooks/users/use-users";
 import { formatDate } from "../../../../utils/format-date";
+import UserInfoEmailBadge from "./UserInfoEmailBadge";
 import UserInfoForm from "./UserInfoForm";
+import UserInfoRoleBadge from "./UserInfoRoleBadge";
 import UserInfoSection from "./UserInfoSection";
 
 type Role = {
@@ -39,7 +41,7 @@ export type UserShape = {
   favourites?: string[];
 };
 
-export type ActionType = "RESET_PASSWORD" | "TOGGLE_ACCOUNT";
+export type ActionType = "RESET_PASSWORD" | "TOGGLE_ACCOUNT" | "CHANGE_ROLE";
 export interface PendingAction {
   type: ActionType;
   user: UserShape;
@@ -48,8 +50,6 @@ export interface PendingAction {
 export function UserInfoTab({ user }: { user: UserShape; onSave?: (payload: unknown) => Promise<void> | void }) {
   const [isEditingUser, setIsEditingUser] = useState<boolean>(false);
   const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
-
-  const RoleIcon = iconMap[user.role.iconKey] || null;
 
   const { mutate: resetUserPasswordMutation, isPending: isResetPasswordLoading } = useResetUserPasswordMutation();
   const { mutate: disableUserAccountMutation, isPending: isDisableAccountLoading } = useDisableUserAccountMutation();
@@ -92,20 +92,12 @@ export function UserInfoTab({ user }: { user: UserShape; onSave?: (payload: unkn
     }
   };
 
-  const roleBadge = (role: Role) => (
-    <div
-      className="px-3 flex-col py-1 rounded-full text-xs font-medium flex items-center gap-2"
-      style={{ backgroundColor: `${role.labelColor}20`, color: role.labelColor }}
-    >
-      {RoleIcon && <RoleIcon className="w-10 h-10" />}
-      <span className="text-xs"> {role.name}</span>
-    </div>
-  );
-
   // --- open reset password alert ---
   const onRequestReset = (user: UserShape) => setPendingAction({ type: "RESET_PASSWORD", user });
   // --- open emable/disable account alert ---
   const onRequestToggle = (user: UserShape) => setPendingAction({ type: "TOGGLE_ACCOUNT", user });
+  // -- open change user role modal ---
+  const onRequestRoleChange = (user: UserShape) => setPendingAction({ type: "CHANGE_ROLE", user });
 
   const triggerBtn = (
     <Button variant="ghost" size="icon">
@@ -116,16 +108,11 @@ export function UserInfoTab({ user }: { user: UserShape; onSave?: (payload: unkn
   return (
     <div className="space-y-7">
       {/* --- Górna sekcja użytkownika --- */}
-      <Card className="rounded-2xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+      <Card className="rounded-xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
         {/* --- Lewa część ---*/}
-        <div className="flex flex-col md:flex-row md:items-center gap-6">
-          {roleBadge(user.role)}
-          <div className="flex flex-col gap-1">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-              {user.name} {user.surname}
-            </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-300">{user.email}</p>
-          </div>
+        <div className="flex flex-col md:flex-row md:items-center  px-3">
+          <UserInfoRoleBadge user={user} />
+          <UserInfoEmailBadge email={user.email} />
         </div>
 
         {/* --- Prawa część ---*/}
@@ -144,7 +131,7 @@ export function UserInfoTab({ user }: { user: UserShape; onSave?: (payload: unkn
                 label: "Zmień role",
                 icon: <UserCog className="w-4 h-4" />,
                 actionHandler: () => {
-                  onRequestReset(user);
+                  onRequestRoleChange(user);
                 },
               },
               {
@@ -172,7 +159,7 @@ export function UserInfoTab({ user }: { user: UserShape; onSave?: (payload: unkn
       </Card>
 
       {/* ---Informacje dodatkowe --- */}
-      <Card className="rounded-2xl  p-6 flex flex-col md:flex-row md:divide-x md:divide-gray-200 dark:md:divide-gray-700 gap-4">
+      <Card className="rounded-xl  p-6 flex flex-col md:flex-row md:divide-x  gap-4">
         <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left px-4 py-2">
           <span className="text-xs text-muted-foreground uppercase mb-1">Status konta</span>
           <span className="text-sm text-foreground">
@@ -240,6 +227,13 @@ export function UserInfoTab({ user }: { user: UserShape; onSave?: (payload: unkn
             </>
           )}
         </Alert>
+      )}
+      {pendingAction && pendingAction.type === "CHANGE_ROLE" && (
+        <UpdateUserRoleModal
+          userData={pendingAction?.user}
+          isUpdatingUserRole={pendingAction?.type === "CHANGE_ROLE"}
+          setIsUpdatingUserRole={() => setPendingAction(null)}
+        />
       )}
     </div>
   );

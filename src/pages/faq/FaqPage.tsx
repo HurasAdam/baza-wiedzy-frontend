@@ -206,7 +206,11 @@ export function FaqPage() {
 
       <Card>
         <CardHeader className="flex justify-between items-center">
-          <CardTitle>Pytania i odpowiedzi({faq?.items?.length})</CardTitle>
+          {isFaqLoading ? (
+            <CardTitle> Ładowanie ...</CardTitle>
+          ) : (
+            <CardTitle>Pytania i odpowiedzi({faq?.items?.length})</CardTitle>
+          )}
           <Button onClick={onCreateFaqItemRequest} variant="outline" size="sm">
             <Plus className="w-4 h-4 mr-1" /> Dodaj pytanie
           </Button>
