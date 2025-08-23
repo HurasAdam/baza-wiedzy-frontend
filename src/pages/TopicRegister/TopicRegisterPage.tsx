@@ -5,12 +5,14 @@ import { Dropdown } from "../../components/Dropdown";
 import { ProductModal } from "../../components/product/product-modal";
 import EmptyState from "../../components/shared/EmptyState";
 import { TopicModal } from "../../components/topic/topic-modal";
+import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
 import { useFindProductsQuery } from "../../hooks/products/use-products";
 import { useFindTopicsQuery } from "../../hooks/topics/use-topics";
 import RegisterTopicCard from "./components/register-topic-card";
 import RegisterTopicSkeletonCards from "./components/register-topic-skeleton-cards";
-import { TopicFiltersPanel } from "./components/topic-filters-panel";
 
 export const TopicRegisterPage = () => {
   const [isCreatingProduct, setIsCreatingProduct] = useState<boolean>(false);
@@ -21,10 +23,7 @@ export const TopicRegisterPage = () => {
   const title = params.get("title") || "";
   const hasFilters = Boolean(product || title);
 
-  const { data: topics = [], isLoading: isTopicsLoading } = useFindTopicsQuery({
-    title,
-    product,
-  });
+  const { data: topics = [], isLoading: isTopicsLoading } = useFindTopicsQuery(params);
   const { data: products = [] } = useFindProductsQuery();
 
   const onCreateProduct = (): void => {
@@ -53,19 +52,18 @@ export const TopicRegisterPage = () => {
   ];
 
   const triggerBtn = (
-    <Button
-      variant="default"
-      className="flex items-center gap-1 cursor-pointer"
-    >
+    <Button variant="default" className="flex items-center gap-1 cursor-pointer">
       Dodaj <Plus className="w-4 h-4" />
     </Button>
   );
 
   const productHandler = (product: string) => {
     setParams((prev) => {
-      prev.set("product", product);
-      prev.delete("category");
-      return prev;
+      const newParams = new URLSearchParams(prev); // kopia
+      if (product) newParams.set("product", product);
+      else newParams.delete("product");
+
+      return newParams;
     });
   };
 
@@ -78,6 +76,10 @@ export const TopicRegisterPage = () => {
     });
   };
 
+  const onResetAllFilters = () => {
+    setParams(new URLSearchParams());
+  };
+
   return (
     <div className="flex w-full ">
       <div className="w-full">
@@ -86,16 +88,42 @@ export const TopicRegisterPage = () => {
             <ClipboardList className="w-6 h-6" /> Rejestr tematów
           </h1>
 
-          <Dropdown
-            triggerBtn={triggerBtn}
-            options={dropdownOptions}
-            position={{ align: "end" }}
-          />
+          <Dropdown triggerBtn={triggerBtn} options={dropdownOptions} position={{ align: "end" }} />
           {/* Tabs */}
         </div>
+
+        <div className="bg-background z-10 flex flex-col gap-4 mb-4">
+          {/* Filters */}
+          <div className="flex bg-muted/40 rounded-lg px-3 py-2 gap-3 items-center flex-wrap">
+            <Input placeholder="Wyszukaj temat..." className="w-64" value={title} onChange={(e) => titleHandler(e)} />
+            <Select
+              value={product === "" ? "all" : product}
+              onValueChange={(value) => productHandler(value === "all" ? "" : value)}
+            >
+              <SelectTrigger className="w-40">
+                <SelectValue placeholder="Produkt" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Wszystkie</SelectItem>
+                {products.map(({ _id, name }) => (
+                  <SelectItem key={_id} value={_id}>
+                    {name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button onClick={onResetAllFilters} disabled={!hasFilters} variant="outline" size="sm">
+              Resetuj
+            </Button>
+            <Badge variant="outline" className="ml-auto">
+              Znaleziono: {topics && topics.length}
+            </Badge>
+          </div>
+        </div>
+
         <div className="flex w-full gap-6">
           {/* ------ topics ------ */}
-          <div className="space-y-3.5 flex-1">
+          <div className="space-y-3.5 flex-1 pb-6.5">
             {isTopicsLoading ? (
               // ---- Loading skeletons -----
               <RegisterTopicSkeletonCards itemsCount={8} />
@@ -109,41 +137,15 @@ export const TopicRegisterPage = () => {
             ) : topics?.length === 0 ? (
               <EmptyState onReset={() => setParams({})} />
             ) : (
-              topics.map((topic) => (
-                <RegisterTopicCard key={topic._id} topic={topic} />
-              ))
+              topics.map((topic) => <RegisterTopicCard key={topic._id} topic={topic} />)
             )}
           </div>
-
-          <TopicFiltersPanel
-            hasFilters={hasFilters}
-            title={title}
-            product={product}
-            products={products}
-            onClearFilters={() => setParams(new URLSearchParams())}
-            onTitleChange={titleHandler}
-            onProductChange={productHandler}
-            onSelectAll={() =>
-              setParams((prev) => {
-                prev.delete("product");
-                prev.delete("category");
-                return prev;
-              })
-            }
-          />
         </div>
       </div>
 
-      <ProductModal
-        isCreatingProduct={isCreatingProduct}
-        setIsCreatingProduct={setIsCreatingProduct}
-      />
+      <ProductModal isCreatingProduct={isCreatingProduct} setIsCreatingProduct={setIsCreatingProduct} />
 
-      <TopicModal
-        products={products}
-        isCreatingTopic={isCreatingTopic}
-        setIsCreatingTopic={setIsCreatingTopic}
-      />
+      <TopicModal products={products} isCreatingTopic={isCreatingTopic} setIsCreatingTopic={setIsCreatingTopic} />
     </div>
   );
 };
