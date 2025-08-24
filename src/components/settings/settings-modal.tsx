@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { Settings, Palette, User, Bell } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
-import { Card, CardContent, CardTitle } from "../ui/card";
 import clsx from "clsx";
+import { Bell, Palette, Settings, User } from "lucide-react";
+import { useState } from "react";
+import { Card, CardContent, CardTitle } from "../ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import SettingsUserAccount from "./settings-user-account";
 
 interface SettingsModalProps {
   isSettingsModalOpen: boolean;
@@ -24,15 +25,9 @@ export const SettingsModal = ({
   const [activeTab, setActiveTab] = useState("account");
 
   return (
-    <Dialog
-      open={isSettingsModalOpen}
-      onOpenChange={setIsSettingsModalOpen}
-      modal
-    >
+    <Dialog open={isSettingsModalOpen} onOpenChange={setIsSettingsModalOpen} modal>
       <DialogContent
-        {...(!closeOnOutsideClick
-          ? { onInteractOutside: (e) => e.preventDefault() }
-          : {})}
+        {...(!closeOnOutsideClick ? { onInteractOutside: (e) => e.preventDefault() } : {})}
         className="max-h-[83vh] min-h-[83vh] min-w-[88vw] md:min-w-[75vw] xl:min-w-[62vw] flex flex-col p-0 gap-0"
       >
         {/* HEADER */}
@@ -57,9 +52,7 @@ export const SettingsModal = ({
                       onClick={() => setActiveTab(key)}
                       className={clsx(
                         "flex items-center w-full px-3 py-2 rounded-md text-sm font-medium transition-colors",
-                        isActive
-                          ? "bg-accent text-accent-foreground shadow-sm"
-                          : "hover:bg-muted text-muted-foreground"
+                        isActive ? "bg-accent text-accent-foreground shadow-sm" : "hover:bg-muted text-muted-foreground"
                       )}
                     >
                       <Icon className="w-4 h-4 mr-2" />
@@ -77,37 +70,23 @@ export const SettingsModal = ({
                     {Array(30)
                       .fill(null)
                       .map((_, i) => (
-                        <p
-                          key={i}
-                          className="mb-2 text-sm text-muted-foreground"
-                        >
+                        <p key={i} className="mb-2 text-sm text-muted-foreground">
                           Pole {i + 1}
                         </p>
                       ))}
                   </div>
                 )}
-                {activeTab === "account" && (
-                  <div>
-                    <CardTitle className="mb-4">Konto</CardTitle>
-                    <p className="text-sm text-muted-foreground">
-                      Zarządzanie danymi konta...
-                    </p>
-                  </div>
-                )}
+                {activeTab === "account" && <SettingsUserAccount />}
                 {activeTab === "theme" && (
                   <div>
                     <CardTitle className="mb-4">Motyw</CardTitle>
-                    <p className="text-sm text-muted-foreground">
-                      Ustawienia wyglądu, kolory, tryb ciemny...
-                    </p>
+                    <p className="text-sm text-muted-foreground">Ustawienia wyglądu, kolory, tryb ciemny...</p>
                   </div>
                 )}
                 {activeTab === "notifications" && (
                   <div>
                     <CardTitle className="mb-4">Powiadomienia</CardTitle>
-                    <p className="text-sm text-muted-foreground">
-                      Zarządzaj ustawieniami powiadomień.
-                    </p>
+                    <p className="text-sm text-muted-foreground">Zarządzaj ustawieniami powiadomień.</p>
                   </div>
                 )}
               </section>

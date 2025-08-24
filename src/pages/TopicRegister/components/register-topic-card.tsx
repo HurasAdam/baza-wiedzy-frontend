@@ -1,4 +1,4 @@
-import { Box } from "lucide-react";
+import { Pin } from "lucide-react";
 import { Card, CardContent } from "../../../components/ui/card";
 import type { ITopic } from "../../../types/topic";
 import { RegisterTopicForm } from "../forms/register-topic-form";
@@ -17,7 +17,7 @@ const RegisterTopicCard = ({ topic }: RegisterTopicCardProps) => {
         className="absolute -left-8 top-1/2 transform -translate-y-1/2 rounded-sm h-7 w-7 flex items-center justify-center border shadow-sm transition-all duration-200 hover:shadow-md"
         style={{ backgroundColor: `${topic.product.labelColor}33` }}
       >
-        <Box className="w-4 h-4 text-foreground/80" />
+        <Pin className="w-4 h-4 text-foreground/80" />
       </div>
 
       <CardContent className="flex items-center justify-between px-4 py-1.5 w-full min-h-[40px]">
