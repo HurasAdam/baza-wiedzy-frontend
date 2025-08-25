@@ -46,8 +46,12 @@ export const updateRole = ({ roleId, payload }: { roleId: string; payload: RoleF
   return api.put(`${adminBaseUrl}/roles/${roleId}`, payload);
 };
 
-export const updateOne = (userId, payload) => {
-  return api.put(`${baseUrl}/${userId}`, payload);
+export const updateOneUser = (userId, payload) => {
+  return api.put(`${adminBaseUrl}${baseUrl}/${userId}/update`, payload);
+};
+
+export const updateMyProfile = (payload) => {
+  return api.put(`${baseUrl}/update-my-profile`, payload);
 };
 
 export const changeUserRole = (userId, roleId) => {
@@ -83,7 +87,8 @@ export const usersService = {
   createUserAccout,
   createRole,
   changeUserRole,
-  updateOne,
+  updateOneUser,
+  updateMyProfile,
   updateRole,
   findPermissions,
 };

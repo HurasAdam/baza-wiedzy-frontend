@@ -147,7 +147,15 @@ export const useCreateRoleMutation = () => {
 export const useUpdateUserMutation = () => {
   return useMutation({
     mutationFn: ({ userId, payload }: { userId: string; payload: EditUserInfoFormData }) => {
-      return usersService.updateOne(userId, payload);
+      return usersService.updateOneUser(userId, payload);
+    },
+  });
+};
+
+export const useUpdateMyProfileMutation = () => {
+  return useMutation({
+    mutationFn: ({ payload }: { userId: string; payload: EditUserInfoFormData }) => {
+      return usersService.updateMyProfile(payload);
     },
   });
 };

@@ -1,103 +1,127 @@
-import { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { BadgeCheck, CalendarCheck, CheckCircle, Mail, ShieldUser, XCircle } from "lucide-react";
 import queryClient from "../../config/query.client";
-import { Avatar } from "../ui/avatar";
-import { Button } from "../ui/button";
-import { CardTitle } from "../ui/card";
-import { Input } from "../ui/input";
+import { iconMap } from "../../constants/role-icons";
+import type { AuthUserData } from "../../types/user";
+import { formatDate } from "../../utils/format-date";
 
-interface FormValues {
-  name: string;
-  surname: string;
-  profilePicture?: string | null;
-}
+const SettingsAccountTab = () => {
+  const user = queryClient.getQueryData<AuthUserData>(["authUser"]);
 
-const SettingsUserAccount = () => {
-  const user = queryClient.getQueryData<any>(["authUser"]);
+  if (!user) {
+    return <p className="text-muted-foreground">Ładowanie danych konta...</p>;
+  }
 
-  const [avatarPreview, setAvatarPreview] = useState<string | undefined>(user?.profilePicture || undefined);
+  const RoleIcon = iconMap[user.role.iconKey] || null;
 
-  const { control, handleSubmit, reset, setValue } = useForm<FormValues>({
-    defaultValues: {
-      name: user?.name || "",
-      surname: user?.surname || "",
-      profilePicture: user?.profilePicture || null,
-    },
-  });
-
-  useEffect(() => {
-    if (user) {
-      reset({
-        name: user.name,
-        surname: user.surname,
-        profilePicture: user.profilePicture,
-      });
-      setAvatarPreview(user.profilePicture || undefined);
-    }
-  }, [user, reset]);
-
-  const onSubmit = (data: FormValues) => {
-    console.log("Zaktualizowane dane użytkownika:", data);
-
-    toast({
-      title: "Zapisano dane",
-      description: "Twoje dane konta zostały zaktualizowane.",
-    });
-
-    // Aktualizacja cache
-    queryClient.setQueryData(["authUser"], { ...user, ...data });
+  const Field = ({
+    icon: Icon,
+    label,
+    description,
+    value,
+  }: {
+    icon?: React.ElementType;
+    label: string;
+    description?: string;
+    value: React.ReactNode;
+  }) => {
+    return (
+      <div className="flex items-center justify-between p-4 rounded-lg border border-border hover:shadow-sm transition">
+        <div className="flex items-center gap-3">
+          {Icon && <Icon className="w-5 h-5 text-muted-foreground" />}
+          <div className="flex flex-col">
+            <span className="text-sm font-medium text-muted-foreground">{label}</span>
+            {description && <span className="text-xs text-muted-foreground mt-0.5">{description}</span>}
+          </div>
+        </div>
+        <div className="ml-4">
+          <Badge className="border flex items-center gap-2 px-2 py-1.5" variant="outline">
+            {" "}
+            {value}
+          </Badge>
+        </div>
+      </div>
+    );
   };
-
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setAvatarPreview(reader.result as string);
-      setValue("profilePicture", reader.result as string);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  if (!user) return <p className="text-muted-foreground">Ładowanie danych użytkownika...</p>;
 
   return (
-    <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-      <CardTitle>Konto</CardTitle>
+    <Card className="border-none shadow-none bg-transparent py-1">
+      <CardHeader>
+        <CardTitle className="text-lg font-semibold flex items-center gap-2">
+          <ShieldUser className="w-5 h-5 text-muted-foreground" />
+          Dane konta
+        </CardTitle>
+        <p className="text-sm text-muted-foreground">Podstawowe dane powiązane z Twoim kontem</p>
+      </CardHeader>
 
-      <div className="flex items-center gap-6">
-        <div className="relative">
-          <Avatar src={avatarPreview} alt={`${user.name} ${user.surname}`} size={50} />
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleAvatarChange}
-            className="absolute inset-0 opacity-0 cursor-pointer rounded-full"
-          />
-        </div>
+      <CardContent className="space-y-3">
+        <Field
+          icon={Mail}
+          label="Email"
+          description="Twój adres e-mail powiązany z kontem"
+          value={<span className="font-semibold text-foreground">{user.email}</span>}
+        />
 
-        <div className="flex flex-col flex-1 gap-3">
-          <Controller name="name" control={control} render={({ field }) => <Input {...field} placeholder="Imię" />} />
-          <Controller
-            name="surname"
-            control={control}
-            render={({ field }) => <Input {...field} placeholder="Nazwisko" />}
-          />
-        </div>
-      </div>
+        <Field
+          icon={BadgeCheck}
+          label="Rola"
+          description="Twoja aktualna rola w systemie"
+          value={
+            <div
+              className=" flex items-center gap-2 px-2 py-1"
+              style={{
+                backgroundColor: `${user.role.labelColor}20`,
+                color: user.role.labelColor,
+              }}
+            >
+              {RoleIcon && <RoleIcon className="w-4 h-4" />}
+              {user.role.name}
+            </div>
+          }
+        />
 
-      <div className="text-sm text-muted-foreground">Email: {user.email}</div>
-      <div className="text-xs text-muted-foreground">
-        Rola: {user.role?.name} | Ostatnie logowanie: {new Date(user.lastLogin).toLocaleString()}
-      </div>
+        <Field
+          icon={user.isActive ? CheckCircle : XCircle}
+          label="Status"
+          description="Czy Twoje konto jest aktywne"
+          value={
+            <div
+              className=""
+              style={{
+                color: user.isActive ? "#10B981" : "#EF4444",
+              }}
+            >
+              {user.isActive ? "Aktywne" : "Nieaktywne"}
+            </div>
+          }
+        />
 
-      <div className="flex justify-end">
-        <Button type="submit">Zapisz zmiany</Button>
-      </div>
-    </form>
+        <Field
+          icon={CheckCircle}
+          label="Zweryfikowane"
+          description="Czy Twój email został zweryfikowany"
+          value={
+            <div
+              className="px-2 py-1"
+              style={{
+                color: user.verified ? "#10B981" : "#EF4444",
+              }}
+            >
+              {user.verified ? "Tak" : "Nie"}
+            </div>
+          }
+        />
+
+        <Field
+          icon={CalendarCheck}
+          label="Utworzono"
+          description="Data utworzenia konta"
+          value={<div className="px-2 py-1">{formatDate(user.createdAt)}</div>}
+        />
+      </CardContent>
+    </Card>
   );
 };
 
-export default SettingsUserAccount;
+export default SettingsAccountTab;

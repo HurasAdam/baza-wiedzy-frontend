@@ -1,6 +1,7 @@
 import api from "@/config/api.client";
 import type { LoginFormData } from "@/pages/auth/login/Login-form";
 import { buildUrl } from "@/utils/build-url";
+import type { AuthUserData } from "../types/user";
 
 const BASE_URL = "/auth";
 
@@ -8,7 +9,7 @@ const login = ({ email, password }: LoginFormData) => {
   return api.post(`${BASE_URL}/login`, { email, password });
 };
 
-const verifyMe = () => {
+const verifyMe = (): Promise<AuthUserData> => {
   return api.get(`users/me`);
 };
 

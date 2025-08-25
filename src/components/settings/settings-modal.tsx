@@ -1,9 +1,10 @@
 import clsx from "clsx";
-import { Bell, Palette, Settings, User } from "lucide-react";
+import { Bell, Palette, Settings, ShieldUser, User } from "lucide-react";
 import { useState } from "react";
 import { Card, CardContent, CardTitle } from "../ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import SettingsUserAccount from "./settings-user-account";
+import SettingsUserProfile from "./settings-user-profile";
 
 interface SettingsModalProps {
   isSettingsModalOpen: boolean;
@@ -12,7 +13,8 @@ interface SettingsModalProps {
 }
 
 const tabs = [
-  { key: "account", label: "Konto", icon: User },
+  { key: "account", label: "Konto", icon: ShieldUser },
+  { key: "profile", label: "Profil", icon: User },
   { key: "theme", label: "Motyw", icon: Palette },
   { key: "notifications", label: "Powiadomienia", icon: Bell },
 ];
@@ -77,6 +79,7 @@ export const SettingsModal = ({
                   </div>
                 )}
                 {activeTab === "account" && <SettingsUserAccount />}
+                {activeTab === "profile" && <SettingsUserProfile />}
                 {activeTab === "theme" && (
                   <div>
                     <CardTitle className="mb-4">Motyw</CardTitle>
