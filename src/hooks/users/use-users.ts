@@ -160,6 +160,14 @@ export const useUpdateMyProfileMutation = () => {
   });
 };
 
+export const useUpdateMyAvatarMutation = () => {
+  return useMutation({
+    mutationFn: ({ payload }) => {
+      return usersService.updateMyAvatar(payload);
+    },
+  });
+};
+
 export const useUpdateRoleMutation = () => {
   return useMutation({
     mutationFn: ({ roleId, data }: { roleId: string; data: RoleFormData }) => {

@@ -33,6 +33,9 @@ const createUserAccout = (payload) => {
   return api.post(`${adminBaseUrl}/create-account`, payload);
 };
 
+const updateMyAvatar = (formData: FormData) => {
+  return api.post(`${baseUrl}/me/avatar`, formData);
+};
 export const createRole = (permissions: string[], name: string, iconKey: string, labelColor: string) => {
   return api.post(`${adminBaseUrl}/roles/create`, {
     permissions,
@@ -89,6 +92,7 @@ export const usersService = {
   changeUserRole,
   updateOneUser,
   updateMyProfile,
+  updateMyAvatar,
   updateRole,
   findPermissions,
 };

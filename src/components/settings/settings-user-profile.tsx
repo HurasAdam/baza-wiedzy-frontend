@@ -6,7 +6,7 @@ import { PenTool, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import queryClient from "../../config/query.client";
-import { useUpdateMyProfileMutation } from "../../hooks/users/use-users";
+import { useUpdateMyAvatarMutation, useUpdateMyProfileMutation } from "../../hooks/users/use-users";
 import type { AuthUserData } from "../../types/user";
 
 interface FormValues {
@@ -18,6 +18,8 @@ interface FormValues {
 const SettingsUserProfile = () => {
   const user = queryClient.getQueryData<AuthUserData>(["authUser"]);
   const { mutate } = useUpdateMyProfileMutation();
+  // destructurujemy isLoading żeby wiedzieć, czy trwa upload
+  const { mutate: updateAvatarMutate, isLoading: isUploading } = useUpdateMyAvatarMutation();
 
   const { control, handleSubmit, reset } = useForm<FormValues>({
     defaultValues: {
@@ -28,6 +30,7 @@ const SettingsUserProfile = () => {
   });
 
   const [avatar, setAvatar] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) {
@@ -39,9 +42,40 @@ const SettingsUserProfile = () => {
     }
   }, [user, reset]);
 
-  const onSubmit = (data: FormValues) => {
-    console.log("Zaktualizowany profil:", data);
+  useEffect(() => {
+    if (!avatar) {
+      setPreviewUrl(null);
+      return;
+    }
+    const url = URL.createObjectURL(avatar);
+    setPreviewUrl(url);
+    return () => {
+      URL.revokeObjectURL(url);
+      setPreviewUrl((current) => (current === url ? null : current));
+    };
+  }, [avatar]);
 
+  const onAvatarSave = (file: File) => {
+    const formData = new FormData();
+    formData.append("avatar", file);
+
+    updateAvatarMutate(
+      { payload: formData },
+      {
+        onSuccess: () => {
+          // odświeżamy cache i czyścimy lokalny podgląd
+          queryClient.invalidateQueries({ queryKey: ["authUser"] });
+          setAvatar(null);
+          setPreviewUrl(null);
+        },
+        onError: (err) => {
+          console.error("Avatar upload failed", err);
+        },
+      }
+    );
+  };
+
+  const onSubmit = (data: FormValues) => {
     mutate(
       { payload: data },
       {
@@ -80,21 +114,16 @@ const SettingsUserProfile = () => {
     </div>
   );
 
+  // Avatar URL to display:  local previe -->  backend URL
+  const backendBase = import.meta.env.VITE_BACKEND_BASE_URL ?? "http://localhost:5000";
+  const avatarUrl = previewUrl ?? (user.profilePicture ? `${backendBase}${user.profilePicture}` : null);
+
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setAvatar(e.target.files[0]);
-    }
-  };
+      const file = e.target.files[0];
 
-  const getAvatarDisplay = () => {
-    if (avatar) {
-      return URL.createObjectURL(avatar);
+      setAvatar(file);
     }
-    if (user.avatarUrl) {
-      return user.avatarUrl;
-    }
-    // Domyślny avatar z pierwszą literą imienia
-    return null;
   };
 
   return (
@@ -113,18 +142,34 @@ const SettingsUserProfile = () => {
         <CardContent className="space-y-4">
           {/* Avatar */}
           <div className="flex items-center gap-6 mb-4">
-            <div className="relative w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center text-2xl font-semibold text-gray-600 overflow-hidden">
-              {getAvatarDisplay() ? (
-                <img src={getAvatarDisplay()!} alt="Avatar" className="w-full h-full object-cover" />
+            <div className="border border-muted-foreground relative w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center text-2xl font-semibold text-gray-600 overflow-hidden">
+              {avatarUrl ? (
+                <img
+                  src={avatarUrl}
+                  alt="Avatar"
+                  className="w-full h-full object-cover"
+                  crossOrigin="anonymous"
+                  onError={(e) => {
+                    console.error("IMG load failed, src=", (e.currentTarget as HTMLImageElement).src);
+                    (e.currentTarget as HTMLImageElement).src = "/fallback-avatar.png";
+                  }}
+                />
               ) : (
                 <span>{user.name?.charAt(0).toUpperCase() || "U"}</span>
               )}
             </div>
+
             <div>
-              <label className="cursor-pointer text-sm text-primary hover:underline">
+              <label className="cursor-pointer text-sm text-primary hover:underline mr-4">
                 Zmień avatar
                 <input type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
               </label>
+
+              {avatar ? (
+                <Button type="button" onClick={() => onAvatarSave(avatar)} size="sm" disabled={isUploading}>
+                  {isUploading ? "Wysyłanie..." : "Zapisz avatar"}
+                </Button>
+              ) : null}
             </div>
           </div>
 
