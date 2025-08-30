@@ -2,6 +2,7 @@ import {
   DownloadIcon,
   FileIcon,
   FileTextIcon,
+  FolderDown,
   ImageIcon,
   LinkIcon,
   Loader,
@@ -68,7 +69,6 @@ const ArticleAttachmentsTab = () => {
   const { id } = useParams<{ id: string }>();
   const [pendingAction, setPendingAction] = useState<PendingAction | null>();
   const [isArticleAttachmentModalOpen, setIsArticleAttachmentModalOpen] = useState<boolean>(false);
-  console.log(pendingAction);
 
   const { data: attachments = [], isLoading: isAttachmentsListLoading } = useFindArticleAttachmentsQuery(id!);
   const { mutate: deleteSelectedArticleAttachmentMutate, isPending: isArticleAttachmentDeleteLoading } =
@@ -95,10 +95,29 @@ const ArticleAttachmentsTab = () => {
     });
   };
 
+  const handleDownload = async (attachment: AttachmentListItem) => {
+    try {
+      const response = await fetch(getAttachmentUrl(attachment));
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = attachment.filename;
+      document.body.appendChild(a);
+      a.click(); // wywołanie pobrania
+      a.remove();
+      window.URL.revokeObjectURL(url); // sprzątanie
+    } catch (err) {
+      console.error("Błąd pobierania pliku:", err);
+    }
+  };
   return (
     <div>
       <div className="flex items-center justify-between py-3 px-4 border-b">
-        <h3 className="text-sm font-semibold">Lista załączników</h3>
+        <h3 className="text-sm font-semibold flex items-center gap-2">
+          <FolderDown className="w-5 h-5" /> Załączone pliki
+        </h3>
         <Button onClick={openAttachmentModal} size="sm">
           <UploadIcon className="w-4 h-4 mr-2" />
           Dodaj załącznik
@@ -146,10 +165,21 @@ const ArticleAttachmentsTab = () => {
                       className="group hover:text-primary"
                       size="sm"
                       variant="outline"
-                      onClick={() => window.open(getAttachmentUrl(file), "_blank")}
+                      onClick={() => handleDownload(file)}
                     >
                       <DownloadIcon className="w-4 h-4 mr-1 group-hover:text-primary" />
                       Pobierz
+                    </Button>
+
+                    {/* Otwórz w nowej karcie */}
+                    <Button
+                      className="group hover:text-primary"
+                      size="sm"
+                      variant="outline"
+                      onClick={() => window.open(getAttachmentUrl(file), "_blank")}
+                    >
+                      <FileIcon className="w-4 h-4 mr-1 group-hover:text-primary" />
+                      Otwórz
                     </Button>
 
                     <DropdownMenu>
@@ -159,8 +189,11 @@ const ArticleAttachmentsTab = () => {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-40">
-                        <DropdownMenuItem onClick={() => window.open(getAttachmentUrl(file), "_blank")}>
+                        <DropdownMenuItem onClick={() => handleDownload(file)}>
                           <DownloadIcon className="w-4 h-4 mr-2" /> Pobierz
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => window.open(getAttachmentUrl(file), "_blank")}>
+                          <FileIcon className="w-4 h-4 mr-2" /> Otwórz
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() => copyAttachmnentUrl(file, () => toast.success("Link skopiowany!"))}

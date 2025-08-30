@@ -137,7 +137,7 @@ const SettingsUserProfile = () => {
         <CardContent className="space-y-4">
           <div className="flex items-center gap-6 mb-4">
             <Avatar className="w-20 h-20">
-              <AvatarImage src={avatarUrl} alt="Avatar" crossOrigin="anonymous" />
+              <AvatarImage className="object-cover" src={avatarUrl} alt="Avatar" crossOrigin="anonymous" />
 
               <AvatarFallback className="bg-muted text-foreground">
                 {(user.name?.[0] || "") + (user.surname?.[0] || "U")}

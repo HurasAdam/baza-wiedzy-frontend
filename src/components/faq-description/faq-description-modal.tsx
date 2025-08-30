@@ -52,7 +52,7 @@ export const FaqDescriptionModal = ({
       >
         <DialogHeader className="space-y-2">
           <DialogTitle className="text-xl font-bold tracking-tight flex flex-col gap-1">
-            Szczegóły FAQ <span className=" text-sm text-muted-foreground">{descriptionContent.title}</span>
+            Szczegóły FAQ <span className=" text-sm text-muted-foreground mt-5 mb-3">{descriptionContent.title}</span>
           </DialogTitle>
 
           {/* --- Description ---*/}
@@ -66,11 +66,45 @@ export const FaqDescriptionModal = ({
 
         {/* --- Author --- */}
         <div className="flex items-center gap-3 px-1.5 pb-2 bg-muted/10 rounded-lg ">
-          <Avatar className="w-20 h-20">
-            <AvatarImage src={avatarUrl} alt="Avatar" crossOrigin="anonymous" />
+          <Avatar className="w-14 h-14 ">
+            <AvatarImage
+              className="object-cover"
+              src={
+                descriptionContent.createdBy?.profilePicture
+                  ? `${
+                      import.meta.env.VITE_BACKEND_BASE_URL ?? "http://localhost:5000"
+                    }${descriptionContent.createdBy.profilePicture.replace(/^\/app/, "")}`
+                  : ""
+              }
+              alt="Avatar"
+              crossOrigin="anonymous"
+            />
 
-            <AvatarFallback className="bg-muted text-foreground">{authorName || "U"}</AvatarFallback>
+            <AvatarFallback className="bg-primary/25 text-primary">
+              {descriptionContent.createdBy?.name[0]}
+              {descriptionContent.createdBy?.name[0]}
+            </AvatarFallback>
           </Avatar>
+
+          {/* <Avatar className="w-14 h-14 ">
+                  <AvatarImage
+                    className="object-cover"
+                    src={
+                      attachment.uploadedBy?.profilePicture
+                        ? `${
+                            import.meta.env.VITE_BACKEND_BASE_URL ?? "http://localhost:5000"
+                          }${attachment.uploadedBy.profilePicture.path.replace(/^\/app/, "")}`
+                        : ""
+                    }
+                    alt="Avatar"
+                    crossOrigin="anonymous"
+                  />
+                  <AvatarFallback className="bg-primary/25 text-primary">
+                    {descriptionContent.createdBy?.name.[0]}
+                    {descriptionContent.createdBy?.name.[0]}
+                  </AvatarFallback>
+                </Avatar> */}
+
           <div className="flex flex-col">
             <span className="font-semibold text-foreground text-sm">{authorName || "Nieznany autor"}</span>
             <span className="flex items-center gap-1 text-xs text-muted-foreground">

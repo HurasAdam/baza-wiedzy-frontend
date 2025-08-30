@@ -66,8 +66,8 @@ const Header = ({ onOpenSettingsModal, onCreateWorkspace, onOpenCreateIssueRepor
         <div>
           <div className="flex items-center mr-4 pb-2 hover:bg-transparent">
             {/* Avatar */}
-            <Avatar className="h-7.5 w-7.5 ">
-              <AvatarImage src={avatarUrl} alt="Avatar" crossOrigin="anonymous" />
+            <Avatar className="h-9 w-9 ">
+              <AvatarImage className="object-cover" src={avatarUrl} alt="Avatar" crossOrigin="anonymous" />
               <AvatarFallback className="text-base font-sembibold bg-primary text-primary-foreground">
                 {initials}
               </AvatarFallback>
@@ -165,13 +165,13 @@ const Header = ({ onOpenSettingsModal, onCreateWorkspace, onOpenCreateIssueRepor
             options={profileMenuOptions}
             triggerBtn={
               <div className="rounded-full flex items-center gap-0.5 cursor-pointer bg-muted/90 py-1 px-1.5 hover:bg-muted ml-0.5">
-                <Avatar className="size-6.5 ">
-                  <AvatarImage src={avatarUrl} alt={user?.name} crossOrigin="anonymous" />
+                <Avatar className="size-7 ">
+                  <AvatarImage className="object-cover" src={avatarUrl} alt={user?.name} crossOrigin="anonymous" />
                   <AvatarFallback className="text-base font-sembibold bg-primary text-primary-foreground">
                     {initials}
                   </AvatarFallback>
                 </Avatar>
-                <ChevronDown className="chevron-icon h-4 w-4" />
+                <ChevronDown className="chevron-icon h-3.5 w-3.5" />
               </div>
             }
           />

@@ -10,9 +10,9 @@ import {
   ChevronsRight,
   Clipboard,
   HeartIcon,
+  Info,
   Layers,
   LayoutDashboard,
-  LogOut,
   RectangleEllipsis,
   School,
   Smile,
@@ -87,7 +87,8 @@ const navItems = [
     icon: Smile,
   },
 ];
-
+const APP_VERSION = import.meta.env.VITE_APP_VERSION;
+const isBeta = APP_VERSION?.toLowerCase().includes("beta");
 export const Sidebar = ({ currentWorkspace }: { currentWorkspace?: Workspace | null }) => {
   //   const { user, logout } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -147,11 +148,17 @@ export const Sidebar = ({ currentWorkspace }: { currentWorkspace?: Workspace | n
       <div className="flex justify-center">
         <ThemeToggle />
       </div>
-      <div>
-        <Button variant={"ghost"} size={isCollapsed ? "icon" : "default"} onClick={onLogout}>
-          <LogOut className={cn("size-4", isCollapsed && "mr-2")} />
-          <span className="hidden md:block">Logout</span>
-        </Button>
+
+      <div className="flex flex-col items-center py-4 mt-auto text-xs text-muted-foreground">
+        <span className="flex items-center gap-1 cursor-help">
+          <Info className="w-4 h-4" />
+          <span className="flex items-center gap-1">
+            v{APP_VERSION}
+            {isBeta && (
+              <span className=" bg-yellow-400 text-black text-[10px] px-1 py-0.5 rounded font-medium ">Beta</span>
+            )}
+          </span>
+        </span>
       </div>
     </div>
   );

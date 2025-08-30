@@ -58,6 +58,7 @@ export const AdminUserDetailsPage = () => {
           <div className="flex items-center gap-3">
             <Avatar className="w-18 h-18  ">
               <AvatarImage
+                className="object-cover"
                 src={
                   faq.profilePicture?.path
                     ? `${backendBase}${faq.profilePicture.path.replace(/^\/app/, "")}`

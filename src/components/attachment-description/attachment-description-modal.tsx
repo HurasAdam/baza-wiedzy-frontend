@@ -75,6 +75,7 @@ export const AttachmentDescriptionModal = ({
               <section className="flex items-center gap-4 mb-4 p-3 bg-popover/30 rounded-lg border border-border">
                 <Avatar className="w-14 h-14 ">
                   <AvatarImage
+                    className="object-cover"
                     src={
                       attachment.uploadedBy?.profilePicture
                         ? `${

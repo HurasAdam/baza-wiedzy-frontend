@@ -14,6 +14,7 @@ export const findArticleAttachments = async (articleId: string): Promise<Attachm
 export const findOneArticleAttachment = async (articleId: string, attachmentId: string): Promise<ArticleAttachment> => {
   return API.get(`${baseUrl}/${articleId}/attachment/${attachmentId}`);
 };
+
 export const deleteSelectedArticleAttachment = async (attachmentId: string) => {
   return API.delete(`${baseUrl}/${attachmentId}`);
 };

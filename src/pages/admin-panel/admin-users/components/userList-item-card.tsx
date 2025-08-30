@@ -122,7 +122,7 @@ const UserListItemCard = ({ user, onRequestResetPassword, onRequestAccountStatus
     >
       {/* Avatar */}
       <Avatar className="w-18 h-18 rounded-md">
-        <AvatarImage src={avatarUrl} alt="Avatar" crossOrigin="anonymous" />
+        <AvatarImage className="object-cover" src={avatarUrl} alt="Avatar" crossOrigin="anonymous" />
 
         <AvatarFallback className="bg-muted text-foreground w-18 h-18 rounded-md">
           {(user.name?.[0] || "") + (user.surname?.[0] || "U")}
