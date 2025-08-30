@@ -1,7 +1,6 @@
 import {
   ArrowLeft,
   CheckCircleIcon,
-  DownloadIcon,
   EyeIcon,
   FileIcon,
   FileImageIcon,
@@ -14,7 +13,7 @@ import {
   XCircleIcon,
 } from "lucide-react";
 import { useMemo, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { PendingArticleRejectionModal } from "../../components/pending-articles/pending-article-rejection-modal";
 import { Alert } from "../../components/shared/alert-modal";
@@ -30,8 +29,10 @@ import {
   useRejectArticleMutation,
 } from "../../hooks/articles/use-articles";
 import { cn } from "../../lib/utils";
-import { generateMockHistory, getEventConfig } from "../../utils/article-event";
+import { generateMockHistory } from "../../utils/article-event";
 import { EditArticlePage } from "../edit-article/EditArticlePage";
+import ArticleAttachmentsTab from "./components/ArticleAttachmentsTab";
+import ArticleHistoryTab from "./components/ArticleHistoryTab";
 import { ArticleVerificationBanner } from "./components/ArticleVerificationBanner";
 import { RejectedArticleBanner } from "./components/RejectedArticleBanner";
 import { ArticlePageSkeleton } from "./skeleton/ArticlePageSkeleton";
@@ -337,82 +338,11 @@ export const ArticlePage = () => {
         </TabsContent>
 
         <TabsContent value="attachments">
-          <Card className="mt-6">
-            <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
-              {[].map((file) => (
-                <div
-                  key={file._id}
-                  className="border rounded-xl p-4 flex flex-col items-center text-center bg-muted/50 hover:bg-muted transition-colors"
-                >
-                  {getFileIcon(file.type)}
-                  <p className="text-sm font-medium mt-2 line-clamp-2">{file.name}</p>
-                  <Button
-                    className="mt-3 w-full"
-                    size="sm"
-                    variant="secondary"
-                    onClick={() => window.open(file.url, "_blank")}
-                  >
-                    <DownloadIcon className="w-4 h-4 mr-1" /> Pobierz
-                  </Button>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+          <ArticleAttachmentsTab />
         </TabsContent>
 
         <TabsContent value="history">
-          <Card className="mt-6 bg-transparent shadow-none pr-4">
-            <CardContent className="p-0">
-              <ul className="relative border-l-2 border-border">
-                {mockHistory.map((item) => {
-                  const { Icon, bgClass } = getEventConfig(item.type);
-
-                  return (
-                    <li key={item.id} className="mb-3 ml-8">
-                      {/* Ikona na osi czasu */}
-                      <span
-                        className={`
-                  absolute -left-4 flex items-center justify-center
-                  w-8 h-8 ${bgClass} rounded-full
-                  ring-4 ring-background shadow-lg
-                `}
-                      >
-                        <Icon className="w-4 h-4 text-primary-foreground" />
-                      </span>
-
-                      {/* Karta */}
-                      <div className="relative bg-card p-4 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-200">
-                        <div className="flex justify-between items-start mb-1">
-                          {/* Event action + user */}
-                          <div className="flex flex-col">
-                            {/* Akcja (np. "Edycja artykułu") */}
-                            <div className="flex items-center space-x-1 text-sm font-medium text-foreground">
-                              <Icon className="w-4 h-4" />
-                              <span>{item.action}</span>
-                            </div>
-                            {/* Nazwisko niżej, mniejsze */}
-                            <span className="mt-1 text-xs text-muted-foreground">{item.user}</span>
-                          </div>
-
-                          {/* Data i szczegóły */}
-                          <div className="flex items-center space-x-2">
-                            <time className="text-xs text-muted-foreground">{item.date}</time>
-                            <Link
-                              to={`/articles/${article._id}/history/${item.id}`}
-                              className="text-primary text-sm hover:text-primary/80"
-                              aria-label="Zobacz szczegóły"
-                            >
-                              →
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </CardContent>
-          </Card>
+          <ArticleHistoryTab />
         </TabsContent>
 
         <TabsContent value="edit">
