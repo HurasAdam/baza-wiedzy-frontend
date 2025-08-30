@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Loader, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Avatar } from "../../../components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../../../components/ui/avatar";
 import { useFindUser } from "../../../hooks/users/use-users";
 import ProductTabCard from "../admin-product-details/components/ProductTabCard";
 import { UserArticlesTab } from "./components/UserArticlesTab";
@@ -11,7 +11,7 @@ import { UserInfoTab } from "./components/UserInfoTab";
 export const AdminUserDetailsPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-
+  const backendBase = import.meta.env.VITE_BACKEND_BASE_URL ?? "http://localhost:5000";
   //   const { data: faq, isLoading: isProductLoading } = useFindFaqQuery(id!);
   const { data: faq, isLoading: isProductLoading } = useFindUser(id!);
 
@@ -56,8 +56,17 @@ export const AdminUserDetailsPage = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between px-6 py-4 gap-4">
           <div className="flex items-center gap-3">
-            <Avatar className="w-13 h-13 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xl font-semibold">
-              {faq.name[0]}
+            <Avatar className="w-18 h-18  ">
+              <AvatarImage
+                src={
+                  faq.profilePicture?.path
+                    ? `${backendBase}${faq.profilePicture.path.replace(/^\/app/, "")}`
+                    : undefined
+                }
+                alt={`${faq.name} ${faq.surname}`}
+                crossOrigin="anonymous"
+              />
+              <AvatarFallback>{(faq.name?.[0] || "") + (faq.surname?.[0] || "U")}</AvatarFallback>
             </Avatar>
 
             <h1 className="text-2xl font-bold">

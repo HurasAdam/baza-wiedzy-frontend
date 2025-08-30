@@ -1,6 +1,7 @@
 import { CalendarDays } from "lucide-react";
 import type { Faq } from "../../types/faq";
 import { formatDate } from "../../utils/format-date";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Separator } from "../ui/separator";
 
@@ -38,6 +39,11 @@ export const FaqDescriptionModal = ({
         .join("")
     : "?";
 
+  const backendBase = import.meta.env.VITE_BACKEND_BASE_URL ?? "http://localhost:5000";
+  const avatarUrl = descriptionContent.createdBy?.profilePicture?.path
+    ? `${backendBase}${descriptionContent.createdBy.profilePicture.path.replace(/^\/app/, "")}`
+    : null;
+
   return (
     <Dialog open={isFaqItemDescriptionModalOpen} onOpenChange={handleOpenChange} modal={true}>
       <DialogContent
@@ -60,9 +66,11 @@ export const FaqDescriptionModal = ({
 
         {/* --- Author --- */}
         <div className="flex items-center gap-3 px-1.5 pb-2 bg-muted/10 rounded-lg ">
-          <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-lg font-bold text-primary">
-            {initials}
-          </div>
+          <Avatar className="w-20 h-20">
+            <AvatarImage src={avatarUrl} alt="Avatar" crossOrigin="anonymous" />
+
+            <AvatarFallback className="bg-muted text-foreground">{authorName || "U"}</AvatarFallback>
+          </Avatar>
           <div className="flex flex-col">
             <span className="font-semibold text-foreground text-sm">{authorName || "Nieznany autor"}</span>
             <span className="flex items-center gap-1 text-xs text-muted-foreground">

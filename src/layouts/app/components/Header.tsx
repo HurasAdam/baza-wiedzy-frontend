@@ -27,7 +27,7 @@ import { getAvatarFallbackText } from "@/utils/avatar";
 import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-
+const backendBase = import.meta.env.VITE_BACKEND_BASE_URL ?? "http://localhost:5000";
 interface HeaderProps {
   onCreateWorkspace: () => void;
   onOpenCreateIssueReport: () => void;
@@ -35,16 +35,16 @@ interface HeaderProps {
 }
 
 const workspaces = [];
-const Header = ({
-  onOpenSettingsModal,
-  onCreateWorkspace,
-  onOpenCreateIssueReport,
-}: HeaderProps) => {
+const Header = ({ onOpenSettingsModal, onCreateWorkspace, onOpenCreateIssueReport }: HeaderProps) => {
   const { data: user } = useAuthQuery();
 
   const initials = getAvatarFallbackText(user?.name);
   const navigate = useNavigate();
 
+  const avatarUrl = user.profilePicture?.path
+    ? `${backendBase}${user.profilePicture.path.replace(/^\/app/, "")}`
+    : null;
+  console.log("UR", avatarUrl);
   const { mutate, isPending } = useLogoutMutation();
 
   const onLogout = () => {
@@ -66,8 +66,8 @@ const Header = ({
         <div>
           <div className="flex items-center mr-4 pb-2 hover:bg-transparent">
             {/* Avatar */}
-            <Avatar className="h-7.5 w-7.5 bg-primary ">
-              <AvatarImage src={user} alt={user?.name} />
+            <Avatar className="h-7.5 w-7.5 ">
+              <AvatarImage src={avatarUrl} alt="Avatar" crossOrigin="anonymous" />
               <AvatarFallback className="text-base font-sembibold bg-primary text-primary-foreground">
                 {initials}
               </AvatarFallback>
@@ -117,10 +117,7 @@ const Header = ({
 
             <DropdownMenuGroup>
               {workspaces.map((ws) => (
-                <DropdownMenuItem
-                  key={ws._id}
-                  onClick={() => onWorkspaceSelected(ws)}
-                >
+                <DropdownMenuItem key={ws._id} onClick={() => onWorkspaceSelected(ws)}>
                   {ws.color && (
                     // <WorkspaceAvatar color={ws.color} name={ws.name} />
                     <div className="border bg-orange-600">OK</div>
@@ -141,23 +138,13 @@ const Header = ({
 
         <div className="flex items-center gap-2">
           {/* FEEDBACK BUTTON */}
-          <Button
-            onClick={onOpenCreateIssueReport}
-            variant="outline"
-            size="sm"
-            className="relative mr-4"
-          >
+          <Button onClick={onOpenCreateIssueReport} variant="outline" size="sm" className="relative mr-4">
             🐞 Zgłoś problem
             <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-[10px] px-1 py-0.5 rounded">
               Beta
             </span>
           </Button>
-          <Button
-            onClick={() => navigate("articles/new")}
-            className="cursor-pointer"
-            variant="ghost"
-            size="icon"
-          >
+          <Button onClick={() => navigate("articles/new")} className="cursor-pointer" variant="ghost" size="icon">
             <LucideCircleFadingPlus />
           </Button>
           <Button className="cursor-pointer" variant="ghost" size="icon">
@@ -178,8 +165,8 @@ const Header = ({
             options={profileMenuOptions}
             triggerBtn={
               <div className="rounded-full flex items-center gap-0.5 cursor-pointer bg-muted/90 py-1 px-1.5 hover:bg-muted ml-0.5">
-                <Avatar className="size-6.5 bg-primary">
-                  <AvatarImage src={user} alt={user?.name} />
+                <Avatar className="size-6.5 ">
+                  <AvatarImage src={avatarUrl} alt={user?.name} crossOrigin="anonymous" />
                   <AvatarFallback className="text-base font-sembibold bg-primary text-primary-foreground">
                     {initials}
                   </AvatarFallback>
