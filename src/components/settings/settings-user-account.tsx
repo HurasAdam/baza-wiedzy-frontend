@@ -27,7 +27,7 @@ const SettingsAccountTab = () => {
     value: React.ReactNode;
   }) => {
     return (
-      <div className="flex items-center justify-between p-4 rounded-lg border border-border hover:shadow-sm transition">
+      <div className="flex items-center justify-between p-4 rounded-lg border  bg-input/30 hover:shadow-sm transition">
         <div className="flex items-center gap-3">
           {Icon && <Icon className="w-5 h-5 text-muted-foreground" />}
           <div className="flex flex-col">

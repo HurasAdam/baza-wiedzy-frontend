@@ -16,13 +16,7 @@ interface SidebarNavProps extends React.HtmlHTMLAttributes<HTMLElement> {
   className?: string;
 }
 
-export const SidebarNav = ({
-  items,
-  isCollapsed,
-  className,
-  currentWorkspace,
-  ...props
-}: SidebarNavProps) => {
+export const SidebarNav = ({ items, isCollapsed, className, currentWorkspace, ...props }: SidebarNavProps) => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -30,9 +24,7 @@ export const SidebarNav = ({
     <nav className={cn("flex flex-col gap-y-2", className)} {...props}>
       {items.map((el) => {
         const Icon = el.icon;
-        const isActive =
-          location.pathname === el.href ||
-          location.pathname.startsWith(el.href + "/");
+        const isActive = location.pathname === el.href || location.pathname.startsWith(el.href + "/");
 
         const handleClick = () => {
           if (el.href === "/workspaces") {
@@ -50,16 +42,12 @@ export const SidebarNav = ({
             variant={isActive ? "outline" : "ghost"}
             className={cn(
               "justify-start",
-              isActive && "bg-primary/25 text-sidebar-primary font-medium "
+              isActive && "bg-sidebar-primary text-sidebar-primary-foreground font-medium  "
             )}
             onClick={handleClick}
           >
             <Icon className="mr-2 size-4" />
-            {isCollapsed ? (
-              <span className="sr-only">{el.title}</span>
-            ) : (
-              el.title
-            )}
+            {isCollapsed ? <span className="sr-only">{el.title}</span> : el.title}
           </Button>
         );
       })}

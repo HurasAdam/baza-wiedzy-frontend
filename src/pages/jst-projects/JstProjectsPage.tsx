@@ -6,13 +6,7 @@ import { JstSchoolModal } from "../../components/jst-school/jst-school-modal";
 import EmptyState from "../../components/shared/EmptyState";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
 import { useFindJstProjectsQuery } from "../../hooks/jst-projects/use-jst-projects";
 import { useFindJstSchoolsQuery } from "../../hooks/jst-schools/use-jst-schools";
 import type { IJstProject, IJstSchool } from "../../types";
@@ -31,8 +25,7 @@ const placeholderMap: Record<FilterField, string> = {
 
 export const JstProjectsPage = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [isCreatingJstSchool, setIsCreatingJstSchool] =
-    useState<boolean>(false);
+  const [isCreatingJstSchool, setIsCreatingJstSchool] = useState<boolean>(false);
 
   const params = useMemo(() => {
     const searchParams = new URLSearchParams();
@@ -40,18 +33,16 @@ export const JstProjectsPage = () => {
     return searchParams;
   }, [searchTerm]);
 
-  const [isCreatingJstProject, setIsCreatingJstProject] =
-    useState<boolean>(false);
+  const [isCreatingJstProject, setIsCreatingJstProject] = useState<boolean>(false);
 
-  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
-    null
-  );
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [filterField, setFilterField] = useState<FilterField>("name");
   const [filterQuery, setFilterQuery] = useState("");
 
   const { data: projects = [], isLoading } = useFindJstProjectsQuery(params);
-  const { data: schools = [], isLoading: isSchoolsLoading } =
-    useFindJstSchoolsQuery(selectedProjectId, { [filterField]: filterQuery });
+  const { data: schools = [], isLoading: isSchoolsLoading } = useFindJstSchoolsQuery(selectedProjectId, {
+    [filterField]: filterQuery,
+  });
 
   useEffect(() => {
     if (projects.length && !selectedProjectId) {
@@ -107,10 +98,7 @@ export const JstProjectsPage = () => {
   ];
 
   const triggerBtn = (
-    <Button
-      variant="default"
-      className="flex items-center gap-1 cursor-pointer"
-    >
+    <Button variant="default" className="flex items-center gap-1 cursor-pointer">
       Dodaj <Plus className="w-4 h-4" />
     </Button>
   );
@@ -123,11 +111,7 @@ export const JstProjectsPage = () => {
             <School className="w-6 h-6" /> Szkoły projektowe
           </h1>
 
-          <Dropdown
-            triggerBtn={triggerBtn}
-            options={dropdownOptions}
-            position={{ align: "end" }}
-          />
+          <Dropdown triggerBtn={triggerBtn} options={dropdownOptions} position={{ align: "end" }} />
           {/* Tabs */}
         </div>
         <div className="flex flex-wrap gap-2 border-b mb-8">
@@ -158,13 +142,13 @@ export const JstProjectsPage = () => {
               Wyszukaj szkołę
             </div>
             <Select value={filterField} onValueChange={setFilterField}>
-              <SelectTrigger className="w-36">
+              <SelectTrigger className="w-36 border-ring bg-input">
                 <SelectValue placeholder="Kryterium" />
               </SelectTrigger>
               <SelectContent className="bg-card">
                 {filterOptions.map(({ value, label, icon }) => (
                   <SelectItem key={value} value={value} className="bg-card">
-                    <div className="flex items-center py-0.5 text-foreground ">
+                    <div className="flex items-center py-0.5  hover:text-primary-foreground ">
                       {icon}
                       {label}
                     </div>
@@ -173,21 +157,19 @@ export const JstProjectsPage = () => {
               </SelectContent>
             </Select>
             <Input
-              className="flex-1 outline-none ring-0 focus:ring-0"
+              className="flex-1 outline-none ring-0 focus:ring-0 border-ring bg-input"
               placeholder={placeholderMap[filterField]}
               value={filterQuery}
               onChange={(e) => setFilterQuery(e.target.value)}
             />
             <Button
-              variant={
-                filterQuery || filterField !== "name" ? "default" : "outline"
-              }
+              variant={filterQuery || filterField !== "name" ? "default" : "outline"}
               disabled={!filterQuery && filterField === "name"}
               onClick={() => {
                 setFilterField("name");
                 setFilterQuery("");
               }}
-              className="ml-2 text-secondary-foreground"
+              className="ml-2 text-primary-foreground"
             >
               Resetuj
             </Button>
@@ -220,10 +202,7 @@ export const JstProjectsPage = () => {
         setIsCreatingJstSchool={setIsCreatingJstSchool}
       />
 
-      <JstProjectModal
-        isCreatingJstProject={isCreatingJstProject}
-        setIsCreatingJstProject={setIsCreatingJstProject}
-      />
+      <JstProjectModal isCreatingJstProject={isCreatingJstProject} setIsCreatingJstProject={setIsCreatingJstProject} />
     </div>
   );
 };

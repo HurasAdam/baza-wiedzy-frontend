@@ -1,59 +1,19 @@
-import {
-  CloudUpload,
-  Info,
-  Link,
-  Loader,
-  MessageCircle,
-  Paperclip,
-  Pencil,
-  Plus,
-  Trash2,
-} from "lucide-react";
+import { CloudUpload, Info, Link, Loader, MessageCircle, Paperclip, Pencil, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import type { SelectOption } from "../../pages/create-article/CreateArticlePage";
 import type { Article } from "../../types/article";
 import { type ArticleFormData } from "../../validation/article.schema";
-import {
-  FileInput,
-  FileUploader,
-  FileUploaderContent,
-  FileUploaderItem,
-} from "../shared/fileUploader";
+import { FileInput, FileUploader, FileUploaderContent, FileUploaderItem } from "../shared/fileUploader";
 import MultipleSelector from "../shared/multiple-selector";
 import { RequiredLabel } from "../shared/required-label";
 import { Button } from "../ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Textarea } from "../ui/textarea";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 
 const dropZoneConfig = {
   maxFiles: 5,
@@ -68,10 +28,7 @@ interface ArticleFormProps {
   products: SelectOption[];
   categories: SelectOption[];
   onCreate?: (payload: { formData: ArticleFormData }) => void;
-  onUpdate?: (payload: {
-    articleId: string;
-    formData: ArticleFormData;
-  }) => void;
+  onUpdate?: (payload: { articleId: string; formData: ArticleFormData }) => void;
   className?: string;
   onProductChange: (productId: string) => void;
   loadingCategories: boolean;
@@ -101,10 +58,7 @@ const ArticleForm = ({
   return (
     <Form {...form}>
       <TooltipProvider>
-        <form
-          onSubmit={form.handleSubmit(form.handleSubmit)}
-          className={`flex flex-col gap-6 ${className}`}
-        >
+        <form onSubmit={form.handleSubmit(form.handleSubmit)} className={`flex flex-col gap-6 ${className}`}>
           {/* Nagłówek z tytułem i przyciskami */}
           <Card className="p-6">
             <CardHeader>
@@ -123,9 +77,7 @@ const ArticleForm = ({
                     className="max-w-xs  bg-background border border-borderrounded-lg p-4 shadow-lg"
                   >
                     <div className="space-y-2">
-                      <h4 className="m-0 text-sm font-semibold">
-                        Wymogi nazwy
-                      </h4>
+                      <h4 className="m-0 text-sm font-semibold">Wymogi nazwy</h4>
                       <ul className="list-disc pl-5 pt-1.5 space-y-1 text-xs text-muted-foreground leading-snug">
                         <li>Unikalna w całym systemie</li>
                         <li>Czytelna i opisowa</li>
@@ -149,6 +101,7 @@ const ArticleForm = ({
                     </FormLabel>
                     <FormControl>
                       <Input
+                        className="border-ring bg-input/30"
                         placeholder="Wprowadź tytuł artykułu..."
                         type="text"
                         {...field}
@@ -181,9 +134,7 @@ const ArticleForm = ({
           <Card className="p-6 space-y-6">
             <CardHeader className="flex items-center gap-2">
               <Info className="w-5 h-5 text-primary/90" />
-              <CardTitle className="text-lg font-semibold">
-                Uwagi i opis dla pracownika
-              </CardTitle>
+              <CardTitle className="text-lg font-semibold">Uwagi i opis dla pracownika</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <FormField
@@ -197,13 +148,11 @@ const ArticleForm = ({
                     <FormControl>
                       <Textarea
                         placeholder="➔ Wprowadź uwagi i wskazówki..."
-                        className="resize-none min-h-[100px] "
+                        className="resize-none min-h-[100px] border-ring bg-input/30 "
                         {...field}
                       />
                     </FormControl>
-                    <FormDescription>
-                      Wewnętrzne uwagi widoczne tylko dla pracowników.
-                    </FormDescription>
+                    <FormDescription>Wewnętrzne uwagi widoczne tylko dla pracowników.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -238,7 +187,7 @@ const ArticleForm = ({
                       <FormItem>
                         <FormLabel>Nazwa wersji</FormLabel>
                         <FormControl>
-                          <Input placeholder="Wpisz nazwę wersji" {...field} />
+                          <Input className="border-ring bg-input/30" placeholder="Wpisz nazwę wersji" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -253,10 +202,8 @@ const ArticleForm = ({
                         <FormLabel>Treść odpowiedzi</FormLabel>
                         <FormControl>
                           <Textarea
-                            placeholder={`➔ Treść odpowiedzi wersji ${
-                              index + 1
-                            }`}
-                            className="resize-none min-h-[200px] "
+                            placeholder={`➔ Treść odpowiedzi wersji ${index + 1}`}
+                            className="resize-none min-h-[200px] border-ring bg-input/30 "
                             {...field}
                           />
                         </FormControl>
@@ -274,8 +221,7 @@ const ArticleForm = ({
               disabled={fields.length >= 4} // ograniczenie do 4 wersji
               onClick={() => {
                 const current = form.getValues("responseVariants") ?? [];
-                const nextVersion =
-                  Math.max(...current.map((v) => v.version || 0), 0) + 1;
+                const nextVersion = Math.max(...current.map((v) => v.version || 0), 0) + 1;
                 append({
                   version: nextVersion,
                   variantContent: "",
@@ -284,9 +230,7 @@ const ArticleForm = ({
               }}
             >
               <Plus className="w-4 h-4 mr-2" />{" "}
-              {fields.length >= 4
-                ? "Osiągnięto maksymalny limit wersji"
-                : "Dodaj wersję odpowiedzi"}
+              {fields.length >= 4 ? "Osiągnięto maksymalny limit wersji" : "Dodaj wersję odpowiedzi"}
             </Button>
           </div>
 
@@ -294,9 +238,7 @@ const ArticleForm = ({
           <Card className="p-6 space-y-6">
             <CardHeader className="flex items-center gap-2">
               <Link className="w-5 h-5 text-primary/90" />
-              <CardTitle className="text-lg font-semibold">
-                Powiązania
-              </CardTitle>
+              <CardTitle className="text-lg font-semibold">Powiązania</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Produkt */}
@@ -316,10 +258,10 @@ const ArticleForm = ({
                           onProductChange?.(value);
                         }}
                       >
-                        <SelectTrigger className="w-56 min-w-56">
+                        <SelectTrigger className="w-56 min-w-56 border-ring bg-input/30 ">
                           <SelectValue placeholder="➔ Wybierz produkt" />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="border-ring ">
                           {products.map(({ label, value }) => (
                             <SelectItem key={value} value={value}>
                               {label}
@@ -343,12 +285,8 @@ const ArticleForm = ({
                       <RequiredLabel>Kategoria</RequiredLabel>
                     </FormLabel>
                     <FormControl>
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}
-                        disabled={loadingCategories}
-                      >
-                        <SelectTrigger className="w-56 min-w-56">
+                      <Select value={field.value} onValueChange={field.onChange} disabled={loadingCategories}>
+                        <SelectTrigger className="w-56 min-w-56 border-ring bg-input/30">
                           {loadingCategories ? (
                             <div className="flex items-center space-x-2">
                               <Loader className="animate-spin h-4 w-4" />
@@ -358,7 +296,7 @@ const ArticleForm = ({
                             <SelectValue placeholder="➔ Wybierz kategorię" />
                           )}
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="">
                           {categories.map(({ label, value }) => (
                             <SelectItem key={value} value={value}>
                               {label}
@@ -384,8 +322,8 @@ const ArticleForm = ({
                     <FormControl>
                       <MultipleSelector
                         placeholder="➔ Wybierz tag"
-                        badgeClassName="bg-foreground text-background"
-                        className="bg-background text-foreground"
+                        badgeClassName="bg-foreground text-background "
+                        className=" text-foreground border-ring bg-input/30 "
                         value={field.value}
                         defaultOptions={tags}
                         onChange={field.onChange}
@@ -402,12 +340,8 @@ const ArticleForm = ({
           <Card className="p-6 space-y-6">
             <CardHeader className="flex items-center gap-2">
               <Paperclip className="w-5 h-5 text-primary/90" />
-              <CardTitle className="text-lg font-semibold">
-                Załączniki
-              </CardTitle>
-              <CardDescription>
-                Maksymalnie 5 plików do 4MB każdy
-              </CardDescription>
+              <CardTitle className="text-lg font-semibold">Załączniki</CardTitle>
+              <CardDescription>Maksymalnie 5 plików do 4MB każdy</CardDescription>
             </CardHeader>
 
             <CardContent>
@@ -417,22 +351,14 @@ const ArticleForm = ({
                 render={() => (
                   <FormItem>
                     <FormControl>
-                      <FileUploader
-                        value={files}
-                        onValueChange={setFiles}
-                        dropzoneOptions={dropZoneConfig}
-                      >
+                      <FileUploader value={files} onValueChange={setFiles} dropzoneOptions={dropZoneConfig}>
                         <FileInput>
                           <div className="flex items-center justify-center flex-col p-6 w-full">
                             <CloudUpload className="text-gray-500 w-10 h-10" />
                             <p className="mb-1 text-sm text-gray-500">
-                              <span className="font-semibold">
-                                Kliknij lub przeciągnij plik
-                              </span>
+                              <span className="font-semibold">Kliknij lub przeciągnij plik</span>
                             </p>
-                            <p className="text-xs text-muted-foreground">
-                              SVG, PNG, JPG, GIF
-                            </p>
+                            <p className="text-xs text-muted-foreground">SVG, PNG, JPG, GIF</p>
                           </div>
                         </FileInput>
                         <FileUploaderContent>

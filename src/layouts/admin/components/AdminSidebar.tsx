@@ -58,22 +58,22 @@ export const AdminSidebar = ({ isCollapsed }: SidebarProps) => {
   return (
     <aside
       className={cn(
-        "h-screen bg-background border-r flex flex-col justify-between px-2 pt-2 pb-4",
+        "h-screen bg-background border-r flex flex-col justify-between px-2 pt-2 pb-4 ",
         isCollapsed ? "w-16 md:w-[80px]" : "w-16 md:w-[240px]"
       )}
     >
       <div className="px-3 pb-4 mb-4 border-b border-border text-center">
         {/* ---------SUBTITLE ----- */}
         <div className="">
-          <span className="text-[10px] font-semibold text-primary/80 tracking-widest uppercase animate-pulse">
+          <span className="text-[10px] font-semibold text-primary-foreground tracking-widest uppercase animate-pulse">
             Baza wiedzy
           </span>
         </div>
 
         {/* ------ MAIN SECTION ------*/}
         <div className="flex items-center justify-center gap-2">
-          <div className="p-2 bg-primary/10 rounded-full shadow-inner">
-            <Crown className="w-5 h-5 text-primary" />
+          <div className="p-2 bg-card rounded-full shadow-inner">
+            <Crown className="w-5 h-5 text-sidebar-accent" />
           </div>
           <span className="text-lg font-bold text-foreground tracking-tight">Panel Admina</span>
         </div>
@@ -94,7 +94,7 @@ export const AdminSidebar = ({ isCollapsed }: SidebarProps) => {
                     className={cn(
                       "w-full px-3 py-2 text-muted-foreground rounded-md transition hover:bg-accent hover:text-foreground",
                       isCollapsed ? "justify-center" : "justify-start",
-                      isActive && "bg-accent text-primary font-medium border-l-4 border-primary"
+                      isActive && "bg-primary text-primary-foreground font-medium border-l-4 border-primary"
                     )}
                   >
                     <Icon className={cn("w-5 h-5", !isCollapsed && "mr-2")} />
@@ -109,11 +109,11 @@ export const AdminSidebar = ({ isCollapsed }: SidebarProps) => {
       </nav>
 
       {/* -------- FOOTER -------- */}
-      <div className="border-t pt-4 mt-6">
+      <div className="border-t border-ring pt-4 mt-6">
         <Button
           onClick={() => navigate("/dashboard")}
           variant="ghost"
-          className="cursor-pointer w-full justify-start text-primary/80 hover:bg-primary/15"
+          className="cursor-pointer w-full justify-start text-primary-foreground  "
         >
           <LucideArrowBigLeft className="w-5 h-5 mr-0 md:mr-2" />
           {!isCollapsed && <span>Powrót do BW</span>}

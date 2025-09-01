@@ -20,7 +20,6 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-import { ThemeToggle } from "@/components/Theme-toggle";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import queryClient from "@/config/query.client";
@@ -144,10 +143,6 @@ export const Sidebar = ({ currentWorkspace }: { currentWorkspace?: Workspace | n
           currentWorkspace={currentWorkspace}
         />
       </ScrollArea>
-
-      <div className="flex justify-center">
-        <ThemeToggle />
-      </div>
 
       <div className="flex flex-col items-center py-4 mt-auto text-xs text-muted-foreground">
         <span className="flex items-center gap-1 cursor-help">

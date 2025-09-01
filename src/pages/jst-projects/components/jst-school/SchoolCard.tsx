@@ -27,37 +27,27 @@ const SchoolCard = ({ school }: Props) => {
               {school.name}
             </h3>
             <Copy
-              onClick={() =>
-                copyToClipboardWithToast(school.szId, "szkolne Id zostało")
-              }
+              onClick={() => copyToClipboardWithToast(school.szId, "szkolne Id zostało")}
               className="hover:text-primary cursor-pointer"
             />
           </div>
 
           <div className="mt-2 space-y-1">
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full text-muted-foreground bg-primary/75" />
-              <span className="text-sm font-semibold text-primary/75">
-                SzID: {school.szId}
-              </span>
+              <div className="w-3 h-3 rounded-full text-muted-foreground bg-sidebar-accent" />
+              <span className="text-sm font-semibold text-foreground">SzID: {school.szId}</span>
             </div>
             <div className="flex items-center gap-2">
               <MapPin className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm text-foreground truncate">
-                {school.adres}
-              </span>
+              <span className="text-sm text-foreground truncate">{school.adres}</span>
             </div>
             <div className="flex items-center gap-2">
               <Phone className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm text-foreground truncate">
-                {school.phone}
-              </span>
+              <span className="text-sm text-foreground truncate">{school.phone}</span>
             </div>
             <div className="flex items-center gap-2">
               <Mail className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm text-foreground truncate">
-                {school.email}
-              </span>
+              <span className="text-sm text-foreground truncate">{school.email}</span>
             </div>
           </div>
         </div>

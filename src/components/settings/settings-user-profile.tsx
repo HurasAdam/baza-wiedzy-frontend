@@ -108,7 +108,7 @@ const SettingsUserProfile = () => {
         render={({ field }) => (
           <div className="relative">
             <Icon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-            <Input {...field} placeholder={placeholder} className="pl-10 h-10" />
+            <Input {...field} placeholder={placeholder} className="pl-10 h-10 border-ring bg-input/30" />
           </div>
         )}
       />
@@ -169,7 +169,11 @@ const SettingsUserProfile = () => {
               render={({ field }) => (
                 <div className="relative">
                   <PenTool className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                  <Textarea {...field} placeholder="Krótki opis" className="pl-10 resize-none h-24" />
+                  <Textarea
+                    {...field}
+                    placeholder="Krótki opis"
+                    className="pl-10 resize-none h-24 border-ring bg-input/30"
+                  />
                 </div>
               )}
             />

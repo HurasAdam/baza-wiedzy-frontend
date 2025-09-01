@@ -130,7 +130,7 @@ export const UserAccountModal = ({
                 <FormItem>
                   <FormLabel>Imię</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Wprowadź imię" className="bg-input text-input-foreground" />
+                    <Input {...field} placeholder="Wprowadź imię" className=" border-input bg-input/30 " />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -144,7 +144,11 @@ export const UserAccountModal = ({
                 <FormItem>
                   <FormLabel>Nazwisko</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Wprowadź nazwisko" className="bg-input text-input-foreground" />
+                    <Input
+                      {...field}
+                      placeholder="Wprowadź nazwisko"
+                      className="text-input-foreground border-input bg-input/30"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -163,7 +167,7 @@ export const UserAccountModal = ({
                     <Input
                       {...field}
                       placeholder="Wprowadź pełen adres email"
-                      className="bg-input text-input-foreground"
+                      className="text-input-foreground border-input bg-input/30 "
                     />
                   </FormControl>
                   <FormMessage />
@@ -183,7 +187,7 @@ export const UserAccountModal = ({
                         type="text"
                         {...field}
                         placeholder="Kliknij generuj, aby ustawić hasło"
-                        className="bg-input text-input-foreground"
+                        className="text-input-foreground border-input bg-input/30"
                       />
                     </FormControl>
                     <Button type="button" variant="outline" onClick={generatePassword}>
@@ -210,7 +214,7 @@ export const UserAccountModal = ({
                     <Input
                       {...field}
                       placeholder="Wprowadź telefon kontaktowy"
-                      className="bg-input text-input-foreground"
+                      className="text-input-foreground border-input bg-input/30"
                     />
                   </FormControl>
                   <FormMessage />
@@ -226,7 +230,7 @@ export const UserAccountModal = ({
                   <FormLabel>Rola</FormLabel>
                   <FormControl>
                     <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger className="w-full bg-input text-input-foreground">
+                      <SelectTrigger className="w-full  text-input-foreground border-input bg-input/30">
                         <SelectValue placeholder="-- Wybierz rolę --" />
                       </SelectTrigger>
                       <SelectContent>
@@ -235,7 +239,7 @@ export const UserAccountModal = ({
                           const bgColor = resolveColor(role.labelColor);
                           return (
                             <SelectItem key={role._id} value={role._id}>
-                              <div className="flex items-center gap-3">
+                              <div className="flex items-center gap-3 ">
                                 {/* kolorowy krąg z ikoną w środku */}
                                 <span
                                   aria-hidden

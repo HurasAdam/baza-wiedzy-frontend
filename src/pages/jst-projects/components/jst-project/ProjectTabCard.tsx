@@ -17,12 +17,12 @@ const ProjectTabCard = ({ name, isActive, onClick }: Props) => {
         onClick={onClick}
         className={cn(
           "flex items-center px-4 py-2 text-sm font-medium transition-transform rounded-t-md focus:outline-none",
-          isActive ? "text-primary" : "text-foreground  hover:text-foreground"
+          isActive ? "text-sidebar-accent" : "text-foreground  hover:text-foreground"
         )}
       >
         {/* Icon changes based on active state */}
         {isActive ? (
-          <FolderOpen className="mr-2 h-4 w-4 text-primary" />
+          <FolderOpen className="mr-2 h-4 w-4 text-sidebar-accent" />
         ) : (
           <Folder className="mr-2 h-4 w-4 text-muted-foreground group-hover:text-foreground" />
         )}

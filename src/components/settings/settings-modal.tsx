@@ -3,6 +3,7 @@ import { Bell, Palette, Settings, ShieldUser, User } from "lucide-react";
 import { useState } from "react";
 import { Card, CardContent, CardTitle } from "../ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import SettingsThemePanelTab from "./settings-theme-panel";
 import SettingsUserAccount from "./settings-user-account";
 import SettingsUserProfile from "./settings-user-profile";
 
@@ -15,7 +16,7 @@ interface SettingsModalProps {
 const tabs = [
   { key: "account", label: "Konto", icon: ShieldUser },
   { key: "profile", label: "Profil", icon: User },
-  { key: "theme", label: "Motyw", icon: Palette },
+  { key: "theme", label: "Wygląd", icon: Palette },
   { key: "notifications", label: "Powiadomienia", icon: Bell },
 ];
 
@@ -45,7 +46,7 @@ export const SettingsModal = ({
           <Card className="flex flex-grow flex-col w-full overflow-hidden border-none rounded-none p-0 bg-background">
             <CardContent className="flex flex-grow h-full p-0 overflow-hidden">
               {/* SIDEBAR */}
-              <aside className="w-[23%] h-full border-r bg-sidebar px-3 py-4 space-y-2">
+              <aside className="w-[23%] h-full border-r bg-ring/30 px-3 py-4 space-y-2">
                 {tabs.map(({ key, label, icon: Icon }) => {
                   const isActive = activeTab === key;
                   return (
@@ -80,12 +81,7 @@ export const SettingsModal = ({
                 )}
                 {activeTab === "account" && <SettingsUserAccount />}
                 {activeTab === "profile" && <SettingsUserProfile />}
-                {activeTab === "theme" && (
-                  <div>
-                    <CardTitle className="mb-4">Motyw</CardTitle>
-                    <p className="text-sm text-muted-foreground">Ustawienia wyglądu, kolory, tryb ciemny...</p>
-                  </div>
-                )}
+                {activeTab === "theme" && <SettingsThemePanelTab />}
                 {activeTab === "notifications" && (
                   <div>
                     <CardTitle className="mb-4">Powiadomienia</CardTitle>

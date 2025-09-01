@@ -32,8 +32,9 @@ const PendingArticleCard = ({
       <CardContent className="p-0 flex flex-col gap-4">
         {/* Header z tytułem i przyciskami po prawej */}
         <div className="flex justify-between items-start gap-4">
-          <h2 className="text-base font-semibold text-card-foreground leading-snug break-words line-clamp-2">
-            {article.title}
+          <h2 className="text-base font-semibold text-card-foreground leading-snug break-words line-clamp-2 space-x-1.5">
+            <span className="font-medium text-sm text-muted-foreground">Tytuł:</span>
+            <span>{article.title}</span>
           </h2>
 
           <div className="flex gap-2 shrink-0">
@@ -44,11 +45,7 @@ const PendingArticleCard = ({
               size="sm"
               disabled={loading}
             >
-              {loading ? (
-                <Loader className="w-4 h-4 animate-spin" />
-              ) : (
-                "Zatwierdź"
-              )}
+              {loading ? <Loader className="w-4 h-4 animate-spin" /> : "Zatwierdź"}
             </Button>
             <Button
               className="cursor-pointer"
@@ -65,16 +62,17 @@ const PendingArticleCard = ({
         {/* Info */}
         <div className="text-sm text-muted-foreground flex flex-col gap-1">
           <div>
-            <span className="font-medium text-foreground">Autor:</span>{" "}
-            {article.createdBy?.name} {article.createdBy?.surname}
+            <span className="font-medium text-muted-foreground">Autor:</span>{" "}
+            <span className="text-foreground">{article.createdBy?.name}</span>
+            <span className="text-foreground"> {article.createdBy?.surname}</span>
           </div>
           <div>
-            <span className="font-medium text-foreground">Produkt:</span>{" "}
-            {article.product?.name}
+            <span className="font-medium text-muted-foreground">Produkt:</span>{" "}
+            <span className="text-primary-foreground">{article.product?.name}</span>
           </div>
           <div>
-            <span className="font-medium text-foreground">Kategoria:</span>{" "}
-            {article.category.name}
+            <span className="font-medium text-muted-foreground">Kategoria:</span>
+            <span className="text-primary-foreground"> {article.category.name}</span>
           </div>
         </div>
         <div className="flex justify-between w-full">
@@ -83,7 +81,7 @@ const PendingArticleCard = ({
             {article.tags.map((tag) => (
               <Badge
                 key={tag._id}
-                className="bg-accent text-muted-foreground rounded-full px-2 py-0.5 text-[10px] max-w-full overflow-hidden text-ellipsis whitespace-nowrap"
+                className="bg-accent text-primary-foreground rounded-full px-2 py-0.5 text-[10px] max-w-full overflow-hidden text-ellipsis whitespace-nowrap"
               >
                 {tag.name}
               </Badge>

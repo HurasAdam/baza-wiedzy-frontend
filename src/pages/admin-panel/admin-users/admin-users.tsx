@@ -223,7 +223,7 @@ export const UsersPage = () => {
           value={selectedStatus ?? "all"}
           onValueChange={(value) => setSelectedStatus(value === "all" ? null : value)}
         >
-          <SelectTrigger className="w-40">
+          <SelectTrigger className="w-40 border-input bg-input/30">
             <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent>
@@ -251,7 +251,7 @@ export const UsersPage = () => {
         </Badge>
       </div>
 
-      <Card className=" bg-transparent shadow-none pr-4">
+      <Card className=" bg-transparent shadow-none pr-4 s">
         <CardContent className="p-0">
           {isLoading && (
             <div className="flex justify-center py-10">
