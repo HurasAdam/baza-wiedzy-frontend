@@ -88,7 +88,13 @@ const navItems = [
 ];
 const APP_VERSION = import.meta.env.VITE_APP_VERSION;
 const isBeta = APP_VERSION?.toLowerCase().includes("beta");
-export const Sidebar = ({ currentWorkspace }: { currentWorkspace?: Workspace | null }) => {
+export const Sidebar = ({
+  currentWorkspace,
+  onOpenChangeLogModal,
+}: {
+  currentWorkspace?: Workspace | null;
+  onOpenChangeLogModal: () => void;
+}) => {
   //   const { user, logout } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const navigate = useNavigate();
@@ -145,8 +151,8 @@ export const Sidebar = ({ currentWorkspace }: { currentWorkspace?: Workspace | n
       </ScrollArea>
 
       <div className="flex flex-col items-center py-4 mt-auto text-xs text-muted-foreground">
-        <span className="flex items-center gap-1 cursor-help">
-          <Info className="w-4 h-4" />
+        <span className="flex items-center gap-1 ">
+          <Info onClick={onOpenChangeLogModal} className="w-4 h-4 cursor-help hover:text-foreground" />
           <span className="flex items-center gap-1">
             v{APP_VERSION}
             {isBeta && (
