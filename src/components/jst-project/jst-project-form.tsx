@@ -1,18 +1,11 @@
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { jstProjectSchema } from "@/validation/jst-project.schema";
-import { Textarea } from "../ui/textarea";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import type z from "zod";
+import { Button } from "../ui/button";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 
 export type JstProjectFormData = z.infer<typeof jstProjectSchema>;
 
@@ -23,12 +16,7 @@ interface JstProjectFormProps {
   isSubmitting?: boolean;
 }
 
-const JstProjectForm = ({
-  defaultValues,
-  onSubmit,
-  isSubmitting,
-  submitText,
-}: JstProjectFormProps) => {
+const JstProjectForm = ({ defaultValues, onSubmit, isSubmitting, submitText }: JstProjectFormProps) => {
   const form = useForm<JstProjectFormData>({
     resolver: zodResolver(jstProjectSchema),
     defaultValues,
@@ -47,7 +35,7 @@ const JstProjectForm = ({
               <FormItem>
                 <FormLabel>Nazwa</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="Nazwa projektu" />
+                  <Input className="border-ring" {...field} placeholder="Nazwa projektu" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -60,7 +48,7 @@ const JstProjectForm = ({
               <FormItem>
                 <FormLabel>Opis</FormLabel>
                 <FormControl>
-                  <Textarea {...field} placeholder="Opis projektu" rows={3} />
+                  <Textarea className="border-ring" {...field} placeholder="Opis projektu" rows={3} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

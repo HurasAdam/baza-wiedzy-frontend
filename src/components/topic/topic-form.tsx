@@ -1,12 +1,5 @@
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import type { IProduct } from "@/types/product";
 import { productSchema } from "@/validation/product.schema";
@@ -14,13 +7,7 @@ import { topicSchema } from "@/validation/topic.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import type { topicFormData } from "./topic-modal";
 
 export const colorOptions = [
@@ -82,13 +69,12 @@ export const TopicForm = ({
                     <>
                       <input type="hidden" {...field} value={productId} />
                       <p className="text-sm text-muted-foreground">
-                        {products.find((p) => p._id === productId)?.name ??
-                          "Wybrany produkt"}
+                        {products.find((p) => p._id === productId)?.name ?? "Wybrany produkt"}
                       </p>
                     </>
                   ) : (
                     <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger className="w-full">
+                      <SelectTrigger className="w-full border-ring">
                         <SelectValue placeholder="-- Wybierz produkt --" />
                       </SelectTrigger>
                       <SelectContent side="bottom">
@@ -113,7 +99,7 @@ export const TopicForm = ({
               <FormItem>
                 <FormLabel>Nazwa</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="Nazwa tematu" />
+                  <Input className="border-ring" {...field} placeholder="Nazwa tematu" />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -10,7 +10,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../../components/ui/select";
-import { Switch } from "../../../components/ui/switch";
 import { cn } from "../../../lib/utils";
 import type { IProduct } from "../../../types/product";
 import type { ProductCategory } from "../../../types/product-category";
@@ -59,15 +58,10 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
             value={selectedTitle}
             onChange={onTitleChange}
             placeholder="Szukaj artykułów..."
-            className="pl-10"
+            className="pl-10 border-ring "
           />
           <span className="absolute left-3 top-2.5 text-muted-foreground">
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -80,7 +74,7 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
 
         {/* Product select */}
         <Select onValueChange={onProductChange} value={selectedProduct}>
-          <SelectTrigger className="w-56">
+          <SelectTrigger className="w-56  border-ring">
             <SelectValue placeholder="Produkt" />
           </SelectTrigger>
           <SelectContent>
@@ -99,12 +93,8 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
         </Select>
 
         {/* Category select */}
-        <Select
-          onValueChange={onCategoryChange}
-          value={selectedCategory}
-          disabled={!selectedProduct}
-        >
-          <SelectTrigger className="w-56">
+        <Select onValueChange={onCategoryChange} value={selectedCategory} disabled={!selectedProduct}>
+          <SelectTrigger className="w-56  border-ring">
             <SelectValue placeholder="Kategoria" />
           </SelectTrigger>
           <SelectContent>
@@ -123,10 +113,10 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
         </Select>
 
         {/* Toggle Favourites */}
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        {/* <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Switch checked={isChecked} onCheckedChange={handleToggleChange} />
           <span>Ulubione</span>
-        </div>
+        </div> */}
 
         {/* Reset Button */}
         <Button

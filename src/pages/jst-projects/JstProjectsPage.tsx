@@ -142,10 +142,10 @@ export const JstProjectsPage = () => {
               Wyszukaj szkołę
             </div>
             <Select value={filterField} onValueChange={setFilterField}>
-              <SelectTrigger className="w-36 border-ring bg-input">
+              <SelectTrigger className="w-36 border-ring bg-input/30 ">
                 <SelectValue placeholder="Kryterium" />
               </SelectTrigger>
-              <SelectContent className="bg-card">
+              <SelectContent className="bg-card ">
                 {filterOptions.map(({ value, label, icon }) => (
                   <SelectItem key={value} value={value} className="bg-card">
                     <div className="flex items-center py-0.5  hover:text-primary-foreground ">
@@ -157,7 +157,7 @@ export const JstProjectsPage = () => {
               </SelectContent>
             </Select>
             <Input
-              className="flex-1 outline-none ring-0 focus:ring-0 border-ring bg-input"
+              className="flex-1 outline-none  border-ring bg-input/30"
               placeholder={placeholderMap[filterField]}
               value={filterQuery}
               onChange={(e) => setFilterQuery(e.target.value)}

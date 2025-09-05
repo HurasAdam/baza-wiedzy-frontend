@@ -21,7 +21,7 @@ const StatusBar = ({ statuses, currentStatus, setCurrentStatus }: StatusBarProps
             className={cn(
               "flex items-center px-4 py-2 text-sm font-medium transition-colors rounded-md border",
               isActive
-                ? "bg-primary border text-foreground shadow-sm "
+                ? "bg-primary border text-primary-foreground shadow-sm "
                 : "bg-card border-border text-muted-foreground hover:bg-muted/80"
             )}
           >

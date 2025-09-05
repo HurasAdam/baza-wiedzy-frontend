@@ -58,15 +58,10 @@ const FavoriteArticlesFilterBar: React.FC<FavoriteArticlesFilterBarProps> = ({
             value={selectedTitle}
             onChange={onTitleChange}
             placeholder="Szukaj artykułów..."
-            className="pl-10"
+            className="pl-10 border-ring"
           />
           <span className="absolute left-3 top-2.5 text-muted-foreground">
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -79,7 +74,7 @@ const FavoriteArticlesFilterBar: React.FC<FavoriteArticlesFilterBarProps> = ({
 
         {/* Product select */}
         <Select onValueChange={onProductChange} value={selectedProduct}>
-          <SelectTrigger className="w-56">
+          <SelectTrigger className="w-56 border-ring">
             <SelectValue placeholder="Produkt" />
           </SelectTrigger>
           <SelectContent>
@@ -98,12 +93,8 @@ const FavoriteArticlesFilterBar: React.FC<FavoriteArticlesFilterBarProps> = ({
         </Select>
 
         {/* Category select */}
-        <Select
-          onValueChange={onCategoryChange}
-          value={selectedCategory}
-          disabled={!selectedProduct}
-        >
-          <SelectTrigger className="w-56">
+        <Select onValueChange={onCategoryChange} value={selectedCategory} disabled={!selectedProduct}>
+          <SelectTrigger className="w-56 border-ring">
             <SelectValue placeholder="Kategoria" />
           </SelectTrigger>
           <SelectContent>

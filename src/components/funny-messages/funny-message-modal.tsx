@@ -8,29 +8,10 @@ import queryClient from "../../config/query.client";
 import { useCreateFunnyMessageMutation } from "../../hooks/funny-messages/use-funny-messages";
 import { funnyMessageSchema } from "../../validation/funny-message.schema";
 import { Button } from "../ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "../ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Textarea } from "../ui/textarea";
 
 export type FunnyMessageForm = z.infer<typeof funnyMessageSchema>;
@@ -87,15 +68,9 @@ export const FunnyMessageModal = ({
   };
 
   return (
-    <Dialog
-      open={isCreatingFunnyMessage}
-      onOpenChange={setIsCreatingFunnyMessage}
-      modal={true}
-    >
+    <Dialog open={isCreatingFunnyMessage} onOpenChange={setIsCreatingFunnyMessage} modal={true}>
       <DialogContent
-        {...(!closeOnOutsideClick
-          ? { onInteractOutside: (e) => e.preventDefault() }
-          : {})}
+        {...(!closeOnOutsideClick ? { onInteractOutside: (e) => e.preventDefault() } : {})}
         className="max-h-[80vh] min-h-[48vh]  overflow-y-auto min-w-[34vw] scrollbar-custom"
       >
         <DialogHeader>
@@ -113,7 +88,7 @@ export const FunnyMessageModal = ({
                   <FormItem>
                     <FormLabel>Tytuł</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Tytuł wiadomości" />
+                      <Input className="border-ring bg-input/30" {...field} placeholder="Tytuł wiadomości" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -129,17 +104,13 @@ export const FunnyMessageModal = ({
                     <FormLabel>Typ wiadomości</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="border-ring ">
                           <SelectValue />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="single">
-                          Pojedyncza wiadomość
-                        </SelectItem>
-                        <SelectItem value="dialog">
-                          Dialog klient–pracownik
-                        </SelectItem>
+                        <SelectItem value="single">Pojedyncza wiadomość</SelectItem>
+                        <SelectItem value="dialog">Dialog klient–pracownik</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -157,7 +128,7 @@ export const FunnyMessageModal = ({
                       <FormLabel>Treść wiadomości</FormLabel>
                       <FormControl>
                         <Textarea
-                          className="min-h-26"
+                          className="min-h-26 border-ring "
                           {...field}
                           placeholder="Wpisz treść wiadomości"
                           rows={8}
@@ -173,20 +144,14 @@ export const FunnyMessageModal = ({
               {watchType === "dialog" && (
                 <div className="space-y-4">
                   {fields.map((fieldItem, index) => (
-                    <div
-                      key={fieldItem.id}
-                      className="border rounded-md p-3 relative space-y-2"
-                    >
+                    <div key={fieldItem.id} className="border rounded-md p-3 relative space-y-2">
                       <FormField
                         control={form.control}
                         name={`entries.${index}.author`}
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Autor</FormLabel>
-                            <Select
-                              onValueChange={field.onChange}
-                              value={field.value}
-                            >
+                            <Select onValueChange={field.onChange} value={field.value}>
                               <FormControl>
                                 <SelectTrigger>
                                   <SelectValue />
@@ -194,9 +159,7 @@ export const FunnyMessageModal = ({
                               </FormControl>
                               <SelectContent>
                                 <SelectItem value="KLIENT">Klient</SelectItem>
-                                <SelectItem value="PRACOWNIK">
-                                  Pracownik
-                                </SelectItem>
+                                <SelectItem value="PRACOWNIK">Pracownik</SelectItem>
                               </SelectContent>
                             </Select>
                             <FormMessage />
@@ -210,11 +173,7 @@ export const FunnyMessageModal = ({
                           <FormItem>
                             <FormLabel>Treść wypowiedzi</FormLabel>
                             <FormControl>
-                              <Textarea
-                                {...field}
-                                placeholder="Treść wypowiedzi"
-                                rows={3}
-                              />
+                              <Textarea className="border-ring" {...field} placeholder="Treść wypowiedzi" rows={3} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -232,11 +191,7 @@ export const FunnyMessageModal = ({
                     </div>
                   ))}
 
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={() => append({ author: "KLIENT", content: "" })}
-                  >
+                  <Button type="button" variant="secondary" onClick={() => append({ author: "KLIENT", content: "" })}>
                     + Dodaj wypowiedź
                   </Button>
                 </div>

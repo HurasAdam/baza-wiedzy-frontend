@@ -1,18 +1,11 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { productSchema } from "@/validation/product.schema";
-import type { z } from "zod";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { productSchema } from "@/validation/product.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import type { z } from "zod";
 
 export const colorOptions = [
   "#FF5733",
@@ -62,7 +55,7 @@ export const ProductForm = ({
             <FormItem>
               <FormLabel>Nazwa</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Nazwa produktu" />
+                <Input className="border-ring" {...field} placeholder="Nazwa produktu" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -84,8 +77,7 @@ export const ProductForm = ({
                       onClick={() => field.onChange(color)}
                       className={cn(
                         "w-6 h-6 rounded-sm cursor-pointer hover:opacity-80 transition-all duration-300",
-                        field.value === color &&
-                          "ring-2 ring-offset-2 ring-blue-500"
+                        field.value === color && "ring-2 ring-offset-2 ring-blue-500"
                       )}
                       style={{ backgroundColor: color }}
                     />
