@@ -9,14 +9,14 @@ const FunnyMessageCard = ({ msg }: IFunyMessageProps) => {
     <article
       key={msg._id}
       className="rounded-lg bg-card border border-border shadow-sm"
-      style={{ color: "var(--color-card-foreground)" }}
+      // style={{ color: "var(--color-card-foreground)" }}
       aria-label={`Wiadomość: ${msg.title}`}
     >
       <header className="flex justify-between items-center px-6 py-3 border-b border-border">
-        <h2 className="text-base font-semibold tracking-wide">{msg.title}</h2>
+        <h2 className="text-base font-semibold text-header-foreground tracking-wide">{msg.title}</h2>
         <time
           dateTime={msg.createdAt}
-          className="text-xs text-muted-foreground"
+          className="text-xs text-header-foreground"
           title={new Date(msg.createdAt).toLocaleString()}
         >
           {new Date(msg.createdAt).toLocaleDateString()}
@@ -25,7 +25,7 @@ const FunnyMessageCard = ({ msg }: IFunyMessageProps) => {
 
       <div className="px-5 py-4 space-y-4">
         {msg.type === "single" && msg.entries[0] && (
-          <p className="whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground">{msg.entries[0].content}</p>
+          <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground">{msg.entries[0].content}</p>
         )}
 
         {msg.type === "dialog" && (
@@ -65,7 +65,7 @@ const FunnyMessageCard = ({ msg }: IFunyMessageProps) => {
                   />
 
                   {/* --------- msg content ----- */}
-                  <div className="whitespace-pre-wrap flex-1 text-sm leading-relaxed text-muted-foreground my-auto">
+                  <div className="whitespace-pre-wrap flex-1 text-sm leading-relaxed text-foreground my-auto">
                     {entry.content}
                   </div>
                 </div>

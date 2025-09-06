@@ -284,7 +284,7 @@ export const ArticlePage = () => {
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         {activeTab !== "edit" && (
-          <div className="flex bg-muted rounded-xl px-2 py-1 gap-1">
+          <div className="flex bg-filterbar-background rounded-xl px-2 py-1 gap-1">
             {sortedDescriptions.map((desc, index) => {
               console.log("DESC", desc);
               return (
@@ -294,7 +294,7 @@ export const ArticlePage = () => {
                   className={cn(
                     "px-3 py-1.5 text-sm rounded-md transition-colors min-w-32 max-w-30 truncate  overflow-hidden",
                     activeVersion === index
-                      ? "bg-background text-foreground shadow-sm"
+                      ? "bg-card text-foreground shadow-sm"
                       : "text-muted-foreground hover:text-foreground"
                   )}
                 >
@@ -309,17 +309,17 @@ export const ArticlePage = () => {
           <Card className="mt-6">
             <CardContent className="space-y-6 p-6">
               <section>
-                <h3 className="text-lg font-semibold mb-1">Opis pracownika</h3>
+                <h3 className="text-lg font-semibold mb-1 text-header-foreground">Opis pracownika</h3>
                 <p className="text-base text-foreground">{article.employeeDescription}</p>
               </section>
 
               <section>
-                <h3 className="text-lg font-semibold mb-1">Opis klienta</h3>
+                <h3 className="text-lg font-semibold mb-1 text-header-foreground">Opis klienta</h3>
                 <p className="whitespace-pre-wrap text-foreground break-words">{currentDescription?.variantContent}</p>
               </section>
 
               <section>
-                <h3 className="text-lg font-semibold mb-1">Autor artykułu</h3>
+                <h3 className="text-lg font-semibold mb-1 text-header-foreground">Autor artykułu</h3>
                 <p className="flex items-center gap-2 text-sm text-muted-foreground">
                   <UserIcon className="w-5 h-5" /> {article.createdBy.name} {article.createdBy.surname}
                 </p>
@@ -327,7 +327,7 @@ export const ArticlePage = () => {
 
               {article.verifiedBy && (
                 <section>
-                  <h3 className="text-lg font-semibold mb-1">Zweryfikowany przez</h3>
+                  <h3 className="text-lg font-semibold mb-1 text-header-foreground">Zweryfikowany przez</h3>
                   <p className="flex items-center gap-2 text-sm text-muted-foreground">
                     <UserRoundCheck className="w-5 h-5" /> {article.verifiedBy.name} {article.verifiedBy.surname}
                   </p>

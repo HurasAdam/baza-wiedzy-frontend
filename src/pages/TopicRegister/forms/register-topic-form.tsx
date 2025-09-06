@@ -83,7 +83,7 @@ export const RegisterTopicForm = ({ topic }: { topic: ITopic }) => {
           {/* Message button */}
           <Button
             size="icon"
-            variant={feedback === "message" ? "ghost" : "outline"}
+            variant={feedback === "message" ? "ghost" : "default"}
             onClick={form.handleSubmit((data) => onSubmit(data, "message"))}
             disabled={loadingType === "message"}
             className="w-14 h-10 rounded-md transition-all hover:scale-105"
@@ -100,7 +100,7 @@ export const RegisterTopicForm = ({ topic }: { topic: ITopic }) => {
           {/* Call button */}
           <Button
             size="icon"
-            variant={feedback === "call" ? "ghost" : "outline"}
+            variant={feedback === "call" ? "ghost" : "default"}
             onClick={form.handleSubmit((data) => onSubmit(data, "call"))}
             disabled={loadingType === "call"}
             className="w-14 h-10 rounded-md transition-all hover:scale-105"

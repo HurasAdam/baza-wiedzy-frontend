@@ -135,14 +135,14 @@ export const JstProjectsPage = () => {
         {/* ---- Filter bar ------ */}
 
         {/* Enterprise-style filter panel */}
-        <div className="mb-8 p-4 bg-muted/50 border border-border rounded-xl shadow-sm">
+        <div className="mb-8 p-4 bg-filterbar-background border border-border rounded-xl shadow-sm">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-muted-foreground text-sm font-medium min-w-[100px]">
               <Filter className="w-4 h-4" />
               Wyszukaj szkołę
             </div>
             <Select value={filterField} onValueChange={setFilterField}>
-              <SelectTrigger className="w-36 border-ring bg-input/30 ">
+              <SelectTrigger className="w-36 border-ring">
                 <SelectValue placeholder="Kryterium" />
               </SelectTrigger>
               <SelectContent className="bg-card ">
@@ -157,7 +157,7 @@ export const JstProjectsPage = () => {
               </SelectContent>
             </Select>
             <Input
-              className="flex-1 outline-none  border-ring bg-input/30"
+              className="flex-1 outline-none  border-ring "
               placeholder={placeholderMap[filterField]}
               value={filterQuery}
               onChange={(e) => setFilterQuery(e.target.value)}

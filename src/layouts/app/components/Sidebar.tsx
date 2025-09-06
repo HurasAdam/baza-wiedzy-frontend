@@ -123,8 +123,8 @@ export const Sidebar = ({
         <Link to="/dashboard" className="flex items-center">
           {!isCollapsed && (
             <div className="flex items-center gap-2">
-              <Layers className="size-6 text-sidebar-primary" />
-              <span className="font-semibold text-lg hidden md:block text-foreground">Baza wiedzy</span>
+              <Layers className="size-6 text-sidebar-logo" />
+              <span className="font-semibold text-lg hidden md:block text-sidebar-foreground">Baza wiedzy</span>
             </div>
           )}
 
@@ -151,9 +151,9 @@ export const Sidebar = ({
       </ScrollArea>
 
       <div className="flex flex-col items-center py-4 mt-auto text-xs text-muted-foreground">
-        <span className="flex items-center gap-1 ">
-          <Info onClick={onOpenChangeLogModal} className="w-4 h-4 cursor-help hover:text-foreground" />
-          <span className="flex items-center gap-1">
+        <span className="flex items-center gap-1  ">
+          <Info onClick={onOpenChangeLogModal} className="w-4 h-4 cursor-help text-sidebar-logo-secondary" />
+          <span className="flex items-center gap-1 text-sidebar-foreground">
             v{APP_VERSION}
             {isBeta && (
               <span className=" bg-yellow-400 text-black text-[10px] px-1 py-0.5 rounded font-medium ">Beta</span>

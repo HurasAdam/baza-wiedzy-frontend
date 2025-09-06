@@ -50,7 +50,7 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
   };
   const hasFilters = selectedTitle || selectedProduct || selectedCategory;
   return (
-    <div className="w-full border border-border bg-card/60 rounded-md p-4 shadow-sm mb-4">
+    <div className="w-full border-b  p-4 mb-4">
       <div className="flex flex-wrap items-center gap-4">
         {/* Search */}
         <div className="relative w-64">

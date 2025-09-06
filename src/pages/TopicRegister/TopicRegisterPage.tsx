@@ -94,7 +94,7 @@ export const TopicRegisterPage = () => {
 
         <div className="bg-background z-10 flex flex-col gap-4 mb-4">
           {/* Filters */}
-          <div className="flex bg-muted/40 rounded-lg px-3 py-2 gap-3 items-center flex-wrap">
+          <div className="flex border-b  px-3 py-2 gap-3 items-center flex-wrap">
             <Input
               placeholder="Wyszukaj temat..."
               className="w-64 border-ring"

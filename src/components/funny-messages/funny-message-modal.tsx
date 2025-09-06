@@ -71,7 +71,7 @@ export const FunnyMessageModal = ({
     <Dialog open={isCreatingFunnyMessage} onOpenChange={setIsCreatingFunnyMessage} modal={true}>
       <DialogContent
         {...(!closeOnOutsideClick ? { onInteractOutside: (e) => e.preventDefault() } : {})}
-        className="max-h-[80vh] min-h-[48vh]  overflow-y-auto min-w-[34vw] scrollbar-custom"
+        className="max-h-[80vh] min-h-[48vh] bg-background  overflow-y-auto min-w-[34vw] scrollbar-custom"
       >
         <DialogHeader>
           <DialogTitle>Dodaj zabawną wiadomość</DialogTitle>

@@ -108,7 +108,11 @@ const SettingsUserProfile = () => {
         render={({ field }) => (
           <div className="relative">
             <Icon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-            <Input {...field} placeholder={placeholder} className="pl-10 h-10 border-ring bg-input/30" />
+            <Input
+              {...field}
+              placeholder={placeholder}
+              className="pl-10 h-10 border-ring bg-input/30 text-muted-foreground"
+            />
           </div>
         )}
       />
@@ -125,7 +129,7 @@ const SettingsUserProfile = () => {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <Card className="border-none shadow-none bg-transparent py-1">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold flex items-center gap-2">
+          <CardTitle className="text-lg font-semibold flex items-center gap-2 text-header-foreground">
             <User className="w-5 h-5 text-muted-foreground" />
             Dane profilu
           </CardTitle>

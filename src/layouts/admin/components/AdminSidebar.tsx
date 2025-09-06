@@ -58,24 +58,24 @@ export const AdminSidebar = ({ isCollapsed }: SidebarProps) => {
   return (
     <aside
       className={cn(
-        "h-screen bg-background border-r flex flex-col justify-between px-2 pt-2 pb-4 ",
+        "h-screen bg-admin-sidebar border-r flex flex-col justify-between px-2 pt-2 pb-4 ",
         isCollapsed ? "w-16 md:w-[80px]" : "w-16 md:w-[240px]"
       )}
     >
       <div className="px-3 pb-4 mb-4 border-b border-border text-center">
         {/* ---------SUBTITLE ----- */}
         <div className="">
-          <span className="text-[10px] font-semibold text-primary-foreground tracking-widest uppercase animate-pulse">
+          <span className="text-[10px] font-semibold text-sidebar-ring tracking-widest uppercase animate-pulse">
             Baza wiedzy
           </span>
         </div>
 
         {/* ------ MAIN SECTION ------*/}
         <div className="flex items-center justify-center gap-2">
-          <div className="p-2 bg-card rounded-full shadow-inner">
-            <Crown className="w-5 h-5 text-sidebar-accent" />
+          <div className="p-2 bg-admin-sidebar-logo rounded-lg shadow-inner">
+            <Crown className="w-5 h-5 text-sidebar-primary-foreground" />
           </div>
-          <span className="text-lg font-bold text-foreground tracking-tight">Panel Admina</span>
+          <span className="text-lg font-bold text-admin-sidebar-foreground tracking-tight">Panel Admina</span>
         </div>
       </div>
 
@@ -92,9 +92,10 @@ export const AdminSidebar = ({ isCollapsed }: SidebarProps) => {
                     onClick={() => navigate(href)}
                     variant="ghost"
                     className={cn(
-                      "w-full px-3 py-2 text-muted-foreground rounded-md transition hover:bg-accent hover:text-foreground",
+                      "w-full px-3 py-2 text-admin-sidebar-foreground transition border-transparent rounded-none hover:bg-transparent hover:border-l hover:border-admin-sidebar-primary",
                       isCollapsed ? "justify-center" : "justify-start",
-                      isActive && "bg-primary text-primary-foreground font-medium border-l-4 border-primary"
+                      isActive &&
+                        "bg-admin-sidebar-primary hover:bg-admin-sidebar-primary rounded-md  text-primary-foreground font-medium border-l-4  border-transparent"
                     )}
                   >
                     <Icon className={cn("w-5 h-5", !isCollapsed && "mr-2")} />

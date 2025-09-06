@@ -209,9 +209,9 @@ export function FaqPage() {
           {isFaqLoading ? (
             <CardTitle> Ładowanie ...</CardTitle>
           ) : (
-            <CardTitle>Pytania i odpowiedzi({faq?.items?.length})</CardTitle>
+            <CardTitle className="text-header-foreground">Pytania i odpowiedzi({faq?.items?.length})</CardTitle>
           )}
-          <Button onClick={onCreateFaqItemRequest} variant="outline" size="sm">
+          <Button onClick={onCreateFaqItemRequest} variant="default" size="sm">
             <Plus className="w-4 h-4 mr-1" /> Dodaj pytanie
           </Button>
         </CardHeader>
@@ -225,10 +225,8 @@ export function FaqPage() {
               {faq?.items?.map((item) => (
                 <li key={item._id} className="flex justify-between items-start py-3">
                   <div className="flex flex-col gap-1.5 px-0.5 py-2.5">
-                    <p className="text-base leading-[1.4644]  font-medium text-[var(--color-foreground)]">
-                      {item?.question}
-                    </p>
-                    <p className="text-[15px] leading-[1.4644]  text-[var(--color-muted-foreground)]">{item?.answer}</p>
+                    <p className="text-base leading-[1.4644]  font-medium text-foreground">{item?.question}</p>
+                    <p className="text-[15px] leading-[1.4644]  text-foreground">{item?.answer}</p>
                   </div>
 
                   <Dropdown

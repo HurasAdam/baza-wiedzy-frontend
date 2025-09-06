@@ -48,7 +48,7 @@ const SettingsAccountTab = () => {
   return (
     <Card className="border-none shadow-none bg-transparent py-1">
       <CardHeader>
-        <CardTitle className="text-lg font-semibold flex items-center gap-2">
+        <CardTitle className="text-lg font-semibold flex items-center gap-2 text-header-foreground">
           <ShieldUser className="w-5 h-5 text-muted-foreground" />
           Dane konta
         </CardTitle>

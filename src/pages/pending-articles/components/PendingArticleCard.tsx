@@ -39,7 +39,7 @@ const PendingArticleCard = ({
 
           <div className="flex gap-2 shrink-0">
             <Button
-              className="cursor-pointer"
+              className="cursor-pointer text-foreground"
               onClick={() => onApprove(article._id)}
               variant="outline"
               size="sm"
@@ -48,7 +48,7 @@ const PendingArticleCard = ({
               {loading ? <Loader className="w-4 h-4 animate-spin" /> : "Zatwierdź"}
             </Button>
             <Button
-              className="cursor-pointer"
+              className="cursor-pointer text-foreground"
               onClick={() => onReject(article._id)}
               variant="outline"
               size="sm"
@@ -80,10 +80,11 @@ const PendingArticleCard = ({
           <div className="flex flex-wrap gap-1">
             {article.tags.map((tag) => (
               <Badge
+                variant="outline"
                 key={tag._id}
-                className="bg-accent text-primary-foreground rounded-full px-2 py-0.5 text-[10px] max-w-full overflow-hidden text-ellipsis whitespace-nowrap"
+                className="  px-2 py-0.5 text-[10px] max-w-full overflow-hidden text-ellipsis whitespace-nowrap"
               >
-                {tag.name}
+                # {tag.name}
               </Badge>
             ))}
           </div>

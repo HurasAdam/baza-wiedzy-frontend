@@ -1,10 +1,4 @@
-import {
-  AlertTriangleIcon,
-  CheckCircleIcon,
-  ClockIcon,
-  Loader,
-  XCircleIcon,
-} from "lucide-react";
+import { AlertTriangleIcon, CheckCircleIcon, ClockIcon, Loader, XCircleIcon } from "lucide-react";
 import { Button } from "../../../components/ui/button";
 import { Card, CardContent } from "../../../components/ui/card";
 import { cn } from "../../../lib/utils";
@@ -17,14 +11,16 @@ interface ArticleVerificationBannerProps {
   onReject: () => void;
 }
 
-export const ArticleVerificationBanner: React.FC<
-  ArticleVerificationBannerProps
-> = ({ status, isApproving, isRejecting, onApprove, onReject }) => {
+export const ArticleVerificationBanner: React.FC<ArticleVerificationBannerProps> = ({
+  status,
+  isApproving,
+  isRejecting,
+  onApprove,
+  onReject,
+}) => {
   const isDraft = status === "draft";
 
-  const title = isDraft
-    ? "Nowy artykuł oczekuje na zatwierdzenie"
-    : "Artykuł wymaga ponownej weryfikacji";
+  const title = isDraft ? "Nowy artykuł oczekuje na zatwierdzenie" : "Artykuł wymaga ponownej weryfikacji";
 
   const description = isDraft
     ? "Ten artykuł został dodany i wymaga zatwierdzenia. Obecnie nie jest widoczny dla innych użytkowników"
@@ -36,9 +32,7 @@ export const ArticleVerificationBanner: React.FC<
     <AlertTriangleIcon className="w-6 h-6 text-amber-700/90" />
   );
 
-  const bannerColor = isDraft
-    ? "bg-destructive/10 border-destructive/30"
-    : "bg-yellow-600/10 border-yellow-600/25"; // stonowany żółty
+  const bannerColor = isDraft ? "bg-destructive/10 border-destructive/30" : "bg-yellow-600/10 border-yellow-600/25"; // stonowany żółty
   const textColor = isDraft ? "text-foreground" : "text-foreground";
 
   return (
@@ -54,36 +48,22 @@ export const ArticleVerificationBanner: React.FC<
         <div className="flex gap-2">
           <Button
             size="sm"
-            variant="ghost"
-            className={cn(
-              "flex items-center gap-1 bg-muted ",
-              isRejecting && "opacity-60"
-            )}
+            variant="destructive"
+            className={cn("flex items-center gap-1  ", isRejecting && "opacity-60")}
             onClick={onReject}
             disabled={isRejecting}
           >
-            {isRejecting ? (
-              <Loader className="w-4 h-4 animate-spin" />
-            ) : (
-              <XCircleIcon className="w-4 h-4" />
-            )}
+            {isRejecting ? <Loader className="w-4 h-4 animate-spin" /> : <XCircleIcon className="w-4 h-4" />}
             Odrzuć
           </Button>
           <Button
             size="sm"
-            variant="ghost"
-            className={cn(
-              "flex items-center gap-1 bg-muted hover:bg-primary ",
-              isApproving && "opacity-60"
-            )}
+            variant="default"
+            className={cn("flex items-center gap-1  hover:bg-primary ", isApproving && "opacity-60")}
             onClick={onApprove}
             disabled={isApproving}
           >
-            {isApproving ? (
-              <Loader className="w-4 h-4 animate-spin" />
-            ) : (
-              <CheckCircleIcon className="w-4 h-4" />
-            )}
+            {isApproving ? <Loader className="w-4 h-4 animate-spin" /> : <CheckCircleIcon className="w-4 h-4" />}
             {isDraft ? "Zatwierdź" : "Zweryfikuj"}
           </Button>
         </div>

@@ -18,6 +18,7 @@ const themeGroups = {
     { key: "dark-amber", label: "Amber", accent: "bg-amber-400" },
   ],
   forest: [{ key: "forest-default", label: "Forest", accent: "bg-green-600" }],
+  silk: [{ key: "silk-default", label: "Silk", accent: "bg-orange-50" }],
 };
 
 const Field = ({
@@ -50,7 +51,7 @@ const SettingsThemePanelTab = () => {
     themeGroups[group as keyof typeof themeGroups].some((t) => t.key === theme)
   ) as keyof typeof themeGroups;
 
-  const [selectedGroup, setSelectedGroup] = useState<"light" | "dark" | "forest">(currentGroup || "light");
+  const [selectedGroup, setSelectedGroup] = useState<"light" | "dark" | "forest" | "silk">(currentGroup || "light");
   const [selectedAccent, setSelectedAccent] = useState<string>(theme);
 
   return (
@@ -58,7 +59,7 @@ const SettingsThemePanelTab = () => {
       {/* Wybór trybu */}
       <Card className="border-none shadow-none bg-transparent py-1">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold flex items-center gap-2">
+          <CardTitle className="text-lg font-semibold flex items-center gap-2 text-header-foreground">
             <Palette className="w-5 h-5 text-muted-foreground" />
             Wygląd
           </CardTitle>
@@ -76,13 +77,13 @@ const SettingsThemePanelTab = () => {
                 setSelectedAccent(defaultTheme);
               }}
             >
-              <SelectTrigger className="w-48 border-ring">
+              <SelectTrigger className="w-48 border-ring text-foreground">
                 <SelectValue placeholder="Wybierz tryb" />
               </SelectTrigger>
               <SelectContent>
-                {(["light", "dark", "forest"] as const).map((g) => (
+                {(["light", "dark", "forest", "silk"] as const).map((g) => (
                   <SelectItem key={g} value={g}>
-                    {g === "light" ? "Jasny" : g === "dark" ? "Ciemny" : "Forest"}
+                    {g === "light" ? "Jasny" : g === "dark" ? "Ciemny" : g === "forest" ? "Forest" : "Silk"}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -102,7 +103,7 @@ const SettingsThemePanelTab = () => {
                 setTheme(value);
               }}
             >
-              <SelectTrigger className="w-48 border-ring">
+              <SelectTrigger className="w-48 border-ring text-foreground">
                 <SelectValue placeholder="Wybierz akcent" />
               </SelectTrigger>
               <SelectContent>

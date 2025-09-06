@@ -55,7 +55,7 @@ export const SettingsModal = ({
                       onClick={() => setActiveTab(key)}
                       className={clsx(
                         "flex items-center w-full px-3 py-2 rounded-md text-sm font-medium transition-colors",
-                        isActive ? "bg-accent text-accent-foreground shadow-sm" : "hover:bg-muted text-muted-foreground"
+                        isActive ? "bg-accent text-accent-foreground shadow-sm" : "hover:bg-muted text-foreground"
                       )}
                     >
                       <Icon className="w-4 h-4 mr-2" />
