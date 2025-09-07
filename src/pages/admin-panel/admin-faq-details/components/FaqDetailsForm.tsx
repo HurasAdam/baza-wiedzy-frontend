@@ -29,17 +29,17 @@ export const FaqDetailsForm = () => {
       <input type="hidden" {...register("iconKey")} />
 
       <div className="mb-4">
-        <label className="block text-sm font-medium mb-1">Tytuł:</label>
-        <Input {...register("title")} placeholder="Wpisz tytuł FAQ" className="h-10" />
+        <label className="block text-sm font-medium mb-1 text-header-foreground">Tytuł:</label>
+        <Input {...register("title")} placeholder="Wpisz tytuł FAQ" className="h-10 text-foreground border-ring" />
       </div>
 
       {/* --- description --- */}
       <div className="mt-4">
-        <label className="block text-sm font-medium mb-1">Opis:</label>
+        <label className="block text-sm font-medium mb-1 text-header-foreground">Opis:</label>
         <Textarea
           {...register("description", { maxLength: 1500 })}
           placeholder="Wpisz opis FAQ (opcjonalnie). Możesz użyć do 1500 znaków."
-          className="w-full min-h-[6rem] p-3 rounded-md border bg-card text-foreground placeholder:text-muted-foreground resize-vertical"
+          className="w-full min-h-[6rem] p-3 rounded-md border-ring bg-card text-foreground placeholder:text-muted-foreground resize-vertical"
         />
         <div className="flex justify-end text-xs text-muted-foreground mt-1">
           <span>{description.length}/1500</span>
@@ -47,7 +47,7 @@ export const FaqDetailsForm = () => {
       </div>
 
       <div className="mt-4">
-        <label className="block text-sm font-medium mb-1">Kolor etykiety:</label>
+        <label className="block text-sm font-medium mb-1 text-header-foreground">Kolor etykiety:</label>
         <div className="flex space-x-2">
           {COLORS.map((color) => {
             const active = selectedColor === color;
@@ -74,7 +74,7 @@ export const FaqDetailsForm = () => {
       </div>
 
       <div className="mt-4">
-        <label className="block text-sm font-medium mb-1">Ikona FAQ:</label>
+        <label className="block text-sm font-medium mb-1 text-header-foreground">Ikona FAQ:</label>
         <div className="flex flex-wrap gap-2">
           {iconKeys.map((key) => {
             const Icon = ICONS[key];

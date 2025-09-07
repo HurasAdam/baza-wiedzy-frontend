@@ -92,7 +92,7 @@ export function CreateFaqPage() {
                 <div>
                   <label className="text-sm font-medium text-muted-foreground">FAQ title</label>
                   <Input
-                    className="mt-2"
+                    className="mt-2 border-ring"
                     {...methods.register("title", { required: true })}
                     placeholder="Np. Rozpoczęcie roku"
                   />
@@ -102,14 +102,14 @@ export function CreateFaqPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="text-sm font-medium text-muted-foreground">Slug (opcjonalny)</label>
-                    <Input {...methods.register("slug")} placeholder="product-billing" className="mt-2" />
+                    <Input {...methods.register("slug")} placeholder="product-billing" className="mt-2 border-ring" />
                   </div>
                   <div>
                     <label className="text-sm font-medium text-muted-foreground">Description</label>
                     <Textarea
                       {...methods.register("description")}
                       placeholder="Krótki opis"
-                      className="mt-2"
+                      className="mt-2 border-ring"
                       rows={3}
                     />
                   </div>
@@ -207,7 +207,7 @@ export function CreateFaqPage() {
 
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-lg font-medium">Lista pytań</h3>
+                  <h3 className="text-lg font-medium text-header-foreground">Lista pytań</h3>
                   <div>
                     <Button size="sm" type="button" onClick={() => addQuestion()}>
                       <Plus className="w-4 h-4 mr-2" /> Dodaj
@@ -223,7 +223,7 @@ export function CreateFaqPage() {
                           <label className="text-sm font-medium text-muted-foreground">Pytanie</label>
                           <Input
                             {...methods.register(`questions.${idx}.question` as const, { required: true })}
-                            className="mt-2"
+                            className="mt-2 border-ring"
                             placeholder={`Pytanie #${idx + 1}`}
                           />
                           <label className="text-sm font-medium text-muted-foreground mt-4">Odpowiedź</label>

@@ -1,4 +1,13 @@
-import { Loader, Plus, ShieldCheck, Users, X } from "lucide-react";
+import { Dropdown } from "@/components/Dropdown";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  useDisableUserAccountMutation,
+  useEnableUserAccountMutation,
+  useFindAdmins,
+  useResetUserPasswordMutation,
+} from "@/hooks/users/use-users";
+import { Loader, Plus, ShieldCheck, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Alert } from "../../../components/shared/alert-modal";
@@ -6,24 +15,7 @@ import { Badge } from "../../../components/ui/badge";
 import { Button } from "../../../components/ui/button";
 import { Card, CardContent } from "../../../components/ui/card";
 import queryClient from "../../../config/query.client";
-import {
-  useDisableUserAccountMutation,
-  useEnableUserAccountMutation,
-  useFindAdmins,
-  useResetUserPasswordMutation,
-} from "@/hooks/users/use-users";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Dropdown } from "@/components/Dropdown";
-import UserListItemCard, {
-  type IUser,
-} from "../admin-users/components/userList-item-card";
+import UserListItemCard, { type IUser } from "../admin-users/components/userList-item-card";
 
 const dropdownOptions = [
   {
@@ -46,9 +38,7 @@ export const AdminAccountsPage = () => {
     user: IUser;
   }
   // -- Alert state --
-  const [pendingAction, setPendingAction] = useState<PendingAction | null>(
-    null
-  );
+  const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
 
   // -- Filter State --
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
@@ -70,19 +60,10 @@ export const AdminAccountsPage = () => {
   // const { data: users = [], isLoading, isError, error } = useFindUsers(params);
   const { data: users = [], isLoading, isError, error } = useFindAdmins(params);
 
-  const {
-    mutate: resetUserPasswordMutation,
-    isPending: isResetPasswordLoading,
-  } = useResetUserPasswordMutation();
-  const {
-    mutate: disableUserAccountMutation,
-    isPending: isDisableAccountLoading,
-  } = useDisableUserAccountMutation();
+  const { mutate: resetUserPasswordMutation, isPending: isResetPasswordLoading } = useResetUserPasswordMutation();
+  const { mutate: disableUserAccountMutation, isPending: isDisableAccountLoading } = useDisableUserAccountMutation();
 
-  const {
-    mutate: enableUserAccountMutation,
-    isPending: isEnableAccountLoading,
-  } = useEnableUserAccountMutation();
+  const { mutate: enableUserAccountMutation, isPending: isEnableAccountLoading } = useEnableUserAccountMutation();
 
   // --- Alert confirmation handler ---
   const onConfirm = () => {
@@ -92,30 +73,20 @@ export const AdminAccountsPage = () => {
     if (type === "RESET_PASSWORD") {
       resetUserPasswordMutation(user._id, {
         onSuccess: () => toast.success("Hasło zresetowane"),
-        onError: () =>
-          toast.error(
-            "Podczas resetowania hasła wystąpił błąd, spróbuj ponownie"
-          ),
+        onError: () => toast.error("Podczas resetowania hasła wystąpił błąd, spróbuj ponownie"),
         onSettled: () => {
           queryClient.invalidateQueries({ queryKey: ["admins"] });
           setPendingAction(null);
         },
       });
     } else {
-      const fn = user.isActive
-        ? disableUserAccountMutation
-        : enableUserAccountMutation;
+      const fn = user.isActive ? disableUserAccountMutation : enableUserAccountMutation;
       fn(user._id, {
         onSuccess: () =>
           toast.success(
-            `Konto użytkownika ${user.name} ${user.surname} zostało ${
-              user.isActive ? "wyłączone" : "włączone"
-            }`
+            `Konto użytkownika ${user.name} ${user.surname} zostało ${user.isActive ? "wyłączone" : "włączone"}`
           ),
-        onError: () =>
-          toast.error(
-            "Podczas zmiany statusu konta wystąpił błąd, spróbuj ponownie."
-          ),
+        onError: () => toast.error("Podczas zmiany statusu konta wystąpił błąd, spróbuj ponownie."),
         onSettled: () => {
           queryClient.invalidateQueries({ queryKey: ["admins"] });
           setPendingAction(null);
@@ -124,11 +95,9 @@ export const AdminAccountsPage = () => {
     }
   };
   // --- open reset password alert ---
-  const onRequestReset = (user: IUser) =>
-    setPendingAction({ type: "RESET_PASSWORD", user });
+  const onRequestReset = (user: IUser) => setPendingAction({ type: "RESET_PASSWORD", user });
   // --- open emable/disable account alert ---
-  const onRequestToggle = (user: IUser) =>
-    setPendingAction({ type: "TOGGLE_ACCOUNT", user });
+  const onRequestToggle = (user: IUser) => setPendingAction({ type: "TOGGLE_ACCOUNT", user });
 
   return (
     <div className="mx-auto pb-6">
@@ -172,19 +141,15 @@ export const AdminAccountsPage = () => {
             </div>
           </div>
 
-          <Dropdown
-            triggerBtn={triggerBtn}
-            options={dropdownOptions}
-            position={{ align: "end" }}
-          />
+          <Dropdown triggerBtn={triggerBtn} options={dropdownOptions} position={{ align: "end" }} />
         </div>
       </div>
 
-      <div className="flex bg-muted/40 rounded-lg px-3 py-2 gap-3 items-center flex-wrap mb-4">
+      <div className="flex  px-3 py-2 gap-3 items-center flex-wrap mb-4">
         {/* --- Keyword Filter ---*/}
         <Input
           placeholder="Szukaj użytkownika..."
-          className="w-48"
+          className="w-48 border-ring"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -192,11 +157,9 @@ export const AdminAccountsPage = () => {
         {/* --- Role Filter ---- */}
         <Select
           value={selectedRole ?? "all"}
-          onValueChange={(value) =>
-            setSelectedRole(value === "all" ? null : value)
-          }
+          onValueChange={(value) => setSelectedRole(value === "all" ? null : value)}
         >
-          <SelectTrigger className="w-40">
+          <SelectTrigger className="w-40 border-ring">
             <SelectValue placeholder="Filtruj rolę" />
           </SelectTrigger>
           <SelectContent>
@@ -210,11 +173,9 @@ export const AdminAccountsPage = () => {
         {/* --- Status Filter ----*/}
         <Select
           value={selectedStatus ?? "all"}
-          onValueChange={(value) =>
-            setSelectedStatus(value === "all" ? null : value)
-          }
+          onValueChange={(value) => setSelectedStatus(value === "all" ? null : value)}
         >
-          <SelectTrigger className="w-40">
+          <SelectTrigger className="w-40 border-ring">
             <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent>
@@ -250,8 +211,7 @@ export const AdminAccountsPage = () => {
 
           {isError && (
             <p className="text-destructive text-center mt-10">
-              {(error as Error)?.message ||
-                "Błąd podczas ładowania użytkowników"}
+              {(error as Error)?.message || "Błąd podczas ładowania użytkowników"}
             </p>
           )}
 
@@ -276,11 +236,7 @@ export const AdminAccountsPage = () => {
       {pendingAction && (
         <Alert
           isOpen={!!pendingAction}
-          isLoading={
-            isResetPasswordLoading ||
-            isDisableAccountLoading ||
-            isEnableAccountLoading
-          }
+          isLoading={isResetPasswordLoading || isDisableAccountLoading || isEnableAccountLoading}
           type="warning"
           title={
             pendingAction?.type === "RESET_PASSWORD"
@@ -299,15 +255,12 @@ export const AdminAccountsPage = () => {
                 {pendingAction.user.name} {pendingAction.user.surname}
               </strong>
               ?<br />
-              Reset przywróci hasło do domyślnej wartości z konfiguracji i
-              wymusi na użytkowniku ustawienie nowego hasła przy następnym
-              logowaniu.
+              Reset przywróci hasło do domyślnej wartości z konfiguracji i wymusi na użytkowniku ustawienie nowego hasła
+              przy następnym logowaniu.
             </>
           ) : (
             <>
-              Czy na pewno chcesz{" "}
-              {pendingAction.user.isActive ? "zdezaktywować" : "aktywować"}{" "}
-              konto użytkownika&nbsp;
+              Czy na pewno chcesz {pendingAction.user.isActive ? "zdezaktywować" : "aktywować"} konto użytkownika&nbsp;
               <strong>
                 {pendingAction.user.name} {pendingAction.user.surname}
               </strong>

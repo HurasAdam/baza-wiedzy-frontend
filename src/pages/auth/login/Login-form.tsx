@@ -1,20 +1,6 @@
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { loginSchema } from "@/validation/login.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -43,10 +29,9 @@ const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
     <div className="minh-screen flex flex-col items-center bg-card/5 rounded-xl p-4">
       <Card className="max-w-md  min-w-md w-full shadow-xl">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Baza Wiedzy</CardTitle>
+          <CardTitle className="text-2xl font-bold text-foreground">Baza Wiedzy</CardTitle>
           <CardDescription className="text-sm text-muted-foreground">
-            Wprowadź swoje dane, aby uzyskać dostęp do bazy wiedzy i szablonów
-            odpowiedzi.
+            Wprowadź swoje dane, aby uzyskać dostęp do bazy wiedzy i szablonów odpowiedzi.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -58,13 +43,9 @@ const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel className="text-foreground">Email</FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="jan.nowak@librus.pl"
-                        type="email"
-                      />
+                      <Input className="border-ring" {...field} placeholder="jan.nowak@librus.pl" type="email" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -78,7 +59,7 @@ const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
                 render={({ field }) => (
                   <FormItem>
                     <div className="flex justify-between items-center">
-                      <FormLabel>Hasło</FormLabel>
+                      <FormLabel className="text-foreground">Hasło</FormLabel>
                       <Link
                         to="/auth/forgot-password"
                         className="text-xs text-muted-foreground hover:text-secondary-foreground"
@@ -88,6 +69,7 @@ const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
                     </div>
                     <FormControl>
                       <Input
+                        className="text-foreground border-ring"
                         {...field}
                         placeholder="********"
                         type="password"
@@ -114,10 +96,7 @@ const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
             <div className="flex items-center justify-center">
               <p className="text-sm text-muted-foreground">
                 Don&apos;t have an account ?
-                <Link
-                  to="/sign-up"
-                  className="hover:underline hover:text-blue-600 ml-1"
-                >
+                <Link to="/sign-up" className="hover:underline hover:text-blue-600 ml-1">
                   Sign up
                 </Link>
               </p>

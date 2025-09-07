@@ -46,7 +46,7 @@ export const UpdateUserRoleForm = ({
                 <FormLabel>Rola użytkownika</FormLabel>
                 <FormControl>
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full border-ring">
                       <SelectValue placeholder="-- Wybierz rolę --" />
                     </SelectTrigger>
                     <SelectContent side="bottom">

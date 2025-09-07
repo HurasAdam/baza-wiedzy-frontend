@@ -63,8 +63,8 @@ const Header = ({ onOpenSettingsModal, onCreateWorkspace, onOpenCreateIssueRepor
   const profileMenuOptions = [
     {
       label: (
-        <div>
-          <div className="flex items-center mr-4 pb-2 hover:bg-transparent">
+        <div className="">
+          <div className="flex items-center mr-4 pb-2">
             {/* Avatar */}
             <Avatar className="h-9 w-9 ">
               <AvatarImage className="object-cover" src={avatarUrl} alt="Avatar" crossOrigin="anonymous" />
@@ -87,20 +87,24 @@ const Header = ({ onOpenSettingsModal, onCreateWorkspace, onOpenCreateIssueRepor
 
     {
       label: "Moje zgłoszenia",
-      icon: <User />,
+      icon: <User className="hover:text-primary-foreground" />,
       actionHandler: () => {},
     },
     {
       label: "Panel Admina",
-      icon: <User />,
+      icon: <User className="hover:text-primary-foreground" />,
       actionHandler: () => navigate("/admin"),
     },
     {
       label: "Ustawienia",
-      icon: <Settings />,
+      icon: <Settings className="hover:text-primary-foreground" />,
       actionHandler: () => onOpenSettingsModal(),
     },
-    { label: "Wyloguj się", icon: <LogOut />, actionHandler: () => onLogout() },
+    {
+      label: "Wyloguj się",
+      icon: <LogOut className="hover:text-primary-foreground" />,
+      actionHandler: () => onLogout(),
+    },
   ];
 
   return (
@@ -164,7 +168,7 @@ const Header = ({ onOpenSettingsModal, onCreateWorkspace, onOpenCreateIssueRepor
             }}
             options={profileMenuOptions}
             triggerBtn={
-              <div className="rounded-full flex items-center gap-0.5 cursor-pointer bg-muted/90 py-1 px-1.5 hover:bg-muted ml-0.5">
+              <div className="rounded-full flex items-center gap-0.5 cursor-pointer bg-muted/90 py-1 px-1.5 hover:bg-muted ml-0.5 ">
                 <Avatar className="size-7 ">
                   <AvatarImage className="object-cover" src={avatarUrl} alt={user?.name} crossOrigin="anonymous" />
                   <AvatarFallback className="text-base font-sembibold bg-primary text-primary-foreground">

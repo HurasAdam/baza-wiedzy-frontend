@@ -41,9 +41,7 @@ export const ProductTopicsTab = ({ productId }: ProductTopicsTabProps) => {
             </Button>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground text-sm text-center py-6">
-              Brak tematów powiązanych z tym produktem
-            </p>
+            <p className="text-muted-foreground text-sm text-center py-6">Brak tematów powiązanych z tym produktem</p>
           </CardContent>
         </Card>
         <TopicModal
@@ -59,21 +57,22 @@ export const ProductTopicsTab = ({ productId }: ProductTopicsTabProps) => {
     <>
       <Card>
         <CardHeader className="flex justify-between items-center">
-          <CardTitle>Tematy rozmów ({topics.length})</CardTitle>
-          <Button onClick={onCreateTopic} variant="outline" size="sm">
+          <CardTitle className="text-header-foreground">Tematy rozmów ({topics.length})</CardTitle>
+          <Button onClick={onCreateTopic} variant="default" size="sm">
             <Plus className="w-4 h-4 mr-1" /> Dodaj temat
           </Button>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-0">
           <ul className="divide-y divide-border">
             {topics.map((topic) => (
-              <li
-                key={topic._id}
-                className="flex justify-between items-center py-3"
-              >
-                <p className="text-sm">{topic.title}</p>
-                <Button variant="ghost" size="icon">
-                  <MoreHorizontal className="w-4 h-4" />
+              <li key={topic._id} className="flex justify-between items-center py-3 px-4 group hover:bg-muted/40">
+                <p className="text-sm text-foreground">{topic.title}</p>
+                <Button
+                  className="opacity-0 group-hover:opacity-100 transition text-foreground"
+                  variant="ghost"
+                  size="icon"
+                >
+                  <MoreHorizontal className="w-4 h-4 " />
                 </Button>
               </li>
             ))}

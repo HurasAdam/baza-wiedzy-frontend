@@ -94,7 +94,7 @@ export const ProductDetailsTab = ({ product }: ProductDetailsTabProps) => {
     <>
       <Card>
         <CardHeader className="flex items-center justify-between">
-          <CardTitle>Informacje o produkcie</CardTitle>
+          <CardTitle className="text-header-foreground">Informacje o produkcie</CardTitle>
           {isEditing ? (
             <div className="flex gap-2">
               <Button size="sm" className="gap-2" onClick={handleSubmit} disabled={!isDirty || isPending}>
@@ -120,18 +120,18 @@ export const ProductDetailsTab = ({ product }: ProductDetailsTabProps) => {
           ) : (
             <>
               <div>
-                <p className=" text-muted-foreground block text-sm font-medium mb-1">Nazwa:</p>
+                <p className=" text-header-foreground block text-sm font-medium mb-1">Nazwa:</p>
 
                 <div className="h-10 flex items-center">
-                  <p className="text-sm font-medium">{product.name}</p>
+                  <p className="text-sm font-medium text-foreground">{product.name}</p>
                 </div>
               </div>
 
               <div>
-                <p className="text-muted-foreground block text-sm font-medium mb-1">Kolor etykiety:</p>
+                <p className="text-header-foreground block text-sm font-medium mb-1">Kolor etykiety:</p>
                 <div className="h-10 flex items-center gap-2">
                   <span className="inline-block w-8 h-8 rounded-full" style={{ backgroundColor: product.labelColor }} />
-                  <span className="text-sm">{product.labelColor}</span>
+                  <span className="text-sm text-foreground font-medium">{product.labelColor}</span>
                 </div>
               </div>
             </>
@@ -140,16 +140,16 @@ export const ProductDetailsTab = ({ product }: ProductDetailsTabProps) => {
           <Separator />
 
           <div>
-            <p className="text-xs text-muted-foreground">Utworzony przez:</p>
+            <p className="text-xs text-header-foreground font-medium">Utworzony przez:</p>
             <div className="flex items-center gap-1.5">
-              <p className="text-sm">{product.createdBy.name}</p>
-              <p className="text-sm">{product.createdBy.surname}</p>
+              <p className="text-sm text-foreground font-medium">{product.createdBy.name}</p>
+              <p className="text-sm text-foreground font-medium">{product.createdBy.surname}</p>
             </div>
           </div>
 
           <div>
-            <p className="text-xs text-muted-foreground">Data utworzenia:</p>
-            <p className="text-sm">{new Date(product.createdAt).toLocaleDateString()}</p>
+            <p className="text-xs text-header-foreground font-medium">Data utworzenia:</p>
+            <p className="text-sm text-foreground font-medium">{new Date(product.createdAt).toLocaleDateString()}</p>
           </div>
         </CardContent>
       </Card>

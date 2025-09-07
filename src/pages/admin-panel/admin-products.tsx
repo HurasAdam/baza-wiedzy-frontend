@@ -1,23 +1,15 @@
-import {
-  Box,
-  Ellipsis,
-  Eye,
-  FileIcon,
-  Loader,
-  Plus,
-  XCircleIcon,
-} from "lucide-react";
+import { Box, Ellipsis, Eye, FileIcon, Loader, Plus, XCircleIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
+import { Dropdown } from "@/components/Dropdown";
+import { Input } from "@/components/ui/input";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Dropdown } from "@/components/Dropdown";
 
-import { useFindProductsQuery } from "@/hooks/products/use-products";
-import { ProductModal } from "@/components/product/product-modal";
 import { EditProductModal } from "@/components/product/edit-product-modal";
+import { ProductModal } from "@/components/product/product-modal";
+import { useFindProductsQuery } from "@/hooks/products/use-products";
 import { useNavigate } from "react-router-dom";
 
 const triggerBtn = (
@@ -40,12 +32,7 @@ export const ProductsPage = () => {
     return searchParams;
   }, [searchTerm]);
 
-  const {
-    data: products = [],
-    isLoading,
-    isError,
-    error,
-  } = useFindProductsQuery(params);
+  const { data: products = [], isLoading, isError, error } = useFindProductsQuery(params);
 
   const onCreateProduct = (): void => {
     setIsCreatingProduct(true);
@@ -74,18 +61,14 @@ export const ProductsPage = () => {
           <h1 className="text-2xl font-semibold text-foreground flex items-center gap-2">
             <Box className="w-6 h-6 text-muted-foreground" /> Produkty
           </h1>
-          <Dropdown
-            triggerBtn={triggerBtn}
-            options={dropdownOptions}
-            position={{ align: "end" }}
-          />
+          <Dropdown triggerBtn={triggerBtn} options={dropdownOptions} position={{ align: "end" }} />
         </div>
 
         {/* Filters */}
-        <div className="flex bg-muted/40 rounded-lg px-3 py-2 gap-3 items-center flex-wrap">
+        <div className="flex px-3 py-2 gap-3 items-center flex-wrap">
           <Input
             placeholder="Szukaj produktu..."
-            className="w-64"
+            className="w-64 border-ring"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -132,12 +115,8 @@ export const ProductsPage = () => {
                   ></span>
 
                   <div className="flex flex-col">
-                    <span className="text-sm font-medium text-foreground">
-                      {product.name}
-                    </span>
-                    <span className="text-xs text-muted-foreground">
-                      Artykuły: {product.articlesCount}
-                    </span>
+                    <span className="text-sm font-medium text-foreground">{product.name}</span>
+                    <span className="text-xs text-muted-foreground">Artykuły: {product.articlesCount}</span>
                   </div>
                 </div>
 
@@ -145,11 +124,7 @@ export const ProductsPage = () => {
                 <Dropdown
                   withSeparators
                   triggerBtn={
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="opacity-0 group-hover:opacity-100 transition"
-                    >
+                    <Button variant="ghost" size="icon" className="opacity-0 group-hover:opacity-100 transition">
                       <Ellipsis className="w-4 h-4" />
                     </Button>
                   }
@@ -157,8 +132,7 @@ export const ProductsPage = () => {
                     {
                       label: "Wyświetl szczególy",
                       icon: <Eye className="w-4 h-4" />,
-                      actionHandler: () =>
-                        navigate(`/admin/manage-products/${product._id}`),
+                      actionHandler: () => navigate(`/admin/manage-products/${product._id}`),
                     },
                     {
                       label: "Edytuj",
@@ -178,10 +152,7 @@ export const ProductsPage = () => {
           </ul>
         )}
       </div>
-      <ProductModal
-        isCreatingProduct={isCreatingProduct}
-        setIsCreatingProduct={setIsCreatingProduct}
-      />
+      <ProductModal isCreatingProduct={isCreatingProduct} setIsCreatingProduct={setIsCreatingProduct} />
       {editingProductId && (
         <EditProductModal
           productId={editingProductId}

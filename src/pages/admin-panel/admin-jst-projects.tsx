@@ -1,21 +1,13 @@
-import {
-  Box,
-  Ellipsis,
-  FileIcon,
-  LandPlot,
-  Loader,
-  Plus,
-  XCircleIcon,
-} from "lucide-react";
+import { Dropdown } from "@/components/Dropdown";
+import { EditJstProjectModal } from "@/components/jst-project/edit-jst-project-modal";
+import { JstProjectModal } from "@/components/jst-project/jst-project-modal";
+import { Input } from "@/components/ui/input";
+import { useFindJstProjectsQuery } from "@/hooks/jst-projects/use-jst-projects";
+import { Ellipsis, FileIcon, LandPlot, Loader, Plus, XCircleIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Dropdown } from "@/components/Dropdown";
-import { useFindJstProjectsQuery } from "@/hooks/jst-projects/use-jst-projects";
-import { JstProjectModal } from "@/components/jst-project/jst-project-modal";
-import { EditJstProjectModal } from "@/components/jst-project/edit-jst-project-modal";
 
 const triggerBtn = (
   <Button variant="default" className="flex items-center gap-1">
@@ -25,12 +17,9 @@ const triggerBtn = (
 
 export const JstAdminProjectsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [isCreatingJstProject, setIsCreatingJstProject] =
-    useState<boolean>(false);
+  const [isCreatingJstProject, setIsCreatingJstProject] = useState<boolean>(false);
   const [isEditingJstProject, setIsEditingJstProject] = useState(false);
-  const [editingJstProjectId, setEditingJstProjectId] = useState<string | null>(
-    null
-  );
+  const [editingJstProjectId, setEditingJstProjectId] = useState<string | null>(null);
 
   const params = useMemo(() => {
     const searchParams = new URLSearchParams();
@@ -38,12 +27,7 @@ export const JstAdminProjectsPage = () => {
     return searchParams;
   }, [searchTerm]);
 
-  const {
-    data: jstprojects = [],
-    isLoading,
-    isError,
-    error,
-  } = useFindJstProjectsQuery(params);
+  const { data: jstprojects = [], isLoading, isError, error } = useFindJstProjectsQuery(params);
 
   const onCreateJstProject = (): void => {
     setIsCreatingJstProject(true);
@@ -72,18 +56,14 @@ export const JstAdminProjectsPage = () => {
           <h1 className="text-2xl font-semibold text-foreground flex items-center gap-2">
             <LandPlot className="w-6 h-6 text-muted-foreground" /> Projekty JST
           </h1>
-          <Dropdown
-            triggerBtn={triggerBtn}
-            options={dropdownOptions}
-            position={{ align: "end" }}
-          />
+          <Dropdown triggerBtn={triggerBtn} options={dropdownOptions} position={{ align: "end" }} />
         </div>
 
         {/* Filters */}
-        <div className="flex bg-muted/40 rounded-lg px-3 py-2 gap-3 items-center flex-wrap">
+        <div className="flex px-3 py-2 gap-3 items-center flex-wrap">
           <Input
             placeholder="Szukaj projektu..."
-            className="w-64"
+            className="w-64 border-ring"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -126,9 +106,7 @@ export const JstAdminProjectsPage = () => {
                   <LandPlot className="w-5 h-5 text-muted-foreground" />
 
                   <div className="flex flex-col">
-                    <span className="text-sm font-medium text-foreground">
-                      {project.name}
-                    </span>
+                    <span className="text-sm font-medium text-foreground">{project.name}</span>
                     <span className="text-xs text-muted-foreground flex items-center gap-1">
                       Szkoły: {project.schoolsCount ?? 0}
                     </span>
@@ -139,11 +117,7 @@ export const JstAdminProjectsPage = () => {
                 <Dropdown
                   withSeparators
                   triggerBtn={
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="opacity-0 group-hover:opacity-100 transition"
-                    >
+                    <Button variant="ghost" size="icon" className="opacity-0 group-hover:opacity-100 transition">
                       <Ellipsis className="w-4 h-4" />
                     </Button>
                   }
@@ -167,10 +141,7 @@ export const JstAdminProjectsPage = () => {
         )}
       </div>
 
-      <JstProjectModal
-        isCreatingJstProject={isCreatingJstProject}
-        setIsCreatingJstProject={setIsCreatingJstProject}
-      />
+      <JstProjectModal isCreatingJstProject={isCreatingJstProject} setIsCreatingJstProject={setIsCreatingJstProject} />
       {editingJstProjectId && (
         <EditJstProjectModal
           projectId={editingJstProjectId}

@@ -81,7 +81,7 @@ export const FaqQuestionsAndAnswersTab = ({ faqId, questions }: ProductTopicsTab
         <Card>
           <CardHeader className="flex justify-between items-center">
             <CardTitle>Pytania i odpowiedzi (0)</CardTitle>
-            <Button onClick={onCreateTopic} variant="outline" size="sm">
+            <Button onClick={onCreateTopic} variant="default" size="sm">
               <Plus className="w-4 h-4 mr-1" /> Dodaj pytanie
             </Button>
           </CardHeader>
@@ -103,7 +103,7 @@ export const FaqQuestionsAndAnswersTab = ({ faqId, questions }: ProductTopicsTab
       <Card>
         <CardHeader className="flex justify-between items-center">
           <CardTitle>Pytania i odpowiedzi({questions.length})</CardTitle>
-          <Button onClick={onCreateTopic} variant="outline" size="sm">
+          <Button onClick={onCreateTopic} variant="default" size="sm">
             <Plus className="w-4 h-4 mr-1" /> Dodaj pytanie
           </Button>
         </CardHeader>

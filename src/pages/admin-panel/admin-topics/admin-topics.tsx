@@ -1,30 +1,16 @@
-import {
-  Ellipsis,
-  FileIcon,
-  ListChecks,
-  Loader,
-  Pin,
-  Plus,
-  XCircleIcon,
-} from "lucide-react";
+import { Ellipsis, FileIcon, ListChecks, Loader, Pin, Plus, XCircleIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
-import { Input } from "@/components/ui/input";
 import { Dropdown } from "@/components/Dropdown";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { useFindTopicsQuery } from "@/hooks/topics/use-topics";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useFindProductsQuery } from "@/hooks/products/use-products";
-import { TopicModal } from "@/components/topic/topic-modal";
 import { EditTopicModal } from "@/components/topic/edit-topic.modal";
+import { TopicModal } from "@/components/topic/topic-modal";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useFindProductsQuery } from "@/hooks/products/use-products";
+import { useFindTopicsQuery } from "@/hooks/topics/use-topics";
 
 const triggerBtn = (
   <Button variant="default" className="flex items-center gap-1">
@@ -49,12 +35,7 @@ export const AdminTopicsPage = () => {
 
   const { data: products = [] } = useFindProductsQuery(null);
 
-  const {
-    data: topics = [],
-    isLoading,
-    isError,
-    error,
-  } = useFindTopicsQuery(params);
+  const { data: topics = [], isLoading, isError, error } = useFindTopicsQuery(params);
 
   const onResetAllFilters = () => {
     setSearchTerm("");
@@ -84,31 +65,24 @@ export const AdminTopicsPage = () => {
       <div className="bg-background z-10 flex flex-col gap-4 mb-4">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold text-foreground flex items-center gap-2">
-            <ListChecks className="w-6 h-6 text-muted-foreground" /> Tematy
-            rozmów i wiadomości
+            <ListChecks className="w-6 h-6 text-muted-foreground" /> Tematy rozmów i wiadomości
           </h1>
-          <Dropdown
-            triggerBtn={triggerBtn}
-            options={dropdownOptions}
-            position={{ align: "end" }}
-          />
+          <Dropdown triggerBtn={triggerBtn} options={dropdownOptions} position={{ align: "end" }} />
         </div>
 
         {/* Filters */}
-        <div className="flex bg-muted/40 rounded-lg px-3 py-2 gap-3 items-center flex-wrap">
+        <div className="flex px-3 py-2 gap-3 items-center flex-wrap">
           <Input
             placeholder="Wyszukaj temat..."
-            className="w-64"
+            className="w-64 border-ring"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <Select
             value={productFilter === "" ? "all" : productFilter}
-            onValueChange={(value) =>
-              setProductFilter(value === "all" ? "" : (value as IssueType))
-            }
+            onValueChange={(value) => setProductFilter(value === "all" ? "" : (value as IssueType))}
           >
-            <SelectTrigger className="w-40">
+            <SelectTrigger className="w-40 border-ring">
               <SelectValue placeholder="Produkt" />
             </SelectTrigger>
             <SelectContent>
@@ -143,9 +117,7 @@ export const AdminTopicsPage = () => {
           </p>
         )}
 
-        {!isLoading && !isError && topics.length === 0 && (
-          <p className="text-center py-10">Nie znaleziono produktów</p>
-        )}
+        {!isLoading && !isError && topics.length === 0 && <p className="text-center py-10">Nie znaleziono produktów</p>}
 
         {!isLoading && !isError && topics.length > 0 && (
           <ul className="divide-y divide-border">
@@ -163,12 +135,8 @@ export const AdminTopicsPage = () => {
                   </span>
 
                   <div className="flex flex-col space-y-0.5">
-                    <span className="text-sm font-medium text-foreground">
-                      {topic.title}
-                    </span>
-                    <span className="text-xs text-muted-foreground">
-                      Produkt: {topic.product.name}
-                    </span>
+                    <span className="text-sm font-medium text-foreground">{topic.title}</span>
+                    <span className="text-xs text-muted-foreground">Produkt: {topic.product.name}</span>
                   </div>
                 </div>
 
@@ -177,11 +145,7 @@ export const AdminTopicsPage = () => {
                   <Dropdown
                     withSeparators
                     triggerBtn={
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="opacity-0 group-hover:opacity-100 transition"
-                      >
+                      <Button variant="ghost" size="icon" className="opacity-0 group-hover:opacity-100 transition">
                         <Ellipsis className="w-4 h-4" />
                       </Button>
                     }
@@ -206,11 +170,7 @@ export const AdminTopicsPage = () => {
         )}
       </div>
 
-      <TopicModal
-        products={products}
-        isCreatingTopic={isCreatingTopic}
-        setIsCreatingTopic={setIsCreatingTopic}
-      />
+      <TopicModal products={products} isCreatingTopic={isCreatingTopic} setIsCreatingTopic={setIsCreatingTopic} />
       {editingTopicId && (
         <EditTopicModal
           products={products}

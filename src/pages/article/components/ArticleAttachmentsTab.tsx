@@ -126,12 +126,12 @@ const ArticleAttachmentsTab = () => {
       <Card className="mt-6 p-0 ">
         <CardContent className="divide-y divide-border p-0">
           {isAttachmentsListLoading ? (
-            // 👉 spinner zamiast NoDataFound
+            //  spinner zamiast NoDataFound
             <div className="flex justify-center items-center py-12">
               <Loader className="h-6 w-6 animate-spin text-muted-foreground" />
             </div>
           ) : attachments.length === 0 ? (
-            // 👉 NoDataFound tylko jeśli nie ma wyników i nie trwa loading
+            //  NoDataFound tylko jeśli nie ma wyników i nie trwa loading
             <NoDataFound
               title="Brak załączników"
               description="Ten artykuł nie ma jeszcze żadnych załączników."
@@ -152,7 +152,7 @@ const ArticleAttachmentsTab = () => {
                       {getFileIcon(type)}
                     </div>
                     <div>
-                      <p className="text-sm font-medium">{file.title ?? file.filename}</p>
+                      <p className="text-sm font-medium text-header-foreground">{file.title ?? file.filename}</p>
                       <p className="text-xs text-muted-foreground">
                         {formatFileSize(file.size)} • {formatDate(file.createdAt)}
                       </p>
@@ -162,7 +162,7 @@ const ArticleAttachmentsTab = () => {
                   {/* Actions */}
                   <div className="flex items-center gap-2 ">
                     <Button
-                      className="group hover:text-primary"
+                      className="text-foreground"
                       size="sm"
                       variant="outline"
                       onClick={() => handleDownload(file)}
@@ -173,7 +173,7 @@ const ArticleAttachmentsTab = () => {
 
                     {/* Otwórz w nowej karcie */}
                     <Button
-                      className="group hover:text-primary"
+                      className="text-foreground"
                       size="sm"
                       variant="outline"
                       onClick={() => window.open(getAttachmentUrl(file), "_blank")}
@@ -184,8 +184,8 @@ const ArticleAttachmentsTab = () => {
 
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                          <MoreVertical className="w-4 h-4" />
+                        <Button className="group" variant="ghost" size="icon">
+                          <MoreVertical className="w-4 h-4 text-foreground group-hover:text-admin-sidebar-foreground" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-40">

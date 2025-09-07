@@ -84,7 +84,7 @@ export const SettingsModal = ({
                 {activeTab === "theme" && <SettingsThemePanelTab />}
                 {activeTab === "notifications" && (
                   <div>
-                    <CardTitle className="mb-4">Powiadomienia</CardTitle>
+                    <CardTitle className="mb-4 text-header-foreground">Powiadomienia</CardTitle>
                     <p className="text-sm text-muted-foreground">Zarządzaj ustawieniami powiadomień.</p>
                   </div>
                 )}

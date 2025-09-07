@@ -3,8 +3,8 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuTrigger,
   DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
 type DropdownPosition = {
@@ -45,17 +45,12 @@ export function Dropdown({
         <DropdownMenuGroup>
           {options.map(({ icon, label, actionHandler }, index) => (
             <div key={index}>
-              <DropdownMenuItem
-                className="cursor-pointer"
-                onClick={() => actionHandler()}
-              >
+              <DropdownMenuItem className="cursor-pointer" onClick={() => actionHandler()}>
                 <div className="mr-2 w-4 h-4 flex items-center">{icon}</div>
                 <span>{label}</span>
               </DropdownMenuItem>
 
-              {withSeparators && index < options.length - 1 && (
-                <DropdownMenuSeparator />
-              )}
+              {withSeparators && index < options.length - 1 && <DropdownMenuSeparator />}
             </div>
           ))}
         </DropdownMenuGroup>

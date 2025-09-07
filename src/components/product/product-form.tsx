@@ -8,18 +8,18 @@ import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
 export const colorOptions = [
-  "#FF5733",
-  "#33C1FF",
-  "#28A745",
-  "#FFC300",
-  "#8E44AD",
-  "#E67E22",
-  "#2ECC71",
-  "#D72631",
-  "#1B998B",
-  "#F4D35E",
-  "#4A90E2",
-  "#F08A5D",
+  "#C94C4C", // ciepła, zgaszona czerwień
+  "#2EA9A1", // stonowany teal
+  "#3EA549", // średnia zieleń
+  "#D9A32A", // złoto / musztardowy
+  "#E07A2E", // ciepły pomarańcz
+  "#274872", // głęboki granat
+  "#4B6CB7", // umiarkowany niebieski
+  "#7D5BA6", // stonowany fiolet
+  "#6B8E23", // oliwkowa zieleń
+  "#6B7280", // neutralny slate / szary
+  "#E27D7D", // pastelowy koral
+  "#2BB3C0", // jasny cyan / morski
 ];
 
 export type ProductFormData = z.infer<typeof productSchema>;

@@ -44,12 +44,12 @@ const UserListItemCard = ({ user, onRequestResetPassword, onRequestAccountStatus
   const getUserDropdownOptions = (): DropdownOption[] => [
     {
       label: "Wyświetl szczegóły",
-      icon: <EyeIcon className="w-4 h-4" />,
+      icon: <EyeIcon className="w-4 h-4 hover:text-admin-sidebar-primary-foreground" />,
       actionHandler: () => navigate(`/admin/manage-users/${user._id}`),
     },
     {
       label: "Zresetuj hasło",
-      icon: <KeyRound className="w-4 h-4" />,
+      icon: <KeyRound className="w-4 h-4 hover:text-admin-sidebar-primary-foreground" />,
       actionHandler: () => onRequestResetPassword(user),
     },
     {
@@ -172,8 +172,8 @@ const UserListItemCard = ({ user, onRequestResetPassword, onRequestAccountStatus
             <Dropdown
               withSeparators
               triggerBtn={
-                <Button className="cursor-pointer" variant="ghost" size="icon">
-                  <Ellipsis />
+                <Button className="cursor-pointer group" variant="ghost" size="icon">
+                  <Ellipsis className="text-foreground group-hover:text-admin-sidebar-primary-foreground" />
                 </Button>
               }
               options={dropdownOptions}

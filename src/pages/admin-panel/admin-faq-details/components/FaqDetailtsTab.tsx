@@ -109,7 +109,7 @@ export const FaqDetailtsTab = ({ faq }: ProductDetailsTabProps) => {
     <>
       <Card>
         <CardHeader className="flex items-center justify-between">
-          <CardTitle>Informacje o FAQ</CardTitle>
+          <CardTitle className="text-header-foreground">Informacje o FAQ</CardTitle>
           {isEditing ? (
             <div className="flex gap-2">
               <Button size="sm" className="gap-2" onClick={handleSubmit} disabled={!isDirty || isPending}>
@@ -121,7 +121,7 @@ export const FaqDetailtsTab = ({ faq }: ProductDetailsTabProps) => {
               </Button>
             </div>
           ) : (
-            <Button size="sm" variant="outline" className="gap-2" onClick={onEdit}>
+            <Button size="sm" variant="default" className="gap-2" onClick={onEdit}>
               <Pencil className="w-4 h-4" /> Edytuj
             </Button>
           )}
@@ -138,14 +138,14 @@ export const FaqDetailtsTab = ({ faq }: ProductDetailsTabProps) => {
                 <p className=" text-muted-foreground block text-sm font-medium mb-1">Tytuł:</p>
 
                 <div className="h-10 flex items-center">
-                  <p className="text-sm font-medium">{faq?.title}</p>
+                  <p className="text-sm font-medium text-foreground">{faq?.title}</p>
                 </div>
               </div>
               <Separator />
               {/* --- Opis FAQ ---*/}
               <div>
                 <p className="text-muted-foreground block text-sm font-medium mb-1.5 ">Opis:</p>
-                <div className="text-sm text-forground whitespace-pre-wrap">
+                <div className="text-sm text-forground whitespace-pre-wrap text-foreground">
                   {faq?.description && faq.description.trim() ? faq?.description : "Brak opisu"}
                 </div>
               </div>
@@ -154,7 +154,7 @@ export const FaqDetailtsTab = ({ faq }: ProductDetailsTabProps) => {
                 <p className="text-muted-foreground block text-sm font-medium mb-1">Kolor etykiety:</p>
                 <div className="h-10 flex items-center gap-2">
                   <span className="inline-block w-8 h-8 rounded-full" style={{ backgroundColor: faq?.labelColor }} />
-                  <span className="text-sm">{faq?.labelColor}</span>
+                  <span className="text-sm text-foreground">{faq?.labelColor}</span>
                 </div>
               </div>
               <div>

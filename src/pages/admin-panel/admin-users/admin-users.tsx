@@ -177,11 +177,11 @@ export const UsersPage = () => {
         </div>
       </div>
 
-      <div className="flex bg-muted/40 rounded-lg px-3 py-2 gap-3 items-center flex-wrap mb-4">
+      <div className="flex rounded-lg px-3 py-2 gap-3 items-center flex-wrap mb-4">
         {/* --- Keyword Filter ---*/}
         <Input
           placeholder="Szukaj użytkownika..."
-          className="w-48"
+          className="w-48 border-ring"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -191,7 +191,7 @@ export const UsersPage = () => {
           value={selectedRole ?? "all"}
           onValueChange={(value) => setSelectedRole(value === "all" ? null : value)}
         >
-          <SelectTrigger className="w-40">
+          <SelectTrigger className="w-40 border-ring">
             <SelectValue placeholder="Filtruj rolę" />
           </SelectTrigger>
           <SelectContent>
@@ -223,7 +223,7 @@ export const UsersPage = () => {
           value={selectedStatus ?? "all"}
           onValueChange={(value) => setSelectedStatus(value === "all" ? null : value)}
         >
-          <SelectTrigger className="w-40 border-input bg-input/30">
+          <SelectTrigger className="w-40 border-ring">
             <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent>

@@ -119,7 +119,7 @@ export function UserInfoTab({ user }: { user: UserShape; onSave?: (payload: unkn
         <div className="flex items-center gap-20">
           <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left px-4 py-2">
             <span className="text-xs text-muted-foreground uppercase mb-1">Ostatnie logowanie</span>
-            <span className="text-sm text-gray-700 dark:text-gray-300">
+            <span className="text-sm text-foreground dark:text-gray-300">
               {user.lastLogin ? formatDate(user.lastLogin) : "Brak logowania"}
             </span>
           </div>

@@ -18,7 +18,10 @@ const themeGroups = {
     { key: "dark-amber", label: "Amber", accent: "bg-amber-400" },
   ],
   forest: [{ key: "forest-default", label: "Forest", accent: "bg-green-600" }],
-  silk: [{ key: "silk-default", label: "Silk", accent: "bg-orange-50" }],
+  corporate: [
+    { key: "corporate-default", label: "Gray", accent: "bg-neutral-400/80" },
+    { key: "corporate-gray", label: "Dark", accent: "bg-slate-700" },
+  ],
 };
 
 const Field = ({
@@ -51,7 +54,9 @@ const SettingsThemePanelTab = () => {
     themeGroups[group as keyof typeof themeGroups].some((t) => t.key === theme)
   ) as keyof typeof themeGroups;
 
-  const [selectedGroup, setSelectedGroup] = useState<"light" | "dark" | "forest" | "silk">(currentGroup || "light");
+  const [selectedGroup, setSelectedGroup] = useState<"light" | "dark" | "forest" | "corporate">(
+    currentGroup || "light"
+  );
   const [selectedAccent, setSelectedAccent] = useState<string>(theme);
 
   return (
@@ -81,9 +86,9 @@ const SettingsThemePanelTab = () => {
                 <SelectValue placeholder="Wybierz tryb" />
               </SelectTrigger>
               <SelectContent>
-                {(["light", "dark", "forest", "silk"] as const).map((g) => (
+                {(["light", "dark", "forest", "corporate"] as const).map((g) => (
                   <SelectItem key={g} value={g}>
-                    {g === "light" ? "Jasny" : g === "dark" ? "Ciemny" : g === "forest" ? "Forest" : "Silk"}
+                    {g === "light" ? "Jasny" : g === "dark" ? "Ciemny" : g === "forest" ? "Forest" : "Corporate"}
                   </SelectItem>
                 ))}
               </SelectContent>

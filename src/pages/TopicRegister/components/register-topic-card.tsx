@@ -14,10 +14,10 @@ const RegisterTopicCard = ({ topic }: RegisterTopicCardProps) => {
       className="w-full shadow hover:shadow-md transition-shadow rounded-lg py-0.5 relative overflow-visible"
     >
       <div
-        className="absolute -left-8 top-1/2 transform -translate-y-1/2 rounded-sm h-7 w-7 flex items-center justify-center border shadow-sm transition-all duration-200 hover:shadow-md"
-        style={{ backgroundColor: `${topic.product.labelColor}33` }}
+        className="absolute -left-10 top-1/2 transform -translate-y-1/2 rounded-sm  h-9 w-9 flex items-center justify-center transition-all duration-200 hover:shadow-md"
+        style={{ backgroundColor: `${topic.product.labelColor}20` }}
       >
-        <Pin className="w-4 h-4 text-foreground/80" />
+        <Pin style={{ color: `${topic.product.labelColor}` }} className="w-4.5 h-4.5 text-foreground/80" />
       </div>
 
       <CardContent className="flex items-center justify-between px-4 py-1.5 w-full min-h-[40px]">

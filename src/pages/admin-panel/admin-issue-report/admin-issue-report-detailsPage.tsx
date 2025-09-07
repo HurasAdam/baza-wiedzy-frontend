@@ -1,24 +1,15 @@
-import { useNavigate, useParams } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Loader,
-  ArrowLeft,
-  MoreVertical,
-  Calendar,
-  Users,
-  Tag,
-  Bug,
-  Lightbulb,
-} from "lucide-react";
 import { useFindIssueReportQuery } from "@/hooks/issue-report/use-issue-report";
+import { ArrowLeft, Bug, Calendar, Lightbulb, Loader, MoreVertical, Tag, Users } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const statusColors: Record<string, string> = {
   pending: "bg-yellow-100 text-yellow-700",
@@ -61,11 +52,7 @@ export function AdminIssueReportDetailsPage() {
   }
 
   if (!report) {
-    return (
-      <p className="text-center py-20 text-muted-foreground">
-        Nie znaleziono zgłoszenia
-      </p>
-    );
+    return <p className="text-center py-20 text-muted-foreground">Nie znaleziono zgłoszenia</p>;
   }
 
   return (
@@ -78,8 +65,7 @@ export function AdminIssueReportDetailsPage() {
           <div className="space-y-2">
             <h1 className="text-2xl font-semibold">{report.title}</h1>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <span>ID: {report._id}</span> •
-              <span>Typ: {typeLabels[report.type]}</span>
+              <span>ID: {report._id}</span> •<span>Typ: {typeLabels[report.type]}</span>
             </div>
           </div>
         </div>
@@ -92,10 +78,7 @@ export function AdminIssueReportDetailsPage() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               {Object.keys(statusColors).map((status) => (
-                <DropdownMenuItem
-                  key={status}
-                  onClick={() => alert(`Change to ${status}`)}
-                >
+                <DropdownMenuItem key={status} onClick={() => alert(`Change to ${status}`)}>
                   {getStatusLabel(status)}
                 </DropdownMenuItem>
               ))}
@@ -110,13 +93,8 @@ export function AdminIssueReportDetailsPage() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => alert("Edytuj")}>
-                Edytuj
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="text-red-600"
-                onClick={() => alert("Usuń")}
-              >
+              <DropdownMenuItem onClick={() => alert("Edytuj")}>Edytuj</DropdownMenuItem>
+              <DropdownMenuItem className="text-red-600" onClick={() => alert("Usuń")}>
                 Usuń
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -128,10 +106,8 @@ export function AdminIssueReportDetailsPage() {
         {/* Opis zgłoszenia */}
         <Card className="md:col-span-2 shadow-sm border">
           <CardContent>
-            <h2 className="text-lg font-semibold mb-4">Opis zgłoszenia</h2>
-            <p className="text-muted-foreground leading-relaxed">
-              {report.description}
-            </p>
+            <h2 className="text-lg text-header-foreground font-semibold mb-4">Opis zgłoszenia</h2>
+            <p className="text-muted-foreground leading-relaxed">{report.description}</p>
           </CardContent>
         </Card>
 
@@ -141,11 +117,7 @@ export function AdminIssueReportDetailsPage() {
               {
                 label: "Status",
                 icon: <Loader className="w-4 h-4 text-muted-foreground" />,
-                value: (
-                  <Badge className={statusColors[report.status]}>
-                    {getStatusLabel(report.status)}
-                  </Badge>
-                ),
+                value: <Badge className={statusColors[report.status]}>{getStatusLabel(report.status)}</Badge>,
               },
               {
                 label: "Typ",
@@ -185,7 +157,7 @@ export function AdminIssueReportDetailsPage() {
                   <h3 className="text-xs font-medium text-muted-foreground mb-0.5 uppercase tracking-wide">
                     {item.label}
                   </h3>
-                  <p className="text-sm font-medium">{item.value}</p>
+                  <p className="text-sm font-medium text-foreground">{item.value}</p>
                 </div>
               </div>
             ))}

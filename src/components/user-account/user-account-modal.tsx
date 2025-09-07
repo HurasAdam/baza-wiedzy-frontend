@@ -118,7 +118,7 @@ export const UserAccountModal = ({
         className="max-h-[85vh] min-w-[29vw] w-full max-w-md rounded-2xl shadow-xl overflow-y-auto p-6 text-card-foreground"
       >
         <DialogHeader>
-          <DialogTitle className="text-2xl font-semibold">Utwórz konto użytkownika</DialogTitle>
+          <DialogTitle className="text-2xl font-semibold text-foreground">Utwórz konto użytkownika</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
@@ -128,9 +128,9 @@ export const UserAccountModal = ({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Imię</FormLabel>
+                  <FormLabel className="text-foreground">Imię</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Wprowadź imię" className=" border-input bg-input/30 " />
+                    <Input {...field} placeholder="Wprowadź imię" className=" border-ring bg-input/30 " />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -142,12 +142,12 @@ export const UserAccountModal = ({
               name="surname"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nazwisko</FormLabel>
+                  <FormLabel className="text-foreground">Nazwisko</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       placeholder="Wprowadź nazwisko"
-                      className="text-input-foreground border-input bg-input/30"
+                      className="text-input-foreground border-ring bg-input/30"
                     />
                   </FormControl>
                   <FormMessage />
@@ -160,14 +160,14 @@ export const UserAccountModal = ({
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
+                  <FormLabel className="text-foreground">
                     Email <span className="text-xs text-muted-foreground">(login)</span>
                   </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       placeholder="Wprowadź pełen adres email"
-                      className="text-input-foreground border-input bg-input/30 "
+                      className="text-input-foreground border-ring bg-input/30 "
                     />
                   </FormControl>
                   <FormMessage />
@@ -180,17 +180,17 @@ export const UserAccountModal = ({
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Hasło</FormLabel>
+                  <FormLabel className="text-foreground">Hasło</FormLabel>
                   <div className="flex items-center gap-3">
                     <FormControl className="flex-1">
                       <Input
                         type="text"
                         {...field}
                         placeholder="Kliknij generuj, aby ustawić hasło"
-                        className="text-input-foreground border-input bg-input/30"
+                        className="text-foreground border-ring bg-input/30"
                       />
                     </FormControl>
-                    <Button type="button" variant="outline" onClick={generatePassword}>
+                    <Button type="button" variant="default" onClick={generatePassword}>
                       Generuj
                     </Button>
                   </div>
@@ -207,14 +207,14 @@ export const UserAccountModal = ({
               name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
+                  <FormLabel className="text-foreground">
                     Telefon kontaktowy <span className="text-xs text-muted-foreground">(opcjonalnie)</span>
                   </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       placeholder="Wprowadź telefon kontaktowy"
-                      className="text-input-foreground border-input bg-input/30"
+                      className="text-input-foreground border-ring bg-input/30"
                     />
                   </FormControl>
                   <FormMessage />
@@ -227,10 +227,10 @@ export const UserAccountModal = ({
               name="role"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Rola</FormLabel>
+                  <FormLabel className="text-foreground">Rola</FormLabel>
                   <FormControl>
                     <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger className="w-full  text-input-foreground border-input bg-input/30">
+                      <SelectTrigger className="w-full  text-input-foreground border-ring bg-input/30">
                         <SelectValue placeholder="-- Wybierz rolę --" />
                       </SelectTrigger>
                       <SelectContent>

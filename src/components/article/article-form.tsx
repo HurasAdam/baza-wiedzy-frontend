@@ -63,7 +63,7 @@ const ArticleForm = ({
           <Card className="p-6">
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
-                <CardTitle className="text-lg font-semibold flex items-center gap-2">
+                <CardTitle className="text-lg font-semibold flex items-center gap-2 text-header-foreground">
                   <Pencil className="w-5 h-5 text-primary/90" />
                   Nazwa artykułu
                 </CardTitle>
@@ -96,7 +96,7 @@ const ArticleForm = ({
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
+                    <FormLabel className="text-header-foreground">
                       <RequiredLabel>Tytuł</RequiredLabel>
                     </FormLabel>
                     <FormControl>
@@ -134,7 +134,9 @@ const ArticleForm = ({
           <Card className="p-6 space-y-6">
             <CardHeader className="flex items-center gap-2">
               <Info className="w-5 h-5 text-primary/90" />
-              <CardTitle className="text-lg font-semibold">Uwagi i opis dla pracownika</CardTitle>
+              <CardTitle className="text-lg font-semibold text-header-foreground">
+                Uwagi i opis dla pracownika
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <FormField
@@ -142,7 +144,7 @@ const ArticleForm = ({
                 name="employeeDescription"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
+                    <FormLabel className="text-header-foreground">
                       <RequiredLabel>Uwagi</RequiredLabel>
                     </FormLabel>
                     <FormControl>
@@ -165,7 +167,7 @@ const ArticleForm = ({
               <Card key={item.id} className="p-6 space-y-2.5 relative mb-4">
                 <CardHeader className="flex items-center gap-2">
                   <MessageCircle className="w-5 h-5 text-primary/90" />
-                  <CardTitle className="text-lg font-semibold">Treść</CardTitle>
+                  <CardTitle className="text-lg font-semibold text-header-foreground">Treść</CardTitle>
                 </CardHeader>
 
                 <Button
@@ -184,7 +186,7 @@ const ArticleForm = ({
                     control={form.control}
                     name={`responseVariants.${index}.variantName`}
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className="text-header-foreground">
                         <FormLabel>Nazwa wersji</FormLabel>
                         <FormControl>
                           <Input className="border-ring bg-input/30" placeholder="Wpisz nazwę wersji" {...field} />
@@ -198,7 +200,7 @@ const ArticleForm = ({
                     control={form.control}
                     name={`responseVariants.${index}.variantContent`}
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className="text-header-foreground">
                         <FormLabel>Treść odpowiedzi</FormLabel>
                         <FormControl>
                           <Textarea
@@ -238,7 +240,7 @@ const ArticleForm = ({
           <Card className="p-6 space-y-6">
             <CardHeader className="flex items-center gap-2">
               <Link className="w-5 h-5 text-primary/90" />
-              <CardTitle className="text-lg font-semibold">Powiązania</CardTitle>
+              <CardTitle className="text-lg font-semibold text-header-foreground">Powiązania</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Produkt */}
@@ -247,7 +249,7 @@ const ArticleForm = ({
                 name="product"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
+                    <FormLabel className="text-header-foreground">
                       <RequiredLabel>Produkt</RequiredLabel>
                     </FormLabel>
                     <FormControl>
@@ -281,7 +283,7 @@ const ArticleForm = ({
                 name="category"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
+                    <FormLabel className="text-header-foreground">
                       <RequiredLabel>Kategoria</RequiredLabel>
                     </FormLabel>
                     <FormControl>
@@ -316,7 +318,7 @@ const ArticleForm = ({
                 name="tags"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
+                    <FormLabel className="text-header-foreground">
                       <RequiredLabel>Tagi</RequiredLabel>
                     </FormLabel>
                     <FormControl>

@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { PenTool, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import queryClient from "../../config/query.client";
 import { useUpdateMyAvatarMutation, useUpdateMyProfileMutation } from "../../hooks/users/use-users";
 import type { AuthUserData } from "../../types/user";
@@ -21,7 +22,7 @@ const SettingsUserProfile = () => {
   const { mutate } = useUpdateMyProfileMutation();
   const { mutate: updateAvatarMutate, isLoading: isUploading } = useUpdateMyAvatarMutation();
 
-  const { control, handleSubmit, reset } = useForm<FormValues>({
+  const { control, handleSubmit, reset, formState } = useForm<FormValues>({
     defaultValues: {
       name: user?.name || "",
       surname: user?.surname || "",
@@ -82,7 +83,11 @@ const SettingsUserProfile = () => {
     mutate(
       { payload: data },
       {
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: ["authUser"] }),
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["authUser"] });
+          toast.success("Zmiany zostały zapisane");
+          reset(data);
+        },
       }
     );
   };
@@ -186,7 +191,9 @@ const SettingsUserProfile = () => {
       </Card>
 
       <div className="flex justify-end px-6">
-        <Button type="submit">Zapisz zmiany</Button>
+        <Button disabled={!formState.isDirty} type="submit">
+          Zapisz zmiany
+        </Button>
       </div>
     </form>
   );

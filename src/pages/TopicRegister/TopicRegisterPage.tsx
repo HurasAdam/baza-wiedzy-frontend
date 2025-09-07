@@ -117,7 +117,12 @@ export const TopicRegisterPage = () => {
                 ))}
               </SelectContent>
             </Select>
-            <Button onClick={onResetAllFilters} disabled={!hasFilters} variant="outline" size="sm">
+            <Button
+              onClick={onResetAllFilters}
+              disabled={!hasFilters}
+              variant={hasFilters ? "default" : "outline"}
+              size="sm"
+            >
               Resetuj
             </Button>
             <Badge variant="outline" className="ml-auto">

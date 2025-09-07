@@ -48,19 +48,13 @@ interface RoleFormProps {
   isPermissionsLoading: boolean;
 }
 
-const RoleForm = ({
-  permissions = [],
-  isPermissionsLoading,
-}: RoleFormProps) => {
+const RoleForm = ({ permissions = [], isPermissionsLoading }: RoleFormProps) => {
   const { register, watch, setValue } = useFormContext<CreateRoleFormValues>();
   const selectedColor = watch("labelColor");
   const selectedIcon = watch("iconKey");
   const selectedPermissions = watch("permissions") ?? [];
 
-  const groupedPermissions = useMemo(
-    () => groupPermissionsByCategory(permissions || []),
-    [permissions]
-  );
+  const groupedPermissions = useMemo(() => groupPermissionsByCategory(permissions || []), [permissions]);
 
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
 
@@ -79,9 +73,7 @@ const RoleForm = ({
   const toggleAllInCategory = useCallback(
     (category: string) => {
       const perms = groupedPermissions[category] || [];
-      const allSelected = perms.every((p) =>
-        selectedPermissions.includes(p.key)
-      );
+      const allSelected = perms.every((p) => selectedPermissions.includes(p.key));
       const newPermissions = new Set(selectedPermissions);
       if (allSelected) perms.forEach((p) => newPermissions.delete(p.key));
       else perms.forEach((p) => newPermissions.add(p.key));
@@ -97,8 +89,7 @@ const RoleForm = ({
     Object.entries(groupedPermissions).forEach(([cat, perms]) => {
       m[cat] = {
         total: perms.length,
-        selected: perms.filter((p) => selectedPermissions.includes(p.key))
-          .length,
+        selected: perms.filter((p) => selectedPermissions.includes(p.key)).length,
       };
     });
     return m;
@@ -108,17 +99,14 @@ const RoleForm = ({
     <form className="space-y-6 pt-1" aria-label="Role form">
       {/* Name */}
       <div className="space-y-1">
-        <label
-          className="text-sm font-medium text-muted-foreground"
-          htmlFor="role-name"
-        >
+        <label className="text-sm font-medium text-muted-foreground" htmlFor="role-name">
           Nazwa roli
         </label>
         <Input
           id="role-name"
           {...register("name", { required: true })}
           placeholder="Np. Moderator"
-          className="h-9"
+          className="h-9 border-ring text-foreground"
         />
       </div>
 
@@ -134,8 +122,8 @@ const RoleForm = ({
               onClick={() => setValue("iconKey", name, { shouldDirty: true })}
               className={`w-11 h-11 flex items-center justify-center rounded border transition ${
                 selectedIcon === name
-                  ? "border-ring ring-2 ring-ring ring-offset-1"
-                  : "border-border hover:bg-muted"
+                  ? "border-ring  ring-primary bg-primary text-primary-foreground ring-offset-1"
+                  : "border-border hover:bg-muted text-foreground"
               }`}
               title={name}
               aria-pressed={selectedIcon === name}
@@ -148,30 +136,19 @@ const RoleForm = ({
 
       {/* Label color */}
       <div className="space-y-2">
-        <p className="text-sm font-medium text-muted-foreground">
-          Kolor etykiety
-        </p>
-        <input
-          type="hidden"
-          {...register("labelColor", { required: true })}
-          value={selectedColor}
-        />
+        <p className="text-sm font-medium text-muted-foreground">Kolor etykiety</p>
+        <input type="hidden" {...register("labelColor", { required: true })} value={selectedColor} />
         <div className="flex flex-wrap gap-2 items-center">
           {colorOptions.map(({ name, value }) => {
             const isSelected = selectedColor === value;
-            const colorClasses =
-              colorClassMap[value] || "bg-muted border-border";
+            const colorClasses = colorClassMap[value] || "bg-muted border-border";
             return (
               <button
                 key={name}
                 type="button"
-                onClick={() =>
-                  setValue("labelColor", value, { shouldDirty: true })
-                }
+                onClick={() => setValue("labelColor", value, { shouldDirty: true })}
                 className={`w-8 h-8 rounded-full border cursor-pointer transition-all duration-200 flex items-center justify-center ${
-                  isSelected
-                    ? "ring-2 ring-ring ring-offset-2"
-                    : "hover:scale-105"
+                  isSelected ? "ring-2 ring-ring ring-offset-2" : "hover:scale-105"
                 } ${colorClasses}`}
                 title={name}
                 aria-pressed={isSelected}
@@ -184,19 +161,11 @@ const RoleForm = ({
       {/* Permissions */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <p className="text-sm font-medium text-muted-foreground">
-            Uprawnienia
-          </p>
-          <p className="text-sm text-muted-foreground">
-            Wybierz uprawnienia dla roli
-          </p>
+          <p className="text-sm font-medium text-muted-foreground">Uprawnienia</p>
+          <p className="text-sm text-muted-foreground">Wybierz uprawnienia dla roli</p>
         </div>
 
-        {isPermissionsLoading && (
-          <p className="text-sm text-muted-foreground">
-            Ładowanie uprawnień...
-          </p>
-        )}
+        {isPermissionsLoading && <p className="text-sm text-muted-foreground">Ładowanie uprawnień...</p>}
 
         {!isPermissionsLoading && (
           <>
@@ -208,8 +177,7 @@ const RoleForm = ({
                   total: perms.length,
                   selected: 0,
                 };
-                const allSelected =
-                  counts.selected === counts.total && counts.total > 0;
+                const allSelected = counts.selected === counts.total && counts.total > 0;
                 const isCollapsed = !!collapsed[category];
 
                 return (
@@ -227,10 +195,7 @@ const RoleForm = ({
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex items-center gap-3">
                         <div className="flex flex-col">
-                          <h3
-                            id={`cat-${category}`}
-                            className="text-base font-semibold text-foreground"
-                          >
+                          <h3 id={`cat-${category}`} className="text-base font-semibold text-foreground">
                             {category}
                           </h3>
                           <span className="text-xs text-muted-foreground">
@@ -247,9 +212,7 @@ const RoleForm = ({
                           aria-pressed={allSelected}
                           title={allSelected ? "Unselect all" : "Select all"}
                         >
-                          {allSelected
-                            ? "Odznacz wszystkie"
-                            : "Zaznacz wszystkie"}
+                          {allSelected ? "Odznacz wszystkie" : "Zaznacz wszystkie"}
                         </button>
 
                         <button
@@ -288,19 +251,12 @@ const RoleForm = ({
                             >
                               <div className="flex items-center gap-3">
                                 <div className="min-w-0">
-                                  <div className="text-sm font-medium text-foreground">
-                                    {label}
-                                  </div>
+                                  <div className="text-sm font-medium text-foreground">{label}</div>
                                 </div>
                               </div>
 
                               <div className="flex items-center gap-2">
-                                {checked && (
-                                  <Check
-                                    className="w-4 h-4 text-muted-foreground"
-                                    aria-hidden
-                                  />
-                                )}
+                                {checked && <Check className="w-4 h-4 text-muted-foreground" aria-hidden />}
                                 <Switch
                                   checked={checked}
                                   onCheckedChange={() => togglePermission(key)}

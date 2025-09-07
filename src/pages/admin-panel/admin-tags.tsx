@@ -1,26 +1,14 @@
-import {
-  Ellipsis,
-  FileIcon,
-  Hash,
-  Loader,
-  Lock,
-  Plus,
-  XCircleIcon,
-} from "lucide-react";
+import { Dropdown } from "@/components/Dropdown";
+import { EditTagModal } from "@/components/tag/edit-tag-modal";
+import { TagModal } from "@/components/tag/tag-modal";
+import { Input } from "@/components/ui/input";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { useFindTagsQuery } from "@/hooks/tags/use-tags";
+import { Ellipsis, FileIcon, Hash, Loader, Lock, Plus, XCircleIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Dropdown } from "@/components/Dropdown";
-import { useFindTagsQuery } from "@/hooks/tags/use-tags";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { TagModal } from "@/components/tag/tag-modal";
-import { EditTagModal } from "@/components/tag/edit-tag-modal";
 
 const triggerBtn = (
   <Button variant="default" className="flex items-center gap-1">
@@ -40,12 +28,7 @@ export const TagsPage = () => {
     return searchParams;
   }, [searchTerm]);
 
-  const {
-    data: tags = [],
-    isLoading,
-    isError,
-    error,
-  } = useFindTagsQuery(params);
+  const { data: tags = [], isLoading, isError, error } = useFindTagsQuery(params);
 
   const onCreateTag = (): void => {
     setIsCreatingTag(true);
@@ -75,18 +58,14 @@ export const TagsPage = () => {
           <h1 className="text-2xl font-semibold text-foreground flex items-center gap-2">
             <Hash className="w-6 h-6 text-muted-foreground" /> Tagi
           </h1>
-          <Dropdown
-            triggerBtn={triggerBtn}
-            options={dropdownOptions}
-            position={{ align: "end" }}
-          />
+          <Dropdown triggerBtn={triggerBtn} options={dropdownOptions} position={{ align: "end" }} />
         </div>
 
         {/* Filters */}
-        <div className="flex bg-muted/40 rounded-lg px-3 py-2 gap-3 items-center flex-wrap">
+        <div className="flex px-3 py-2 gap-3 items-center flex-wrap">
           <Input
             placeholder="Wyszukaj tag..."
-            className="w-64"
+            className="w-64 border-ring"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -128,9 +107,7 @@ export const TagsPage = () => {
                 <div className="flex items-center gap-3">
                   <Hash className="w-5 h-5 text-muted-foreground" />
 
-                  <span className="text-sm font-medium text-foreground">
-                    {tag.name}
-                  </span>
+                  <span className="text-sm font-medium text-foreground">{tag.name}</span>
                 </div>
 
                 {/* Actions */}
@@ -148,11 +125,7 @@ export const TagsPage = () => {
                   <Dropdown
                     withSeparators
                     triggerBtn={
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="opacity-0 group-hover:opacity-100 transition"
-                      >
+                      <Button variant="ghost" size="icon" className="opacity-0 group-hover:opacity-100 transition">
                         <Ellipsis className="w-4 h-4" />
                       </Button>
                     }
@@ -176,16 +149,9 @@ export const TagsPage = () => {
           </ul>
         )}
       </div>
-      <TagModal
-        isCreatingTag={isCreatingTag}
-        setIsCreatingTag={setIsCreatingTag}
-      />
+      <TagModal isCreatingTag={isCreatingTag} setIsCreatingTag={setIsCreatingTag} />
       {editingTagId && (
-        <EditTagModal
-          tagId={editingTagId}
-          isEditingTag={isEditingTag}
-          setIsEditingTag={setIsEditingTag}
-        />
+        <EditTagModal tagId={editingTagId} isEditingTag={isEditingTag} setIsEditingTag={setIsEditingTag} />
       )}
     </div>
   );

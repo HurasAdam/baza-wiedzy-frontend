@@ -10,7 +10,8 @@ type Theme =
   | "aqua"
   | "light-halloween"
   | "forest-default"
-  | "silk-default";
+  | "corporate-default"
+  | "corporate-gray";
 
 type ThemeProviderProps = {
   children: React.ReactNode;
@@ -52,7 +53,8 @@ export function ThemeProvider({
       "aqua",
       "dark-halloween",
       "forest-default",
-      "silk-default"
+      "corporate-default",
+      "corporate-gray"
     );
 
     if (theme === "system") {

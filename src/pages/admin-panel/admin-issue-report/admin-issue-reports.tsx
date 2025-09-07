@@ -1,26 +1,13 @@
 import { Dropdown } from "@/components/Dropdown";
-import {
-  Loader,
-  Ellipsis,
-  Bug,
-  Lightbulb,
-  MessageSquareWarning,
-  X,
-} from "lucide-react";
-import { useState, useMemo } from "react";
-import { toast } from "sonner";
-import { useFindIssueReportsQuery } from "@/hooks/issue-report/use-issue-report";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useFindIssueReportsQuery } from "@/hooks/issue-report/use-issue-report";
+import { Bug, Ellipsis, Lightbulb, Loader, MessageSquareWarning, X } from "lucide-react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 type IssueType = "" | "bug" | "proposal";
 type IssueStatus = "" | "pending" | "in-progress" | "resolved" | "rejected";
@@ -39,12 +26,7 @@ export const AdminUserReportsPage = () => {
     return searchParams;
   }, [filterStatus, filterType, searchTerm]);
 
-  const {
-    data: reports = [],
-    isLoading,
-    isError,
-    error,
-  } = useFindIssueReportsQuery(params);
+  const { data: reports = [], isLoading, isError, error } = useFindIssueReportsQuery(params);
 
   const getStatusLabel = (status: string) => {
     switch (status) {
@@ -109,22 +91,20 @@ export const AdminUserReportsPage = () => {
         </div>
 
         {/* Filters */}
-        <div className="flex bg-muted/40 rounded-lg px-3 py-2 gap-3 items-center flex-wrap">
+        <div className="flex px-3 py-2 gap-3 items-center flex-wrap">
           {/* Wyszukiwanie */}
           <Input
             placeholder="Wyszukaj zgłoszenie"
-            className="w-48"
+            className="w-48 border-ring"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
 
           <Select
             value={filterType === "" ? "all" : filterType}
-            onValueChange={(value) =>
-              setFilterType(value === "all" ? "" : (value as IssueType))
-            }
+            onValueChange={(value) => setFilterType(value === "all" ? "" : (value as IssueType))}
           >
-            <SelectTrigger className="w-40">
+            <SelectTrigger className="w-40 border-ring">
               <SelectValue placeholder="Typ zgłoszenia" />
             </SelectTrigger>
             <SelectContent>
@@ -136,11 +116,9 @@ export const AdminUserReportsPage = () => {
 
           <Select
             value={filterStatus === "" ? "all" : filterStatus}
-            onValueChange={(value) =>
-              setFilterStatus(value === "all" ? "" : (value as IssueStatus))
-            }
+            onValueChange={(value) => setFilterStatus(value === "all" ? "" : (value as IssueStatus))}
           >
-            <SelectTrigger className="w-40">
+            <SelectTrigger className="w-40 border-ring">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
@@ -183,9 +161,7 @@ export const AdminUserReportsPage = () => {
           </p>
         )}
 
-        {!isLoading && !isError && reports.length === 0 && (
-          <p className="text-center py-10">Brak zgłoszeń</p>
-        )}
+        {!isLoading && !isError && reports.length === 0 && <p className="text-center py-10">Brak zgłoszeń</p>}
 
         {!isLoading && !isError && reports.length > 0 && (
           <ul className="divide-y divide-border">
@@ -202,9 +178,7 @@ export const AdminUserReportsPage = () => {
                     <Lightbulb className="w-5 h-5 text-yellow-500" />
                   )}
                   <div className="flex flex-col">
-                    <span className="text-sm font-semibold">
-                      {report.title}
-                    </span>
+                    <span className="text-sm font-semibold">{report.title}</span>
                     <span className="text-xs text-muted-foreground">
                       {report.createdBy.name} {report.createdBy.surname} •{" "}
                       {new Date(report.createdAt).toLocaleDateString("pl-PL")}
@@ -216,20 +190,14 @@ export const AdminUserReportsPage = () => {
                 <div className="flex items-center gap-14">
                   <div className="flex items-center gap-10">
                     <Badge variant="secondary">{report.category}</Badge>
-                    <Badge variant="outline">
-                      {getStatusLabel(report.status)}
-                    </Badge>
+                    <Badge variant="outline">{getStatusLabel(report.status)}</Badge>
                   </div>
 
                   {/* Actions */}
                   <Dropdown
                     withSeparators
                     triggerBtn={
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="opacity-0 group-hover:opacity-100 transition"
-                      >
+                      <Button variant="ghost" size="icon" className="opacity-0 group-hover:opacity-100 transition">
                         <Ellipsis className="w-4 h-4" />
                       </Button>
                     }
@@ -237,14 +205,12 @@ export const AdminUserReportsPage = () => {
                       {
                         label: "Szczegóły",
                         icon: <Bug className="w-4 h-4" />,
-                        actionHandler: () =>
-                          navigate(`/admin/manage-reports/${report._id}`),
+                        actionHandler: () => navigate(`/admin/manage-reports/${report._id}`),
                       },
                       {
                         label: "Usuń",
                         icon: <Bug className="w-4 h-4 text-red-500" />,
-                        actionHandler: () =>
-                          toast.error(`Usuń ${report.title}`),
+                        actionHandler: () => toast.error(`Usuń ${report.title}`),
                       },
                     ]}
                     position={{ align: "end" }}

@@ -95,7 +95,7 @@ export const AdminSidebar = ({ isCollapsed }: SidebarProps) => {
                       "w-full px-3 py-2 text-admin-sidebar-foreground transition border-transparent rounded-none hover:bg-transparent hover:border-l hover:border-admin-sidebar-primary",
                       isCollapsed ? "justify-center" : "justify-start",
                       isActive &&
-                        "bg-admin-sidebar-primary hover:bg-admin-sidebar-primary rounded-md  text-primary-foreground font-medium border-l-4  border-transparent"
+                        "bg-admin-sidebar-primary hover:bg-admin-sidebar-primary rounded-md  text-admin-sidebar-primary-foreground font-medium border-l-4  border-transparent"
                     )}
                   >
                     <Icon className={cn("w-5 h-5", !isCollapsed && "mr-2")} />

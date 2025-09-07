@@ -115,15 +115,13 @@ const FavoriteArticlesFilterBar: React.FC<FavoriteArticlesFilterBarProps> = ({
         {/* Reset Button */}
         <Button
           onClick={onResetAll}
+          variant={hasFilters ? "default" : "outline"}
           disabled={!hasFilters}
           className={cn(
-            "ml-auto inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors",
-            hasFilters
-              ? "bg-muted text-foreground hover:bg-muted/80 border border-border shadow-sm"
-              : "bg-muted text-muted-foreground border border-border disabled:opacity-70 cursor-not-allowed opacity-50"
+            "ml-auto inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors"
           )}
         >
-          <XIcon className="h-4 w-4 stroke-[2] text-foreground" />
+          <XIcon className="h-4 w-4 stroke-[2] text-primary-foreground" />
           Wyczyść filtry
         </Button>
       </div>

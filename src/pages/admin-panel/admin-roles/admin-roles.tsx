@@ -49,10 +49,10 @@ export const AdminRolesPage = () => {
         </div>
 
         {/* Filters */}
-        <div className="flex bg-muted/40 rounded-lg px-3 py-2 gap-3 items-center flex-wrap">
+        <div className="flex  px-3 py-2 gap-3 items-center flex-wrap">
           <Input
             placeholder="Wyszukaj role..."
-            className="w-64"
+            className="w-64 border-ring"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
