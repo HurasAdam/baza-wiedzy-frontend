@@ -4,12 +4,14 @@ import { CreateWorkspaceModal } from "@/components/workspace/CreateWorkspaceModa
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { ChangeLogModal } from "../../components/change-log/change-log-modal";
+import { IssueReportsModal } from "../../components/issue-reports/issue-reports-modal";
 import Header from "./components/Header";
 import { Sidebar } from "./components/Sidebar";
 
 const AppLayout = () => {
   const [isCreatingWorkspace, setIsCreatingWorkspace] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  const [isIssueReportsModalOpen, setIsIssueReportsModalOpen] = useState(false);
   const [isCreatingIssueReport, setIsCreatingIssueReport] = useState(false);
   const [isChangeLogModalOpen, setIsChangeLogModalOpen] = useState(false);
 
@@ -21,6 +23,7 @@ const AppLayout = () => {
         <Header
           onCreateWorkspace={() => setIsCreatingWorkspace(true)}
           onOpenSettingsModal={() => setIsSettingsModalOpen(true)}
+          onOpenIssueReportsModal={() => setIsIssueReportsModalOpen(true)}
           onOpenCreateIssueReport={() => setIsCreatingIssueReport(true)}
         />
 
@@ -32,6 +35,11 @@ const AppLayout = () => {
       </div>
 
       <SettingsModal isSettingsModalOpen={isSettingsModalOpen} setIsSettingsModalOpen={setIsSettingsModalOpen} />
+
+      <IssueReportsModal
+        isIssueReportsModalOpen={isIssueReportsModalOpen}
+        setIsIssueReportsModalOpen={setIsIssueReportsModalOpen}
+      />
 
       <CreateWorkspaceModal isCreatingWorkspace={isCreatingWorkspace} setIsCreatingWorkspace={setIsCreatingWorkspace} />
       <SendIssueReportModal

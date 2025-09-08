@@ -31,11 +31,17 @@ const backendBase = import.meta.env.VITE_BACKEND_BASE_URL ?? "http://localhost:5
 interface HeaderProps {
   onCreateWorkspace: () => void;
   onOpenCreateIssueReport: () => void;
+  onOpenIssueReportsModal: () => void;
   onOpenSettingsModal: () => void;
 }
 
 const workspaces = [];
-const Header = ({ onOpenSettingsModal, onCreateWorkspace, onOpenCreateIssueReport }: HeaderProps) => {
+const Header = ({
+  onOpenSettingsModal,
+  onCreateWorkspace,
+  onOpenCreateIssueReport,
+  onOpenIssueReportsModal,
+}: HeaderProps) => {
   const { data: user } = useAuthQuery();
 
   const initials = getAvatarFallbackText(user?.name);
@@ -88,7 +94,7 @@ const Header = ({ onOpenSettingsModal, onCreateWorkspace, onOpenCreateIssueRepor
     {
       label: "Moje zgłoszenia",
       icon: <User className="hover:text-primary-foreground" />,
-      actionHandler: () => {},
+      actionHandler: () => onOpenIssueReportsModal(),
     },
     {
       label: "Panel Admina",
