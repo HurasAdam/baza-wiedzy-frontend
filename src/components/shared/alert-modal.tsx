@@ -19,6 +19,7 @@ interface Props {
   onCancel: () => void;
   onConfirm: () => void;
   requireConfirmation?: boolean;
+  isConfirmEnabled?: boolean;
   type?: "warning" | "info" | "success" | "default";
   title?: string;
   isLoading: boolean;
@@ -36,6 +37,8 @@ export function Alert({
   onConfirm,
   children,
   requireConfirmation = false,
+  isConfirmEnabled = false,
+
   type = "default",
   isLoading,
 }: Props) {
@@ -60,7 +63,7 @@ export function Alert({
           </AlertDialogTitle>
           <AlertDialogDescription className="pt-1.5 pb-0.5">{children}</AlertDialogDescription>
         </AlertDialogHeader>
-        {requireConfirmation && (
+        {requireConfirmation && isConfirmEnabled && (
           <ConfirmationCheckbox onChange={setIsChecked} checked={isChecked} label="Rozumiem" id="confirmation" />
         )}
         <AlertDialogFooter>
