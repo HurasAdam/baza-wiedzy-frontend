@@ -6,7 +6,7 @@ import { CheckCircle, Edit3, Eye, PlusCircle, RotateCcw, Trash2, XCircle } from 
 import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-export default function ArticleHistoryTab() {
+export function ArticleHistoryPage() {
   const { id } = useParams();
   const { data: articleHistoryList = [] } = useFindArticleHistoryQuery(id!);
 
@@ -23,8 +23,8 @@ export default function ArticleHistoryTab() {
   }, [articleHistoryList, query]);
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+    <div className="">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 py-3">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 bg-gradient-to-r from-primary/10 to-primary/5 rounded-full px-3 py-1">
             <h3 className="text-sm font-semibold">Historia zmian</h3>
@@ -52,6 +52,10 @@ export default function ArticleHistoryTab() {
               const cfg = eventConfig(item.eventType);
               const Icon = cfg.Icon;
 
+              // sprawdź czy jest zmiana statusu
+              const statusChange =
+                item.statusChange && item.statusChange.from !== item.statusChange.to ? item.statusChange : null;
+
               return (
                 <li key={item._id}>
                   <div className="flex items-center justify-between bg-card p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-150">
@@ -71,6 +75,20 @@ export default function ArticleHistoryTab() {
                           {relativeTime(item.createdAt)} •{" "}
                           <span className="text-[11px]">{formatDate(item.createdAt)}</span>
                         </div>
+
+                        {/* 👇 tu dokładamy extra info o statusie */}
+                        {statusChange && (
+                          <div className="text-xs mt-2">
+                            <span className="text-muted-foreground">Status: </span>
+                            <span className="font-base text-muted-foreground">
+                              {statusLabels[String(statusChange.from)] ?? statusChange.from}
+                            </span>{" "}
+                            →{" "}
+                            <span className="font-base">
+                              {statusLabels[String(statusChange.to)] ?? statusChange.to}
+                            </span>
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -115,13 +133,21 @@ function relativeTime(d: any) {
   const min = Math.floor(sec / 60);
   const hrs = Math.floor(min / 60);
   const days = Math.floor(hrs / 24);
+  const years = Math.floor(days / 365);
 
   if (sec < 60) return `${sec} s temu`;
   if (min < 60) return `${min} min temu`;
   if (hrs < 24) return `${hrs} godz. temu`;
   if (days === 1) return `wczoraj`;
+  if (years >= 1) return `${years} ${years === 1 ? "rok" : "lata"} temu`;
   return `${days} dni temu`;
 }
+const statusLabels: Record<string, string> = {
+  approved: "Zatwierdzony", // Approved → zatwierdzony
+  pending: "Wymaga weryfikacji", // Pending → wymaga weryfikacji
+  rejected: "Wymagający poprawy", // Rejected → wymagający poprawy
+  draft: "Szkic roboczy", // Draft → wersja robocza / szkic, może pasuje do Twojego workflow
+};
 
 function eventConfig(eventType: string | undefined) {
   // prosty mapping, możesz przenieść do utils/getEventConfig jeśli chcesz

@@ -1,9 +1,9 @@
-import { AlertTriangleIcon, CheckCircleIcon, ClockIcon, Loader } from "lucide-react";
+import { AlertTriangleIcon, CheckCircleIcon, ClockIcon, Loader, XCircleIcon } from "lucide-react";
 import { Button } from "../../../components/ui/button";
 import { Card, CardContent } from "../../../components/ui/card";
 import { cn } from "../../../lib/utils";
 
-interface ArticleVerificationBannerProps {
+interface ArticleDraftBannerProps {
   status: "draft" | "pending";
   isApproving: boolean;
   isRejecting: boolean;
@@ -11,7 +11,7 @@ interface ArticleVerificationBannerProps {
   onReject: () => void;
 }
 
-export const ArticleVerificationBanner: React.FC<ArticleVerificationBannerProps> = ({
+export const ArticleDraftBanner: React.FC<ArticleDraftBannerProps> = ({
   status,
   isApproving,
   isRejecting,
@@ -46,7 +46,7 @@ export const ArticleVerificationBanner: React.FC<ArticleVerificationBannerProps>
         </div>
 
         <div className="flex gap-2">
-          {/* <Button
+          <Button
             size="sm"
             variant="destructive"
             className={cn("flex items-center gap-1  ", isRejecting && "opacity-60")}
@@ -54,8 +54,8 @@ export const ArticleVerificationBanner: React.FC<ArticleVerificationBannerProps>
             disabled={isRejecting}
           >
             {isRejecting ? <Loader className="w-4 h-4 animate-spin" /> : <XCircleIcon className="w-4 h-4" />}
-            Odrzuć
-          </Button> */}
+            Zgłoś sugestie
+          </Button>
           <Button
             size="sm"
             variant="default"

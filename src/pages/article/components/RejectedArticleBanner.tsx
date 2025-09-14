@@ -1,4 +1,4 @@
-import { XCircleIcon } from "lucide-react";
+import { CheckCircleIcon, Loader, XCircleIcon } from "lucide-react";
 import { useState } from "react";
 
 import ArticleRejectionReasonModal from "../../../components/my-entries/article-rejection-reason-modal";
@@ -8,13 +8,16 @@ import type { Article } from "../../my-entries/components/MyEntryCard";
 
 interface RejectedArticleBannerProps {
   article: Article;
+  onResubmit: () => void;
+  isResubmitting: boolean;
 }
 
 export const RejectedArticleBanner: React.FC<RejectedArticleBannerProps> = ({
   article,
+  onResubmit,
+  isResubmitting,
 }) => {
-  const [isRejectionReasonAlertOpen, setIsRejectionReasonAlertOpen] =
-    useState<boolean>(false);
+  const [isRejectionReasonAlertOpen, setIsRejectionReasonAlertOpen] = useState<boolean>(false);
 
   const onRejectionModalOpen = () => {
     setIsRejectionReasonAlertOpen(true);
@@ -32,12 +35,10 @@ export const RejectedArticleBanner: React.FC<RejectedArticleBannerProps> = ({
           </div>
 
           <div className="space-y-1">
-            <h2 className="text-base font-semibold text-foreground">
-              Artykuł został odrzucony
-            </h2>
+            <h2 className="text-base font-semibold text-foreground">Artykuł został odrzucony</h2>
             <p className="text-sm text-foreground">
-              Artykuł został odrzucony przez moderatora. Zapoznaj się z uwagami
-              i wprowadź poprawki przed ponownym zgłoszeniem.
+              Artykuł został odrzucony przez moderatora. Zapoznaj się z uwagami i wprowadź poprawki przed ponownym
+              zgłoszeniem.
             </p>
             {article && article.rejectionReason && (
               <Button
@@ -49,6 +50,12 @@ export const RejectedArticleBanner: React.FC<RejectedArticleBannerProps> = ({
                 Pokaż więcej...
               </Button>
             )}
+          </div>
+          <div className="flex gap-2">
+            <Button onClick={onResubmit} size="sm" variant="default">
+              {isResubmitting ? <Loader className="w-4 h-4 animate-spin" /> : <CheckCircleIcon className="w-4 h-4" />}
+              Zgłoś do weryfikacji
+            </Button>
           </div>
         </CardContent>
       </Card>

@@ -86,7 +86,7 @@ export const UpdateUserRoleModal = ({
 
         <UpdateUserRoleForm
           roles={roles}
-          defaultValues={{ roleId: userData.role._id }}
+          defaultValues={{ roleId: userData?.role?._id }}
           onSubmit={onSubmit}
           isSubmitting={isPending}
           submitText="Zapisz zmiany"

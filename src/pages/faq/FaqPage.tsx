@@ -146,9 +146,13 @@ export function FaqPage() {
                           <CommandItem
                             key={item._id}
                             onSelect={() => handleSelectFaq(item._id)}
-                            className={`cursor-pointer ${item._id === activeFaqId ? "bg-accent" : ""}`}
+                            className={`cursor-pointer  ${
+                              item._id === activeFaqId
+                                ? "bg-accent border-l-4  border-primary text-primary-foreground group"
+                                : ""
+                            }`}
                           >
-                            <Icon className="w-4 h-4 mr-2" />
+                            <Icon className="w-4 h-4 mr-2 group-text-foreground" />
                             <span>{item.title}</span>
                           </CommandItem>
                         );

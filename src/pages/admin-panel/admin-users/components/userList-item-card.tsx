@@ -149,7 +149,7 @@ const UserListItemCard = ({ user, onRequestResetPassword, onRequestAccountStatus
               <span>{user.name}</span>
               <span>{user.surname}</span>
             </div>
-            <span className="mt-1 text-xs text-muted-foreground">{user.role.name}</span>
+            <span className="mt-1 text-xs text-muted-foreground">{user?.role?.name}</span>
           </div>
 
           <div className="flex items-center space-x-16">

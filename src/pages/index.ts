@@ -12,6 +12,10 @@ import { TagsPage } from "./admin-panel/admin-tags";
 import { AdminTopicsPage } from "./admin-panel/admin-topics/admin-topics";
 import { AdminUserDetailsPage } from "./admin-panel/admin-user-details/admin-user-details";
 import { UsersPage } from "./admin-panel/admin-users/admin-users";
+import { ArticleAttachmentsPage } from "./article/ArticleAttachmentsPage";
+import { ArticleEditPage } from "./article/ArticleEditPage";
+import { ArticleHistoryPage } from "./article/ArticleHistoryPage";
+import { ArticleMainPage } from "./article/ArticleMainPage";
 import { ArticlesPage } from "./articles/ArticlesPage";
 import { ForgotPasswordPage } from "./auth/forgot-password/ForgotPasswordPage";
 import { LoginPage } from "./auth/login/LoginPage";
@@ -36,6 +40,10 @@ export const PAGES = {
   DashboardPage,
   ArticlesPage,
   ArticlePage,
+  ArticleMainPage,
+  ArticleAttachmentsPage,
+  ArticleHistoryPage,
+  ArticleEditPage,
   TopicRegisterPage,
   NotFoundPage,
   JstProjectsPage,

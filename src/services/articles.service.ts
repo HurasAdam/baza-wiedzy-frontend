@@ -26,9 +26,7 @@ const findByUser = async (userId, params) => {
   return api.get(`${baseUrl}/by-user/${userId}`, { params });
 };
 
-export const createArticle = async (
-  formData: ArticleCreateDto
-): Promise<AxiosResponse> => {
+export const createArticle = async (formData: ArticleCreateDto): Promise<AxiosResponse> => {
   return await api.post(baseUrl, formData);
 };
 
@@ -47,29 +45,25 @@ export const verifyArticle = ({ id, isVerified }) => {
 export const aproveOne = ({ id }: { id: string }) => {
   return api.post(buildUrl(baseUrl, id, "aprove"));
 };
-export const rejectOne = ({
-  articleId,
-  rejectionReason,
-}: {
-  articleId: string;
-  rejectionReason: string;
-}) => {
+export const rejectOne = ({ articleId, rejectionReason }: { articleId: string; rejectionReason: string }) => {
   console.log("SERIS", articleId, rejectionReason);
   return api.post(buildUrl(baseUrl, articleId, "reject"), {
     rejectionReason,
   });
 };
+export const requestReviewOne = ({ id }: { id: string }) => {
+  return api.post(buildUrl(baseUrl, id, "request-review"));
+};
 
-export const markArticleAsFavourite = ({
-  id,
-}: {
-  id: string;
-}): Promise<ToggleFavouriteResponse> => {
+export const markArticleAsFavourite = ({ id }: { id: string }): Promise<ToggleFavouriteResponse> => {
   return api.post(buildUrl(baseUrl, id, "markAsFavourite"));
 };
 
 export const updateArticle = ({ articleId, dto }) => {
   return api.put(buildUrl(baseUrl, articleId), dto);
+};
+export const simpleUpdateArticle = ({ articleId, dto }) => {
+  return api.put(buildUrl(baseUrl, articleId, "simple-update"), dto);
 };
 
 export const deleteArticle = ({ id }) => {
@@ -120,6 +114,7 @@ export const articlesService = {
   markArticleAsFavourite,
   deleteArticle,
   updateArticle,
+  simpleUpdateArticle,
   trashArticle,
   findTrashed,
   getArticleHistory,
@@ -134,5 +129,6 @@ export const articlesService = {
   findByUser,
   aproveOne,
   rejectOne,
+  requestReviewOne,
   findAllByUser,
 };

@@ -59,7 +59,7 @@ const UserInfoForm = ({ user, onEditSave, onEditCancel }: UserInfoFormProps) => 
               render={({ field }) => (
                 <label className="flex flex-col text-sm">
                   <span className="text-xs text-muted-foreground uppercase mb-1">Imię</span>
-                  <Input className="border-ring" {...field} placeholder="Imię" />
+                  <Input className="border-ring bg-input/30" {...field} placeholder="Imię" />
                 </label>
               )}
             />
@@ -70,7 +70,7 @@ const UserInfoForm = ({ user, onEditSave, onEditCancel }: UserInfoFormProps) => 
               render={({ field }) => (
                 <label className="flex flex-col text-sm">
                   <span className="text-xs text-muted-foreground uppercase mb-1">Nazwisko</span>
-                  <Input className="border-ring" {...field} placeholder="Nazwisko" />
+                  <Input className="border-ring bg-input/30" {...field} placeholder="Nazwisko" />
                 </label>
               )}
             />
@@ -82,7 +82,12 @@ const UserInfoForm = ({ user, onEditSave, onEditCancel }: UserInfoFormProps) => 
             render={({ field }) => (
               <label className="flex flex-col text-sm">
                 <span className="text-xs text-muted-foreground uppercase mb-1">Bio</span>
-                <Textarea className="border-ring" {...field} rows={4} placeholder="Krótki opis użytkownika" />
+                <Textarea
+                  className="border-ring bg-input/30"
+                  {...field}
+                  rows={4}
+                  placeholder="Krótki opis użytkownika"
+                />
               </label>
             )}
           />

@@ -1,34 +1,19 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader } from "lucide-react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
-import { Button } from "../ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "../ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
-import { Textarea } from "../ui/textarea";
-
-import { Loader2 } from "lucide-react";
-import { useCreateJstProjectMutation } from "../../hooks/jst-projects/use-jst-projects";
-
 import { pendingArticleRejectionSchema } from "../../validation/pending-article-rejection.schema";
+import { Button } from "../ui/button";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { Textarea } from "../ui/textarea";
 
 interface CreateWorkspaceProps {
   onSubmit: ({ rejectionReason }) => void;
   closeOnOutsideClick?: boolean;
   isCreatingArticleRejection: boolean;
   setIsCreatingArticleRejection: (isCreatingWorkspace: boolean) => void;
+  isPending: boolean;
 }
 
 export type JstProjectForm = z.infer<typeof pendingArticleRejectionSchema>;
@@ -38,6 +23,7 @@ export const PendingArticleRejectionModal = ({
   closeOnOutsideClick = false,
   isCreatingArticleRejection,
   setIsCreatingArticleRejection,
+  isPending,
 }: CreateWorkspaceProps) => {
   const form = useForm<JstProjectForm>({
     resolver: zodResolver(pendingArticleRejectionSchema),
@@ -46,22 +32,15 @@ export const PendingArticleRejectionModal = ({
     },
   });
 
-  const { mutate, isPending } = useCreateJstProjectMutation();
-
   const onFormSubmit = (values) => {
     onSubmit(values);
+    form.reset();
   };
 
   return (
-    <Dialog
-      open={isCreatingArticleRejection}
-      onOpenChange={setIsCreatingArticleRejection}
-      modal={true}
-    >
+    <Dialog open={isCreatingArticleRejection} onOpenChange={setIsCreatingArticleRejection} modal={true}>
       <DialogContent
-        {...(!closeOnOutsideClick
-          ? { onInteractOutside: (e) => e.preventDefault() }
-          : {})}
+        {...(!closeOnOutsideClick ? { onInteractOutside: (e) => e.preventDefault() } : {})}
         className="max-h-[80vh] overflow-y-auto"
       >
         <DialogHeader>
@@ -91,15 +70,11 @@ export const PendingArticleRejectionModal = ({
             </div>
 
             <DialogFooter>
-              <Button
-                className="cursor-pointer"
-                type="submit"
-                disabled={isPending}
-              >
+              <Button className="cursor-pointer" type="submit" disabled={isPending}>
                 {isPending ? (
                   <span className="flex items-center gap-1.5">
-                    <Loader2 className="animate-spin" />
-                    Wysyłanie
+                    <Loader className="animate-spin" />
+                    Odrzuć
                   </span>
                 ) : (
                   "Odrzuć"
