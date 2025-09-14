@@ -13,6 +13,7 @@ import {
   Info,
   Layers,
   LayoutDashboard,
+  Ratio,
   RectangleEllipsis,
   School,
   Smile,
@@ -114,16 +115,17 @@ export const Sidebar = ({
 
   return (
     <div
+      style={{ background: "var(--sidebar)" }}
       className={cn(
         "flex flex-col border-r bg-sidebar transition-all duration-300",
-        isCollapsed ? "w-16 md:w[80px]" : "w-16 md:w-[240px]"
+        isCollapsed ? "w-18 md:w[80px]" : "w-16 md:w-[240px] p-2.5"
       )}
     >
       <div className="flex h-14 items-center border-b px-4 mb-4">
         <Link to="/dashboard" className="flex items-center">
           {!isCollapsed && (
             <div className="flex items-center gap-2">
-              <Layers className="size-6 text-sidebar-logo" />
+              <Ratio className="size-6 text-sidebar-logo" />
               <span className="font-semibold text-lg hidden md:block text-sidebar-foreground">Baza wiedzy</span>
             </div>
           )}
@@ -141,7 +143,7 @@ export const Sidebar = ({
         </Button>
       </div>
 
-      <ScrollArea className="flex-1 px-3 py-2">
+      <ScrollArea className="flex-1  px-3 py-2">
         <SidebarNav
           items={navItems}
           isCollapsed={isCollapsed}
@@ -153,12 +155,14 @@ export const Sidebar = ({
       <div className="flex flex-col items-center py-4 mt-auto text-xs text-muted-foreground">
         <span className="flex items-center gap-1  ">
           <Info onClick={onOpenChangeLogModal} className="w-4 h-4 cursor-help text-sidebar-logo-secondary" />
-          <span className="flex items-center gap-1 text-sidebar-foreground">
-            v{APP_VERSION}
-            {isBeta && (
-              <span className=" bg-yellow-400 text-black text-[10px] px-1 py-0.5 rounded font-medium ">Beta</span>
-            )}
-          </span>
+          {!isCollapsed && (
+            <span className="flex items-center gap-1 text-sidebar-foreground">
+              v{APP_VERSION}
+              {isBeta && (
+                <span className=" bg-yellow-400 text-black text-[10px] px-1 py-0.5 rounded font-medium ">Beta</span>
+              )}
+            </span>
+          )}
         </span>
       </div>
     </div>

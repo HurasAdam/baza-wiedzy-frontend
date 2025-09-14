@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useTheme } from "@/providers/theme-provider";
-import { Droplet, Palette, Sun } from "lucide-react";
+import { Droplet, LayoutDashboard, Palette, Sun } from "lucide-react";
 import { useState } from "react";
 
 const themeGroups = {
@@ -13,15 +13,20 @@ const themeGroups = {
   ],
   dark: [
     { key: "dark-aqua", label: "Aqua", accent: "bg-indigo-500" },
+    // { key: "dark-aqua-gradient", label: "Aqua-Gradient", accent: "bg-indigo-400" },
     { key: "dark-halloween", label: "Halloween", accent: "bg-orange-600" },
+    // { key: "dark-halloween-gradient", label: "Halloween-Gradient", accent: "bg-orange-400" },
     { key: "dark-violet", label: "Violet", accent: "bg-purple-500" },
     { key: "dark-amber", label: "Amber", accent: "bg-amber-400" },
   ],
-  forest: [{ key: "forest-default", label: "Forest", accent: "bg-green-600" }],
-  corporate: [
-    { key: "corporate-default", label: "Gray", accent: "bg-neutral-400/80" },
-    { key: "corporate-gray", label: "Dark", accent: "bg-slate-700" },
+  deep: [
+    { key: "deep-forest", label: "Forest", accent: "bg-green-600" },
+    { key: "deep-aqua", label: "Aqua", accent: "bg-blue-600" },
   ],
+  // corporate: [
+  //   { key: "corporate-default", label: "Gray", accent: "bg-neutral-400/80" },
+  //   { key: "corporate-gray", label: "Gray", accent: "bg-neutral-400/80" },
+  // ],
 };
 
 const Field = ({
@@ -48,15 +53,13 @@ const Field = ({
 );
 
 const SettingsThemePanelTab = () => {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, sidebarTheme, setSidebarTheme } = useTheme();
 
   const currentGroup = Object.keys(themeGroups).find((group) =>
     themeGroups[group as keyof typeof themeGroups].some((t) => t.key === theme)
   ) as keyof typeof themeGroups;
 
-  const [selectedGroup, setSelectedGroup] = useState<"light" | "dark" | "forest" | "corporate">(
-    currentGroup || "light"
-  );
+  const [selectedGroup, setSelectedGroup] = useState<"light" | "dark" | "deep" | "corporate">(currentGroup || "light");
   const [selectedAccent, setSelectedAccent] = useState<string>(theme);
 
   return (
@@ -68,14 +71,14 @@ const SettingsThemePanelTab = () => {
             <Palette className="w-5 h-5 text-muted-foreground" />
             Wygląd
           </CardTitle>
-          <p className="text-sm text-muted-foreground"> Wybierz motyw i wariant akcentu dla aplikacji</p>
+          <p className="text-sm text-muted-foreground">Wybierz motyw i wariant akcentu dla aplikacji</p>
         </CardHeader>
         <CardContent className="space-y-3">
           <Field icon={Sun} label="Motyw" description="Wybierz jasny lub ciemny tryb">
             <Select
               value={selectedGroup}
               onValueChange={(value) => {
-                const group = value as "light" | "dark";
+                const group = value as "light" | "dark" | "deep" | "corporate";
                 setSelectedGroup(group);
                 const defaultTheme = themeGroups[group][0].key;
                 setTheme(defaultTheme);
@@ -86,9 +89,9 @@ const SettingsThemePanelTab = () => {
                 <SelectValue placeholder="Wybierz tryb" />
               </SelectTrigger>
               <SelectContent>
-                {(["light", "dark", "forest", "corporate"] as const).map((g) => (
+                {(["light", "dark", "deep"] as const).map((g) => (
                   <SelectItem key={g} value={g}>
-                    {g === "light" ? "Jasny" : g === "dark" ? "Ciemny" : g === "forest" ? "Forest" : "Corporate"}
+                    {g === "light" ? "Jasny" : g === "dark" ? "Ciemny" : g === "deep" ? "Deep" : "Corporate"}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -120,6 +123,41 @@ const SettingsThemePanelTab = () => {
                     </div>
                   </SelectItem>
                 ))}
+              </SelectContent>
+            </Select>
+          </Field>
+        </CardContent>
+      </Card>
+
+      {/* Wybór sidebaru */}
+      <Card className="border-none shadow-none bg-transparent py-2">
+        <CardContent className="space-y-3">
+          <Field icon={LayoutDashboard} label="Sidebar" description="Wybierz wygląd paska bocznego">
+            <Select
+              value={sidebarTheme}
+              onValueChange={(value) => {
+                setSidebarTheme(value as string);
+              }}
+            >
+              <SelectTrigger className="w-48 border-ring text-foreground">
+                <SelectValue placeholder="Wybierz sidebar" />
+              </SelectTrigger>
+              <SelectContent>
+                {selectedGroup === "light" ? (
+                  <>
+                    <SelectItem value="sidebar-default">Base</SelectItem>
+                    <SelectItem value="sidebar-style-1">Gradient-One</SelectItem>
+                    <SelectItem value="sidebar-style-2">Gradient-Two</SelectItem>
+                    <SelectItem value="sidebar-style-3">Gradient-Three</SelectItem>
+                  </>
+                ) : (
+                  <>
+                    <SelectItem value="sidebar-default">Base</SelectItem>
+                    <SelectItem value="sidebar-style-1">Carbon</SelectItem>
+                    <SelectItem value="sidebar-style-2">Gradient</SelectItem>
+                    <SelectItem value="sidebar-style-3">CentOS</SelectItem>
+                  </>
+                )}
               </SelectContent>
             </Select>
           </Field>

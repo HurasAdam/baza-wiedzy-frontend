@@ -43,7 +43,8 @@ export const SidebarNav = ({ items, isCollapsed, className, currentWorkspace, ..
             className={cn(
               "justify-start text-sidebar-foreground border-transparent hover:text-sidebar-accent-foreground hover:bg-transparent",
               isActive &&
-                "bg-sidebar-primary hover:bg-sidebar-primary border-sidebar-border text-sidebar-primary-foreground font-medium"
+                "bg-sidebar-primary hover:bg-sidebar-primary border-sidebar-border text-sidebar-primary-foreground font-medium",
+              isCollapsed && "w-10 "
             )}
             onClick={handleClick}
           >

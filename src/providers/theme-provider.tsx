@@ -11,7 +11,8 @@ type Theme =
   | "light-violet"
   | "aqua"
   | "light-halloween"
-  | "forest-default"
+  | "deep-forest"
+  | "deep-aqua"
   | "corporate-default"
   | "corporate-gray";
 
@@ -71,7 +72,8 @@ export function ThemeProvider({
       "aqua",
       "dark-halloween",
       "dark-halloween-gradient",
-      "forest-default",
+      "deep-forest",
+      "deep-aqua",
       "corporate-default",
       "corporate-gray"
     );
