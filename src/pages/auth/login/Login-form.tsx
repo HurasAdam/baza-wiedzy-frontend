@@ -4,7 +4,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { loginSchema } from "@/validation/login.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
+import { KeyRound, Loader2 } from "lucide-react";
 
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
@@ -60,12 +60,12 @@ const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
                   <FormItem>
                     <div className="flex justify-between items-center">
                       <FormLabel className="text-foreground">Hasło</FormLabel>
-                      <Link
+                      {/* <Link
                         to="/auth/forgot-password"
                         className="text-xs text-muted-foreground hover:text-secondary-foreground"
                       >
                         Przypomnij hasło
-                      </Link>
+                      </Link> */}
                     </div>
                     <FormControl>
                       <Input
@@ -93,13 +93,14 @@ const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
             </form>
           </Form>
           <CardFooter className="flex items-center justify-center mt-5">
-            <div className="flex items-center justify-center">
-              <p className="text-sm text-muted-foreground">
-                Don&apos;t have an account ?
-                <Link to="/sign-up" className="hover:underline hover:text-blue-600 ml-1">
-                  Sign up
-                </Link>
-              </p>
+            <div className="flex items-center justify-end w-full">
+              <Link
+                to="/auth/forgot-password"
+                className="flex items-center gap-1 text-xs text-muted-foreground hover:text-secondary-foreground transition-colors"
+              >
+                <KeyRound size={14} className="text-muted-foreground" />
+                <span>Przypomnij hasło</span>
+              </Link>
             </div>
           </CardFooter>
         </CardContent>
