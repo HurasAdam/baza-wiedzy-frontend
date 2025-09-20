@@ -1,4 +1,4 @@
-import { Edit, HelpCircle, Loader, MoreHorizontal, Plus, Trash } from "lucide-react";
+import { Edit, HelpCircle, Loader, MoreHorizontal, Pin, Plus, Trash } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -229,7 +229,9 @@ export function FaqPage() {
               {faq?.items?.map((item) => (
                 <li key={item._id} className="flex justify-between items-start py-3">
                   <div className="flex flex-col gap-1.5 px-0.5 py-2.5">
-                    <p className="text-base leading-[1.4644]  font-medium text-foreground">{item?.question}</p>
+                    <p className="text-base leading-[1.4644] font-medium text-foreground flex items-center gap-1.5">
+                      <Pin className="w-6 h-6 bg-accent/80 rounded-sm p-1 text-primary-foreground" /> {item?.question}
+                    </p>
                     <p className="text-[15px] leading-[1.4644]  text-foreground">{item?.answer}</p>
                   </div>
 
