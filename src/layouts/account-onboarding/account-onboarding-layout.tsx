@@ -1,4 +1,5 @@
 // layouts/onboarding/onboarding.layout.tsx
+import { Origami } from "lucide-react";
 import { Outlet } from "react-router-dom";
 
 const AccountOnboardingLayout = () => {
@@ -9,27 +10,11 @@ const AccountOnboardingLayout = () => {
         <div className="max-w-md mx-auto text-center">
           {/* Logo / Icon */}
           <div className="mb-6 text-primary">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="mx-auto h-12 w-12"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 20h9M12 4h9M4 12h16"
-              />
-            </svg>
+            <Origami className="mx-auto w-12 h-12 text-sidebar-logo/65 " />
           </div>
-          <h1 className="text-4xl font-bold mb-4 text-primary">
-            Witaj w Bazie Wiedzy
-          </h1>
+          <h1 className="text-4xl font-bold mb-4 text-primary">Witaj w Bazie Wiedzy</h1>
           <p className="text-muted-foreground text-lg leading-relaxed">
-            Zanim zaczniesz, skonfiguruj swoje konto, aby w pełni korzystać z
-            zasobów.
+            Zanim zaczniesz, skonfiguruj swoje konto, aby w pełni korzystać z zasobów.
           </p>
         </div>
       </div>
@@ -40,9 +25,7 @@ const AccountOnboardingLayout = () => {
           {/* Header for mobile */}
           <div className="mb-6 text-center lg:hidden">
             <h1 className="text-2xl font-bold text-primary">Witaj!</h1>
-            <p className="text-muted-foreground text-sm">
-              Skonfiguruj swoje konto w kilku krokach
-            </p>
+            <p className="text-muted-foreground text-sm">Skonfiguruj swoje konto w kilku krokach</p>
           </div>
 
           <Outlet />

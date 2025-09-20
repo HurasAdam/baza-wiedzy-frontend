@@ -4,7 +4,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { loginSchema } from "@/validation/login.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { KeyRound, Loader2 } from "lucide-react";
+import { KeyRound, Loader2, Origami } from "lucide-react";
 
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
@@ -29,8 +29,10 @@ const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
     <div className="minh-screen flex flex-col items-center bg-card/5 rounded-xl p-4">
       <Card className="max-w-md  min-w-md w-full shadow-xl">
         <CardHeader className="text-center">
+          <Origami className="mx-auto w-9 h-9 text-sidebar-logo/70" />
           <CardTitle className="text-2xl font-bold text-foreground">Baza Wiedzy</CardTitle>
-          <CardDescription className="text-sm text-muted-foreground">
+
+          <CardDescription className="text-sm text-muted-foreground mt-1.5">
             Wprowadź swoje dane, aby uzyskać dostęp do bazy wiedzy i szablonów odpowiedzi.
           </CardDescription>
         </CardHeader>

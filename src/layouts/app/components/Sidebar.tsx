@@ -13,7 +13,7 @@ import {
   Info,
   Layers,
   LayoutDashboard,
-  Ratio,
+  Origami,
   RectangleEllipsis,
   School,
   Smile,
@@ -125,7 +125,7 @@ export const Sidebar = ({
         <Link to="/dashboard" className="flex items-center">
           {!isCollapsed && (
             <div className="flex items-center gap-2">
-              <Ratio className="size-6 text-sidebar-logo" />
+              <Origami className="size-6 text-sidebar-logo/65" />
               <span className="font-semibold text-lg hidden md:block text-sidebar-foreground">Baza wiedzy</span>
             </div>
           )}

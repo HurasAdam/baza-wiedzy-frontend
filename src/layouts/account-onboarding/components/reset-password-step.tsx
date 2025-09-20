@@ -1,6 +1,6 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -24,10 +24,7 @@ interface PasswordStepProps {
   isPending: boolean;
 }
 
-export const ResetPasswordStep: React.FC<PasswordStepProps> = ({
-  onNext,
-  isPending,
-}) => {
+export const ResetPasswordStep: React.FC<PasswordStepProps> = ({ onNext, isPending }) => {
   const {
     register,
     handleSubmit,
@@ -41,44 +38,19 @@ export const ResetPasswordStep: React.FC<PasswordStepProps> = ({
   return (
     <form onSubmit={handleSubmit(onNext)} className="space-y-4">
       <div>
-        <label
-          htmlFor="password"
-          className="block mb-1 text-sm font-medium text-foreground"
-        >
+        <label htmlFor="password" className="block mb-1 text-sm font-medium text-foreground">
           Nowe hasło
         </label>
-        <Input
-          id="password"
-          type="password"
-          {...register("password")}
-          autoFocus
-          placeholder="Minimum 8 znaków"
-        />
-        {errors.password && (
-          <p className="text-destructive text-sm mt-1">
-            {errors.password.message}
-          </p>
-        )}
+        <Input id="password" type="password" {...register("password")} autoFocus placeholder="Minimum 8 znaków" />
+        {errors.password && <p className="text-destructive text-sm mt-1">{errors.password.message}</p>}
       </div>
 
       <div>
-        <label
-          htmlFor="passwordConfirm"
-          className="block mb-1 text-sm font-medium text-foreground"
-        >
+        <label htmlFor="passwordConfirm" className="block mb-1 text-sm font-medium text-foreground">
           Potwierdź hasło
         </label>
-        <Input
-          id="passwordConfirm"
-          type="password"
-          {...register("passwordConfirm")}
-          placeholder="Powtórz nowe hasło"
-        />
-        {errors.passwordConfirm && (
-          <p className="text-destructive text-sm mt-1">
-            {errors.passwordConfirm.message}
-          </p>
-        )}
+        <Input id="passwordConfirm" type="password" {...register("passwordConfirm")} placeholder="Powtórz nowe hasło" />
+        {errors.passwordConfirm && <p className="text-destructive text-sm mt-1">{errors.passwordConfirm.message}</p>}
       </div>
 
       <div className="flex justify-end">

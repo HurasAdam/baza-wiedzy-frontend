@@ -229,7 +229,7 @@ export function FaqPage() {
               {faq?.items?.map((item) => (
                 <li key={item._id} className="flex justify-between items-start py-3">
                   <div className="flex flex-col gap-1.5 px-0.5 py-2.5">
-                    <p className="text-base leading-[1.4644] font-medium text-foreground flex items-center gap-1.5">
+                    <p className="text-base leading-[1.4644] font-medium text-foreground flex items-center gap-2">
                       <Pin className="w-6 h-6 bg-accent/80 rounded-sm p-1 text-primary-foreground" /> {item?.question}
                     </p>
                     <p className="text-[15px] leading-[1.4644]  text-foreground">{item?.answer}</p>
