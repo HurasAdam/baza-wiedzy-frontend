@@ -1,17 +1,31 @@
-import { CheckCircleIcon, EyeIcon, SquarePen, Star, Trash2, UserIcon, UserRoundCheck, XCircleIcon } from "lucide-react";
+import {
+  CheckCircleIcon,
+  EyeIcon,
+  Loader,
+  RefreshCw,
+  SquarePen,
+  Star,
+  Trash2,
+  UserIcon,
+  UserRoundCheck,
+  XCircleIcon,
+} from "lucide-react";
 import { useState } from "react";
-import { NavLink, useNavigate, useOutletContext, useParams } from "react-router-dom";
+import { NavLink, useOutletContext, useParams } from "react-router-dom";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "../../components/ui/card";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../components/ui/tooltip";
 import { cn } from "../../lib/utils";
 import type { Article } from "../../types/article";
-
+export interface ArticleOutletContext {
+  article: Article;
+  refetch: () => void;
+  isArticleRefreshing: boolean;
+}
 export const ArticleMainPage = () => {
-  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const article = useOutletContext<Article>(); // 👈 pobierasz z Outlet
+  const { article, refetch, isArticleRefreshing } = useOutletContext<ArticleOutletContext>();
   const [activeVersion, setActiveVersion] = useState(0);
 
   const sortedDescriptions = [...(article?.responseVariants ?? [])].sort((a, b) => a.version - b.version);
@@ -53,9 +67,23 @@ export const ArticleMainPage = () => {
 
         <TooltipProvider>
           <div className="flex gap-2 items-center">
+            <div className="flex items-center space-x-2">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button onClick={refetch} variant="ghost" className="transition" size="icon">
+                    {isArticleRefreshing ? (
+                      <Loader className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <RefreshCw className="w-4 h-4" />
+                    )}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Odśwież</TooltipContent>
+              </Tooltip>
+            </div>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button size="icon" variant="outline">
+                <Button size="icon" variant="ghost">
                   <Star className="w-4 h-4" />
                 </Button>
               </TooltipTrigger>
@@ -65,7 +93,7 @@ export const ArticleMainPage = () => {
             <Tooltip>
               <TooltipTrigger asChild>
                 <NavLink to={`/articles/${id}/edit`}>
-                  <Button variant="outline" size="icon">
+                  <Button variant="ghost" size="icon">
                     <SquarePen className="w-4 h-4" />
                   </Button>
                 </NavLink>
@@ -75,7 +103,7 @@ export const ArticleMainPage = () => {
 
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button size="icon" variant="destructive">
+                <Button size="icon" variant="ghost">
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </TooltipTrigger>

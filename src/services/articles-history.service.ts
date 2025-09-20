@@ -7,6 +7,11 @@ export const findArticleHistory = ({ id }: { id: string }) => {
   return api.get(buildUrl(baseUrl, "article", id));
 };
 
+export const findArticleHistoryItemDetails = (historyItemItd: string) => {
+  return api.get(buildUrl(baseUrl, historyItemItd));
+};
+
 export const articlesHistoryService = {
   findArticleHistory,
+  findArticleHistoryItemDetails,
 };

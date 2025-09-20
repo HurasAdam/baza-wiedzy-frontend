@@ -7,3 +7,10 @@ export const useFindArticleHistoryQuery = (articleId: string) => {
     queryFn: () => articlesHistoryService.findArticleHistory({ id: articleId }),
   });
 };
+
+export const useFindArticleHistoryItemDetailsQuery = (historyItemId: string) => {
+  return useQuery({
+    queryKey: ["history-item", historyItemId],
+    queryFn: () => articlesHistoryService.findArticleHistoryItemDetails(historyItemId),
+  });
+};

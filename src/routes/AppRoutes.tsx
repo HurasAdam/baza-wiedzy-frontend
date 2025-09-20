@@ -49,6 +49,7 @@ export function AppRoutes() {
               <Route path="attachments" element={<PAGES.ArticleAttachmentsPage />} /> {/* /articles/:id/attachments */}
               <Route path="history" element={<PAGES.ArticleHistoryPage />} /> {/* /articles/:id/history */}
               <Route path="edit" element={<PAGES.ArticleEditPage />} /> {/* /articles/:id/history */}
+              <Route path="history/:historyId" element={<PAGES.ArticleHistoryDetailPage />} />
             </Route>
           </Route>
         </Route>

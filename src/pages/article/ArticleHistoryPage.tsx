@@ -2,13 +2,18 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useFindArticleHistoryQuery } from "@/hooks/articles-history/use-articles-history";
-import { CheckCircle, Edit3, Eye, PlusCircle, RotateCcw, Trash2, XCircle } from "lucide-react";
+import { CheckCircle, Edit3, Eye, Loader, PlusCircle, RefreshCw, RotateCcw, Trash2, XCircle } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 export function ArticleHistoryPage() {
   const { id } = useParams();
-  const { data: articleHistoryList = [] } = useFindArticleHistoryQuery(id!);
+  const {
+    data: articleHistoryList = [],
+    isFetching: isRefetching,
+    refetch,
+    isPending,
+  } = useFindArticleHistoryQuery(id!);
 
   const [query, setQuery] = useState("");
 
@@ -29,6 +34,11 @@ export function ArticleHistoryPage() {
           <div className="flex items-center gap-2 bg-gradient-to-r from-primary/10 to-primary/5 rounded-full px-3 py-1">
             <h3 className="text-sm font-semibold">Historia zmian</h3>
             <p className="text-xs text-muted-foreground">Szybki podgląd zdarzeń</p>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Button onClick={refetch} variant="ghost" className="p-2 rounded transition" title="Odśwież" size="icon">
+              {isRefetching ? <Loader className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+            </Button>
           </div>
         </div>
 
@@ -93,7 +103,7 @@ export function ArticleHistoryPage() {
                     </div>
 
                     <div className="flex items-center gap-4">
-                      <Link to={`/articles/history/${item._id}`} aria-label={`Szczegóły wpisu ${item._id}`}>
+                      <Link to={`/articles/${id}/history/${item._id}`} aria-label={`Szczegóły wpisu ${item._id}`}>
                         <Button size="sm" variant="outline" className="flex items-center gap-2">
                           <Eye className="w-4 h-4" />
                           Szczegóły

@@ -14,6 +14,7 @@ import { AdminUserDetailsPage } from "./admin-panel/admin-user-details/admin-use
 import { UsersPage } from "./admin-panel/admin-users/admin-users";
 import { ArticleAttachmentsPage } from "./article/ArticleAttachmentsPage";
 import { ArticleEditPage } from "./article/ArticleEditPage";
+import { ArticleHistoryDetailPage } from "./article/ArticleHistoryDetailPage";
 import { ArticleHistoryPage } from "./article/ArticleHistoryPage";
 import { ArticleMainPage } from "./article/ArticleMainPage";
 import { ArticlesPage } from "./articles/ArticlesPage";
@@ -43,6 +44,7 @@ export const PAGES = {
   ArticleMainPage,
   ArticleAttachmentsPage,
   ArticleHistoryPage,
+  ArticleHistoryDetailPage,
   ArticleEditPage,
   TopicRegisterPage,
   NotFoundPage,

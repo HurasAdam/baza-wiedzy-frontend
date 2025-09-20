@@ -1,23 +1,29 @@
-// layouts/article/ArticleLayout.tsx
 import { Loader } from "lucide-react";
-import { Outlet, useLocation, useParams } from "react-router-dom";
+import { Outlet, useMatch, useParams } from "react-router-dom";
 import { useFindArticleQuery } from "../../hooks/articles/use-articles";
 import { ArticlePageHeader } from "../../pages/article/components/ArticlePageHeader";
 
 export default function ArticleLayout() {
   const { id } = useParams<{ id: string }>();
-  const location = useLocation();
-  const { data: article, isLoading, isError, error } = useFindArticleQuery(id!);
+  const { data: article, isLoading, refetch, isRefetching } = useFindArticleQuery(id!);
 
-  const returnUrl = (location.state as { from?: string })?.from ?? "/articles";
+  const matchHistoryDetail = useMatch("/articles/:id/history/:historyId");
+  const showHeader = !matchHistoryDetail; // nagłówek NIE pokaże się w szczegółach historii
+
   if (isLoading) {
     return <Loader className="animate-spin" />;
   }
+
   return (
     <div className="space-y-1">
-      {article && <ArticlePageHeader article={article} returnUrl={returnUrl} />}
-
-      <Outlet context={article} />
+      {article && showHeader && <ArticlePageHeader article={article} returnUrl="/articles" />}
+      <Outlet
+        context={{
+          article,
+          refetch,
+          isArticleRefreshing: isRefetching,
+        }}
+      />
     </div>
   );
 }
