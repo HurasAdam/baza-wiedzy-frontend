@@ -92,11 +92,28 @@ const ArticleBannerSection = ({ article }) => {
         isOpen={isCreatingArticleApprove}
         isLoading={isApproveLoading}
         type="info"
-        title="Zatwierdź artykuł"
+        title={articleStatus === "draft" ? "Zatwierdź artykuł" : "Zweryfikuj artykuł"}
         onCancel={onCloseArticleApproveAlert}
         onConfirm={onArticleApproveConfirm}
       >
-        Czy na pewno chcesz zatwierdzić ten artykuł?
+        {articleStatus === "draft" ? (
+          <div className="flex flex-col gap-1">
+            <span>Czy na pewno chcesz zatwierdzić ten artykuł?</span>
+            <span className="text-sm ">
+              Po potwierdzeniu status artykułu zostanie ustawiony jako{" "}
+              <span className="text-primary/90">*zweryfikowany*</span> i stanie się on widoczny dla wszystkich
+              użytkowników.
+            </span>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-1">
+            <span>Czy na pewno chcesz zweryfikować ten artykuł?</span>
+            <span className="text-sm ">
+              Po potwierdzeniu status artykułu zostanie ustawiony jako{" "}
+              <span className="text-primary/90">*zweryfikowany*</span>
+            </span>
+          </div>
+        )}
       </Alert>
 
       <PendingArticleRejectionModal
