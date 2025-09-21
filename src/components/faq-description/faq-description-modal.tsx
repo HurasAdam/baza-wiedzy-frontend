@@ -32,17 +32,17 @@ export const FaqDescriptionModal = ({
   const authorName = `${descriptionContent.createdBy?.name || ""} ${
     descriptionContent.createdBy?.surname || ""
   }`.trim();
-  const initials = authorName
-    ? authorName
-        .split(" ")
-        .map((n) => n[0]?.toUpperCase())
-        .join("")
-    : "?";
+  // const initials = authorName
+  //   ? authorName
+  //       .split(" ")
+  //       .map((n) => n[0]?.toUpperCase())
+  //       .join("")
+  //   : "?";
 
-  const backendBase = import.meta.env.VITE_BACKEND_BASE_URL ?? "http://localhost:5000";
-  const avatarUrl = descriptionContent.createdBy?.profilePicture?.path
-    ? `${backendBase}${descriptionContent.createdBy.profilePicture.path.replace(/^\/app/, "")}`
-    : null;
+  // const backendBase = import.meta.env.VITE_BACKEND_BASE_URL ?? "http://localhost:5000";
+  // const avatarUrl = descriptionContent.createdBy?.profilePicture?.path
+  //   ? `${backendBase}${descriptionContent.createdBy.profilePicture.path.replace(/^\/app/, "")}`
+  //   : null;
 
   return (
     <Dialog open={isFaqItemDescriptionModalOpen} onOpenChange={handleOpenChange} modal={true}>

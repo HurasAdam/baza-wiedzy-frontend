@@ -40,8 +40,6 @@ const ArticleForm = ({
   tags,
   products,
   categories,
-
-  isLoading,
   className,
   onProductChange,
   loadingCategories,

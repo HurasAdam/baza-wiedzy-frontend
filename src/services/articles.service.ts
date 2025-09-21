@@ -88,21 +88,20 @@ export const getUsersChangedArticleStats = (params: URLSearchParams) => {
   return api.get("/users/change-statistics", { params });
 };
 
-const getArticlesCreatedByUser = ({ userId, params }) => {
+const getArticlesCreatedByUser = ({ userId, params }: { userId: string; params: unknown }) => {
   // startDate, endDate, limit and page in searchParams
   return api.get(buildUrl(baseUrl, "userArticles", userId), { params });
 };
 
-const getArticlesHistoryByUser = ({ userId, params }) => {
+const getArticlesHistoryByUser = ({ userId, params }: { userId: string; params: unknown }) => {
   // startDate and endDate in params
   return api.get(buildUrl(baseUrl, "userHistory", userId), { params });
 };
-const getArticleHistoryItem = ({ id }) => {
+const getArticleHistoryItem = ({ id }: { id: string }) => {
   return api.get(buildUrl(baseUrl, "history", id));
 };
 
-const findAllByUser = (query: any) => {
-  console.log(query, "UTUTUT");
+const findAllByUser = (query: unknown) => {
   return api.get(buildUrl(baseUrl, "my"), { params: query });
 };
 

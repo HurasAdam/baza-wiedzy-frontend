@@ -289,6 +289,7 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.488 0.243 264.376);
+  --sidebar-logo: oklch(0.683 0.114 259.815);
 
   --admin-sidebar: oklch(0.21 0.006 285.885);
   --admin-sidebar-logo: oklch(0.406 0.125 262.881);
@@ -877,7 +878,7 @@
   --sidebar-stop-2: #121218;
   --sidebar-stop-3: #1c1c24;
   --sidebar-stop-4: #262631;
-  --sidebar-logo: #262631;
+  --sidebar-logo: #212631;
   --sidebar: linear-gradient(
     145deg,
     var(--sidebar-stop-1) 0%,

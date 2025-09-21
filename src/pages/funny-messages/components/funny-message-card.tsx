@@ -34,10 +34,10 @@ const FunnyMessageCard = ({ msg }: IFunyMessageProps) => {
               const isEmployee = entry.author.toLowerCase() === "pracownik";
 
               return (
-                <div key={idx} className="flex items-center space-x-1.5 py-1">
+                <div key={idx} className="flex items-start space-x-1.5 py-1">
                   {/* ----- Letter sign ----- */}
                   <div
-                    className="flex items-center justify-center min-w-[24px]"
+                    className="flex items-ceneter justify-start min-w-[24px]"
                     aria-label={isEmployee ? "Pracownik" : "Klient"}
                     title={isEmployee ? "Pracownik" : "Klient"}
                     style={{

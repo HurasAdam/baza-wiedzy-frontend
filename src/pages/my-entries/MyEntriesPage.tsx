@@ -31,8 +31,7 @@ export type StatusKey = "approved" | "pending" | "rejected" | "draft";
 export const MyEntriesPage = () => {
   const [currentStatus, setCurrentStatus] = useState<StatusKey>("approved");
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
-  const [openRejectionReasonModal, setOpenRejectionReasonModal] =
-    useState(false);
+  const [openRejectionReasonModal, setOpenRejectionReasonModal] = useState(false);
 
   const { data, isLoading, error } = useFindArticlesCreatedByUserQuery({
     status: currentStatus,
@@ -52,24 +51,13 @@ export const MyEntriesPage = () => {
 
   return (
     <div className="mx-auto pb-10">
-      <h1 className="text-xl font-bold mb-6.5 tracking-wide text-foreground">
-        Moje artykuły
-      </h1>
+      <h1 className="text-xl font-bold mb-6.5 tracking-wide text-foreground">Moje artykuły</h1>
 
-      <StatusBar
-        currentStatus={currentStatus}
-        setCurrentStatus={setCurrentStatus}
-        statuses={statuses}
-      />
+      <StatusBar currentStatus={currentStatus} setCurrentStatus={setCurrentStatus} statuses={statuses} />
 
       <Tabs value={currentStatus} className="w-full">
         {statuses.map(({ key }) => (
-          <TabsContent
-            key={key}
-            value={key}
-            className="p-0"
-            style={{ backgroundColor: "var(--color-card)" }}
-          >
+          <TabsContent key={key} value={key} className="p-0" style={{ backgroundColor: "var(--color-card)" }}>
             <div className=" border border-border  bg-card divide-y divide-border">
               {isLoading && (
                 <div className="flex items-center justify-center p-6 text-gray-500 dark:text-gray-400">
@@ -101,24 +89,17 @@ export const MyEntriesPage = () => {
                 // <p className="p-6 text-center text-gray-500 dark:text-gray-400 italic">
                 //   Brak artykułów do wyświetlenia.
                 // </p>
-                <NoDataFound
-                  title="Brak wyników"
-                  description="Brak artykułów do wyświetlenia."
-                />
+                <NoDataFound title="Brak wyników" description="Brak artykułów do wyświetlenia." />
               )}
 
               {data?.data?.map((article: Article) => (
-                <MyEntryCard
-                  onOpenRejectionReason={onOpenRejectionReason}
-                  article={article}
-                  label={key}
-                />
+                <MyEntryCard onOpenRejectionReason={onOpenRejectionReason} article={article} label={key} />
               ))}
             </div>
           </TabsContent>
         ))}
       </Tabs>
-      <div>More</div>
+
       {selectedArticle && (
         <ArticleRejectionReasonModal
           article={selectedArticle}
