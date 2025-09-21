@@ -11,7 +11,6 @@ import {
   Clipboard,
   HeartIcon,
   Info,
-  Layers,
   LayoutDashboard,
   Origami,
   RectangleEllipsis,
@@ -121,7 +120,7 @@ export const Sidebar = ({
         isCollapsed ? "w-18 md:w[80px]" : "w-16 md:w-[240px] p-2.5"
       )}
     >
-      <div className="flex h-14 items-center border-b px-4 mb-4">
+      <div className="flex h-14 items-center border-b px-4 mb-4 gap-1">
         <Link to="/dashboard" className="flex items-center">
           {!isCollapsed && (
             <div className="flex items-center gap-2">
@@ -130,13 +129,13 @@ export const Sidebar = ({
             </div>
           )}
 
-          {isCollapsed && <Layers className="size-6 text-sidebar-primary" />}
+          {isCollapsed && <Origami className="size-6 text-sidebar-primary" />}
         </Link>
 
         <Button
           variant={"ghost"}
           size="icon"
-          className="ml-auto hidden md:block"
+          className="ml-auto hidden md:block hover:bg-transparent"
           onClick={() => setIsCollapsed(!isCollapsed)}
         >
           {isCollapsed ? <ChevronsRight className="size-4" /> : <ChevronsLeft className="size-4" />}
