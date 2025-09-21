@@ -1,3 +1,4 @@
+import { Mail } from "lucide-react";
 import type { IFunnyMessage } from "../../../types/funny-message";
 
 interface IFunyMessageProps {
@@ -12,8 +13,10 @@ const FunnyMessageCard = ({ msg }: IFunyMessageProps) => {
       // style={{ color: "var(--color-card-foreground)" }}
       aria-label={`Wiadomość: ${msg.title}`}
     >
-      <header className="flex justify-between items-center px-6 py-3 border-b border-border">
-        <h2 className="text-base font-semibold text-header-foreground tracking-wide">{msg.title}</h2>
+      <header className="flex justify-between items-center px-4 py-3 border-b border-border">
+        <h2 className="text-base font-semibold text-header-foreground tracking-wide flex items-center gap-2 ">
+          <Mail className="w-3.5 h-3.5 " /> {msg.title}
+        </h2>
         <time
           dateTime={msg.createdAt}
           className="text-xs text-header-foreground"
@@ -34,10 +37,10 @@ const FunnyMessageCard = ({ msg }: IFunyMessageProps) => {
               const isEmployee = entry.author.toLowerCase() === "pracownik";
 
               return (
-                <div key={idx} className="flex items-start space-x-1.5 py-1">
+                <div key={idx} className="flex items-start space-x-1.5 py-1 ">
                   {/* ----- Letter sign ----- */}
                   <div
-                    className="flex items-ceneter justify-start min-w-[24px]"
+                    className="flex items-center  justify-start min-w-[24px] gap-1.5"
                     aria-label={isEmployee ? "Pracownik" : "Klient"}
                     title={isEmployee ? "Pracownik" : "Klient"}
                     style={{
@@ -49,20 +52,21 @@ const FunnyMessageCard = ({ msg }: IFunyMessageProps) => {
                       height: "24px",
                     }}
                   >
-                    {isEmployee ? "P" : "K"}
+                    {/*--------- arrow mark ------- */}
+                    <span
+                      aria-hidden="true"
+                      style={{
+                        width: 0,
+                        height: 0,
+                        borderTop: "5px solid transparent",
+                        borderBottom: "5px solid transparent",
+                        borderLeft: `5px solid ${
+                          isEmployee ? "var(--color-primary)" : "var(--color-muted-foreground)"
+                        }`,
+                      }}
+                    />
+                    {isEmployee ? "P" : "K"} :
                   </div>
-
-                  {/*--------- arrow mark ------- */}
-                  <span
-                    aria-hidden="true"
-                    style={{
-                      width: 0,
-                      height: 0,
-                      borderTop: "6px solid transparent",
-                      borderBottom: "6px solid transparent",
-                      borderLeft: `8px solid ${isEmployee ? "var(--color-primary)" : "var(--color-muted-foreground)"}`,
-                    }}
-                  />
 
                   {/* --------- msg content ----- */}
                   <div className="whitespace-pre-wrap flex-1 text-sm leading-relaxed text-foreground my-auto">
