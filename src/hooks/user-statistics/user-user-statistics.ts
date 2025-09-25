@@ -14,6 +14,25 @@ export const useFindAllUsersStatistics = (query) => {
   });
 };
 
+interface UserArticlesQuery {
+  userId?: string | null;
+  startDate?: Date;
+  endDate?: Date;
+}
+
+export const useFindUserAddedArticles = ({ userId, startDate, endDate }: UserArticlesQuery) => {
+  return useQuery({
+    queryKey: ["user-added-articles", userId, startDate, endDate],
+    queryFn: () => {
+      return userStatisticsService.findUserAddedArticles({ userId, startDate, endDate });
+    },
+
+    refetchOnWindowFocus: false,
+    staleTime: 0,
+    retry: false,
+  });
+};
+
 // export const useFindUsers = (params?: URLSearchParams) => {
 //   return useQuery({
 //     queryKey: ["users", params?.toString()],

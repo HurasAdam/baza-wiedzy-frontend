@@ -7,11 +7,29 @@ export const findAllUsersStatistics = (params?: URLSearchParams) => {
   return api.get(buildUrl(baseUrl, "users"), { params });
 };
 
+export const findUserAddedArticles = ({
+  userId,
+  startDate,
+  endDate,
+}: {
+  userId: string;
+  startDate?: Date;
+  endDate?: Date;
+}) => {
+  return api.get(buildUrl(baseUrl, `users`, `${userId}`, `articles`, "added"), {
+    params: {
+      startDate: startDate?.toISOString(),
+      endDate: endDate?.toISOString(),
+    },
+  });
+};
+
 export const findMyStatistics = (userId: string) => {
   return api.get(`${baseUrl}/${userId}`);
 };
 
 export const userStatisticsService = {
   findAllUsersStatistics,
+  findUserAddedArticles,
   findMyStatistics,
 };

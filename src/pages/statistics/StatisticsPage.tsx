@@ -5,12 +5,23 @@ import { useState } from "react";
 import { NoDataFound } from "../../components/shared/NoDataFound";
 import { Button } from "../../components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover";
+import { UserStatisticsChartsModal } from "../../components/user-statistics-charts/user-statistics-charts.modal";
+import { UserStatisticsDetailsModal } from "../../components/user-statistics-details/user-statistics-details.modal";
 import { useFindAllUsersStatistics } from "../../hooks/user-statistics/user-user-statistics";
 import { DateFilterBar } from "./components/DateFilterBar";
 
 export const StatisticsPage = () => {
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
+  const [userStatisticsModal, setUserStatisticsModal] = useState<{
+    variant: "details" | "charts" | "";
+    isOpen: boolean;
+    selectedUser: {} | null;
+  }>({
+    variant: "",
+    isOpen: false,
+    selectedUser: null,
+  });
 
   const hasFilters = startDate && endDate;
   const params = hasFilters ? { startDate, endDate } : undefined;
@@ -30,8 +41,23 @@ export const StatisticsPage = () => {
       </span>
     </div>
   );
+  console.log(userStatisticsModal, "XD");
+  const ActionsCell = ({
+    selectedUser,
+    context,
+  }: {
+    selectedUser: any;
+    context: "articlesAdded" | "articlesEdited" | "conversations";
+  }) => {
+    console.log(selectedUser);
+    const openModal = (selectedUser: string) => {
+      if (context === "conversations") {
+        setUserStatisticsModal({ variant: "charts", isOpen: true, selectedUser });
+      } else {
+        setUserStatisticsModal({ variant: "details", isOpen: true, selectedUser });
+      }
+    };
 
-  const ActionsCell = ({ user }: { user: any }) => {
     return (
       <Popover>
         <PopoverTrigger asChild>
@@ -40,15 +66,12 @@ export const StatisticsPage = () => {
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-40 p-2 space-y-1">
-          <Button variant="ghost" className="w-full justify-start">
+          <Button onClick={() => openModal(selectedUser)} variant="ghost" className="w-full justify-start">
             Szczegóły
           </Button>
-          <Button variant="ghost" className="w-full justify-start">
+          {/* <Button variant="ghost" className="w-full justify-start">
             Historia
-          </Button>
-          <Button variant="ghost" className="w-full justify-start">
-            Wiadomość
-          </Button>
+          </Button> */}
         </PopoverContent>
       </Popover>
     );
@@ -65,7 +88,6 @@ export const StatisticsPage = () => {
         <DateFilterBar startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} />
       </div>
 
-      {/* Informacja o zakresie dat – pod paskiem filtrów */}
       <div className="text-sm text-muted-foreground mt-2 mb-4">
         {startDate && endDate ? (
           <p>
@@ -112,13 +134,13 @@ export const StatisticsPage = () => {
                 </thead>
                 <tbody>
                   {[...data]
-                    .sort((a, b) => b.stats.articlesAdded - a.stats.articlesAdded) // sortowanie po dodanych artykułach
+                    .sort((a, b) => b.stats.articlesAdded - a.stats.articlesAdded)
                     .map((u) => (
                       <tr key={u.userId} className="border-b hover:bg-muted/50">
                         <td className="py-2">{renderUserCell(u)}</td>
-                        <td className="py-2">{u.stats.articlesAdded}</td> {/* <--- tutaj zmienione */}
+                        <td className="py-2">{u.stats.articlesAdded}</td>
                         <td className="py-2 text-center">
-                          <ActionsCell user={u} /> {/* <--- nowe pole */}
+                          <ActionsCell selectedUser={u} context="articlesAdded" />
                         </td>
                       </tr>
                     ))}
@@ -152,7 +174,7 @@ export const StatisticsPage = () => {
                         <td className="py-2">{renderUserCell(u)}</td>
                         <td className="py-2">{u.stats.articlesEdited}</td>
                         <td className="py-2 text-center">
-                          <ActionsCell user={u} /> {/* <--- nowe pole */}
+                          <ActionsCell selectedUser={u._id} context="articlesEdited" />
                         </td>
                       </tr>
                     ))}
@@ -186,7 +208,7 @@ export const StatisticsPage = () => {
                         <td className="py-2">{renderUserCell(u)}</td>
                         <td className="py-2">{u.stats.conversationTopics}</td>
                         <td className="py-2 text-center">
-                          <ActionsCell user={u} /> {/* <--- nowe pole */}
+                          <ActionsCell selectedUser={u._id} context="conversations" />
                         </td>
                       </tr>
                     ))}
@@ -196,6 +218,20 @@ export const StatisticsPage = () => {
           </Card>
         </div>
       )}
+      {userStatisticsModal.isOpen && userStatisticsModal.variant === "details" && (
+        <UserStatisticsDetailsModal
+          isUserStatisticsModalOpen={userStatisticsModal.isOpen && userStatisticsModal.variant === "details"}
+          selectedUser={userStatisticsModal.selectedUser}
+          setIsUserStatisticsModalOpen={setUserStatisticsModal}
+          startDate={startDate}
+          endDate={endDate}
+        />
+      )}
+
+      <UserStatisticsChartsModal
+        isUserStatisticsModalOpen={userStatisticsModal.isOpen && userStatisticsModal.variant === "charts"}
+        setIsUserStatisticsModalOpen={setUserStatisticsModal}
+      />
     </div>
   );
 };
