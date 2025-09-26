@@ -1,5 +1,5 @@
-import { FileText, Loader2 } from "lucide-react";
-import { useFindUserAddedArticles } from "../../hooks/user-statistics/user-user-statistics";
+import { Edit3, Loader2 } from "lucide-react";
+import { useFindUserEditedArticles } from "../../hooks/user-statistics/user-user-statistics";
 import { Card, CardContent } from "../ui/card";
 import { Dialog, DialogContent, DialogHeader } from "../ui/dialog";
 import { ScrollArea } from "../ui/scroll-area";
@@ -22,7 +22,7 @@ interface UserStatisticsDetailsModalProps {
   endDate?: Date;
 }
 
-export const UserStatisticsDetailsModal = ({
+export const UserStatisticsEditedArticlesModal = ({
   selectedUser,
   isUserStatisticsModalOpen,
   setIsUserStatisticsModalOpen,
@@ -36,7 +36,7 @@ export const UserStatisticsDetailsModal = ({
     startDate,
     endDate,
   };
-  const { data, isLoading } = useFindUserAddedArticles(params);
+  const { data, isLoading } = useFindUserEditedArticles(params);
 
   const statusTranslations: Record<string, { label: string; tone: string }> = {
     approved: { label: "Zaakceptowany", tone: "green" },
@@ -65,11 +65,11 @@ export const UserStatisticsDetailsModal = ({
           <div className="flex items-start gap-4 min-w-0">
             {/* zamiast Avatar */}
             <div className="h-12 w-12 flex items-center justify-center rounded-md text-foreground bg-muted">
-              <FileText className="w-6 h-6" />
+              <Edit3 className="w-6 h-6" />
             </div>
 
             <div className="min-w-0">
-              <div className="mt-0.5 text-2xs text-muted-foreground">Lista artykułów dodanych przez :</div>
+              <div className="mt-0.5 text-2xs text-muted-foreground">Lista artykułów edytowanych przez :</div>
               <div className="flex items-center gap-2">
                 <h3 className="text-sm font-semibold text-foreground truncate">
                   {selectedUser ? `${selectedUser.name ?? ""} ${selectedUser.surname ?? ""}`.trim() : "Użytkownik"}
@@ -115,7 +115,7 @@ export const UserStatisticsDetailsModal = ({
                 </div>
               ) : !data?.length ? (
                 <div className="flex flex-col items-center justify-center w-full h-full text-muted-foreground">
-                  <p className="text-sm">Brak artykułów w wybranym zakresie dat</p>
+                  <p className="text-sm">Brak dodanych artykułów w wybranym zakresie dat</p>
                 </div>
               ) : (
                 <ScrollArea className="w-full h-full">
@@ -124,9 +124,8 @@ export const UserStatisticsDetailsModal = ({
                       <tr className="bg-muted/40 sticky top-0 z-10">
                         <th className="text-left py-3 px-6 font-medium text-foreground">Tytuł</th>
                         <th className="text-left py-3 px-6 font-medium text-foreground">Produkt</th>
-                        <th className="text-left py-3 px-6 font-medium text-foreground">Status</th>
-                        <th className="text-left py-3 px-6 font-medium text-foreground">Data dodania</th>
-                        <th className="text-right py-3 px-6 font-medium text-foreground">Akcje</th>
+
+                        <th className="text-center py-3 px-6 font-medium text-foreground">Akcje</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -138,22 +137,15 @@ export const UserStatisticsDetailsModal = ({
                             </div>
                           </td>
                           <td className="py-3 px-6 text-foreground font-medium text-xs">{article.product?.name}</td>
-                          <td className="py-3 px-6">{renderStatusBadge(article.status)}</td>
-                          <td className="py-3 px-6 text-foreground/70 text-xs">
-                            {new Date(article.createdAt).toLocaleDateString("pl-PL", {
-                              year: "numeric",
-                              month: "short",
-                              day: "numeric",
-                            })}
-                          </td>
+
                           <td className="py-3 px-6 text-right">
-                            <div className="flex justify-end gap-3">
+                            <div className="flex justify-center gap-3">
                               <button
                                 onClick={() => setPreviewArticle(article)}
                                 className="text-accent hover:underline font-medium text-xs"
                               ></button>
                               <a
-                                href={`http://localhost:5173/articles/${article._id}`}
+                                href={`http://localhost:5173/articles/${article._id}/history`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-accent hover:underline font-medium text-xs"

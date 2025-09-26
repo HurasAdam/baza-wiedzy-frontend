@@ -33,6 +33,32 @@ export const useFindUserAddedArticles = ({ userId, startDate, endDate }: UserArt
   });
 };
 
+export const useFindUserEditedArticles = ({ userId, startDate, endDate }: UserArticlesQuery) => {
+  return useQuery({
+    queryKey: ["user-edited-articles", userId, startDate, endDate],
+    queryFn: () => {
+      return userStatisticsService.findUserEditedArticles({ userId, startDate, endDate });
+    },
+
+    refetchOnWindowFocus: false,
+    staleTime: 0,
+    retry: false,
+  });
+};
+
+export const useFindUserAddedConversationReports = ({ userId, startDate, endDate }: UserArticlesQuery) => {
+  return useQuery({
+    queryKey: ["user-added-conversation-reports", userId, startDate, endDate],
+    queryFn: () => {
+      return userStatisticsService.findUserAddedConversationReports({ userId, startDate, endDate });
+    },
+
+    refetchOnWindowFocus: false,
+    staleTime: 0,
+    retry: false,
+  });
+};
+
 // export const useFindUsers = (params?: URLSearchParams) => {
 //   return useQuery({
 //     queryKey: ["users", params?.toString()],

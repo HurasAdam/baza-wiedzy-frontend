@@ -1,22 +1,36 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BookOpen, ChartColumnDecreasing, Edit3, FileText, Loader, MoreHorizontal } from "lucide-react";
+import { BookOpen, ChartColumnDecreasing, ClipboardList, Edit3, Loader, MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 import { NoDataFound } from "../../components/shared/NoDataFound";
 import { Button } from "../../components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover";
-import { UserStatisticsChartsModal } from "../../components/user-statistics-charts/user-statistics-charts.modal";
-import { UserStatisticsDetailsModal } from "../../components/user-statistics-details/user-statistics-details.modal";
+import { UserStatisticsAddedArticlesModal } from "../../components/user-statistics-added-articles-details/user-statistics-added-articles.modal";
+import { UserStatisticsAddedConversationReportsModal } from "../../components/user-statistics-added-coversation-reports-details/user-statistics-added-conersation-reports.modal";
+import { UserStatisticsEditedArticlesModal } from "../../components/user-statistics-edited-articles-details/user-statistics-edited-articles.modal";
 import { useFindAllUsersStatistics } from "../../hooks/user-statistics/user-user-statistics";
 import { DateFilterBar } from "./components/DateFilterBar";
+
+export interface SelectedUser {
+  userId: string;
+  email: string;
+  name: string;
+  surname: string;
+  role?: string;
+  stats: {
+    articlesAdded: number;
+    articlesEdited: number;
+    conversationTopics: number;
+  };
+}
 
 export const StatisticsPage = () => {
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
   const [userStatisticsModal, setUserStatisticsModal] = useState<{
-    variant: "details" | "charts" | "";
+    variant: "ADDED_ARTICLES" | "EDITED_ARTICLES" | "ADDED_CONVERSATION_REPORTS" | "";
     isOpen: boolean;
-    selectedUser: {} | null;
+    selectedUser: SelectedUser | null;
   }>({
     variant: "",
     isOpen: false,
@@ -41,20 +55,36 @@ export const StatisticsPage = () => {
       </span>
     </div>
   );
-  console.log(userStatisticsModal, "XD");
+
   const ActionsCell = ({
     selectedUser,
     context,
+    count = 0,
   }: {
     selectedUser: any;
     context: "articlesAdded" | "articlesEdited" | "conversations";
+    count?: number;
   }) => {
-    console.log(selectedUser);
+    if (count === 0)
+      return (
+        <Button variant="ghost" disabled={true} className="">
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      ); // nie pokazuj, jeśli zero
+
     const openModal = (selectedUser: string) => {
-      if (context === "conversations") {
-        setUserStatisticsModal({ variant: "charts", isOpen: true, selectedUser });
-      } else {
-        setUserStatisticsModal({ variant: "details", isOpen: true, selectedUser });
+      switch (context) {
+        case "articlesAdded":
+          setUserStatisticsModal({ variant: "ADDED_ARTICLES", isOpen: true, selectedUser });
+          break;
+        case "articlesEdited":
+          setUserStatisticsModal({ variant: "EDITED_ARTICLES", isOpen: true, selectedUser });
+          break;
+        case "conversations":
+          setUserStatisticsModal({ variant: "ADDED_CONVERSATION_REPORTS", isOpen: true, selectedUser });
+          break;
+        default:
+          console.warn(`Nieznany kontekst: ${context}`);
       }
     };
 
@@ -69,16 +99,13 @@ export const StatisticsPage = () => {
           <Button onClick={() => openModal(selectedUser)} variant="ghost" className="w-full justify-start">
             Szczegóły
           </Button>
-          {/* <Button variant="ghost" className="w-full justify-start">
-            Historia
-          </Button> */}
         </PopoverContent>
       </Popover>
     );
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-10">
       {/* Header */}
       <div className="flex items-center justify-between gap-4">
         <h1 className="text-xl font-bold tracking-tight flex items-center gap-1.5">
@@ -140,7 +167,7 @@ export const StatisticsPage = () => {
                         <td className="py-2">{renderUserCell(u)}</td>
                         <td className="py-2">{u.stats.articlesAdded}</td>
                         <td className="py-2 text-center">
-                          <ActionsCell selectedUser={u} context="articlesAdded" />
+                          <ActionsCell selectedUser={u} context="articlesAdded" count={u.stats.articlesEdited} />
                         </td>
                       </tr>
                     ))}
@@ -169,25 +196,26 @@ export const StatisticsPage = () => {
                 <tbody>
                   {[...data]
                     .sort((a, b) => b.stats.articlesEdited - a.stats.articlesEdited)
-                    .map((u) => (
-                      <tr key={u.userId} className="border-b hover:bg-muted/50">
-                        <td className="py-2">{renderUserCell(u)}</td>
-                        <td className="py-2">{u.stats.articlesEdited}</td>
-                        <td className="py-2 text-center">
-                          <ActionsCell selectedUser={u._id} context="articlesEdited" />
-                        </td>
-                      </tr>
-                    ))}
+                    .map((u) => {
+                      return (
+                        <tr key={u.userId} className="border-b hover:bg-muted/50">
+                          <td className="py-2">{renderUserCell(u)}</td>
+                          <td className="py-2">{u.stats.articlesEdited}</td>
+                          <td className="py-2 text-center">
+                            <ActionsCell selectedUser={u} context="articlesEdited" count={u.stats.articlesEdited} />
+                          </td>
+                        </tr>
+                      );
+                    })}
                 </tbody>
               </table>
             </CardContent>
           </Card>
 
-          {/* Odnotowane rozmowy */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <FileText className="w-4 h-4 text-primary" />
+                <ClipboardList className="w-4 h-4 text-primary" />
                 Odnotowane rozmowy i wiadomości
               </CardTitle>
             </CardHeader>
@@ -208,7 +236,7 @@ export const StatisticsPage = () => {
                         <td className="py-2">{renderUserCell(u)}</td>
                         <td className="py-2">{u.stats.conversationTopics}</td>
                         <td className="py-2 text-center">
-                          <ActionsCell selectedUser={u._id} context="conversations" />
+                          <ActionsCell selectedUser={u} context="conversations" count={u.stats.conversationTopics} />
                         </td>
                       </tr>
                     ))}
@@ -218,20 +246,42 @@ export const StatisticsPage = () => {
           </Card>
         </div>
       )}
-      {userStatisticsModal.isOpen && userStatisticsModal.variant === "details" && (
-        <UserStatisticsDetailsModal
-          isUserStatisticsModalOpen={userStatisticsModal.isOpen && userStatisticsModal.variant === "details"}
-          selectedUser={userStatisticsModal.selectedUser}
-          setIsUserStatisticsModalOpen={setUserStatisticsModal}
-          startDate={startDate}
-          endDate={endDate}
-        />
-      )}
+      {userStatisticsModal.isOpen &&
+        userStatisticsModal.selectedUser &&
+        userStatisticsModal.variant === "ADDED_ARTICLES" && (
+          <UserStatisticsAddedArticlesModal
+            isUserStatisticsModalOpen={userStatisticsModal.isOpen && userStatisticsModal.variant === "ADDED_ARTICLES"}
+            selectedUser={userStatisticsModal.selectedUser}
+            setIsUserStatisticsModalOpen={setUserStatisticsModal}
+            startDate={startDate}
+            endDate={endDate}
+          />
+        )}
 
-      <UserStatisticsChartsModal
-        isUserStatisticsModalOpen={userStatisticsModal.isOpen && userStatisticsModal.variant === "charts"}
-        setIsUserStatisticsModalOpen={setUserStatisticsModal}
-      />
+      {userStatisticsModal.isOpen &&
+        userStatisticsModal.selectedUser &&
+        userStatisticsModal.variant === "EDITED_ARTICLES" && (
+          <UserStatisticsEditedArticlesModal
+            isUserStatisticsModalOpen={userStatisticsModal.isOpen && userStatisticsModal.variant === "EDITED_ARTICLES"}
+            selectedUser={userStatisticsModal.selectedUser}
+            setIsUserStatisticsModalOpen={setUserStatisticsModal}
+            startDate={startDate}
+            endDate={endDate}
+          />
+        )}
+      {userStatisticsModal.isOpen &&
+        userStatisticsModal.selectedUser &&
+        userStatisticsModal.variant === "ADDED_CONVERSATION_REPORTS" && (
+          <UserStatisticsAddedConversationReportsModal
+            isUserStatisticsModalOpen={
+              userStatisticsModal.isOpen && userStatisticsModal.variant === "ADDED_CONVERSATION_REPORTS"
+            }
+            selectedUser={userStatisticsModal.selectedUser}
+            setIsUserStatisticsModalOpen={setUserStatisticsModal}
+            startDate={startDate}
+            endDate={endDate}
+          />
+        )}
     </div>
   );
 };
