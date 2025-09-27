@@ -1,12 +1,9 @@
 import { z } from "zod";
 
 export const articleSchema = z.object({
-  title: z
-    .string()
-    .min(3, { message: "Tytuł artykułu musi zawierać co najmniej 3 znaki." })
-    .max(90, {
-      message: "Tytuł artykułu może zawierać maksymalnie 90 znaków.",
-    }),
+  title: z.string().min(3, { message: "Tytuł artykułu musi zawierać co najmniej 3 znaki." }).max(140, {
+    message: "Tytuł artykułu może zawierać maksymalnie 140 znaków.",
+  }),
   product: z.string().min(1, {
     message: "Produkt jest wymagany. Wybierz jedną z dostępnych opcji.",
   }),
@@ -31,12 +28,10 @@ export const articleSchema = z.object({
         variantContent: z
           .string()
           .min(6, {
-            message:
-              "Treść odpowiedzi dla klienta musi zawierać co najmniej 6 znaków.",
+            message: "Treść odpowiedzi dla klienta musi zawierać co najmniej 6 znaków.",
           })
           .max(9000, {
-            message:
-              "Treść odpowiedzi dla klienta może zawierać maksymalnie 9000 znaków.",
+            message: "Treść odpowiedzi dla klienta może zawierać maksymalnie 9000 znaków.",
           }),
       })
     )
@@ -49,7 +44,7 @@ export const articleSchema = z.object({
     .max(9000, {
       message: "Notatka dla pracownika może zawierać maksymalnie 9000 znaków.",
     }),
-  file: z.array(z.any()).optional(), // dla uproszczenia
+  file: z.array(z.any()).optional(),
 });
 
 export type ArticleFormData = z.infer<typeof articleSchema>;
