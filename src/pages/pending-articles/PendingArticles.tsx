@@ -28,23 +28,16 @@ export const PendingArticles: React.FC = () => {
   const selectedProduct = searchParams.get("product") || "";
   const selectedCategory = searchParams.get("category") || "";
   const [pendingId, setPendingId] = useState<string | null>(null);
-  const [rejectedArticleId, setRejectedArticleId] = useState<null | string>(
-    null
-  );
-  const [approvedArticleId, setApprovedArticleId] = useState<null | string>(
-    null
-  );
-  const [isCreatingArticleRejection, setIsCreatingArticleRejection] =
-    useState<boolean>(false);
-  const [isCreatinArticleApprove, setIsCreatingArticleApprove] =
-    useState<boolean>(false);
+  const [rejectedArticleId, setRejectedArticleId] = useState<null | string>(null);
+  const [approvedArticleId, setApprovedArticleId] = useState<null | string>(null);
+  const [isCreatingArticleRejection, setIsCreatingArticleRejection] = useState<boolean>(false);
+  const [isCreatinArticleApprove, setIsCreatingArticleApprove] = useState<boolean>(false);
   const { data, isLoading, error } = useFindArticlesQuery(params);
   const { data: products = [] } = useFindProductsQuery();
 
   const { data: categories } = useFindCategoriesByProductQuery(selectedProduct);
 
-  const { mutate: approveMutate, isPending: isApproveLoading } =
-    useAproveArticleMutation();
+  const { mutate: approveMutate, isPending: isApproveLoading } = useAproveArticleMutation();
   const { mutate: rejectionMutate } = useRejectArticleMutation();
 
   const statuses: { key: StatusKey; label: string; icon: JSX.Element }[] = [
@@ -112,6 +105,15 @@ export const PendingArticles: React.FC = () => {
           queryClient.invalidateQueries({ queryKey: ["articles"] });
           toast.success("Artykuł został zatwierdzony.");
         },
+        onError: (error: any) => {
+          const status = error?.status;
+
+          if (status === 403) {
+            toast.warning("Brak wymaganych uprawnień do wykonania tej operacji.");
+          } else {
+            toast.error("Wystąpił nieoczekiwany błąd. Spróbuj ponownie później.");
+          }
+        },
         onSettled: () => {
           setPendingId(null);
           setApprovedArticleId(null);
@@ -126,20 +128,14 @@ export const PendingArticles: React.FC = () => {
     setRejectedArticleId(articleId);
   };
 
-  const onArticleRejectConfirm = ({
-    rejectionReason,
-  }: {
-    rejectionReason: string;
-  }) => {
+  const onArticleRejectConfirm = ({ rejectionReason }: { rejectionReason: string }) => {
     if (rejectedArticleId) {
       rejectionMutate(
         { articleId: rejectedArticleId, rejectionReason },
         {
           onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["articles"] });
-            toast.success(
-              "Artykuł został odrzucony, uwagi zostały wysłane do autora artykułu"
-            );
+            toast.success("Artykuł został odrzucony, uwagi zostały wysłane do autora artykułu");
           },
           onSettled: () => {
             setPendingId(null);
@@ -159,9 +155,7 @@ export const PendingArticles: React.FC = () => {
 
   return (
     <div className="mx-auto pb-10 ">
-      <h1 className="text-xl font-bold mb-6.5 tracking-wide text-foreground">
-        Moje artykuły
-      </h1>
+      <h1 className="text-xl font-bold mb-6.5 tracking-wide text-foreground">Moje artykuły</h1>
 
       {/* TU WYRENDERUJESZ STATUSBAR */}
 
@@ -208,10 +202,7 @@ export const PendingArticles: React.FC = () => {
                 // <p className="p-6 text-center text-gray-500 dark:text-gray-400 italic">
                 //   Brak artykułów do wyświetlenia.
                 // </p>
-                <NoDataFound
-                  title="Brak wyników"
-                  description="Brak artykułów do wyświetlenia."
-                />
+                <NoDataFound title="Brak wyników" description="Brak artykułów do wyświetlenia." />
               )}
 
               {data?.data?.map((article: ArticleListItem) => (
