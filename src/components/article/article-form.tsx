@@ -79,7 +79,7 @@ const ArticleForm = ({
                       <ul className="list-disc pl-5 pt-1.5 space-y-1 text-xs text-muted-foreground leading-snug">
                         <li>Unikalna w całym systemie</li>
                         <li>Czytelna i opisowa</li>
-                        <li>3–90 znaków długości</li>
+                        <li>3-140 znaków długości</li>
                       </ul>
                     </div>
                   </TooltipContent>
@@ -109,23 +109,6 @@ const ArticleForm = ({
                   </FormItem>
                 )}
               />
-
-              {/* <div className="flex justify-end gap-2">
-              {onCancel && (
-                <Button type="button" onClick={onCancel} variant="outline">
-                  <ArrowLeft className="w-4 h-4 mr-1" /> Wróć
-                </Button>
-              )}
-              <Button
-                type="submit"
-                variant="default"
-                disabled={article ? !isDirty : false}
-              >
-                {isLoading && <Loader className="animate-spin w-4 h-4 mr-2" />}
-                <Save className="w-4 h-4 mr-1" />
-                {article ? "Zapisz" : "Utwórz"}
-              </Button>
-            </div> */}
             </CardContent>
           </Card>
 

@@ -33,9 +33,7 @@ export const ArticlePageHeader: React.FC<Props> = ({ article, returnUrl }) => {
           </button>
 
           {/* Nagłówek */}
-          <h1 className="text-xl font-semibold text-foreground truncate max-w-xs md:max-w-2xl text-center">
-            {article.title}
-          </h1>
+          <h1 className="text-lg font-semibold text-foreground  max-w-xs md:max-w-5xl ">{article.title}</h1>
         </div>
 
         {/* Zakładki po prawej */}
