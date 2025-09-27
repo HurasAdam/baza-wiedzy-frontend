@@ -1,11 +1,11 @@
 import {
+  Archive,
   CheckCircleIcon,
   EyeIcon,
   Loader,
   RefreshCw,
   SquarePen,
   Star,
-  Trash2,
   UserIcon,
   UserRoundCheck,
   XCircleIcon,
@@ -104,10 +104,10 @@ export const ArticleMainPage = () => {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button size="icon" variant="ghost">
-                  <Trash2 className="w-4 h-4" />
+                  <Archive className="w-4 h-4" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>Usuń</TooltipContent>
+              <TooltipContent>Archiwizuj</TooltipContent>
             </Tooltip>
           </div>
         </TooltipProvider>

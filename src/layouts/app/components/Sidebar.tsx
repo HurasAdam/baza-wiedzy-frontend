@@ -2,13 +2,13 @@ import { cn } from "@/lib/utils";
 // import { useAuth } from "@/provider/auth-context";
 import type { Workspace } from "@/types";
 import {
-  Archive,
   BookOpen,
   BookUser,
   ChartColumnDecreasing,
   ChevronsLeft,
   ChevronsRight,
   Clipboard,
+  FolderSearch,
   HeartIcon,
   Info,
   LayoutDashboard,
@@ -36,7 +36,7 @@ const navItems = [
   {
     title: "Baza artykułów",
     href: "/articles",
-    icon: Archive,
+    icon: FolderSearch,
   },
   {
     title: "FAQ",
