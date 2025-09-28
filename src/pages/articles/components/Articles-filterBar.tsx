@@ -1,16 +1,9 @@
-import { XIcon } from "lucide-react";
-import React, { useState } from "react";
-import { Button } from "../../../components/ui/button";
-import { Input } from "../../../components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../../components/ui/select";
-import { cn } from "../../../lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Box, FolderSearch, X } from "lucide-react";
+import React from "react";
 import type { IProduct } from "../../../types/product";
 import type { ProductCategory } from "../../../types/product-category";
 
@@ -19,15 +12,12 @@ type ArticlesFilterBarProps = {
   selectedProduct: string;
   selectedCategory: string;
   products: IProduct[];
-  onSearchChange?: (val: string) => void;
-  onResetAll: () => void;
-  onTagChange?: (val: string) => void;
-  onToggleChange?: (val: boolean) => void;
   categories?: ProductCategory[];
-  tags?: string[];
   onTitleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onProductChange: (value: string) => void;
   onCategoryChange: (value: string) => void;
+  onResetAll: () => void;
+  resultsCount?: number;
 };
 
 const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
@@ -35,54 +25,97 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
   selectedProduct,
   selectedCategory,
   products,
+  categories,
   onTitleChange,
   onProductChange,
   onCategoryChange,
   onResetAll,
-  onToggleChange = () => {},
-  categories,
+  resultsCount,
 }) => {
-  const [isChecked, setIsChecked] = useState(false);
-
-  const handleToggleChange = (checked: boolean) => {
-    setIsChecked(checked);
-    onToggleChange(checked);
-  };
   const hasFilters = selectedTitle || selectedProduct || selectedCategory;
-  return (
-    <div className="w-full border-b  p-4 mb-4">
-      <div className="flex flex-wrap items-center gap-4">
-        {/* Search */}
-        <div className="relative w-64">
-          <Input
-            value={selectedTitle}
-            onChange={onTitleChange}
-            placeholder="Szukaj artykułów..."
-            className="pl-10 border-ring "
-          />
-          <span className="absolute left-3 top-2.5 text-muted-foreground">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M21 21l-4.35-4.35M16 10a6 6 0 11-12 0 6 6 0 0112 0z"
-              />
-            </svg>
-          </span>
-        </div>
 
-        {/* Product select */}
-        <Select onValueChange={onProductChange} value={selectedProduct}>
-          <SelectTrigger className="w-56  border-ring">
+  return (
+    <div className="bg-background flex flex-col gap-4 mb-4">
+      {/* ---- Header ---- */}
+      <div className="flex justify-between items-center">
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 ">
+            <div className=" rounded-xl bg-primary/10">
+              <FolderSearch className="w-6 h-6 text-muted-foreground" />
+            </div>
+            <h1 className="text-xl font-semibold text-foreground flex items-center gap-2">Baza artykułów</h1>
+          </div>
+
+          {/* Active filter badges */}
+          <div className="flex gap-2 pt-2.5 flex-wrap px-2 h-6 mb-3">
+            {selectedTitle && (
+              <Badge
+                variant="secondary"
+                className="flex items-center gap-1 w-full min-w-[130px] max-w-[130px] justify-between"
+              >
+                <span className="text-xs font-semibold">🔍</span>
+                <span className="truncate" title={selectedTitle}>
+                  {selectedTitle}
+                </span>
+                <button
+                  onClick={() => onTitleChange({ target: { value: "" } } as any)}
+                  className="hover:text-destructive"
+                  aria-label="Usuń filtr tekstowy"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </Badge>
+            )}
+
+            {/* Product */}
+            {selectedProduct && (
+              <Badge variant="default" className="flex items-center gap-1">
+                <Box className="w-3 h-3 text-foreground" /> {/* Ikonka po lewej */}
+                {products.find((p) => p._id === selectedProduct)?.name || "Produkt"}
+                <button
+                  onClick={() => onProductChange("__clear__")}
+                  className="hover:text-destructive"
+                  aria-label="Usuń filtr produktu"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </Badge>
+            )}
+
+            {/* Category */}
+            {selectedCategory && (
+              <Badge variant="secondary" className="flex items-center gap-1">
+                {categories?.find((c) => c._id === selectedCategory)?.name || "Kategoria"}
+                <button onClick={() => onCategoryChange("__clear__")} className="hover:text-destructive">
+                  <X className="w-4 h-4" />
+                </button>
+              </Badge>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* ---- Filters ---- */}
+      <div className="flex px-3 py-2 gap-3 items-center flex-wrap">
+        {/* Search */}
+        <Input
+          value={selectedTitle}
+          onChange={onTitleChange}
+          placeholder="Szukaj artykułów..."
+          className="w-52 border-ring"
+        />
+
+        {/* Product */}
+        <Select
+          onValueChange={(value) => onProductChange(value === "all" ? "__clear__" : value)}
+          value={selectedProduct || "all"}
+        >
+          <SelectTrigger className="w-48 border-ring">
             <SelectValue placeholder="Produkt" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectItem value="__clear__">
-                <XIcon className="w-4 h-4 mr-1" />
-                Wyczyść produkt
-              </SelectItem>
+              <SelectItem value="all">Wszystkie</SelectItem>
               {products.map(({ _id, name }) => (
                 <SelectItem key={_id} value={_id}>
                   {name}
@@ -92,17 +125,18 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
           </SelectContent>
         </Select>
 
-        {/* Category select */}
-        <Select onValueChange={onCategoryChange} value={selectedCategory} disabled={!selectedProduct}>
-          <SelectTrigger className="w-56  border-ring">
+        {/* Category */}
+        <Select
+          onValueChange={(value) => onCategoryChange(value === "all" ? "__clear__" : value)}
+          value={selectedCategory || "all"}
+          disabled={!selectedProduct}
+        >
+          <SelectTrigger className="w-48 border-ring">
             <SelectValue placeholder="Kategoria" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectItem value="__clear__">
-                <XIcon className="w-4 h-4 mr-1" />
-                Wyczyść kategorię
-              </SelectItem>
+              <SelectItem value="all">Wszystkie</SelectItem>
               {categories?.map(({ _id, name }) => (
                 <SelectItem key={_id} value={_id}>
                   {name}
@@ -112,26 +146,19 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
           </SelectContent>
         </Select>
 
-        {/* Toggle Favourites */}
-        {/* <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Switch checked={isChecked} onCheckedChange={handleToggleChange} />
-          <span>Ulubione</span>
-        </div> */}
-
-        {/* Reset Button */}
-        <Button
-          onClick={onResetAll}
-          variant={hasFilters ? "default" : "outline"}
-          disabled={!hasFilters}
-          className={cn(
-            "ml-auto inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors"
-          )}
-        >
-          <XIcon className="h-4 w-4 stroke-[2] text-primary-foreground" />
+        {/* Reset */}
+        <Button variant="outline" size="sm" disabled={!hasFilters} onClick={onResetAll} className="ml-auto">
           Wyczyść filtry
         </Button>
+
+        {typeof resultsCount === "number" && (
+          <Badge variant="outline" className="ml-2">
+            Znaleziono: {resultsCount}
+          </Badge>
+        )}
       </div>
     </div>
   );
 };
+
 export default ArticlesFilterBar;
