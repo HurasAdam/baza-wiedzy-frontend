@@ -27,6 +27,7 @@ import { getAvatarFallbackText } from "@/utils/avatar";
 import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useSound } from "../../../providers/sound-provider";
 const backendBase = import.meta.env.VITE_BACKEND_BASE_URL ?? "http://localhost:5000";
 interface HeaderProps {
   onCreateWorkspace: () => void;
@@ -43,9 +44,11 @@ const Header = ({
   onOpenIssueReportsModal,
 }: HeaderProps) => {
   const { data: user } = useAuthQuery();
-
+  const { soundEnabled } = useSound();
   const initials = getAvatarFallbackText(user?.name);
   const navigate = useNavigate();
+
+  const userPermissions = user?.role?.permissions || [];
 
   const avatarUrl = user.profilePicture?.path
     ? `${backendBase}${user.profilePicture.path.replace(/^\/app/, "")}`
@@ -58,6 +61,13 @@ const Header = ({
       onSuccess: () => {
         queryClient.clear();
         navigate("/auth/login", { replace: true });
+        if (soundEnabled) {
+          const audio = new Audio("/logout-sound.m4a");
+          audio.play().catch(() => {
+            console.log("Nie udało się odtworzyć dźwięku");
+          });
+        }
+
         toast.success("Zostałeś pomyślnie wylogowany");
       },
       onError: (err) => {
@@ -89,29 +99,39 @@ const Header = ({
       ),
       icon: <></>,
       actionHandler: () => {},
+      requiredPermission: null,
     },
 
     {
       label: "Moje zgłoszenia",
       icon: <User className="hover:text-primary-foreground" />,
+      requiredPermissions: ["SEND_REPORT"],
       actionHandler: () => onOpenIssueReportsModal(),
     },
     {
       label: "Panel Admina",
       icon: <User className="hover:text-primary-foreground" />,
       actionHandler: () => navigate("/admin"),
+      requiredPermissions: ["ACCESS_ADMIN_PANEL"],
     },
     {
       label: "Ustawienia",
       icon: <Settings className="hover:text-primary-foreground" />,
       actionHandler: () => onOpenSettingsModal(),
+      requiredPermission: null,
     },
     {
       label: "Wyloguj się",
       icon: <LogOut className="hover:text-primary-foreground" />,
       actionHandler: () => onLogout(),
+      requiredPermission: null,
     },
   ];
+
+  const filteredProfileOptions = profileMenuOptions.filter((option) => {
+    if (!option.requiredPermissions) return true;
+    return option.requiredPermissions.some((perm) => userPermissions.includes(perm));
+  });
 
   return (
     <div className="bg-background sticky top-0 z-40 border-b">
@@ -148,15 +168,19 @@ const Header = ({
 
         <div className="flex items-center gap-2">
           {/* FEEDBACK BUTTON */}
-          <Button onClick={onOpenCreateIssueReport} variant="outline" size="sm" className="relative mr-4">
-            🐞 Zgłoś problem
-            <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-[10px] px-1 py-0.5 rounded">
-              Beta
-            </span>
-          </Button>
-          <Button onClick={() => navigate("articles/new")} className="cursor-pointer" variant="ghost" size="icon">
-            <LucideCircleFadingPlus />
-          </Button>
+          {userPermissions.includes("SEND_REPORT") && (
+            <Button onClick={onOpenCreateIssueReport} variant="outline" size="sm" className="relative mr-4">
+              🐞 Zgłoś problem
+              <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-[10px] px-1 py-0.5 rounded">
+                Beta
+              </span>
+            </Button>
+          )}
+          {userPermissions.includes("ADD_ARTICLE") && (
+            <Button onClick={() => navigate("articles/new")} className="cursor-pointer" variant="ghost" size="icon">
+              <LucideCircleFadingPlus />
+            </Button>
+          )}
           <Button className="cursor-pointer" variant="ghost" size="icon">
             <LucidePhone />
           </Button>
@@ -172,7 +196,7 @@ const Header = ({
               sideOffset: 7,
               alignOffset: 0,
             }}
-            options={profileMenuOptions}
+            options={filteredProfileOptions}
             triggerBtn={
               <div className="rounded-full flex items-center gap-0.5 cursor-pointer bg-muted/90 py-1 px-1.5 hover:bg-muted ml-0.5 ">
                 <Avatar className="size-7 ">

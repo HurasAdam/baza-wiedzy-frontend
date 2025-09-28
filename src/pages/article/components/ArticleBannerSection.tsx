@@ -35,6 +35,15 @@ const ArticleBannerSection = ({ article }) => {
         queryClient.invalidateQueries({ queryKey: ["article", article._id] });
         toast.success("Artykuł został zatwierdzony.");
       },
+      onError: (error: any) => {
+        const status = error?.status;
+
+        if (status === 403) {
+          toast.warning("Brak wymaganych uprawnień do wykonania tej operacji.");
+        } else {
+          toast.error("Wystąpił nieoczekiwany błąd. Spróbuj ponownie później.");
+        }
+      },
       onSettled: () => {
         setIsCreatingArticleApprove(false);
       },
@@ -50,6 +59,15 @@ const ArticleBannerSection = ({ article }) => {
             queryClient.invalidateQueries({ queryKey: ["articles"] });
             queryClient.invalidateQueries({ queryKey: ["article", article._id] });
             toast.success("Artykuł został odrzucony, uwagi zostały wysłane do autora artykułu");
+          },
+          onError: (error: any) => {
+            const status = error?.status;
+
+            if (status === 403) {
+              toast.warning("Brak wymaganych uprawnień do wykonania tej operacji.");
+            } else {
+              toast.error("Wystąpił nieoczekiwany błąd. Spróbuj ponownie później.");
+            }
           },
           onSettled: () => {
             setIsCreatingArticleRejection(false);

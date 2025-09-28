@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-// import { useAuth } from "@/provider/auth-context";
 import type { Workspace } from "@/types";
 import {
   BookOpen,
@@ -23,71 +22,39 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import queryClient from "@/config/query.client";
-import { useLogoutMutation } from "@/hooks/auth/use-auth";
+import { useAuthQuery, useLogoutMutation } from "@/hooks/auth/use-auth";
 import { Link, useNavigate } from "react-router-dom";
 import { SidebarNav } from "./Sidebar-nav";
 
-const navItems = [
-  {
-    title: "Start",
-    href: "/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Baza artykułów",
-    href: "/articles",
-    icon: FolderSearch,
-  },
-  {
-    title: "FAQ",
-    href: "/faq",
-    icon: BookOpen,
-  },
-  {
-    title: "Rejestr tematów",
-    href: "/register-topic",
-    icon: Clipboard,
-  },
+type NavItem = {
+  title: string;
+  href: string;
+  icon: React.ComponentType<any>;
+  requiredPermission?: string; // opcjonalna permisja do wyświetlenia
+};
 
-  {
-    title: "Szkoły projektowe",
-    href: `/jst-projects`,
-    icon: School,
-  },
-  {
-    title: "Działy i kontakty",
-    href: `/achieved`,
-    icon: BookUser,
-  },
-  {
-    title: "Moje wpisy",
-    href: `/my-entries`,
-    icon: UserRoundPen,
-  },
-  {
-    title: "Statystyki",
-    href: `/statistics`,
-    icon: ChartColumnDecreasing,
-  },
-
-  {
-    title: "Ulubione",
-    href: "/favorites-articles",
-    icon: HeartIcon,
-  },
+const navItems: NavItem[] = [
+  { title: "Start", href: "/dashboard", icon: LayoutDashboard },
+  { title: "Baza artykułów", href: "/articles", icon: FolderSearch },
+  { title: "FAQ", href: "/faq", icon: BookOpen },
+  { title: "Rejestr tematów", href: "/register-topic", icon: Clipboard },
+  { title: "Szkoły projektowe", href: `/jst-projects`, icon: School },
+  { title: "Działy i kontakty", href: `/achieved`, icon: BookUser },
+  { title: "Moje wpisy", href: `/my-entries`, icon: UserRoundPen, requiredPermission: "ADD_ARTICLE" },
+  { title: "Statystyki", href: `/statistics`, icon: ChartColumnDecreasing },
+  { title: "Ulubione", href: "/favorites-articles", icon: HeartIcon },
   {
     title: "do zweryfikowania",
     href: "/articles-pending",
     icon: RectangleEllipsis,
+    requiredPermission: "ACCESS_PENDING_ARTICLES_PANEL",
   },
-  {
-    title: "Złote wiadomości",
-    href: "/funny-messages",
-    icon: Smile,
-  },
+  { title: "Zabawne wiad.", href: "/funny-messages", icon: Smile },
 ];
+
 const APP_VERSION = import.meta.env.VITE_APP_VERSION;
 const isBeta = APP_VERSION?.toLowerCase().includes("beta");
+
 export const Sidebar = ({
   currentWorkspace,
   onOpenChangeLogModal,
@@ -95,10 +62,13 @@ export const Sidebar = ({
   currentWorkspace?: Workspace | null;
   onOpenChangeLogModal: () => void;
 }) => {
-  //   const { user, logout } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const navigate = useNavigate();
-  const { mutate, isPending } = useLogoutMutation();
+  const { mutate } = useLogoutMutation();
+
+  // Pobranie użytkownika i jego permisji
+  const { data: authData, isLoading } = useAuthQuery();
+  const userPermissions = authData?.role?.permissions || [];
 
   const onLogout = () => {
     mutate(undefined, {
@@ -106,11 +76,14 @@ export const Sidebar = ({
         queryClient.clear();
         navigate("/auth/login", { replace: true });
       },
-      onError: (err) => {
-        // optionalnego obsłużenia błędu
-      },
     });
   };
+
+  // Filtrowanie zakładek po permisjach
+  const filteredNavItems = navItems.filter((item) => {
+    if (!item.requiredPermission) return true;
+    return userPermissions.includes(item.requiredPermission);
+  });
 
   return (
     <div
@@ -128,7 +101,6 @@ export const Sidebar = ({
               <span className="font-semibold text-lg hidden md:block text-sidebar-foreground">Baza wiedzy</span>
             </div>
           )}
-
           {isCollapsed && <Origami className="size-6 text-sidebar-primary" />}
         </Link>
 
@@ -142,9 +114,9 @@ export const Sidebar = ({
         </Button>
       </div>
 
-      <ScrollArea className="flex-1  px-3 py-2">
+      <ScrollArea className="flex-1 px-3 py-2">
         <SidebarNav
-          items={navItems}
+          items={filteredNavItems} // <- wyświetlamy tylko zakładki dostępne dla użytkownika
           isCollapsed={isCollapsed}
           className={cn(isCollapsed && "items-center space-y-2")}
           currentWorkspace={currentWorkspace}
@@ -152,13 +124,13 @@ export const Sidebar = ({
       </ScrollArea>
 
       <div className="flex flex-col items-center py-4 mt-auto text-xs text-muted-foreground">
-        <span className="flex items-center gap-1  ">
+        <span className="flex items-center gap-1">
           <Info onClick={onOpenChangeLogModal} className="w-4 h-4 cursor-help text-sidebar-logo-secondary" />
           {!isCollapsed && (
             <span className="flex items-center gap-1 text-sidebar-foreground">
               v{APP_VERSION}
               {isBeta && (
-                <span className=" bg-yellow-400 text-black text-[10px] px-1 py-0.5 rounded font-medium ">Beta</span>
+                <span className="bg-yellow-400 text-black text-[10px] px-1 py-0.5 rounded font-medium">Beta</span>
               )}
             </span>
           )}

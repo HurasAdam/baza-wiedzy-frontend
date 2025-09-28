@@ -8,16 +8,22 @@ import ArticleBannerSection from "./ArticleBannerSection";
 interface Props {
   article: Article;
   returnUrl: string;
+  userPermissions: string[];
 }
 
-export const ArticlePageHeader: React.FC<Props> = ({ article, returnUrl }) => {
+export const ArticlePageHeader: React.FC<Props> = ({ article, returnUrl, userPermissions }) => {
   const navigate = useNavigate();
 
   const tabs = [
-    { label: "Dane główne", path: "" },
-    { label: "Załączniki", path: "attachments" },
-    { label: "Historia zmian", path: "history" },
+    { label: "Dane główne", path: "", requirePermission: null },
+    { label: "Załączniki", path: "attachments", requiredPermission: null },
+    { label: "Historia zmian", path: "history", requiredPermission: "VIEW_ARTICLE_HISTORY" },
   ];
+
+  const filteredTabOptions = tabs.filter((tab) => {
+    if (!tab.requiredPermission) return true; // brak wymagania = zawsze widoczne
+    return userPermissions.includes(tab.requiredPermission);
+  });
 
   return (
     <>
@@ -38,7 +44,7 @@ export const ArticlePageHeader: React.FC<Props> = ({ article, returnUrl }) => {
 
         {/* Zakładki po prawej */}
         <div className="flex items-center gap-2">
-          {tabs.map((tab) => (
+          {filteredTabOptions.map((tab) => (
             <NavLink
               key={tab.path}
               to={tab.path}

@@ -3,10 +3,13 @@ import { useState } from "react";
 import { Dropdown } from "../../components/Dropdown";
 import { FunnyMessageModal } from "../../components/funny-messages/funny-message-modal";
 import { Button } from "../../components/ui/button";
+import { useAuthQuery } from "../../hooks/auth/use-auth";
 import { useFindFunnyMessagesQuery } from "../../hooks/funny-messages/use-funny-messages";
 import { FunnyMessagesList } from "./components/funny-messages-list";
 
 export const FunnyMessages = () => {
+  const { data: user } = useAuthQuery();
+  const userPermissions = user?.role?.permissions || [];
   const [isCreatingFunnyMessage, setIsCreatingFunnyMessage] = useState<boolean>(false);
 
   const { data: funnyMessages, isLoading: isFunnyMessagesLoading } = useFindFunnyMessagesQuery();
@@ -36,11 +39,12 @@ export const FunnyMessages = () => {
       <div className="w-full">
         <div className="flex justify-between">
           <h1 className="text-xl font-semibold mb-6 text-foreground flex items-center gap-1.5">
-            <Smile className="w-6 h-6" /> Złote myśli
+            <Smile className="w-6 h-6" /> Zabawne wiadomości
           </h1>
 
-          <Dropdown triggerBtn={triggerBtn} options={dropdownOptions} position={{ align: "end" }} />
-          {/* Tabs */}
+          {userPermissions.includes("ADD_FUN_MESSAGE") && (
+            <Dropdown triggerBtn={triggerBtn} options={dropdownOptions} position={{ align: "end" }} />
+          )}
         </div>
         <FunnyMessagesList isLoading={isFunnyMessagesLoading} messages={funnyMessages?.data ?? []} />
       </div>

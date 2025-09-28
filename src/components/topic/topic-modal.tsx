@@ -73,17 +73,15 @@ export const TopicModal = ({
               }}
             >
               <div>
-                <div style={{ fontWeight: 600, marginBottom: 2 }}>
-                  Błąd: Duplikat tematu
-                </div>
-                <div style={{ opacity: 0.8 }}>
-                  Dla wybranego produtku istnieje już temat rozmowy o tej
-                  nazwie.
-                </div>
+                <div style={{ fontWeight: 600, marginBottom: 2 }}>Błąd: Duplikat tematu</div>
+                <div style={{ opacity: 0.8 }}>Dla wybranego produtku istnieje już temat rozmowy o tej nazwie.</div>
               </div>
             </div>,
             { duration: 7000 }
           );
+          return;
+        } else if (status === 403) {
+          toast.error("Brak wymaganych uprawnień do wykonania tej operacji.");
           return;
         }
         toast.error("Wystapił błąd, spróbuj ponownie");
@@ -92,15 +90,9 @@ export const TopicModal = ({
   };
 
   return (
-    <Dialog
-      open={isCreatingTopic}
-      onOpenChange={setIsCreatingTopic}
-      modal={true}
-    >
+    <Dialog open={isCreatingTopic} onOpenChange={setIsCreatingTopic} modal={true}>
       <DialogContent
-        {...(!closeOnOutsideClick
-          ? { onInteractOutside: (e) => e.preventDefault() }
-          : {})}
+        {...(!closeOnOutsideClick ? { onInteractOutside: (e) => e.preventDefault() } : {})}
         className="max-h-[80vh] overflow-y-auto"
       >
         <DialogHeader>

@@ -110,6 +110,9 @@ export const ArticleEditPage = () => {
                 { duration: 6200 }
               );
               return;
+            } else if (status === 403) {
+              toast.error("Brak wymaganych uprawnień do wykonania tej operacji.");
+              return;
             } else {
               toast.error("Wystąpił błąd, spróbuj ponownie");
             }
@@ -137,6 +140,9 @@ export const ArticleEditPage = () => {
               </div>,
               { duration: 6200 }
             );
+            return;
+          } else if (status === 403) {
+            toast.error("Brak wymaganych uprawnień do wykonania tej operacji.");
             return;
           } else {
             toast.error("Wystąpił błąd, spróbuj ponownie");

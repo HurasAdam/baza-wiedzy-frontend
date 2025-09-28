@@ -3,6 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import type { AxiosError } from "axios";
 import { ArrowDown, ArrowUp, Check, Loader, Plus, Trash2 } from "lucide-react";
 import { useMemo, useRef } from "react";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
@@ -55,6 +56,14 @@ export function CreateFaqPage() {
       onSuccess: () => {
         toast.success("FAQ zostało dodane");
         navigate(-1);
+      },
+      onError: (error: AxiosError) => {
+        const { status } = error;
+        if (status === 403) {
+          toast.error("Brak wymaganych uprawnień do wykonania tej operacji.");
+          return;
+        }
+        toast.error("Wystapił błąd, spróbuj ponownie");
       },
     });
 

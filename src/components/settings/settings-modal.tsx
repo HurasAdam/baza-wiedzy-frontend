@@ -1,8 +1,9 @@
 import clsx from "clsx";
-import { Bell, Palette, Settings, ShieldUser, User } from "lucide-react";
+import { Bell, Palette, Settings, ShieldUser, User, Volume2 } from "lucide-react";
 import { useState } from "react";
 import { Card, CardContent, CardTitle } from "../ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import SettingsSoundPanel from "./settings-sound-panel";
 import SettingsThemePanelTab from "./settings-theme-panel";
 import SettingsUserAccount from "./settings-user-account";
 import SettingsUserProfile from "./settings-user-profile";
@@ -18,6 +19,7 @@ const tabs = [
   { key: "profile", label: "Profil", icon: User },
   { key: "theme", label: "Wygląd", icon: Palette },
   { key: "notifications", label: "Powiadomienia", icon: Bell },
+  { key: "sounds", label: "Efekty dzwiękowe", icon: Volume2 }, // nowy tab
 ];
 
 export const SettingsModal = ({
@@ -88,6 +90,7 @@ export const SettingsModal = ({
                     <p className="text-sm text-muted-foreground">Zarządzaj ustawieniami powiadomień.</p>
                   </div>
                 )}
+                {activeTab === "sounds" && <SettingsSoundPanel />}
               </section>
             </CardContent>
           </Card>

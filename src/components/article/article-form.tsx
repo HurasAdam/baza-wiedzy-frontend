@@ -1,14 +1,13 @@
-import { CloudUpload, Info, Link, Loader, MessageCircle, Paperclip, Pencil, Plus, Trash2 } from "lucide-react";
+import { Info, Link, Loader, MessageCircle, Pencil, Plus, RectangleEllipsis, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import type { SelectOption } from "../../pages/create-article/CreateArticlePage";
 import type { Article } from "../../types/article";
 import { type ArticleFormData } from "../../validation/article.schema";
-import { FileInput, FileUploader, FileUploaderContent, FileUploaderItem } from "../shared/fileUploader";
 import MultipleSelector from "../shared/multiple-selector";
 import { RequiredLabel } from "../shared/required-label";
 import { Button } from "../ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
@@ -63,7 +62,7 @@ const ArticleForm = ({
               <CardTitle className="flex items-center justify-between">
                 <CardTitle className="text-lg font-semibold flex items-center gap-2 text-header-foreground">
                   <Pencil className="w-5 h-5 text-primary/90" />
-                  Nazwa artykułu
+                  Tytuł artykułu
                 </CardTitle>
 
                 <Tooltip>
@@ -72,14 +71,14 @@ const ArticleForm = ({
                   </TooltipTrigger>
                   <TooltipContent
                     side="right"
-                    className="max-w-xs  bg-background border border-borderrounded-lg p-4 shadow-lg"
+                    className="max-w-xs bg-muted text-muted-foreground border border-borderrounded-lg p-4 shadow-lg"
                   >
                     <div className="space-y-2">
-                      <h4 className="m-0 text-sm font-semibold">Wymogi nazwy</h4>
-                      <ul className="list-disc pl-5 pt-1.5 space-y-1 text-xs text-muted-foreground leading-snug">
-                        <li>Unikalna w całym systemie</li>
-                        <li>Czytelna i opisowa</li>
-                        <li>3-140 znaków długości</li>
+                      <h4 className="m-0 text-sm font-semibold">Wymogi tytułu artykułu</h4>
+                      <ul className="list-disc pl-5 pt-1.5 space-y-1 text-xs leading-snug">
+                        <li>Powinien być unikalny w systemie</li>
+                        <li>Jasny i zrozumiały, opisujący zawartość artykułu</li>
+                        <li>Długość: od 3 do 140 znaków</li>
                       </ul>
                     </div>
                   </TooltipContent>
@@ -113,10 +112,31 @@ const ArticleForm = ({
           </Card>
 
           <Card className="p-6 space-y-6">
-            <CardHeader className="flex items-center gap-2">
-              <Info className="w-5 h-5 text-primary/90" />
-              <CardTitle className="text-lg font-semibold text-header-foreground">
-                Uwagi i opis dla pracownika
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                <CardTitle className="text-lg font-semibold flex items-center gap-2 text-header-foreground">
+                  <RectangleEllipsis className="w-5 h-5 text-primary/90" />
+                  Uwagi i opis dla pracownika
+                </CardTitle>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Info className="w-5 h-5 text-muted-foreground cursor-pointer" />
+                  </TooltipTrigger>
+                  <TooltipContent
+                    side="right"
+                    className="max-w-xs bg-muted text-muted-foreground border border-borderrounded-lg p-4 shadow-lg"
+                  >
+                    <div className="space-y-2">
+                      <h4 className="m-0 text-sm font-semibold">Opis i uwagi dla pracownika</h4>
+                      <ul className="list-disc pl-5 pt-1.5 space-y-1 text-xs leading-snug">
+                        <li>wskazówki dotyczące poprawności lub stylu odpowiedzi</li>
+
+                        <li>Długość: od 3 do 140 znaków</li>
+                      </ul>
+                    </div>
+                  </TooltipContent>
+                </Tooltip>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -219,9 +239,44 @@ const ArticleForm = ({
 
           {/* Powiązania */}
           <Card className="p-6 space-y-6">
-            <CardHeader className="flex items-center gap-2">
-              <Link className="w-5 h-5 text-primary/90" />
-              <CardTitle className="text-lg font-semibold text-header-foreground">Powiązania</CardTitle>
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                <CardTitle className="text-lg font-semibold flex items-center gap-2 text-header-foreground">
+                  <Link className="w-5 h-5 text-primary/90" />
+                  Powiązania
+                </CardTitle>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Info className="w-5 h-5 text-muted-foreground cursor-pointer" />
+                  </TooltipTrigger>
+                  <TooltipContent
+                    side="right"
+                    className="max-w-xs bg-muted text-muted-foreground border border-borderrounded-lg p-4 space-y-2.5 shadow-lg"
+                  >
+                    <div className="space-y-2">
+                      <h4 className="m-0 text-sm font-semibold">Produkt:</h4>
+                      <ul className="list-disc pl-5 pt-1.5 space-y-1 text-xs leading-snug">
+                        <li>
+                          Wybierz produkt, do którego artykuł zostanie przypisany,wybór produktu determinuje dostępne
+                        </li>
+                      </ul>
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="m-0 text-sm font-semibold">Kategoria:</h4>
+                      <ul className="list-disc pl-5 pt-1.5 space-y-1 text-xs leading-snug">
+                        <li>Wybierz kategorię odpowiadającą treści artykułu</li>
+                      </ul>
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="m-0 text-sm font-semibold">Tagi:</h4>
+                      <ul className="list-disc pl-5 pt-1.5 space-y-1 text-xs leading-snug">
+                        <li>Wybierz cofnajmniej jeden tag, który najlepiej pasuje do treści artykuł</li>
+                      </ul>
+                    </div>
+                  </TooltipContent>
+                </Tooltip>
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Produkt */}
@@ -320,7 +375,7 @@ const ArticleForm = ({
           </Card>
 
           {/* Załączniki */}
-          <Card className="p-6 space-y-6">
+          {/* <Card className="p-6 space-y-6">
             <CardHeader className="flex items-center gap-2">
               <Paperclip className="w-5 h-5 text-primary/90" />
               <CardTitle className="text-lg font-semibold">Załączniki</CardTitle>
@@ -359,7 +414,7 @@ const ArticleForm = ({
                 )}
               />
             </CardContent>
-          </Card>
+          </Card> */}
         </form>
       </TooltipProvider>
     </Form>

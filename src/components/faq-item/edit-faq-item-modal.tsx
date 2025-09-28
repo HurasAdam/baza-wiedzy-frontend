@@ -64,6 +64,9 @@ export const EditFaqItemModal = ({
               { duration: 7000 }
             );
             return;
+          } else if (status === 403) {
+            toast.error("Brak wymaganych uprawnień do wykonania tej operacji.");
+            return;
           }
 
           toast.error("Wystąpił błąd serwera");

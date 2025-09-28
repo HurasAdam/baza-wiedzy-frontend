@@ -13,6 +13,7 @@ import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from ".
 import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover";
 import queryClient from "../../config/query.client";
 import { COLOR_TOKEN_MAP, ICONS } from "../../constants/faq-icons";
+import { useAuthQuery } from "../../hooks/auth/use-auth";
 import { useDeleteFaqItemMutaton } from "../../hooks/faq-item/use-faq-item";
 import { useFindFaqQuery, useFindFaqsQuery } from "../../hooks/faq/use-faq";
 import type { Faq, FaqItem } from "../../types/faq";
@@ -41,6 +42,10 @@ export function FaqPage() {
   const [pendingDeleteAction, setPendingDeleteAction] = useState<DeleteActionData | null>(null);
   const [isFaqItemDescriptionModalOpen, setIsFaqItemDescriptionModalOpen] = useState(false);
   const [selectedFaqDetailsContent, setSelectedFaqDetailsContent] = useState<Faq | null>(null);
+
+  const { data: user } = useAuthQuery();
+
+  const userPermissions = user?.role?.permissions || [];
 
   const { data: faqs, isLoading: isFaqsLoading } = useFindFaqsQuery();
 
@@ -189,23 +194,25 @@ export function FaqPage() {
           )}
         </div>
 
-        <Dropdown
-          triggerBtn={
-            <Button variant="default" className="flex items-center gap-1 cursor-pointer">
-              Dodaj <Plus className="w-4 h-4" />
-            </Button>
-          }
-          options={[
-            {
-              label: "Dodaj FAQ",
-              icon: <Plus className="w-4 h-4" />,
-              actionHandler: () => {
-                navigate("/faq/create");
+        {userPermissions.includes("ADD_FAQ") && (
+          <Dropdown
+            triggerBtn={
+              <Button variant="default" className="flex items-center gap-1 cursor-pointer">
+                Dodaj <Plus className="w-4 h-4" />
+              </Button>
+            }
+            options={[
+              {
+                label: "Dodaj FAQ",
+                icon: <Plus className="w-4 h-4" />,
+                actionHandler: () => {
+                  navigate("/faq/create");
+                },
               },
-            },
-          ]}
-          position={{ align: "end" }}
-        />
+            ]}
+            position={{ align: "end" }}
+          />
+        )}
       </div>
 
       <Card>
@@ -215,9 +222,11 @@ export function FaqPage() {
           ) : (
             <CardTitle className="text-header-foreground">Pytania i odpowiedzi({faq?.items?.length})</CardTitle>
           )}
-          <Button onClick={onCreateFaqItemRequest} variant="default" size="sm">
-            <Plus className="w-4 h-4 mr-1" /> Dodaj pytanie
-          </Button>
+          {userPermissions.includes("ADD_FAQ_QUESTION") && (
+            <Button onClick={onCreateFaqItemRequest} variant="default" size="sm">
+              <Plus className="w-4 h-4 mr-1" /> Dodaj pytanie
+            </Button>
+          )}
         </CardHeader>
         {isFaqLoading ? (
           <CardContent className="mx-auto">
@@ -228,37 +237,49 @@ export function FaqPage() {
             <ul className="divide-y divide-border">
               {faq?.items?.map((item) => (
                 <li key={item._id} className="flex justify-between items-start py-3">
-                  <div className="flex flex-col gap-1.5 px-0.5 py-2.5">
-                    <p className="text-base leading-[1.4644] font-medium text-foreground flex items-center gap-2">
+                  <div className="flex flex-col gap-1.5  py-2.5">
+                    <p className="text-base leading-[1.4644] font-medium text-forground- flex items-center gap-2">
                       <Pin className="w-6 h-6 bg-accent/80 rounded-sm p-1 text-primary-foreground" /> {item?.question}
                     </p>
-                    <p className="text-[15px] leading-[1.4644]  text-foreground">{item?.answer}</p>
+                    <p className="text-[15px] leading-[1.4644]  text-foreground px-8 py-3">{item?.answer}</p>
                   </div>
 
-                  <Dropdown
-                    triggerBtn={
-                      <Button size="icon" variant="ghost" aria-label="Opcje pytania" className="p-1 rounded ">
-                        <MoreHorizontal className="w-5 h-5 hover:text-primary" />
-                      </Button>
-                    }
-                    options={[
-                      {
-                        label: "Edytuj",
-                        icon: <Edit className="w-4 h-4" />,
-                        actionHandler: () => {
-                          onEditFaqItemRequest(item._id);
+                  {userPermissions.includes("EDIT_FAQ_QUESTION") ? (
+                    <Dropdown
+                      triggerBtn={
+                        <Button size="icon" variant="ghost" aria-label="Opcje pytania" className="p-1 rounded ">
+                          <MoreHorizontal className="w-5 h-5 hover:text-primary" />
+                        </Button>
+                      }
+                      options={[
+                        {
+                          label: "Edytuj",
+                          icon: <Edit className="w-4 h-4" />,
+                          actionHandler: () => {
+                            onEditFaqItemRequest(item._id);
+                          },
                         },
-                      },
-                      {
-                        label: "Usuń",
-                        icon: <Trash className="w-4 h-4 text-rose-600/80" />,
-                        actionHandler: () => {
-                          onDeleteRequest(item);
+                        {
+                          label: "Usuń",
+                          icon: <Trash className="w-4 h-4 text-rose-600/80" />,
+                          actionHandler: () => {
+                            onDeleteRequest(item);
+                          },
                         },
-                      },
-                    ]}
-                    position={{ align: "end" }}
-                  />
+                      ]}
+                      position={{ align: "end" }}
+                    />
+                  ) : (
+                    <Button
+                      disabled={true}
+                      size="icon"
+                      variant="ghost"
+                      aria-label="Opcje pytania"
+                      className="p-1 rounded "
+                    >
+                      <MoreHorizontal className="w-5 h-5 hover:text-primary" />
+                    </Button>
+                  )}
                 </li>
               ))}
             </ul>

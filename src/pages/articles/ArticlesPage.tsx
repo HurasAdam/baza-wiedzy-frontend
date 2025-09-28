@@ -4,10 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { NoDataFound } from "../../components/shared/NoDataFound";
 import queryClient from "../../config/query.client";
-import {
-  useArticleToggleFavouriteMutation,
-  useFindArticlesQuery,
-} from "../../hooks/articles/use-articles";
+import { useArticleToggleFavouriteMutation, useFindArticlesQuery } from "../../hooks/articles/use-articles";
 import { useFindCategoriesByProductQuery } from "../../hooks/product-categories/use-product-categories";
 import { useFindProductsQuery } from "../../hooks/products/use-products";
 import type { ArticleListItem } from "../../types/article";
@@ -94,33 +91,24 @@ export const ArticlesPage: React.FC = () => {
         categories={categories}
         onResetAll={onResetAllFilters}
       />
-      <div className="flex-grow flex flex-col h-fit bg-card border border-border divide-y divide-border">
+      <div className="flex-grow flex flex-col h-fit bg-card border border-border divide-y divide-border rounded-xl ">
         {isLoading && (
           <div className="flex items-center flex-col gap-0.5 justify-center">
             <Loader className="animate-spin w-7 h-7" />
-            <p className="text-sm text-muted-foreground animate-pulse">
-              Ładowanie...
-            </p>
+            <p className="text-sm text-muted-foreground animate-pulse">Ładowanie...</p>
           </div>
         )}
 
-        {isError && (
-          <p className="text-sm text-destructive">
-            Błąd podczas ładowania artykułów.
-          </p>
-        )}
+        {isError && <p className="text-sm text-destructive">Błąd podczas ładowania artykułów.</p>}
 
-        {!isLoading &&
-          !isError &&
-          data?.data.length === 0 &&
-          (titleParam || selectedProduct || selectedCategory) && (
-            <NoDataFound
-              title="Nie znaleziono żadnych artykułów"
-              description="Spróbuj zmienić filtry lub zresetuj wszystkie."
-              buttonText="Wyczyść filtry"
-              buttonAction={onResetAllFilters}
-            />
-          )}
+        {!isLoading && !isError && data?.data.length === 0 && (titleParam || selectedProduct || selectedCategory) && (
+          <NoDataFound
+            title="Nie znaleziono żadnych artykułów"
+            description="Spróbuj zmienić filtry lub zresetuj wszystkie."
+            buttonText="Wyczyść filtry"
+            buttonAction={onResetAllFilters}
+          />
+        )}
 
         {data?.data.map((article: ArticleListItem) => (
           <TableArticleCard

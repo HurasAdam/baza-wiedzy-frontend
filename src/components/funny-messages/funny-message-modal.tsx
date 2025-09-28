@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import type { AxiosError } from "axios";
 import { toast } from "sonner";
 import queryClient from "../../config/query.client";
 import { useCreateFunnyMessageMutation } from "../../hooks/funny-messages/use-funny-messages";
@@ -61,8 +62,13 @@ export const FunnyMessageModal = ({
         queryClient.invalidateQueries({ queryKey: ["funny-messages"] });
         return;
       },
-      onError: (error) => {
-        toast.error("Wystąpił błąd, spróbuj ponownie");
+      onError: (error: AxiosError) => {
+        const { status } = error;
+        if (status === 403) {
+          toast.error("Brak wymaganych uprawnień do wykonania tej operacji.");
+          return;
+        }
+        toast.error("Wystapił błąd, spróbuj ponownie");
       },
     });
   };

@@ -22,10 +22,12 @@ export interface ArticleOutletContext {
   article: Article;
   refetch: () => void;
   isArticleRefreshing: boolean;
+  userPermissions: {};
 }
 export const ArticleMainPage = () => {
   const { id } = useParams<{ id: string }>();
-  const { article, refetch, isArticleRefreshing } = useOutletContext<ArticleOutletContext>();
+
+  const { article, refetch, isArticleRefreshing, userPermissions } = useOutletContext<ArticleOutletContext>();
   const [activeVersion, setActiveVersion] = useState(0);
 
   const sortedDescriptions = [...(article?.responseVariants ?? [])].sort((a, b) => a.version - b.version);
@@ -78,7 +80,7 @@ export const ArticleMainPage = () => {
                     )}
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>Odśwież</TooltipContent>
+                <TooltipContent className="bg-muted">Odśwież</TooltipContent>
               </Tooltip>
             </div>
             <Tooltip>
@@ -87,28 +89,32 @@ export const ArticleMainPage = () => {
                   <Star className="w-4 h-4" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>Dodaj do ulubionych</TooltipContent>
+              <TooltipContent className="bg-muted">Dodaj do ulubionych</TooltipContent>
             </Tooltip>
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <NavLink to={`/articles/${id}/edit`}>
-                  <Button variant="ghost" size="icon">
-                    <SquarePen className="w-4 h-4" />
+            {userPermissions.includes("EDIT_ARTICLE") && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <NavLink to={`/articles/${id}/edit`}>
+                    <Button variant="ghost" size="icon">
+                      <SquarePen className="w-4 h-4" />
+                    </Button>
+                  </NavLink>
+                </TooltipTrigger>
+                <TooltipContent className="bg-muted">Edytuj</TooltipContent>
+              </Tooltip>
+            )}
+
+            {userPermissions.includes("ARCHIVE_ARTICLE") && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button size="icon" variant="ghost">
+                    <Archive className="w-4 h-4" />
                   </Button>
-                </NavLink>
-              </TooltipTrigger>
-              <TooltipContent>Edytuj</TooltipContent>
-            </Tooltip>
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button size="icon" variant="ghost">
-                  <Archive className="w-4 h-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Archiwizuj</TooltipContent>
-            </Tooltip>
+                </TooltipTrigger>
+                <TooltipContent className="bg-muted">Archiwizuj</TooltipContent>
+              </Tooltip>
+            )}
           </div>
         </TooltipProvider>
       </div>
@@ -137,12 +143,12 @@ export const ArticleMainPage = () => {
           <Card className="">
             <CardContent className="space-y-6">
               <section>
-                <h3 className="text-lg font-semibold mb-1 text-header-foreground">Opis pracownika</h3>
+                <h3 className="text-lg font-semibold mb-1 text-header-foreground">Uwagi dla pracownika</h3>
                 <p className="text-base text-foreground">{article.employeeDescription}</p>
               </section>
 
               <section>
-                <h3 className="text-lg font-semibold mb-1 text-header-foreground">Opis klienta</h3>
+                <h3 className="text-lg font-semibold mb-1 text-header-foreground">Odpowiedź dla klienta</h3>
                 <p className="whitespace-pre-wrap break-all text-foreground">{currentDescription?.variantContent}</p>
               </section>
 

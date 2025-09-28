@@ -12,6 +12,7 @@ import {
   useFindArticlesQuery,
   useRejectArticleMutation,
 } from "../../hooks/articles/use-articles";
+import { useAuthQuery } from "../../hooks/auth/use-auth";
 import { useFindCategoriesByProductQuery } from "../../hooks/product-categories/use-product-categories";
 import { useFindProductsQuery } from "../../hooks/products/use-products";
 import type { ArticleListItem } from "../../types/article";
@@ -36,6 +37,10 @@ export const PendingArticles: React.FC = () => {
   const { data: products = [] } = useFindProductsQuery();
 
   const { data: categories } = useFindCategoriesByProductQuery(selectedProduct);
+
+  const { data: user } = useAuthQuery();
+
+  const userPermissions = user?.role?.permissions || [];
 
   const { mutate: approveMutate, isPending: isApproveLoading } = useAproveArticleMutation();
   const { mutate: rejectionMutate } = useRejectArticleMutation();
@@ -207,6 +212,7 @@ export const PendingArticles: React.FC = () => {
 
               {data?.data?.map((article: ArticleListItem) => (
                 <PendingArticleCard
+                  userPermissions={userPermissions}
                   key={article._id}
                   article={article}
                   onApprove={onArticleAprove}

@@ -46,16 +46,16 @@ export const JstProjectModal = ({
               }}
             >
               <div>
-                <div style={{ fontWeight: 600, marginBottom: 2 }}>
-                  Błąd: Duplikat nazwy projektu
-                </div>
-                <div style={{ opacity: 0.8 }}>
-                  Projekt o podanej nazwie już istnieje. Wybierz inną nazwę.
-                </div>
+                <div style={{ fontWeight: 600, marginBottom: 2 }}>Błąd: Duplikat nazwy projektu</div>
+                <div style={{ opacity: 0.8 }}>Projekt o podanej nazwie już istnieje. Wybierz inną nazwę.</div>
               </div>
             </div>,
             { duration: 7000 }
           );
+          return;
+        }
+        if (status === 403) {
+          toast.error("Brak wymaganych uprawnień do wykonania tej operacji.");
           return;
         }
 
@@ -65,15 +65,9 @@ export const JstProjectModal = ({
   };
 
   return (
-    <Dialog
-      open={isCreatingJstProject}
-      onOpenChange={setIsCreatingJstProject}
-      modal={true}
-    >
+    <Dialog open={isCreatingJstProject} onOpenChange={setIsCreatingJstProject} modal={true}>
       <DialogContent
-        {...(!closeOnOutsideClick
-          ? { onInteractOutside: (e) => e.preventDefault() }
-          : {})}
+        {...(!closeOnOutsideClick ? { onInteractOutside: (e) => e.preventDefault() } : {})}
         className="max-h-[80vh] overflow-y-auto"
       >
         <DialogHeader>

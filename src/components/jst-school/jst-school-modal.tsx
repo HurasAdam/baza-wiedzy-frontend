@@ -2,21 +2,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import { Button } from "../ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "../ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 
 import type { AxiosError } from "axios";
@@ -25,13 +12,7 @@ import queryClient from "../../config/query.client";
 import { useCreateJstSchoolMutation } from "../../hooks/jst-schools/use-jst-schools";
 import type { IJstProject } from "../../types";
 import { jstSchoolSchema } from "../../validation/jst-school.schema";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 interface CreateWorkspaceProps {
   projects: IJstProject[];
@@ -41,11 +22,7 @@ interface CreateWorkspaceProps {
 
 export type JstSchoolForm = z.infer<typeof jstSchoolSchema>;
 
-export const JstSchoolModal = ({
-  projects,
-  isCreatingJstSchool,
-  setIsCreatingJstSchool,
-}: CreateWorkspaceProps) => {
+export const JstSchoolModal = ({ projects, isCreatingJstSchool, setIsCreatingJstSchool }: CreateWorkspaceProps) => {
   // --- use form ----//
   const form = useForm<JstSchoolForm>({
     resolver: zodResolver(jstSchoolSchema),
@@ -90,16 +67,16 @@ export const JstSchoolModal = ({
                 }}
               >
                 <div>
-                  <div style={{ fontWeight: 600, marginBottom: 2 }}>
-                    Błąd: Duplikat szId
-                  </div>
-                  <div style={{ opacity: 0.8 }}>
-                    Podany szId już istnieje w bazie danych. Proszę wybrać inny.
-                  </div>
+                  <div style={{ fontWeight: 600, marginBottom: 2 }}>Błąd: Duplikat szId</div>
+                  <div style={{ opacity: 0.8 }}>Podany szId już istnieje w bazie danych. Proszę wybrać inny.</div>
                 </div>
               </div>,
               { duration: 7000 }
             );
+            return;
+          }
+          if (status === 403) {
+            toast.warning("Brak wymaganych uprawnień do wykonania tej operacji.");
             return;
           }
           toast.error("Wystapił błąd, spróbuj ponownie");
@@ -109,11 +86,7 @@ export const JstSchoolModal = ({
   };
 
   return (
-    <Dialog
-      open={isCreatingJstSchool}
-      onOpenChange={setIsCreatingJstSchool}
-      modal={true}
-    >
+    <Dialog open={isCreatingJstSchool} onOpenChange={setIsCreatingJstSchool} modal={true}>
       <DialogContent className="max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Dodaj szkołę JST</DialogTitle>
@@ -129,10 +102,7 @@ export const JstSchoolModal = ({
                   <FormItem>
                     <FormLabel>Projekt</FormLabel>
                     <FormControl>
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}
-                      >
+                      <Select value={field.value} onValueChange={field.onChange}>
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="-- Wybierz projekt --" />
                         </SelectTrigger>
@@ -157,10 +127,7 @@ export const JstSchoolModal = ({
                   <FormItem>
                     <FormLabel>Nazwa szkoły</FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Wprowadź pełną nazwę szkoły"
-                      />
+                      <Input {...field} placeholder="Wprowadź pełną nazwę szkoły" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -189,10 +156,7 @@ export const JstSchoolModal = ({
                   <FormItem>
                     <FormLabel>Adres</FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Wprowadź pełen adres szkoły (ulica...)"
-                      />
+                      <Input {...field} placeholder="Wprowadź pełen adres szkoły (ulica...)" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -206,11 +170,7 @@ export const JstSchoolModal = ({
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input
-                        type="email"
-                        {...field}
-                        placeholder="Wprowadź oficjalny adres email szkoły"
-                      />
+                      <Input type="email" {...field} placeholder="Wprowadź oficjalny adres email szkoły" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -225,11 +185,7 @@ export const JstSchoolModal = ({
                   <FormItem>
                     <FormLabel>Telefon kontaktowy</FormLabel>
                     <FormControl>
-                      <Input
-                        type="text"
-                        {...field}
-                        placeholder="Wprowadź oficjalny telefon kontaktowy"
-                      />
+                      <Input type="text" {...field} placeholder="Wprowadź oficjalny telefon kontaktowy" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

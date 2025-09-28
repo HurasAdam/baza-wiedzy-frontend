@@ -6,12 +6,14 @@ import { Card, CardContent } from "../../../components/ui/card";
 import type { ArticleListItem } from "../../../types/article";
 
 const PendingArticleCard = ({
+  userPermissions,
   className,
   article,
   onApprove,
   onReject,
   loading,
 }: {
+  userPermissions: string[];
   className?: string;
   article: ArticleListItem;
   onApprove: (id: string) => void;
@@ -38,24 +40,28 @@ const PendingArticleCard = ({
           </h2>
 
           <div className="flex gap-2 shrink-0">
-            <Button
-              className="cursor-pointer text-foreground"
-              onClick={() => onApprove(article._id)}
-              variant="outline"
-              size="sm"
-              disabled={loading}
-            >
-              {loading ? <Loader className="w-4 h-4 animate-spin" /> : "Zatwierdź"}
-            </Button>
-            <Button
-              className="cursor-pointer text-foreground"
-              onClick={() => onReject(article._id)}
-              variant="outline"
-              size="sm"
-              disabled={loading}
-            >
-              Odrzuć
-            </Button>
+            {userPermissions.includes("APPROVE_ARTICLE") && (
+              <Button
+                className="cursor-pointer text-foreground"
+                onClick={() => onApprove(article._id)}
+                variant="outline"
+                size="sm"
+                disabled={loading}
+              >
+                {loading ? <Loader className="w-4 h-4 animate-spin" /> : "Zatwierdź"}
+              </Button>
+            )}
+            {userPermissions.includes("REJECT_ARTICLE") && (
+              <Button
+                className="cursor-pointer text-foreground"
+                onClick={() => onReject(article._id)}
+                variant="outline"
+                size="sm"
+                disabled={loading}
+              >
+                Odrzuć
+              </Button>
+            )}
           </div>
         </div>
 
