@@ -30,6 +30,19 @@ export const useFindUsers = (params?: URLSearchParams) => {
   });
 };
 
+export const useFindUsersForSelect = (params?: URLSearchParams) => {
+  return useQuery({
+    queryKey: ["select-users", params?.toString()],
+    queryFn: () => {
+      return usersService.findUsersforSelect(params);
+    },
+
+    refetchOnWindowFocus: false,
+    staleTime: 0,
+    retry: false,
+  });
+};
+
 export const useFindRoles = (params?: URLSearchParams) => {
   return useQuery({
     queryKey: ["roles", params?.toString()],

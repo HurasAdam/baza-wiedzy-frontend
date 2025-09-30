@@ -9,6 +9,11 @@ export const findUsers = (params?: URLSearchParams): Promise => {
   return api.get(buildUrl(baseUrl), { params });
 };
 
+export const findUsersforSelect = (params?: URLSearchParams): Promise => {
+  // title, produst params
+  return api.get(buildUrl(baseUrl, "select"), { params });
+};
+
 export const findUser = (userId: string) => {
   return api.get(`${baseUrl}/${userId}`);
 };
@@ -80,6 +85,7 @@ export const enableUserAccount = (userId: string): Promise<void> => {
 export const usersService = {
   findMyFavorites,
   findUsers,
+  findUsersforSelect,
   findUser,
   resetUserPassword,
   disableUserAccount,
