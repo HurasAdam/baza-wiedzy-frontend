@@ -1,4 +1,4 @@
-import { Clock, Loader, XCircle } from "lucide-react";
+import { AlertTriangle, Clock, DiamondPlus, Loader, RectangleEllipsis } from "lucide-react";
 import React, { useState, type JSX } from "react";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -13,33 +13,39 @@ import {
   useRejectArticleMutation,
 } from "../../hooks/articles/use-articles";
 import { useAuthQuery } from "../../hooks/auth/use-auth";
-import { useFindCategoriesByProductQuery } from "../../hooks/product-categories/use-product-categories";
 import { useFindProductsQuery } from "../../hooks/products/use-products";
+import { useFindUsersForSelect } from "../../hooks/users/use-users";
 import type { ArticleListItem } from "../../types/article";
 import StatusBar from "../my-entries/components/StatusBar";
 import type { StatusKey } from "../my-entries/MyEntriesPage";
 import PendingArticleCard from "./components/PendingArticleCard";
+import PendingArticlesFilterBar from "./components/PendingArticles-filterBar";
 
 export const PendingArticles: React.FC = () => {
-  const [currentStatus, setCurrentStatus] = useState<PendingKey>("draft");
   const [searchParams, setSearchParams] = useSearchParams();
-  const params = new URLSearchParams(searchParams);
-  params.set("status", currentStatus);
+
+  // Status pobrany z URL lub domyślnie 'draft'
+  const initialStatus = (searchParams.get("status") as PendingKey) || "draft";
+  const [currentStatus, setCurrentStatus] = useState<PendingKey>(initialStatus);
+
   const titleParam = searchParams.get("title") || "";
   const selectedProduct = searchParams.get("product") || "";
-  const selectedCategory = searchParams.get("category") || "";
+
+  // Tworzenie parametrów do zapytania
+  const params = new URLSearchParams(searchParams);
+  params.set("status", currentStatus);
+
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [rejectedArticleId, setRejectedArticleId] = useState<null | string>(null);
   const [approvedArticleId, setApprovedArticleId] = useState<null | string>(null);
   const [isCreatingArticleRejection, setIsCreatingArticleRejection] = useState<boolean>(false);
   const [isCreatinArticleApprove, setIsCreatingArticleApprove] = useState<boolean>(false);
+
   const { data, isLoading, error } = useFindArticlesQuery(params);
+  const { data: users } = useFindUsersForSelect();
   const { data: products = [] } = useFindProductsQuery();
 
-  const { data: categories } = useFindCategoriesByProductQuery(selectedProduct);
-
   const { data: user } = useAuthQuery();
-
   const userPermissions = user?.role?.permissions || [];
 
   const { mutate: approveMutate, isPending: isApproveLoading } = useAproveArticleMutation();
@@ -49,15 +55,27 @@ export const PendingArticles: React.FC = () => {
     {
       key: "draft",
       label: "Nowe",
-      icon: <XCircle className="w-4 h-4 mr-1" />,
+      // Draft = w przygotowaniu
+      icon: <DiamondPlus className="w-5 h-5 mr-2" />,
     },
     {
       key: "pending",
       label: "Oczekujące",
-      icon: <Clock className="w-4 h-4 mr-1" />,
+      // Pending = oczekuje na decyzję
+      icon: <Clock className="w-5 h-5 mr-2" />,
+    },
+
+    {
+      key: "rejected",
+      label: "Odrzucone",
+      // Rejected = odrzucone
+      icon: <AlertTriangle className="w-5 h-5 mr-2" />,
     },
   ];
+
   type PendingKey = (typeof statuses)[number]["key"];
+
+  // ---- Handlery filtrów ----
   const changeTitleHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchParams((prev) => {
@@ -71,32 +89,21 @@ export const PendingArticles: React.FC = () => {
     setSearchParams((prev) => {
       if (product === "__clear__") {
         prev.delete("product");
-        prev.delete("category");
       } else {
-        prev.delete("product");
-        prev.delete("category");
         prev.set("product", product);
       }
       return prev;
     });
   };
 
-  const changeCategoryHandler = (categoryId: string) => {
+  const onResetAllFilters = () => {
     setSearchParams((prev) => {
-      if (categoryId === "__clear__") {
-        prev.delete("category");
-      } else {
-        prev.set("category", categoryId);
-      }
-
-      return prev;
+      const status = prev.get("status") || "draft";
+      return new URLSearchParams({ status });
     });
   };
 
-  const onResetAllFilters = () => {
-    setSearchParams({});
-  };
-
+  // ---- Handlery akcji ----
   const onArticleAprove = (id: string) => {
     setApprovedArticleId(id);
     setIsCreatingArticleApprove(true);
@@ -112,12 +119,8 @@ export const PendingArticles: React.FC = () => {
         },
         onError: (error: any) => {
           const status = error?.status;
-
-          if (status === 403) {
-            toast.warning("Brak wymaganych uprawnień do wykonania tej operacji.");
-          } else {
-            toast.error("Wystąpił nieoczekiwany błąd. Spróbuj ponownie później.");
-          }
+          if (status === 403) toast.warning("Brak wymaganych uprawnień.");
+          else toast.error("Wystąpił nieoczekiwany błąd.");
         },
         onSettled: () => {
           setPendingId(null);
@@ -140,15 +143,12 @@ export const PendingArticles: React.FC = () => {
         {
           onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["articles"] });
-            toast.success("Artykuł został odrzucony, uwagi zostały wysłane do autora artykułu");
+            toast.success("Artykuł został odrzucony, uwagi wysłane do autora.");
           },
-          onSettled: () => {
-            setPendingId(null);
-          },
+          onSettled: () => setPendingId(null),
         }
       );
     }
-
     setIsCreatingArticleRejection(false);
     setRejectedArticleId(null);
   };
@@ -159,71 +159,91 @@ export const PendingArticles: React.FC = () => {
   };
 
   return (
-    <div className="mx-auto pb-10 ">
-      <h1 className="text-xl font-bold mb-6.5 tracking-wide text-foreground">Moje artykuły</h1>
+    <div className="mx-auto pb-10">
+      <div className="flex items-center gap-4 mb-4">
+        <div className="rounded-xl bg-primary/10 p-2">
+          <RectangleEllipsis className="w-6 h-6 text-muted-foreground" />
+        </div>
+        <h1 className="text-xl font-semibold text-foreground flex items-center gap-2">Artykuły oczekujące</h1>
+      </div>
 
-      {/* TU WYRENDERUJESZ STATUSBAR */}
-
+      {/* ---- StatusBar ---- */}
       <StatusBar
         statuses={statuses}
         currentStatus={currentStatus}
         setCurrentStatus={(key) => {
           setCurrentStatus(key);
-          setSearchParams({}); // opcjonalnie reset filtrów
+          setSearchParams((prev) => {
+            prev.set("status", key);
+            return prev;
+          });
         }}
       />
 
+      {/* ---- Filter Bar ---- */}
+      <PendingArticlesFilterBar
+        selectedTitle={titleParam}
+        selectedProduct={selectedProduct}
+        selectedAuthor={searchParams.get("author") || ""} // <-- dodaj wartość
+        products={products}
+        authors={users}
+        onTitleChange={changeTitleHandler}
+        onProductChange={changeProductHandler}
+        onAuthorChange={(authorId: string) => {
+          setSearchParams((prev) => {
+            if (authorId === "__clear__") prev.delete("author");
+            else prev.set("author", authorId);
+            return prev;
+          });
+        }}
+        onResetAll={onResetAllFilters}
+        resultsCount={data?.data.length}
+      />
+      {/* ---- Lista artykułów ---- */}
       <Tabs value={currentStatus} className="w-full">
         {statuses.map(({ key }) => (
           <TabsContent key={key} value={key} className="p-0">
-            <div className="divide-y divide-border space-y-4">
+            <div className="bg-card border rounded-xl overflow-hidden">
               {isLoading && (
-                <div className="flex items-center justify-center p-6 text-gray-500 dark:text-gray-400">
-                  <Loader className="animate-spin" />
-                  <span>Ładowanie artykułów...</span>
+                <div className="flex justify-center py-10">
+                  <Loader className="animate-spin w-6 h-6" />
                 </div>
               )}
 
               {error && (
-                <div className="p-6 text-center text-red-600 dark:text-red-400 font-medium">
-                  <svg
-                    className="inline-block mr-2 h-6 w-6"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                  Wystąpił błąd podczas pobierania artykułów.
-                </div>
+                <p className="text-destructive text-center py-10">
+                  {(error as Error)?.message || "Błąd podczas ładowania artykułów"}
+                </p>
               )}
 
-              {!isLoading && data?.data?.length === 0 && (
-                // <p className="p-6 text-center text-gray-500 dark:text-gray-400 italic">
-                //   Brak artykułów do wyświetlenia.
-                // </p>
+              {!isLoading && !error && data?.data?.length === 0 && (
                 <NoDataFound title="Brak wyników" description="Brak artykułów do wyświetlenia." />
               )}
 
-              {data?.data?.map((article: ArticleListItem) => (
-                <PendingArticleCard
-                  userPermissions={userPermissions}
-                  key={article._id}
-                  article={article}
-                  onApprove={onArticleAprove}
-                  onReject={onArticleReject}
-                />
-              ))}
+              {!isLoading && !error && data?.data?.length > 0 && (
+                <ul className="divide-y divide-border">
+                  {data.data.map((article: ArticleListItem) => {
+                    const createdAt = new Date(article.createdAt).toLocaleDateString("pl-PL", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    });
+
+                    return (
+                      <PendingArticleCard
+                        article={article}
+                        onApprove={onArticleAprove}
+                        onReject={onArticleReject}
+                        userPermissions={userPermissions}
+                      />
+                    );
+                  })}
+                </ul>
+              )}
             </div>
           </TabsContent>
         ))}
       </Tabs>
-      {/* Sidebar filtrów */}
 
       <PendingArticleRejectionModal
         onSubmit={onArticleRejectConfirm}

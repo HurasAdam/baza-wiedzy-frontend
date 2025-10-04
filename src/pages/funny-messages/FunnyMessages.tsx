@@ -6,7 +6,7 @@ import { Button } from "../../components/ui/button";
 import { useAuthQuery } from "../../hooks/auth/use-auth";
 import { useFindFunnyMessagesQuery } from "../../hooks/funny-messages/use-funny-messages";
 import { useFindUsersForSelect } from "../../hooks/users/use-users";
-import FunnyMessagesFilterBar from "./components/funny-messages-filter-bar";
+import FunnyMessagesFilterBar from "./components/Funny-messages-filter-bar";
 import { FunnyMessagesList } from "./components/funny-messages-list";
 
 export const FunnyMessages = () => {
@@ -14,11 +14,16 @@ export const FunnyMessages = () => {
   const { data } = useFindUsersForSelect();
   const userPermissions = user?.role?.permissions || [];
   const [isCreatingFunnyMessage, setIsCreatingFunnyMessage] = useState<boolean>(false);
-
-  const { data: funnyMessages, isLoading: isFunnyMessagesLoading } = useFindFunnyMessagesQuery();
-
   const [filterTitle, setFilterTitle] = useState("");
   const [filterAuthor, setFilterAuthor] = useState("");
+  const [sortDateDesc, setSortDateDesc] = useState<boolean>(true);
+
+  const filerParams = {
+    ...(filterTitle && { title: filterTitle }),
+    ...(filterAuthor && { author: filterAuthor }),
+    sortByDate: sortDateDesc ? "desc" : "asc", // dodaj parametr do zapytania
+  };
+  const { data: funnyMessages, isLoading: isFunnyMessagesLoading } = useFindFunnyMessagesQuery(filerParams);
 
   const onCreateFunnyMessage = (): void => {
     setIsCreatingFunnyMessage(true);
@@ -63,14 +68,13 @@ export const FunnyMessages = () => {
           )}
         </div>
 
-        {/* Tutaj filter bar */}
         {data && (
           <FunnyMessagesFilterBar
             selectedTitle={filterTitle}
             selectedAuthor={filterAuthor}
             authors={data} // <-- tu
             onTitleChange={(e) => setFilterTitle(e.target.value)}
-            onAuthorChange={(id) => setFilterAuthor(id)} // <-- teraz id z selecta
+            onAuthorChange={(id) => setFilterAuthor(id)}
             onResetAll={onResetAllFilters}
             resultsCount={funnyMessages?.data.length ?? 0}
           />

@@ -8,11 +8,11 @@ export const useCreateFunnyMessageMutation = () => {
   });
 };
 
-export const useFindFunnyMessagesQuery = () => {
+export const useFindFunnyMessagesQuery = (filerParams) => {
   return useQuery({
-    queryKey: ["funny-messages"],
+    queryKey: ["funny-messages", filerParams],
     queryFn: () => {
-      return funnyMessagesService.find();
+      return funnyMessagesService.find(filerParams);
     },
     refetchOnWindowFocus: false,
     staleTime: 0,

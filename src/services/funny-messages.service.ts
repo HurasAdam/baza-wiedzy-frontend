@@ -8,8 +8,8 @@ const create = async (formData: FunnyMessageForm) => {
   return api.post(BASE_URL, formData);
 };
 
-const find = (): Promise<FindFunnyMessagesResponse> => {
-  return api.get(BASE_URL);
+const find = (params?: URLSearchParams): Promise<FindFunnyMessagesResponse> => {
+  return api.get(BASE_URL, { params });
 };
 
 export const funnyMessagesService = {

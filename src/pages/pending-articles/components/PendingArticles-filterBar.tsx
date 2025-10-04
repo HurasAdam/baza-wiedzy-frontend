@@ -1,120 +1,127 @@
-import { XIcon } from "lucide-react";
-import React, { useState } from "react";
-import { Button } from "../../../components/ui/button";
-import { Input } from "../../../components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../../components/ui/select";
-import { Switch } from "../../../components/ui/switch";
-import type { IProduct } from "../../../types/product";
-import type { ProductCategory } from "../../../types/product-category";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Box, X } from "lucide-react";
+import React from "react";
 
-type ArticlesFilterBarProps = {
+type PendingArticlesFilterBarProps = {
   selectedTitle: string;
   selectedProduct: string;
-  selectedCategory: string;
+  selectedAuthor: string;
   products: IProduct[];
-  onSearchChange?: (val: string) => void;
-  onResetAll: () => void;
-  onTagChange?: (val: string) => void;
-  onToggleChange?: (val: boolean) => void;
-  categories?: ProductCategory[];
-  tags?: string[];
+  authors: { _id: string; name: string }[];
   onTitleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onProductChange: (value: string) => void;
-  onCategoryChange: (value: string) => void;
+  onAuthorChange: (value: string) => void;
+  onResetAll: () => void;
+  resultsCount?: number;
 };
 
-const PendingArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
+const PendingArticlesFilterBar: React.FC<PendingArticlesFilterBarProps> = ({
   selectedTitle,
   selectedProduct,
-  selectedCategory,
+  selectedAuthor,
   products,
+  authors,
   onTitleChange,
   onProductChange,
-  onCategoryChange,
+  onAuthorChange,
   onResetAll,
-  onToggleChange = () => {},
-  categories,
-  tags = ["Tag 1", "Tag 2", "Tag 3"],
+  resultsCount,
 }) => {
-  const [isChecked, setIsChecked] = useState(false);
-
-  const handleToggleChange = (checked: boolean) => {
-    setIsChecked(checked);
-    onToggleChange(checked);
-  };
+  const hasFilters = selectedTitle || selectedProduct || selectedAuthor;
 
   return (
-    <aside className="w-66 bg-card/50 p-6 border rounded-md shadow-md sticky top-4 h-[calc(100vh-1rem)] overflow-auto flex flex-col gap-6">
-      {/* ------ Title ------ */}
-      <Input
-        placeholder="Search articles..."
-        value={selectedTitle}
-        onChange={onTitleChange}
-        className="w-full"
-      />
+    <div className="bg-background flex flex-col gap-1 mb-4">
+      {/* ---- Filtry główne ---- */}
+      <div className="flex px-3  gap-2.5 items-center flex-wrap">
+        <Input
+          value={selectedTitle}
+          onChange={onTitleChange}
+          placeholder="Szukaj artykułów..."
+          className="w-52 border-ring"
+        />
 
-      {/* ------ Product ------ */}
-      <Select onValueChange={onProductChange} value={selectedProduct}>
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder="Wybierz produkt" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectItem className="bg-rose-800/85" value="__clear__">
-              <XIcon /> Wyczyść produkt
-            </SelectItem>
-            {products.map(({ _id, name }) => (
-              <SelectItem key={_id} value={_id}>
-                {name}
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-
-      {/* ------ Product - category ------ */}
-      <Select
-        disabled={!selectedProduct}
-        onValueChange={onCategoryChange}
-        value={selectedCategory}
-      >
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder="Wybierz kategorie" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectItem className="bg-rose-800/85" value="__clear__">
-              <XIcon /> Wyczyść kategorie
-            </SelectItem>
-            {categories &&
-              categories.map(({ _id, name }) => (
-                <SelectItem key={_id} value={_id}>
+        <Select value={selectedProduct || "all"} onValueChange={(v) => onProductChange(v === "all" ? "__clear__" : v)}>
+          <SelectTrigger className="w-48 border-ring">
+            <SelectValue placeholder="Produkt" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value="all">Wszystkie</SelectItem>
+              {products.map(({ _id, name, labelColor }) => (
+                <SelectItem key={_id} value={_id} className="flex items-center gap-2">
+                  <Box className="w-3 h-3" style={{ color: labelColor }} />
                   {name}
                 </SelectItem>
               ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
 
-      <div className="flex items-center space-x-3">
-        <Switch checked={isChecked} onCheckedChange={handleToggleChange} />
-        <span className="select-none text-gray-700">Only favourites</span>
+        <Select value={selectedAuthor || "all"} onValueChange={(v) => onAuthorChange(v === "all" ? "__clear__" : v)}>
+          <SelectTrigger className="w-50 border-ring">
+            <SelectValue placeholder="Autor" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value="all">Wszyscy</SelectItem>
+              {authors.map(({ _id, name, surname }) => {
+                const initials = `${name[0]}${surname[0]}`.toUpperCase();
+                return (
+                  <SelectItem key={_id} value={_id} className="flex items-center gap-2 group">
+                    <div className="min-w-6 min-h-6 rounded-full  flex items-center justify-center text-xs text-foreground bg-primary">
+                      <span className="p-0.5"> {initials}</span>
+                    </div>
+                    {name} {surname}
+                  </SelectItem>
+                );
+              })}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+
+        <Button variant="outline" size="sm" disabled={!hasFilters} onClick={onResetAll} className="ml-auto">
+          Wyczyść filtry
+        </Button>
+
+        {typeof resultsCount === "number" && (
+          <Badge variant="outline" className="ml-2 text-xs px-2 py-0.5">
+            Znaleziono: {resultsCount}
+          </Badge>
+        )}
       </div>
-      <Button
-        variant="outline"
-        onClick={onResetAll}
-        className="self-start mt-2"
-      >
-        Wyczyść filtry
-      </Button>
-    </aside>
+
+      {/* ---- Aktywne filtry (badge) ---- */}
+      <div className="flex gap-2 flex-wrap mt-1 min-h-[24px]">
+        {selectedTitle && (
+          <Badge variant="secondary" className="flex items-center gap-1 px-2 py-0.5 text-xs">
+            🔍 {selectedTitle}
+            <button onClick={() => onTitleChange({ target: { value: "" } } as any)}>
+              <X className="w-3 h-3" />
+            </button>
+          </Badge>
+        )}
+        {selectedProduct && (
+          <Badge variant="default" className="flex items-center gap-1 px-2 py-0.5 text-xs">
+            <Box className="w-3 h-3" />
+            {products.find((p) => p._id === selectedProduct)?.name}
+            <button onClick={() => onProductChange("__clear__")}>
+              <X className="w-3 h-3" />
+            </button>
+          </Badge>
+        )}
+        {selectedAuthor && (
+          <Badge variant="secondary" className="flex items-center gap-1 px-2 py-0.5 text-xs">
+            🧑 {authors.find((a) => a._id === selectedAuthor)?.name}
+            <button onClick={() => onAuthorChange("__clear__")}>
+              <X className="w-3 h-3" />
+            </button>
+          </Badge>
+        )}
+      </div>
+    </div>
   );
 };
 

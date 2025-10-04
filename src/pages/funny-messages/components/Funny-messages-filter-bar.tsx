@@ -26,7 +26,6 @@ const FunnyMessagesFilterBar: React.FC<FunnyMessagesFilterBarProps> = ({
 }) => {
   const hasFilters = selectedTitle || selectedAuthor;
 
-  // Wyciągamy autora raz
   const selectedAuthorObj = authors.find((a) => a._id === selectedAuthor);
   const authorDisplayName = selectedAuthorObj ? `${selectedAuthorObj.name} ${selectedAuthorObj.surname[0]}.` : null;
 
