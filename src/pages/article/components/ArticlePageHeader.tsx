@@ -1,6 +1,6 @@
 // pages/article/components/ArticlePageHeader.tsx
 import { cn } from "@/lib/utils"; // helper do łączenia klas
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowUp } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import type { Article } from "../../../types/article";
 import ArticleBannerSection from "./ArticleBannerSection";
@@ -29,15 +29,23 @@ export const ArticlePageHeader: React.FC<Props> = ({ article, returnUrl, userPer
     <>
       <div className="flex items-center justify-between py-4 px-4 bg-background border-b border-border ">
         <div>
-          {/* Lewy przycisk Wróć */}
-          <button
-            className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-foreground hover:bg-muted rounded-md transition"
-            onClick={() => navigate(returnUrl)}
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Wróć
-          </button>
-
+          <div className="flex">
+            {/* Lewy przycisk Wróć */}
+            <button
+              className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-foreground hover:bg-muted rounded-md transition"
+              onClick={() => navigate(-1)}
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Wróć
+            </button>
+            <button
+              className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-foreground hover:bg-muted rounded-md transition"
+              onClick={() => navigate(returnUrl)}
+            >
+              <ArrowUp className="w-4 h-4" />
+              Powrót do listy artykułów
+            </button>
+          </div>
           {/* Nagłówek */}
           <h1 className="text-lg font-semibold text-foreground  max-w-xs md:max-w-5xl ">{article.title}</h1>
         </div>
