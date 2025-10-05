@@ -57,7 +57,7 @@ const FavoriteArticleCard = ({ article, toggleFavourite, toggleFavouriteLoading 
       >
         {/* LEWA STRONA: ikona Box + tytuł */}
         <div className="flex items-center gap-3 overflow-hidden min-w-0">
-          <Box className="w-6 h-6 flex-shrink-0" style={{ color: article.product.labelColor }} />
+          <Box className="w-5 h-5 flex-shrink-0" style={{ color: article.product.labelColor }} />
           <div className="flex flex-col overflow-hidden">
             <span className="font-medium text-foreground truncate">{article.title}</span>
             <span className="text-muted-foreground text-xs">{article.product.name}</span>
