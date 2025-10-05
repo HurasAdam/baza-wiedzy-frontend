@@ -8,20 +8,13 @@ interface NoDataFoundProps {
   buttonAction?: () => void;
 }
 
-export const NoDataFound = ({
-  title,
-  description,
-  buttonText,
-  buttonAction,
-}: NoDataFoundProps) => {
+export const NoDataFound = ({ title, description, buttonText, buttonAction }: NoDataFoundProps) => {
   return (
-    <div className="col-span-full text-center py-12 2xl:py-24 bg-muted/20 rounded-lg">
+    <div className="col-span-full text-center py-12 2xl:py-24 bg-card rounded-lg">
       <LayoutGrid className="size-12 mx-auto text-muted-foreground" />
       <h3 className="mt-4 text-lg font-semibold">{title}</h3>
 
-      <p className="mt-2 text-sm text-muted-foreground max-w-sm mx-auto">
-        {description}
-      </p>
+      <p className="mt-2 text-sm text-muted-foreground max-w-sm mx-auto">{description}</p>
       {buttonAction && (
         <Button
           variant="outline"

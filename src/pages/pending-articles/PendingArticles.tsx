@@ -1,9 +1,10 @@
-import { AlertTriangle, Clock, DiamondPlus, Loader, RectangleEllipsis } from "lucide-react";
+import { AlertTriangle, Clock, DiamondPlus } from "lucide-react";
 import React, { useState, type JSX } from "react";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { PendingArticleRejectionModal } from "../../components/pending-articles/pending-article-rejection-modal";
 import { Alert } from "../../components/shared/alert-modal";
+import EmptyState from "../../components/shared/EmptyState";
 import { NoDataFound } from "../../components/shared/NoDataFound";
 import { Tabs, TabsContent } from "../../components/ui/tabs";
 import queryClient from "../../config/query.client";
@@ -15,23 +16,22 @@ import {
 import { useAuthQuery } from "../../hooks/auth/use-auth";
 import { useFindProductsQuery } from "../../hooks/products/use-products";
 import { useFindUsersForSelect } from "../../hooks/users/use-users";
-import type { ArticleListItem } from "../../types/article";
 import StatusBar from "../my-entries/components/StatusBar";
 import type { StatusKey } from "../my-entries/MyEntriesPage";
 import PendingArticleCard from "./components/PendingArticleCard";
 import PendingArticlesFilterBar from "./components/PendingArticles-filterBar";
+import SkeletonArticleCard from "./components/SkeletonArticleCard";
 
 export const PendingArticles: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Status pobrany z URL lub domyślnie 'draft'
   const initialStatus = (searchParams.get("status") as PendingKey) || "draft";
   const [currentStatus, setCurrentStatus] = useState<PendingKey>(initialStatus);
 
   const titleParam = searchParams.get("title") || "";
   const selectedProduct = searchParams.get("product") || "";
+  const selectedAuthor = searchParams.get("author") || "";
 
-  // Tworzenie parametrów do zapytania
   const params = new URLSearchParams(searchParams);
   params.set("status", currentStatus);
 
@@ -41,7 +41,7 @@ export const PendingArticles: React.FC = () => {
   const [isCreatingArticleRejection, setIsCreatingArticleRejection] = useState<boolean>(false);
   const [isCreatinArticleApprove, setIsCreatingArticleApprove] = useState<boolean>(false);
 
-  const { data, isLoading, error } = useFindArticlesQuery(params);
+  const { data: articles, isLoading, error } = useFindArticlesQuery(params);
   const { data: users } = useFindUsersForSelect();
   const { data: products = [] } = useFindProductsQuery();
 
@@ -49,33 +49,32 @@ export const PendingArticles: React.FC = () => {
   const userPermissions = user?.role?.permissions || [];
 
   const { mutate: approveMutate, isPending: isApproveLoading } = useAproveArticleMutation();
-  const { mutate: rejectionMutate } = useRejectArticleMutation();
+  const { mutate: rejectionMutate, isPending: isRejectionLoading } = useRejectArticleMutation();
+
+  const hasFilters = Boolean(titleParam || selectedProduct || selectedAuthor);
 
   const statuses: { key: StatusKey; label: string; icon: JSX.Element }[] = [
     {
       key: "draft",
       label: "Nowe",
-      // Draft = w przygotowaniu
-      icon: <DiamondPlus className="w-5 h-5 mr-2" />,
+      icon: <DiamondPlus className="w-5 h-5 " />,
     },
     {
       key: "pending",
       label: "Oczekujące",
-      // Pending = oczekuje na decyzję
-      icon: <Clock className="w-5 h-5 mr-2" />,
+      icon: <Clock className="w-5 h-5 " />,
     },
 
     {
       key: "rejected",
       label: "Odrzucone",
-      // Rejected = odrzucone
-      icon: <AlertTriangle className="w-5 h-5 mr-2" />,
+      icon: <AlertTriangle className="w-5 h-5 " />,
     },
   ];
 
   type PendingKey = (typeof statuses)[number]["key"];
 
-  // ---- Handlery filtrów ----
+  // ---- Filter handlers  ----
   const changeTitleHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchParams((prev) => {
@@ -103,7 +102,7 @@ export const PendingArticles: React.FC = () => {
     });
   };
 
-  // ---- Handlery akcji ----
+  // ---- Action handlers  ----
   const onArticleAprove = (id: string) => {
     setApprovedArticleId(id);
     setIsCreatingArticleApprove(true);
@@ -157,17 +156,9 @@ export const PendingArticles: React.FC = () => {
     setIsCreatingArticleApprove(false);
     setApprovedArticleId(null);
   };
-
+  const currentStatusObj = statuses.find((status) => status.key === currentStatus);
   return (
     <div className="mx-auto pb-10">
-      <div className="flex items-center gap-4 mb-4">
-        <div className="rounded-xl bg-primary/10 p-2">
-          <RectangleEllipsis className="w-6 h-6 text-muted-foreground" />
-        </div>
-        <h1 className="text-xl font-semibold text-foreground flex items-center gap-2">Artykuły oczekujące</h1>
-      </div>
-
-      {/* ---- StatusBar ---- */}
       <StatusBar
         statuses={statuses}
         currentStatus={currentStatus}
@@ -179,12 +170,18 @@ export const PendingArticles: React.FC = () => {
           });
         }}
       />
+      <div className="flex items-center mb-4">
+        <h1 className="text-lg font-semibold text-foreground flex items-center gap-2">
+          <div className="rounded-lg bg-card p-2 ">{currentStatusObj?.icon}</div>
 
-      {/* ---- Filter Bar ---- */}
+          {currentStatusObj?.label}
+        </h1>
+      </div>
+
       <PendingArticlesFilterBar
         selectedTitle={titleParam}
         selectedProduct={selectedProduct}
-        selectedAuthor={searchParams.get("author") || ""} // <-- dodaj wartość
+        selectedAuthor={selectedAuthor}
         products={products}
         authors={users}
         onTitleChange={changeTitleHandler}
@@ -197,47 +194,38 @@ export const PendingArticles: React.FC = () => {
           });
         }}
         onResetAll={onResetAllFilters}
-        resultsCount={data?.data.length}
+        resultsCount={articles?.data.length}
       />
-      {/* ---- Lista artykułów ---- */}
+
       <Tabs value={currentStatus} className="w-full">
         {statuses.map(({ key }) => (
           <TabsContent key={key} value={key} className="p-0">
-            <div className="bg-card border rounded-xl overflow-hidden">
-              {isLoading && (
-                <div className="flex justify-center py-10">
-                  <Loader className="animate-spin w-6 h-6" />
-                </div>
-              )}
-
-              {error && (
-                <p className="text-destructive text-center py-10">
-                  {(error as Error)?.message || "Błąd podczas ładowania artykułów"}
-                </p>
-              )}
-
-              {!isLoading && !error && data?.data?.length === 0 && (
-                <NoDataFound title="Brak wyników" description="Brak artykułów do wyświetlenia." />
-              )}
-
-              {!isLoading && !error && data?.data?.length > 0 && (
-                <ul className="divide-y divide-border">
-                  {data.data.map((article: ArticleListItem) => {
-                    const createdAt = new Date(article.createdAt).toLocaleDateString("pl-PL", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    });
-
-                    return (
-                      <PendingArticleCard
-                        article={article}
-                        onApprove={onArticleAprove}
-                        onReject={onArticleReject}
-                        userPermissions={userPermissions}
-                      />
-                    );
-                  })}
+            <div className=" rounded-xl overflow-hidden">
+              {isLoading || !users || !products ? (
+                <ul className="divide-y divide-border ">
+                  {Array(5)
+                    .fill(0)
+                    .map((_, i) => (
+                      <SkeletonArticleCard key={i} withSpinner={i === 0} />
+                    ))}
+                </ul>
+              ) : articles?.data.length === 0 ? (
+                hasFilters ? (
+                  <EmptyState onReset={() => setSearchParams(new URLSearchParams({ status: currentStatus }))} />
+                ) : (
+                  <NoDataFound title="Brak wyników" description="Brak artykułów do wyświetlenia." />
+                )
+              ) : (
+                <ul className="divide-y divide-border border bg-card rounded-xl ">
+                  {articles.data.map((article) => (
+                    <PendingArticleCard
+                      key={article._id}
+                      article={article}
+                      onApprove={onArticleAprove}
+                      onReject={onArticleReject}
+                      userPermissions={userPermissions}
+                    />
+                  ))}
                 </ul>
               )}
             </div>
@@ -249,6 +237,7 @@ export const PendingArticles: React.FC = () => {
         onSubmit={onArticleRejectConfirm}
         isCreatingArticleRejection={isCreatingArticleRejection}
         setIsCreatingArticleRejection={setIsCreatingArticleRejection}
+        isPending={isRejectionLoading}
       />
       <Alert
         isOpen={isCreatinArticleApprove}
