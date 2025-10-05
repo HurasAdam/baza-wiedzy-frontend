@@ -9,7 +9,9 @@ interface Props {
 
 const copyToClipboardWithToast = (value: string, label: string = "Wartość") => {
   navigator.clipboard.writeText(value);
-  toast.success(`${label} skopiowane do schowka`);
+  toast.success(`${label} skopiowane do schowka`, {
+    position: "bottom-right",
+  });
 };
 
 const SchoolCard = ({ school }: Props) => {
@@ -27,7 +29,7 @@ const SchoolCard = ({ school }: Props) => {
               {school.name}
             </h3>
             <Copy
-              onClick={() => copyToClipboardWithToast(school.szId, "szkolne Id zostało")}
+              onClick={() => copyToClipboardWithToast(school.szId, " ID szkoły zostało")}
               className="hover:text-primary cursor-pointer"
             />
           </div>

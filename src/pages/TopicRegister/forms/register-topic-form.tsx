@@ -72,7 +72,7 @@ export const RegisterTopicForm = ({ topic }: { topic: ITopic }) => {
                 </div>
               </div>
             </div>,
-            { duration: toastDuration }
+            { duration: toastDuration, position: "bottom-right" }
           );
 
           setTimeout(() => setFeedback(null), toastDuration);
