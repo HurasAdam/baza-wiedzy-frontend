@@ -36,13 +36,14 @@ type NavItem = {
 const navItems: NavItem[] = [
   { title: "Start", href: "/dashboard", icon: LayoutDashboard },
   { title: "Baza artykułów", href: "/articles", icon: FolderSearch },
-  { title: "FAQ", href: "/faq", icon: BookOpen },
   { title: "Rejestr tematów", href: "/register-topic", icon: Clipboard },
+  { title: "Moje wpisy", href: `/my-entries`, icon: UserRoundPen, requiredPermission: "ADD_ARTICLE" },
+  { title: "Ulubione", href: "/favorites-articles", icon: HeartIcon },
+  { title: "FAQ", href: "/faq", icon: BookOpen },
+  { title: "Statystyki", href: `/statistics`, icon: ChartColumnDecreasing },
   { title: "Szkoły projektowe", href: `/jst-projects`, icon: School },
   { title: "Działy i kontakty", href: `/achieved`, icon: BookUser },
-  { title: "Moje wpisy", href: `/my-entries`, icon: UserRoundPen, requiredPermission: "ADD_ARTICLE" },
-  { title: "Statystyki", href: `/statistics`, icon: ChartColumnDecreasing },
-  { title: "Ulubione", href: "/favorites-articles", icon: HeartIcon },
+
   {
     title: "do zweryfikowania",
     href: "/articles-pending",
