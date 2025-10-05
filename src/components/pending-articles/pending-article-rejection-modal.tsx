@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader } from "lucide-react";
+import { Loader, SendHorizontal } from "lucide-react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import { pendingArticleRejectionSchema } from "../../validation/pending-article-rejection.schema";
@@ -58,6 +58,7 @@ export const PendingArticleRejectionModal = ({
                     <FormLabel>Powód odrzucenia</FormLabel>
                     <FormControl>
                       <Textarea
+                        className="h-24"
                         {...field}
                         placeholder="Wprowadź uwagi, powód odrzucenia artykułu oraz kwestie wymagające poprawy"
                         rows={3}
@@ -74,10 +75,13 @@ export const PendingArticleRejectionModal = ({
                 {isPending ? (
                   <span className="flex items-center gap-1.5">
                     <Loader className="animate-spin" />
-                    Odrzuć
+                    Wyślij
                   </span>
                 ) : (
-                  "Odrzuć"
+                  <span className="flex items-center gap-1.5">
+                    <SendHorizontal />
+                    Wyślij
+                  </span>
                 )}
               </Button>
             </DialogFooter>
