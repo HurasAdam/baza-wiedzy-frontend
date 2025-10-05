@@ -13,7 +13,7 @@ export const LoginPage = () => {
       onSuccess: (data) => {
         navigate("/dashboard", { replace: true });
 
-        toast.success("Zalogowano pomyślnie!");
+        toast.success("Zalogowano pomyślnie!", { position: "bottom-right" });
         if (soundEnabled) {
           const audio = new Audio("/login-sound.m4a");
           audio.play().catch(() => console.log("Nie udało się odtworzyć dźwięku"));

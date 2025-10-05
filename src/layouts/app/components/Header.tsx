@@ -68,7 +68,7 @@ const Header = ({
           });
         }
 
-        toast.success("Zostałeś pomyślnie wylogowany");
+        toast.success("Zostałeś pomyślnie wylogowany", { position: "bottom-right" });
       },
       onError: (err) => {
         toast.error("Wystąpił błąd. Spróbuj ponownie");
