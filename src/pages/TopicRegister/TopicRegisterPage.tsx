@@ -133,7 +133,7 @@ export const TopicRegisterPage = () => {
 
         <div className="flex w-full gap-6">
           {/* ------ topics ------ */}
-          <div className="space-y-3.5 flex-1 pb-6.5">
+          <div className="space-y-3.5 flex-1 pb-10">
             {isTopicsLoading ? (
               // ---- Loading skeletons -----
               <RegisterTopicSkeletonCards itemsCount={8} />
