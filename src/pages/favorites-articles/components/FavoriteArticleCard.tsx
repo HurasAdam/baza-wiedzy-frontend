@@ -1,11 +1,7 @@
-import { FileTextIcon, Loader, Trash2Icon } from "lucide-react";
+import { Box, FileTextIcon, Loader, Trash2Icon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "../../../components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "../../../components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../../../components/ui/tooltip";
 
 export interface Article {
   _id: string;
@@ -29,20 +25,17 @@ interface Tag {
   _id: string;
   name: string;
 }
-
 interface Author {
   _id: string;
   name: string;
   surname: string;
 }
-
 interface Product {
   _id: string;
   name: string;
   labelColor: string;
   banner: string;
 }
-
 interface Category {
   _id: string;
   name: string;
@@ -54,30 +47,25 @@ interface FavoriteArticleCardProps {
   toggleFavouriteLoading: boolean;
 }
 
-const FavoriteArticleCard = ({
-  article,
-
-  toggleFavourite,
-  toggleFavouriteLoading,
-}: FavoriteArticleCardProps) => {
+const FavoriteArticleCard = ({ article, toggleFavourite, toggleFavouriteLoading }: FavoriteArticleCardProps) => {
   return (
     <Link to={`/articles/${article._id}`}>
       <div
         key={article._id}
-        className="flex justify-between items-center px-4 py-3 text-sm hover:bg-muted transition-colors cursor-pointer"
+        className="flex justify-between items-center bg-card   px-4 py-3 text-sm hover:bg-muted transition-colors cursor-pointer"
         title={`Autor: ${article.createdBy.name}`}
       >
-        <div className="flex flex-col overflow-hidden">
-          <span className="font-medium text-foreground truncate">
-            {article.title}
-          </span>
-          <span className="text-muted-foreground text-xs">
-            {article.product.name}
-          </span>
+        {/* LEWA STRONA: ikona Box + tytuł */}
+        <div className="flex items-center gap-3 overflow-hidden min-w-0">
+          <Box className="w-6 h-6 flex-shrink-0" style={{ color: article.product.labelColor }} />
+          <div className="flex flex-col overflow-hidden">
+            <span className="font-medium text-foreground truncate">{article.title}</span>
+            <span className="text-muted-foreground text-xs">{article.product.name}</span>
+          </div>
         </div>
 
-        <div className="flex items-center gap-40">
-          {/* Wersje odpowiedzi */}
+        {/* PRAWA STRONA: liczba wersji + przycisk ulubione */}
+        <div className="flex items-center gap-4">
           {article.responseVariantsCount > 1 && (
             <Tooltip>
               <TooltipTrigger asChild>
@@ -86,13 +74,10 @@ const FavoriteArticleCard = ({
                   <span>{article.responseVariantsCount}</span>
                 </div>
               </TooltipTrigger>
-              <TooltipContent side="top">
-                Liczba wersji odpowiedzi w tym artykule
-              </TooltipContent>
+              <TooltipContent side="top">Liczba wersji odpowiedzi w tym artykule</TooltipContent>
             </Tooltip>
           )}
 
-          {/* Ulubione */}
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -110,7 +95,7 @@ const FavoriteArticleCard = ({
                 {toggleFavouriteLoading ? (
                   <Loader className="h-4 w-4 animate-spin" />
                 ) : (
-                  <Trash2Icon className="h-4 w-4 " />
+                  <Trash2Icon className="h-4 w-4" />
                 )}
               </Button>
             </TooltipTrigger>

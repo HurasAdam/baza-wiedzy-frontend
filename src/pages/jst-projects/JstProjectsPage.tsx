@@ -26,18 +26,16 @@ const placeholderMap: Record<FilterField, string> = {
 export const JstProjectsPage = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isCreatingJstSchool, setIsCreatingJstSchool] = useState<boolean>(false);
+  const [isCreatingJstProject, setIsCreatingJstProject] = useState<boolean>(false);
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+  const [filterField, setFilterField] = useState<FilterField>("name");
+  const [filterQuery, setFilterQuery] = useState("");
 
   const params = useMemo(() => {
     const searchParams = new URLSearchParams();
     if (searchTerm) searchParams.append("name", searchTerm);
     return searchParams;
   }, [searchTerm]);
-
-  const [isCreatingJstProject, setIsCreatingJstProject] = useState<boolean>(false);
-
-  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
-  const [filterField, setFilterField] = useState<FilterField>("name");
-  const [filterQuery, setFilterQuery] = useState("");
 
   const { data: projects = [], isLoading } = useFindJstProjectsQuery(params);
   const { data: schools = [], isLoading: isSchoolsLoading } = useFindJstSchoolsQuery(selectedProjectId, {
@@ -50,51 +48,18 @@ export const JstProjectsPage = () => {
     }
   }, [projects, selectedProjectId]);
 
-  const onCreateJstSchool = (): void => {
-    setIsCreatingJstSchool(true);
-  };
+  const onCreateJstSchool = () => setIsCreatingJstSchool(true);
+  const onCreateJstProject = () => setIsCreatingJstProject(true);
 
-  const onCreateJstProject = (): void => {
-    setIsCreatingJstProject(true);
-  };
-
-  const filterOptions: {
-    value: FilterField;
-    label: string;
-    icon: React.ReactNode;
-  }[] = [
-    {
-      value: "name",
-      label: "Nazwa",
-      icon: <ChevronsUp className="w-4 h-4 mr-2" />,
-    },
-    {
-      value: "adres",
-      label: "Adres",
-      icon: <MapPin className="w-4 h-4 mr-2" />,
-    },
-    {
-      value: "email",
-      label: "E-mail",
-      icon: <Mail className="w-4 h-4 mr-2" />,
-    },
+  const filterOptions = [
+    { value: "name", label: "Nazwa", icon: <ChevronsUp className="w-4 h-4 mr-2" /> },
+    { value: "adres", label: "Adres", icon: <MapPin className="w-4 h-4 mr-2" /> },
+    { value: "email", label: "E-mail", icon: <Mail className="w-4 h-4 mr-2" /> },
   ];
 
   const dropdownOptions = [
-    {
-      label: "Dodaj projekt",
-      icon: <Plus className="w-4 h-4" />,
-      actionHandler: () => {
-        onCreateJstProject();
-      },
-    },
-    {
-      label: "Dodaj szkołę",
-      icon: <Plus className="w-4 h-4" />,
-      actionHandler: () => {
-        onCreateJstSchool();
-      },
-    },
+    { label: "Dodaj projekt", icon: <Plus className="w-4 h-4" />, actionHandler: onCreateJstProject },
+    { label: "Dodaj szkołę", icon: <Plus className="w-4 h-4" />, actionHandler: onCreateJstSchool },
   ];
 
   const triggerBtn = (
@@ -104,51 +69,46 @@ export const JstProjectsPage = () => {
   );
 
   return (
-    <div className="flex w-full ">
+    <div className="flex w-full">
       <div className="w-full">
-        <div className="flex justify-between">
-          <h1 className="text-xl font-semibold mb-6 text-foreground flex items-center gap-1.5">
+        {/* Header */}
+        <div className="flex justify-between mb-6">
+          <h1 className="text-xl font-semibold text-foreground flex items-center gap-1.5">
             <School className="w-6 h-6" /> Szkoły projektowe
           </h1>
-
           <Dropdown triggerBtn={triggerBtn} options={dropdownOptions} position={{ align: "end" }} />
-          {/* Tabs */}
         </div>
+
+        {/* Tabs */}
         <div className="flex flex-wrap gap-2 border-b mb-8">
           {isLoading ? (
             <ProjectTabsSkeleton tabsCount={4} />
           ) : (
-            projects.map((project: IJstProject) => {
-              const isActive = selectedProjectId === project._id;
-              return (
-                <ProjectTabCard
-                  key={project._id}
-                  onClick={() => setSelectedProjectId(project._id)}
-                  name={project.name}
-                  isActive={isActive}
-                />
-              );
-            })
+            projects.map((project: IJstProject) => (
+              <ProjectTabCard
+                key={project._id}
+                onClick={() => setSelectedProjectId(project._id)}
+                name={project.name}
+                isActive={selectedProjectId === project._id}
+              />
+            ))
           )}
         </div>
 
-        {/* ---- Filter bar ------ */}
-
-        {/* Enterprise-style filter panel */}
+        {/* Filter Bar */}
         <div className="mb-8 p-4 bg-filterbar-background border border-border rounded-xl shadow-sm">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-muted-foreground text-sm font-medium min-w-[100px]">
-              <Filter className="w-4 h-4" />
-              Wyszukaj szkołę
+              <Filter className="w-4 h-4" /> Wyszukaj szkołę
             </div>
             <Select value={filterField} onValueChange={setFilterField}>
               <SelectTrigger className="w-36 border-ring">
                 <SelectValue placeholder="Kryterium" />
               </SelectTrigger>
-              <SelectContent className="bg-card ">
+              <SelectContent className="bg-card">
                 {filterOptions.map(({ value, label, icon }) => (
                   <SelectItem key={value} value={value} className="bg-card">
-                    <div className="flex items-center py-0.5  hover:text-primary-foreground ">
+                    <div className="flex items-center py-0.5 hover:text-primary-foreground">
                       {icon}
                       {label}
                     </div>
@@ -157,7 +117,7 @@ export const JstProjectsPage = () => {
               </SelectContent>
             </Select>
             <Input
-              className="flex-1 outline-none  border-ring "
+              className="flex-1 outline-none border-ring"
               placeholder={placeholderMap[filterField]}
               value={filterQuery}
               onChange={(e) => setFilterQuery(e.target.value)}
@@ -176,18 +136,14 @@ export const JstProjectsPage = () => {
           </div>
         </div>
 
-        {/* ----- Schools -------- */}
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-14">
+        {/* Schools List */}
+        <div className="flex flex-col gap-4 pb-14">
           {isSchoolsLoading ? (
             <SchoolSkeletonCards itemsCount={6} />
+          ) : schools?.length ? (
+            schools.map((school: IJstSchool) => <SchoolCard key={school._id} school={school} />)
           ) : (
-            schools?.map((school: IJstSchool) => <SchoolCard school={school} />)
-          )}
-
-          {!isSchoolsLoading && !schools?.length && (
             <EmptyState
-              // onReset={() => navigate("/admin/projects")}
               resetLabel="Dodaj szkołę"
               title="Brak szkół do wyświetlenia"
               description="Wygląda na to że dla wybranego projektu nie dodano jeszcze żadnych szkół"
@@ -201,7 +157,6 @@ export const JstProjectsPage = () => {
         isCreatingJstSchool={isCreatingJstSchool}
         setIsCreatingJstSchool={setIsCreatingJstSchool}
       />
-
       <JstProjectModal isCreatingJstProject={isCreatingJstProject} setIsCreatingJstProject={setIsCreatingJstProject} />
     </div>
   );
