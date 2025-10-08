@@ -36,25 +36,38 @@ export const StatisticsPage = () => {
     isOpen: false,
     selectedUser: null,
   });
-
+  const backendBase = import.meta.env.VITE_BACKEND_BASE_URL ?? "http://localhost:5000";
   const hasFilters = startDate && endDate;
   const params = hasFilters ? { startDate, endDate } : undefined;
   const { data, isLoading } = useFindAllUsersStatistics(params);
 
-  const renderUserCell = (u: unknown) => (
-    <div className="flex items-center gap-3.5">
-      <Avatar className="h-9 w-9">
-        <AvatarImage src={u.avatarUrl || ""} alt={`${u.name} ${u.surname}`} />
-        <AvatarFallback>
-          {u.name?.[0]}
-          {u.surname?.[0]}
-        </AvatarFallback>
-      </Avatar>
-      <span>
-        {u.name} {u.surname}
-      </span>
-    </div>
-  );
+  const renderUserCell = (u: any) => {
+    const avatarUrl = u.avatar ? `${backendBase}${u.avatar.replace(/^\/app/, "")}` : null;
+
+    return (
+      <div className="flex items-center gap-3.5">
+        <Avatar className="h-9 w-9">
+          {avatarUrl ? (
+            <AvatarImage
+              className="object-cover"
+              src={avatarUrl}
+              alt={`${u.name} ${u.surname}`}
+              crossOrigin="anonymous"
+              style={{ imageRendering: "auto" }} // lub "crisp-edges" / "pixelated"
+            />
+          ) : (
+            <AvatarFallback>
+              {u.name?.[0]}
+              {u.surname?.[0]}
+            </AvatarFallback>
+          )}
+        </Avatar>
+        <span>
+          {u.name} {u.surname}
+        </span>
+      </div>
+    );
+  };
 
   const ActionsCell = ({
     selectedUser,
@@ -167,7 +180,7 @@ export const StatisticsPage = () => {
                         <td className="py-2">{renderUserCell(u)}</td>
                         <td className="py-2">{u.stats.articlesAdded}</td>
                         <td className="py-2 text-center">
-                          <ActionsCell selectedUser={u} context="articlesAdded" count={u.stats.articlesEdited} />
+                          <ActionsCell selectedUser={u} context="articlesAdded" count={u.stats.articlesAdded} />
                         </td>
                       </tr>
                     ))}
