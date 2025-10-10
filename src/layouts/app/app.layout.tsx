@@ -1,6 +1,7 @@
 import { SendIssueReportModal } from "@/components/issue-report/send-issue-report-modal";
 import { SettingsModal } from "@/components/settings/settings-modal";
 import { CreateWorkspaceModal } from "@/components/workspace/CreateWorkspaceModal";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { ChangeLogModal } from "../../components/change-log/change-log-modal";
@@ -9,6 +10,11 @@ import Header from "./components/Header";
 import { Sidebar } from "./components/Sidebar";
 
 const AppLayout = () => {
+  const { data: onlineUsers = [] } = useQuery({
+    queryKey: ["onlineUsers"],
+  });
+
+  console.log(onlineUsers, "SOCKET");
   const [isCreatingWorkspace, setIsCreatingWorkspace] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [isIssueReportsModalOpen, setIsIssueReportsModalOpen] = useState(false);

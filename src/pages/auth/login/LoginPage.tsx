@@ -1,10 +1,12 @@
 import { useLoginMutation } from "@/hooks/auth/use-auth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useSocket } from "../../../providers/socket-provider";
 import { useSound } from "../../../providers/sound-provider";
 import LoginForm, { type LoginFormData } from "./Login-form";
 
 export const LoginPage = () => {
+  const { socket } = useSocket(); // <- pobierasz socket z contextu
   const { mutate, isPending } = useLoginMutation();
   const navigate = useNavigate();
   const { soundEnabled } = useSound();
@@ -17,6 +19,9 @@ export const LoginPage = () => {
         if (soundEnabled) {
           const audio = new Audio("/login-sound.m4a");
           audio.play().catch(() => console.log("Nie udało się odtworzyć dźwięku"));
+        }
+        if (socket) {
+          socket.emit("user-login", { userId: data._id });
         }
         return;
       },
