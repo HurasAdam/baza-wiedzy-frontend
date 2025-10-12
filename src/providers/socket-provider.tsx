@@ -1,8 +1,9 @@
 import { createContext, FC, ReactNode, useContext, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
-import { toast } from "sonner";
 import queryClient from "../config/query.client";
 import { useAuthQuery } from "../hooks/auth/use-auth";
+import { notificationsService } from "../services/notifications.service";
+import { useSound } from "./sound-provider";
 
 const backendBase = import.meta.env.VITE_BACKEND_BASE_URL ?? "http://localhost:5000";
 
@@ -17,6 +18,7 @@ interface SocketProviderProps {
 }
 
 export const SocketProvider: FC<SocketProviderProps> = ({ children }) => {
+  const { soundEnabled } = useSound();
   const [socket, setSocket] = useState<Socket | null>(null);
   const { user } = useAuthQuery();
   const userId = user?._id;
@@ -35,11 +37,17 @@ export const SocketProvider: FC<SocketProviderProps> = ({ children }) => {
       queryClient.setQueryData(["onlineUsers"], (old: any[] = []) => old.filter((u) => u.id !== userId));
     });
 
-    socketIo.on("new-notification", (notification) => {
-      console.log("Otrzymano nowe powiadomienie:", notification);
-
-      toast.info("Dodano nowy artykuł", { position: "top-right" });
-      queryClient.invalidateQueries({ queryKey: ["notifications"] });
+    socketIo.on("new-notification", async (notification) => {
+      await queryClient.fetchQuery({
+        queryKey: ["my-notifications"],
+        queryFn: () => notificationsService.findMyNotifications(),
+      });
+      if (soundEnabled) {
+        const audio = new Audio("/notification-sound.mp3");
+        audio.play().catch(() => {
+          console.log("Nie udało się odtworzyć dźwięku");
+        });
+      }
     });
 
     return () => {

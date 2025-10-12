@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { ChangeLogModal } from "../../components/change-log/change-log-modal";
 import { IssueReportsModal } from "../../components/issue-reports/issue-reports-modal";
+import { NotificationsPanel } from "../../components/notifications-panel/notifications-panel";
 import Header from "./components/Header";
 import { Sidebar } from "./components/Sidebar";
 
@@ -20,6 +21,7 @@ const AppLayout = () => {
   const [isIssueReportsModalOpen, setIsIssueReportsModalOpen] = useState(false);
   const [isCreatingIssueReport, setIsCreatingIssueReport] = useState(false);
   const [isChangeLogModalOpen, setIsChangeLogModalOpen] = useState(false);
+  const [isNotificationsPanelOpen, setIsNotificationsPanelOpen] = useState(false);
 
   return (
     <div className="flex h-screen w-full">
@@ -31,6 +33,9 @@ const AppLayout = () => {
           onOpenSettingsModal={() => setIsSettingsModalOpen(true)}
           onOpenIssueReportsModal={() => setIsIssueReportsModalOpen(true)}
           onOpenCreateIssueReport={() => setIsCreatingIssueReport(true)}
+          onOpenNotificationsPanel={() => {
+            setIsNotificationsPanelOpen(true);
+          }}
         />
 
         <main className="flex-1 overflow-y-auto h-full w-full bg-background scrollbar-custom">
@@ -41,7 +46,11 @@ const AppLayout = () => {
       </div>
 
       <SettingsModal isSettingsModalOpen={isSettingsModalOpen} setIsSettingsModalOpen={setIsSettingsModalOpen} />
-
+      <NotificationsPanel
+        isOpen={isNotificationsPanelOpen}
+        onOpenChange={setIsNotificationsPanelOpen}
+        onMarkAsRead={(id) => console.log("Oznaczono jako przeczytane:", id)}
+      />
       <IssueReportsModal
         isIssueReportsModalOpen={isIssueReportsModalOpen}
         setIsIssueReportsModalOpen={setIsIssueReportsModalOpen}

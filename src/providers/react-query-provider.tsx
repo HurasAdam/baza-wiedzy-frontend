@@ -10,17 +10,17 @@ import { ThemeProvider } from "./theme-provider";
 const ReactQueryProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <QueryClientProvider client={queryClient}>
-      <SocketProvider>
-        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-          <SoundProvider>
+      <SoundProvider>
+        <SocketProvider>
+          <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
             <TooltipProvider delayDuration={300}>
               <Toaster position="top-center" richColors={true} />
 
               {children}
             </TooltipProvider>
-          </SoundProvider>
-        </ThemeProvider>
-      </SocketProvider>
+          </ThemeProvider>
+        </SocketProvider>
+      </SoundProvider>
     </QueryClientProvider>
   );
 };

@@ -27,6 +27,7 @@ import { getAvatarFallbackText } from "@/utils/avatar";
 import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useFindMyNotificationsQuery } from "../../../hooks/notifications/use-notifications";
 import { useSound } from "../../../providers/sound-provider";
 const backendBase = import.meta.env.VITE_BACKEND_BASE_URL ?? "http://localhost:5000";
 interface HeaderProps {
@@ -34,6 +35,7 @@ interface HeaderProps {
   onOpenCreateIssueReport: () => void;
   onOpenIssueReportsModal: () => void;
   onOpenSettingsModal: () => void;
+  onOpenNotificationsPanel: () => void;
 }
 
 const workspaces = [];
@@ -42,7 +44,10 @@ const Header = ({
   onCreateWorkspace,
   onOpenCreateIssueReport,
   onOpenIssueReportsModal,
+  onOpenNotificationsPanel,
 }: HeaderProps) => {
+  const { data: notificationsData } = useFindMyNotificationsQuery();
+  const unreadCount = notificationsData?.unreadCount || 0;
   const { data: user } = useAuthQuery();
   const { soundEnabled } = useSound();
   const initials = getAvatarFallbackText(user?.name);
@@ -185,8 +190,18 @@ const Header = ({
             <LucidePhone />
           </Button>
 
-          <Button className="cursor-pointer " variant="ghost" size="icon">
-            <Bell />
+          <Button
+            onClick={() => onOpenNotificationsPanel()}
+            className="relative cursor-pointer"
+            variant="ghost"
+            size="icon"
+          >
+            <Bell className="w-5 h-5 " />
+            {unreadCount > 0 && (
+              <span className="absolute -top-1 -right-1 flex items-center justify-center min-w-[18px] h-4 px-1 text-[10px] font-semibold text-white bg-red-600 rounded-full shadow-md animate-pulse">
+                {unreadCount}
+              </span>
+            )}
           </Button>
 
           <Dropdown
