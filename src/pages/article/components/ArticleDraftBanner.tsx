@@ -9,6 +9,7 @@ interface ArticleDraftBannerProps {
   isRejecting: boolean;
   onApprove: () => void;
   onReject: () => void;
+  userPermissions: string[];
 }
 
 export const ArticleDraftBanner: React.FC<ArticleDraftBannerProps> = ({
@@ -17,6 +18,7 @@ export const ArticleDraftBanner: React.FC<ArticleDraftBannerProps> = ({
   isRejecting,
   onApprove,
   onReject,
+  userPermissions,
 }) => {
   const isDraft = status === "draft";
 
@@ -45,28 +47,30 @@ export const ArticleDraftBanner: React.FC<ArticleDraftBannerProps> = ({
           <p className={cn("text-sm", textColor)}>{description}</p>
         </div>
 
-        <div className="flex gap-2">
-          <Button
-            size="sm"
-            variant="destructive"
-            className={cn("flex items-center gap-1  ", isRejecting && "opacity-60")}
-            onClick={onReject}
-            disabled={isRejecting}
-          >
-            {isRejecting ? <Loader className="w-4 h-4 animate-spin" /> : <XCircleIcon className="w-4 h-4" />}
-            Zgłoś sugestie
-          </Button>
-          <Button
-            size="sm"
-            variant="default"
-            className={cn("flex items-center gap-1  hover:bg-primary ", isApproving && "opacity-60")}
-            onClick={onApprove}
-            disabled={isApproving}
-          >
-            {isApproving ? <Loader className="w-4 h-4 animate-spin" /> : <CheckCircleIcon className="w-4 h-4" />}
-            {isDraft ? "Zatwierdź" : "Zweryfikuj"}
-          </Button>
-        </div>
+        {userPermissions.includes("APPROVE_ARTICLE") && (
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              variant="destructive"
+              className={cn("flex items-center gap-1  ", isRejecting && "opacity-60")}
+              onClick={onReject}
+              disabled={isRejecting}
+            >
+              {isRejecting ? <Loader className="w-4 h-4 animate-spin" /> : <XCircleIcon className="w-4 h-4" />}
+              Zgłoś sugestie
+            </Button>
+            <Button
+              size="sm"
+              variant="default"
+              className={cn("flex items-center gap-1  hover:bg-primary ", isApproving && "opacity-60")}
+              onClick={onApprove}
+              disabled={isApproving}
+            >
+              {isApproving ? <Loader className="w-4 h-4 animate-spin" /> : <CheckCircleIcon className="w-4 h-4" />}
+              {isDraft ? "Zatwierdź" : "Zweryfikuj"}
+            </Button>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

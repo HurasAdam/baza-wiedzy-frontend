@@ -13,7 +13,7 @@ import { ArticleDraftBanner } from "./ArticleDraftBanner";
 import { ArticleVerificationBanner } from "./ArticleVerificationBanner";
 import { RejectedArticleBanner } from "./RejectedArticleBanner";
 
-const ArticleBannerSection = ({ article }) => {
+const ArticleBannerSection = ({ article, userPermissions }) => {
   const articleStatus = article.status;
 
   const [isCreatingArticleApprove, setIsCreatingArticleApprove] = useState<boolean>(false);
@@ -99,10 +99,20 @@ const ArticleBannerSection = ({ article }) => {
         />
       )}
       {articleStatus === "pending" && (
-        <ArticleVerificationBanner article={article} isResubmitting={isApproveLoading} onApprove={onArticleApprove} />
+        <ArticleVerificationBanner
+          article={article}
+          isResubmitting={isApproveLoading}
+          onApprove={onArticleApprove}
+          userPermissions={userPermissions}
+        />
       )}
       {articleStatus === "draft" && (
-        <ArticleDraftBanner status={article.status} onApprove={onArticleApprove} onReject={onArticleReject} />
+        <ArticleDraftBanner
+          status={article.status}
+          onApprove={onArticleApprove}
+          onReject={onArticleReject}
+          userPermissions={userPermissions}
+        />
       )}
 
       {/* Modale */}

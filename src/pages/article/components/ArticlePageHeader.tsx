@@ -83,7 +83,7 @@ export const ArticlePageHeader: React.FC<Props> = ({ article, returnUrl, userPer
         <ArticleDraftBanner status={article.status} onApprove={onArticleAprove} onReject={onArticleReject} />
       )} */}
 
-      <ArticleBannerSection article={article} />
+      <ArticleBannerSection article={article} userPermissions={userPermissions} />
     </>
   );
 };
