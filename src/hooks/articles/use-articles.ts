@@ -10,6 +10,18 @@ export const useCreateArticleMutation = () => {
   });
 };
 
+export const useFollowArticleMutation = () => {
+  return useMutation<void, AxiosError, string>({
+    mutationFn: (articleId) => articlesService.followArticle(articleId),
+  });
+};
+
+export const useUnfollowArticleMutation = () => {
+  return useMutation<void, AxiosError, string>({
+    mutationFn: (articleId) => articlesService.unfollowArticle(articleId),
+  });
+};
+
 export const useUpdateArticleMutation = () => {
   return useMutation<AxiosResponse, AxiosError, ArticleCreateDto>({
     mutationFn: (data) => articlesService.updateArticle(data),

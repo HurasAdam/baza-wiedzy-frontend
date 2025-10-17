@@ -32,6 +32,7 @@ export interface Article {
   category: ProductCategory;
   createdAt: string;
   isFavourite: boolean;
+  isFollowed: boolean;
 }
 
 export interface ArticleListItem {

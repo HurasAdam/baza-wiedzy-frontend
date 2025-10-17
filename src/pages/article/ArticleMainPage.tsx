@@ -1,10 +1,13 @@
 import {
   Archive,
+  Bell,
+  BellOff,
   CheckCircleIcon,
   Copy,
   EyeIcon,
   Info,
   Loader,
+  MoreVertical,
   RefreshCw,
   SquarePen,
   Star,
@@ -17,8 +20,16 @@ import { ArticleExtraInfoModal } from "../../components/article/article-extra-in
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "../../components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../../components/ui/dropdown-menu";
 import { Separator } from "../../components/ui/separator";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../components/ui/tooltip";
+import queryClient from "../../config/query.client";
+import { useFollowArticleMutation, useUnfollowArticleMutation } from "../../hooks/articles/use-articles";
 import type { Article } from "../../types/article";
 
 export interface ArticleOutletContext {
@@ -31,6 +42,8 @@ export interface ArticleOutletContext {
 export const ArticleMainPage = () => {
   const { id } = useParams<{ id: string }>();
   const { article, refetch, isArticleRefreshing, userPermissions } = useOutletContext<ArticleOutletContext>();
+  const { mutate: followArticleMutate } = useFollowArticleMutation();
+  const { mutate: unfollowArticleMutate } = useUnfollowArticleMutation();
   const [isExtraInforModalOpen, setIsExtraInfoModalOpen] = useState(false);
 
   if (!article) {
@@ -39,6 +52,28 @@ export const ArticleMainPage = () => {
 
   const openExtraInfoModal = () => {
     setIsExtraInfoModalOpen(true);
+  };
+
+  const handleFollowToggle = (articleId: string, isFollowed: boolean) => {
+    if (isFollowed) {
+      unfollowArticleMutate(articleId, {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["article", articleId] });
+          toast.success("Artykuł został usunięty z listy obserwowanych", {
+            position: "bottom-right",
+          });
+        },
+      });
+    } else {
+      followArticleMutate(articleId, {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["article", articleId] });
+          toast.success("Artykuł został dodany do listy obserwowanych", {
+            position: "bottom-right",
+          });
+        },
+      });
+    }
   };
 
   const sortedDescriptions = [...(article?.responseVariants ?? [])].sort((a, b) => a.version - b.version);
@@ -80,67 +115,103 @@ export const ArticleMainPage = () => {
             <EyeIcon className="w-4 h-4 mr-1" /> {article.viewsCounter} wyświetleń
           </Badge>
         </div>
-
-        <TooltipProvider>
-          <div className="flex gap-2 items-center">
-            <div className="flex items-center space-x-2">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button onClick={openExtraInfoModal} variant="ghost" className="transition" size="icon">
-                    <Info className="w-4 h-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent className="bg-muted">Odśwież</TooltipContent>
-              </Tooltip>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button onClick={refetch} variant="ghost" className="transition" size="icon">
-                    {isArticleRefreshing ? (
-                      <Loader className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <RefreshCw className="w-4 h-4" />
-                    )}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent className="bg-muted">Odśwież</TooltipContent>
-              </Tooltip>
-            </div>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button size="icon" variant="ghost">
-                  <Star className="w-4 h-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent className="bg-muted">Dodaj do ulubionych</TooltipContent>
-            </Tooltip>
-
-            {userPermissions.includes("EDIT_ARTICLE") && (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <NavLink to={`/articles/${id}/edit`}>
-                    <Button variant="ghost" size="icon">
-                      <SquarePen className="w-4 h-4" />
+        <div className="flex items-center">
+          <TooltipProvider>
+            <div className="flex gap-2 items-center">
+              <div className="flex items-center space-x-2">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button onClick={openExtraInfoModal} variant="ghost" className="transition" size="icon">
+                      <Info className="w-4 h-4" />
                     </Button>
-                  </NavLink>
-                </TooltipTrigger>
-                <TooltipContent className="bg-muted">Edytuj</TooltipContent>
-              </Tooltip>
-            )}
-
-            {userPermissions.includes("ARCHIVE_ARTICLE") && (
+                  </TooltipTrigger>
+                  <TooltipContent className="bg-muted">Odśwież</TooltipContent>
+                </Tooltip>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button onClick={refetch} variant="ghost" className="transition" size="icon">
+                      {isArticleRefreshing ? (
+                        <Loader className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <RefreshCw className="w-4 h-4" />
+                      )}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent className="bg-muted">Odśwież</TooltipContent>
+                </Tooltip>
+              </div>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button size="icon" variant="ghost">
-                    <Archive className="w-4 h-4" />
+                    <Star className="w-4 h-4" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent className="bg-muted">Archiwizuj</TooltipContent>
+                <TooltipContent className="bg-muted">Dodaj do ulubionych</TooltipContent>
               </Tooltip>
-            )}
-          </div>
-        </TooltipProvider>
+              {userPermissions.includes("EDIT_ARTICLE") && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <NavLink to={`/articles/${id}/edit`}>
+                      <Button variant="ghost" size="icon">
+                        <SquarePen className="w-4 h-4" />
+                      </Button>
+                    </NavLink>
+                  </TooltipTrigger>
+                  <TooltipContent className="bg-muted">Edytuj</TooltipContent>
+                </Tooltip>
+              )}
+              {userPermissions.includes("ARCHIVE_ARTICLE") && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button size="icon" variant="ghost">
+                      <Archive className="w-4 h-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent className="bg-muted">Archiwizuj</TooltipContent>
+                </Tooltip>
+              )}
+            </div>
+          </TooltipProvider>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <MoreVertical className="w-4 h-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-48">
+              <DropdownMenuItem onClick={openExtraInfoModal}>
+                <Info className="w-4 h-4 mr-2" /> Informacje
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={refetch}>
+                <RefreshCw className="w-4 h-4 mr-2" /> Odśwież
+              </DropdownMenuItem>
+
+              {userPermissions.includes("EDIT_ARTICLE") && (
+                <DropdownMenuItem asChild>
+                  <NavLink to={`/articles/${id}/edit`}>
+                    <div className="flex items-center gap-2">
+                      <SquarePen className="w-4 h-4" /> Edytuj
+                    </div>
+                  </NavLink>
+                </DropdownMenuItem>
+              )}
+
+              {userPermissions.includes("ARCHIVE_ARTICLE") && (
+                <DropdownMenuItem onClick={() => console.log("Archiwizuj")}>
+                  <Archive className="w-4 h-4 mr-2" /> Archiwizuj
+                </DropdownMenuItem>
+              )}
+
+              {/* Obserwuj / Przestań obserwować */}
+              <DropdownMenuItem onClick={() => handleFollowToggle(article._id, article.isFollowed)}>
+                {article.isFollowed ? <BellOff /> : <Bell />}
+                {article.isFollowed ? "Przestań obserwować" : "Obserwuj"}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
 
       {/* ---- Product/Category/Tag Badges ---- */}

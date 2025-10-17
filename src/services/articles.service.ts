@@ -30,6 +30,14 @@ export const createArticle = async (formData: ArticleCreateDto): Promise<AxiosRe
   return await api.post(baseUrl, formData);
 };
 
+export const followArticle = async (articleId: string): Promise<void> => {
+  return await api.post(`${baseUrl}/${articleId}/follow`);
+};
+
+export const unfollowArticle = async (articleId: string): Promise<void> => {
+  return await api.delete(`${baseUrl}/${articleId}/follow`);
+};
+
 export const getArticle = ({ id }: { id: string }): Promise<Article> => {
   return api.get(buildUrl(baseUrl, id));
 };
@@ -108,6 +116,8 @@ const findAllByUser = (query: unknown) => {
 export const articlesService = {
   getAllArticles,
   createArticle,
+  followArticle,
+  unfollowArticle,
   getArticle,
   verifyArticle,
   markArticleAsFavourite,
