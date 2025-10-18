@@ -29,12 +29,16 @@ import {
 import { Separator } from "../../components/ui/separator";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../components/ui/tooltip";
 import queryClient from "../../config/query.client";
-import { useFollowArticleMutation, useUnfollowArticleMutation } from "../../hooks/articles/use-articles";
+import {
+  useArticleToggleFavouriteMutation,
+  useFollowArticleMutation,
+  useUnfollowArticleMutation,
+} from "../../hooks/articles/use-articles";
 import type { Article } from "../../types/article";
 
 export interface ArticleOutletContext {
   article: Article;
-  refetch: () => void;
+  refetch: () => Promise<void>;
   isArticleRefreshing: boolean;
   userPermissions: {};
 }
@@ -44,6 +48,8 @@ export const ArticleMainPage = () => {
   const { article, refetch, isArticleRefreshing, userPermissions } = useOutletContext<ArticleOutletContext>();
   const { mutate: followArticleMutate } = useFollowArticleMutation();
   const { mutate: unfollowArticleMutate } = useUnfollowArticleMutation();
+  const { mutate: toggleArticleFavouriteMutate, isPending: isFavouriteTogglePending } =
+    useArticleToggleFavouriteMutation();
   const [isExtraInforModalOpen, setIsExtraInfoModalOpen] = useState(false);
 
   if (!article) {
@@ -74,6 +80,34 @@ export const ArticleMainPage = () => {
         },
       });
     }
+  };
+
+  const onRefresh = async () => {
+    try {
+      const result = await refetch(); // czeka aż zakończy się odświeżanie
+      if (!result.error) {
+        toast.success("Odświeżono.", {
+          description: "Dane artykułu zostały zaktualizowane.",
+          position: "bottom-right",
+        });
+      } else {
+        toast.error("Nie udało się odświeżyć danych", { position: "bottom-right" });
+      }
+    } catch {
+      toast.error("Błąd podczas odświeżania danych", { position: "bottom-right" });
+    }
+  };
+
+  const handleFavouriteToggle = (articleId: string) => {
+    toggleArticleFavouriteMutate(articleId, {
+      onSuccess: (data) => {
+        queryClient.invalidateQueries({ queryKey: ["article", article._id] });
+        toast.success("Zaktualizowano", {
+          description: data?.message || "Zaktualizowano ulubione",
+          position: "bottom-right",
+        });
+      },
+    });
   };
 
   const sortedDescriptions = [...(article?.responseVariants ?? [])].sort((a, b) => a.version - b.version);
@@ -114,85 +148,90 @@ export const ArticleMainPage = () => {
           <Badge variant="secondary" className="flex items-center whitespace-nowrap">
             <EyeIcon className="w-4 h-4 mr-1" /> {article.viewsCounter} wyświetleń
           </Badge>
-        </div>
-        <div className="flex items-center">
           <TooltipProvider>
-            <div className="flex gap-2 items-center">
-              <div className="flex items-center space-x-2">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button onClick={openExtraInfoModal} variant="ghost" className="transition" size="icon">
-                      <Info className="w-4 h-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent className="bg-muted">Odśwież</TooltipContent>
-                </Tooltip>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button onClick={refetch} variant="ghost" className="transition" size="icon">
-                      {isArticleRefreshing ? (
-                        <Loader className="w-4 h-4 animate-spin" />
-                      ) : (
-                        <RefreshCw className="w-4 h-4" />
-                      )}
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent className="bg-muted">Odśwież</TooltipContent>
-                </Tooltip>
-              </div>
+            <div className="flex items-center space-x-2">
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button size="icon" variant="ghost">
-                    <Star className="w-4 h-4" />
+                  <Button
+                    onClick={openExtraInfoModal}
+                    variant="ghost"
+                    className="transition hover:bg-primary/20"
+                    size="icon"
+                  >
+                    <Info className="w-4 h-4" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent className="bg-muted">Dodaj do ulubionych</TooltipContent>
+                <TooltipContent className="bg-muted">Info</TooltipContent>
               </Tooltip>
-              {userPermissions.includes("EDIT_ARTICLE") && (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <NavLink to={`/articles/${id}/edit`}>
-                      <Button variant="ghost" size="icon">
-                        <SquarePen className="w-4 h-4" />
-                      </Button>
-                    </NavLink>
-                  </TooltipTrigger>
-                  <TooltipContent className="bg-muted">Edytuj</TooltipContent>
-                </Tooltip>
-              )}
-              {userPermissions.includes("ARCHIVE_ARTICLE") && (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button size="icon" variant="ghost">
-                      <Archive className="w-4 h-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent className="bg-muted">Archiwizuj</TooltipContent>
-                </Tooltip>
-              )}
+            </div>
+            <div className="flex items-center space-x-2">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button onClick={onRefresh} variant="ghost" className="transition hover:bg-primary/20" size="icon">
+                    {isArticleRefreshing ? (
+                      <Loader className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <RefreshCw className="w-4 h-4" />
+                    )}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent className="bg-muted">Odśwież</TooltipContent>
+              </Tooltip>
+            </div>
+          </TooltipProvider>
+        </div>
+        <div className="flex items-center gap-5  pr-2.5">
+          <TooltipProvider>
+            <div className="flex items-center">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    onClick={() => handleFavouriteToggle(article._id)}
+                    size="icon"
+                    variant={article.isFavourite ? "default" : "outline"}
+                    className={`transition relative ${
+                      article.isFavourite ? "bg-primary/10 border-primary/30 hover:bg-primary/20" : "hover:bg-accent"
+                    }`}
+                    disabled={isFavouriteTogglePending} // blokuje przycisk podczas mutacji
+                  >
+                    {isFavouriteTogglePending ? (
+                      <Loader className="w-4 h-4 animate-spin text-primary" />
+                    ) : (
+                      <Star
+                        className={`w-4 h-4 transition ${
+                          article.isFavourite ? "fill-primary text-primary" : "text-muted-foreground"
+                        }`}
+                      />
+                    )}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent className="bg-muted text-sm">
+                  {article.isFavourite ? "Usuń z ulubionych" : "Dodaj do ulubionych"}
+                </TooltipContent>
+              </Tooltip>
             </div>
           </TooltipProvider>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
+              <Button variant="outline" size="sm">
                 <MoreVertical className="w-4 h-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-48">
-              <DropdownMenuItem onClick={openExtraInfoModal}>
-                <Info className="w-4 h-4 mr-2" /> Informacje
+              {/* Obserwuj / Przestań obserwować */}
+              <DropdownMenuItem onClick={() => handleFollowToggle(article._id, article.isFollowed)}>
+                {article.isFollowed ? <BellOff className="mr-1.5" /> : <Bell className="mr-1.5" />}
+                {article.isFollowed ? "Przestań obserwować" : "Obserwuj"}
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={refetch}>
-                <RefreshCw className="w-4 h-4 mr-2" /> Odśwież
+              <DropdownMenuItem onClick={openExtraInfoModal}>
+                <Info className="w-4 h-4 mr-1.5" /> Informacje
               </DropdownMenuItem>
 
               {userPermissions.includes("EDIT_ARTICLE") && (
                 <DropdownMenuItem asChild>
                   <NavLink to={`/articles/${id}/edit`}>
                     <div className="flex items-center gap-2">
-                      <SquarePen className="w-4 h-4" /> Edytuj
+                      <SquarePen className="w-4 h-4 mr-1.5" /> Edytuj
                     </div>
                   </NavLink>
                 </DropdownMenuItem>
@@ -203,11 +242,8 @@ export const ArticleMainPage = () => {
                   <Archive className="w-4 h-4 mr-2" /> Archiwizuj
                 </DropdownMenuItem>
               )}
-
-              {/* Obserwuj / Przestań obserwować */}
-              <DropdownMenuItem onClick={() => handleFollowToggle(article._id, article.isFollowed)}>
-                {article.isFollowed ? <BellOff /> : <Bell />}
-                {article.isFollowed ? "Przestań obserwować" : "Obserwuj"}
+              <DropdownMenuItem onClick={refetch}>
+                <RefreshCw className="w-4 h-4 mr-1.5" /> Odśwież
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
