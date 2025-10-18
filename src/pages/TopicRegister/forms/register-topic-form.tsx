@@ -36,7 +36,7 @@ export const RegisterTopicForm = ({ topic }: { topic: ITopic }) => {
   });
 
   const { mutate } = useCreateReportTopicMutation();
-  const toastDuration = 2000;
+  const toastDuration = 1600;
 
   const onSubmit = (data: RegisterTopicFormValues, type: "call" | "message") => {
     if (!data.count || data.count < 1) data.count = 1;
@@ -135,23 +135,6 @@ export const RegisterTopicForm = ({ topic }: { topic: ITopic }) => {
           <Button
             type="button"
             size="icon"
-            variant={feedback === "message" ? "ghost" : "default"}
-            onClick={form.handleSubmit((data) => onSubmit(data, "message"))}
-            disabled={loadingType === "message"}
-            className="w-14 h-10 rounded-md transition-all hover:scale-105"
-          >
-            {loadingType === "message" ? (
-              <Loader className="animate-spin w-5 h-5" />
-            ) : feedback === "message" ? (
-              <CircleCheck className="w-5 h-5 text-green-600/85" />
-            ) : (
-              <Mail className="w-5 h-5" />
-            )}
-          </Button>
-
-          <Button
-            type="button"
-            size="icon"
             variant={feedback === "call" ? "ghost" : "default"}
             onClick={form.handleSubmit((data) => onSubmit(data, "call"))}
             disabled={loadingType === "call"}
@@ -163,6 +146,22 @@ export const RegisterTopicForm = ({ topic }: { topic: ITopic }) => {
               <CircleCheck className="w-5 h-5 text-green-600/85" />
             ) : (
               <Phone className="w-5 h-5" />
+            )}
+          </Button>
+          <Button
+            type="button"
+            size="icon"
+            variant={feedback === "message" ? "outline" : "default"}
+            onClick={form.handleSubmit((data) => onSubmit(data, "message"))}
+            disabled={loadingType === "message"}
+            className="w-14 h-10 rounded-md transition-all hover:scale-105"
+          >
+            {loadingType === "message" ? (
+              <Loader className="animate-spin w-5 h-5" />
+            ) : feedback === "message" ? (
+              <CircleCheck className="w-5 h-5 text-green-600/85" />
+            ) : (
+              <Mail className="w-5 h-5" />
             )}
           </Button>
         </div>
