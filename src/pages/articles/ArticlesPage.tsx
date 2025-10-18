@@ -1,4 +1,3 @@
-import { Loader } from "lucide-react";
 import React, { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -8,6 +7,7 @@ import { useArticleToggleFavouriteMutation, useFindArticlesQuery } from "../../h
 import { useFindCategoriesByProductQuery } from "../../hooks/product-categories/use-product-categories";
 import { useFindProductsQuery } from "../../hooks/products/use-products";
 import type { ArticleListItem } from "../../types/article";
+import SkeletonArticleCard from "../pending-articles/components/SkeletonArticleCard";
 import ArticlesFilterBar from "./components/Articles-filterBar";
 import TableArticleCard from "./components/TableArticleCard";
 
@@ -91,12 +91,15 @@ export const ArticlesPage: React.FC = () => {
         categories={categories}
         onResetAll={onResetAllFilters}
       />
-      <div className="flex-grow flex flex-col h-fit bg-card border border-border divide-y divide-border rounded-xl ">
+      <div className="flex-grow flex flex-col h-fit border border-border divide-y divide-border rounded-xl bg-card/90  ">
         {isLoading && (
-          <div className="flex items-center flex-col gap-0.5 justify-center">
-            <Loader className="animate-spin w-7 h-7" />
-            <p className="text-sm text-muted-foreground animate-pulse">Ładowanie...</p>
-          </div>
+          <ul className="divide-y divide-border py-2">
+            {Array(12)
+              .fill(0)
+              .map((_, i) => (
+                <SkeletonArticleCard key={i} withSpinner={i === 0} />
+              ))}
+          </ul>
         )}
 
         {isError && <p className="text-sm text-destructive">Błąd podczas ładowania artykułów.</p>}
@@ -110,13 +113,16 @@ export const ArticlesPage: React.FC = () => {
           />
         )}
 
-        {data?.data.map((article: ArticleListItem) => (
-          <TableArticleCard
-            article={article}
-            toggleFavourite={toggleFavourite}
-            toggleFavouriteLoading={pendingId === article._id}
-          />
-        ))}
+        {!isError &&
+          data?.data.length > 0 &&
+          data.data.map((article: ArticleListItem) => (
+            <TableArticleCard
+              key={article._id}
+              article={article}
+              toggleFavourite={toggleFavourite}
+              toggleFavouriteLoading={pendingId === article._id}
+            />
+          ))}
       </div>
     </div>
   );
