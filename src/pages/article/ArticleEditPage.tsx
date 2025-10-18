@@ -36,7 +36,7 @@ export const ArticleEditPage = () => {
   const [saveAlertState, setSaveAlertState] = useState<{
     isOpen: boolean;
     saveVariant: "simple" | "full" | "";
-  }>({ isOpen: false, saveVariant: "simple" });
+  }>({ isOpen: false, saveVariant: "full" });
   const { data: products = [] } = useFindProductsQuery(null);
 
   const { data: categories = [], isLoading: loadingCategories } = useFindCategoriesByProductQuery(selectedProductId);
@@ -262,7 +262,7 @@ export const ArticleEditPage = () => {
 
         <Alert
           isConfirmEnabled={!!saveAlertState.saveVariant}
-          requireConfirmation={false} // checkbox niepotrzebny przy wyborze wariantu
+          requireConfirmation={false}
           isOpen={saveAlertState.isOpen}
           title="Jak chcesz zapisać zmiany?"
           onCancel={onCloseArticleApproveAlert}
@@ -275,26 +275,6 @@ export const ArticleEditPage = () => {
             </p>
 
             <div className="grid gap-3">
-              {/* Prosta edycja */}
-              <button
-                type="button"
-                onClick={() => onArticleSaveModeSelect("simple")}
-                className={`p-4 rounded-lg border flex items-start gap-3 transition-all ${
-                  saveAlertState.saveVariant === "simple"
-                    ? "border-primary bg-primary/5"
-                    : "border-muted hover:border-primary/40 hover:bg-muted/40"
-                }`}
-              >
-                <CheckCircle className="w-5 h-5 text-green-600 mt-1" />
-                <div className="text-left">
-                  <p className="font-medium">Prosta edycja</p>
-                  <p className="text-sm text-muted-foreground">
-                    Wprowadza zmiany w artykule bez zmiany jego statusu – artykuł pozostaje{" "}
-                    <strong>zatwierdzony</strong>.
-                  </p>
-                </div>
-              </button>
-
               {/* Pełna edycja */}
               <button
                 type="button"
@@ -311,6 +291,25 @@ export const ArticleEditPage = () => {
                   <p className="text-sm text-muted-foreground">
                     Wprowadza zmiany w artykule <strong>i zmienia jego status</strong> na{" "}
                     <strong>Oczekujący weryfikacji</strong>, wymagając ponownej weryfikacji.
+                  </p>
+                </div>
+              </button>
+              {/* Prosta edycja */}
+              <button
+                type="button"
+                onClick={() => onArticleSaveModeSelect("simple")}
+                className={`p-4 rounded-lg border flex items-start gap-3 transition-all ${
+                  saveAlertState.saveVariant === "simple"
+                    ? "border-primary bg-primary/5"
+                    : "border-muted hover:border-primary/40 hover:bg-muted/40"
+                }`}
+              >
+                <CheckCircle className="w-5 h-5 text-green-600 mt-1" />
+                <div className="text-left">
+                  <p className="font-medium">Prosta edycja</p>
+                  <p className="text-sm text-muted-foreground">
+                    Wprowadza zmiany w artykule bez zmiany jego statusu – artykuł pozostaje{" "}
+                    <strong>zatwierdzony</strong>.
                   </p>
                 </div>
               </button>
