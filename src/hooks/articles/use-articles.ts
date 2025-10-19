@@ -39,6 +39,11 @@ export const useAproveArticleMutation = () => {
     mutationFn: (id) => articlesService.aproveOne({ id }),
   });
 };
+export const useVerifyArticleMutation = () => {
+  return useMutation<AxiosResponse, AxiosError, string>({
+    mutationFn: (id) => articlesService.verifyArticle({ id }),
+  });
+};
 
 export const useRejectArticleMutation = () => {
   return useMutation<AxiosResponse, AxiosError, RejectArticleDto>({

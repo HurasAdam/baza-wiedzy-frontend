@@ -5,6 +5,7 @@ import {
   useAproveArticleMutation,
   useRejectArticleMutation,
   useRequestReviewArticleMutation,
+  useVerifyArticleMutation,
 } from "../../../hooks/articles/use-articles";
 
 import { PendingArticleRejectionModal } from "../../../components/pending-articles/pending-article-rejection-modal";
@@ -17,16 +18,20 @@ const ArticleBannerSection = ({ article, userPermissions }) => {
   const articleStatus = article.status;
 
   const [isCreatingArticleApprove, setIsCreatingArticleApprove] = useState<boolean>(false);
+  const [isCreatingArticleVerify, setIsCreatingArticleVerify] = useState<boolean>(false);
   const [isCreatingArticleRejection, setIsCreatingArticleRejection] = useState<boolean>(false);
 
   const { mutate: approveMutate, isPending: isApproveLoading } = useAproveArticleMutation();
+  const { mutate: verifyMutate, isPending: isVerifyLoading } = useVerifyArticleMutation();
   const { mutate: rejectionMutate, isPending: isRejectLoading } = useRejectArticleMutation();
   const { mutate: requestReviewMutate, isPending: isRequestReviewLoading } = useRequestReviewArticleMutation();
 
   const onArticleApprove = () => setIsCreatingArticleApprove(true);
+  const onArticleVerify = () => setIsCreatingArticleVerify(true);
   const onArticleReject = () => setIsCreatingArticleRejection(true);
 
   const onCloseArticleApproveAlert = () => setIsCreatingArticleApprove(false);
+  const onCloseArticleVerifyAlert = () => setIsCreatingArticleVerify(false);
 
   const onArticleApproveConfirm = () => {
     if (!article) return;
@@ -46,6 +51,28 @@ const ArticleBannerSection = ({ article, userPermissions }) => {
       },
       onSettled: () => {
         setIsCreatingArticleApprove(false);
+      },
+    });
+  };
+
+  const onArticleVerifyConfirm = () => {
+    if (!article) return;
+    verifyMutate(article._id, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["article", article._id] });
+        toast.success("Artykuł został zweryfikowany.");
+      },
+      onError: (error: any) => {
+        const status = error?.status;
+
+        if (status === 403) {
+          toast.warning("Brak wymaganych uprawnień do wykonania tej operacji.");
+        } else {
+          toast.error("Wystąpił nieoczekiwany błąd. Spróbuj ponownie później.");
+        }
+      },
+      onSettled: () => {
+        setIsCreatingArticleVerify(false);
       },
     });
   };
@@ -101,8 +128,8 @@ const ArticleBannerSection = ({ article, userPermissions }) => {
       {articleStatus === "pending" && (
         <ArticleVerificationBanner
           article={article}
-          isResubmitting={isApproveLoading}
-          onApprove={onArticleApprove}
+          isResubmitting={isVerifyLoading}
+          onApprove={onArticleVerify}
           userPermissions={userPermissions}
         />
       )}
@@ -115,7 +142,7 @@ const ArticleBannerSection = ({ article, userPermissions }) => {
         />
       )}
 
-      {/* Modale */}
+      {/* Approve */}
       <Alert
         isOpen={isCreatingArticleApprove}
         isLoading={isApproveLoading}
@@ -144,6 +171,25 @@ const ArticleBannerSection = ({ article, userPermissions }) => {
         )}
       </Alert>
 
+      {/* Verify */}
+      <Alert
+        isOpen={isCreatingArticleVerify}
+        isLoading={isVerifyLoading}
+        type="info"
+        title={articleStatus === "draft" ? "Zatwierdź artykuł" : "Zweryfikuj artykuł"}
+        onCancel={onCloseArticleVerifyAlert}
+        onConfirm={onArticleVerifyConfirm}
+      >
+        <div className="flex flex-col gap-1">
+          <span>Czy na pewno chcesz zweryfikować ten artykuł?</span>
+          <span className="text-sm ">
+            Po potwierdzeniu status artykułu zostanie ustawiony jako{" "}
+            <span className="text-primary/90">*zweryfikowany*</span>
+          </span>
+        </div>
+      </Alert>
+
+      {/* Reject */}
       <PendingArticleRejectionModal
         onSubmit={onArticleRejectConfirm}
         isCreatingArticleRejection={isCreatingArticleRejection}

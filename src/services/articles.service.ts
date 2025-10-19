@@ -46,8 +46,8 @@ export const getArticleHistory = ({ id }: { id: string }) => {
   return api.get(buildUrl(baseUrl, id, "history"));
 };
 
-export const verifyArticle = ({ id, isVerified }) => {
-  return api.post(buildUrl(baseUrl, id, "verify"), { isVerified });
+export const verifyArticle = ({ id }) => {
+  return api.post(buildUrl(baseUrl, id, "verify"));
 };
 
 export const aproveOne = ({ id }: { id: string }) => {
