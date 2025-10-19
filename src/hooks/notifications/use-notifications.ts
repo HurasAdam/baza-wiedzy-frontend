@@ -21,6 +21,12 @@ export const useMarkNotificationAsreadMutation = () => {
   });
 };
 
+export const useMarkAllNotificationsAsreadMutation = () => {
+  return useMutation({
+    mutationFn: () => notificationsService.markAllAsRead(),
+  });
+};
+
 export const useDeleteNotificationMutation = () => {
   return useMutation({
     mutationFn: (notificationId: string) => notificationsService.deleteNotification(notificationId),

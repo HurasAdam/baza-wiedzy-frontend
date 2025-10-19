@@ -12,6 +12,10 @@ const findMyNotifications = (params?: URLSearchParams) => {
 const markAsRead = (notificationId: string) => {
   return api.patch(`${BASE_URL}/${notificationId}/read`);
 };
+
+const markAllAsRead = () => {
+  return api.patch(`${BASE_URL}/read-all`);
+};
 const deleteNotification = (notificationId: string) => {
   return api.delete(`${BASE_URL}/${notificationId}`);
 };
@@ -19,5 +23,6 @@ const deleteNotification = (notificationId: string) => {
 export const notificationsService = {
   findMyNotifications,
   markAsRead,
+  markAllAsRead,
   deleteNotification,
 };

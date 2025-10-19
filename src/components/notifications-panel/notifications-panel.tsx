@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { AlertTriangle, BellRing, Check, Loader, UserPlus, X } from "lucide-react";
@@ -9,6 +7,7 @@ import queryClient from "../../config/query.client";
 import {
   useDeleteNotificationMutation,
   useFindMyNotificationsQuery,
+  useMarkAllNotificationsAsreadMutation,
   useMarkNotificationAsreadMutation,
 } from "../../hooks/notifications/use-notifications";
 
@@ -30,9 +29,9 @@ interface NotificationsPanelProps {
 export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, onOpenChange }) => {
   const { data: notifications } = useFindMyNotificationsQuery();
   const { mutate: markAsReadMutate } = useMarkNotificationAsreadMutation();
+  const { mutate: markAllAsReadMutate } = useMarkAllNotificationsAsreadMutation();
   const { mutate: deleteNotificationMutate } = useDeleteNotificationMutation();
 
-  // Stany lokalne
   const [loadingIds, setLoadingIds] = React.useState<Set<string>>(new Set());
   const [deletingIds, setDeletingIds] = React.useState<Set<string>>(new Set());
 
@@ -58,6 +57,11 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, 
     });
   };
 
+  const markAllAsRead = () => {
+    markAllAsReadMutate(undefined, {
+      onSuccess: () => queryClient.invalidateQueries({ queryKey: ["my-notifications"] }),
+    });
+  };
   const deleteNotification = (id: string) => {
     setDeletingIds((prev) => new Set(prev).add(id));
 
@@ -180,7 +184,7 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, 
         </div>
 
         <div className="mt-5 flex justify-between items-center border-t pt-4">
-          <Button variant="link" size="sm" className="text-primary">
+          <Button onClick={markAllAsRead} variant="link" size="sm" className="text-primary">
             Zobacz wszystkie powiadomienia
           </Button>
           <Button variant="outline" size="sm" onClick={() => onOpenChange(false)}>
