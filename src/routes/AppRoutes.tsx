@@ -66,6 +66,7 @@ export function AppRoutes() {
             <Route path="manage-tags" element={<PAGES.TagsPage />} />
             <Route path="manage-jstprojects" element={<PAGES.JstAdminProjectsPage />} />
             <Route path="manage-reports" element={<PAGES.AdminUserReportsPage />} />
+            <Route path="logs" element={<PAGES.AdminLogsPage />} />
             <Route path="manage-reports/:id" element={<PAGES.AdminIssueReportDetailsPage />} />
 
             <Route path="manage-registertopics" element={<PAGES.AdminTopicsPage />} />

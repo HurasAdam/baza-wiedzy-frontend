@@ -1,10 +1,10 @@
-import type { z } from "zod";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import type { AxiosError } from "axios";
 import { toast } from "sonner";
+import type { z } from "zod";
 import queryClient from "../../config/query.client";
 import { useCreateProductMutation } from "../../hooks/products/use-products";
 import { productSchema } from "../../validation/product.schema";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { ProductForm } from "./product-form";
 
 interface CreateWorkspaceProps {
@@ -27,35 +27,20 @@ export const ProductModal = ({
       onSuccess: () => {
         setIsCreatingProduct(false);
         queryClient.invalidateQueries({ queryKey: ["products"] });
-        toast.success("Produkt został dodany");
+        toast.success("Zmiany zapisane", {
+          description: "Produkt został pomyślnie dodany.",
+          position: "bottom-right",
+        });
       },
       onError: (error) => {
         const { status } = error as AxiosError;
 
         if (status === 409) {
-          toast.error(
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "12px",
-                fontFamily: "Inter, sans-serif",
-                color: "#991b1b",
-                fontSize: "14px",
-              }}
-            >
-              <div>
-                <div style={{ fontWeight: 600, marginBottom: 2 }}>
-                  Błąd: Duplikat produktu
-                </div>
-                <div style={{ opacity: 0.8 }}>
-                  Produktu o tej nazwie już istnieje, nazwa produktu musi być
-                  unikalna
-                </div>
-              </div>
-            </div>,
-            { duration: 7000 }
-          );
+          toast.error("Niepowodzenie", {
+            description: "Produkt o tej nazwie już istnieje. Nazwa produktu musi być unikalna.",
+            position: "bottom-right",
+            duration: 7000,
+          });
           return;
         }
 
@@ -65,15 +50,9 @@ export const ProductModal = ({
   };
 
   return (
-    <Dialog
-      open={isCreatingProduct}
-      onOpenChange={setIsCreatingProduct}
-      modal={true}
-    >
+    <Dialog open={isCreatingProduct} onOpenChange={setIsCreatingProduct} modal={true}>
       <DialogContent
-        {...(!closeOnOutsideClick
-          ? { onInteractOutside: (e) => e.preventDefault() }
-          : {})}
+        {...(!closeOnOutsideClick ? { onInteractOutside: (e) => e.preventDefault() } : {})}
         className="max-h-[80vh] overflow-y-auto"
       >
         <DialogHeader>

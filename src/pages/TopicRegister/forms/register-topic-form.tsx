@@ -50,7 +50,6 @@ export const RegisterTopicForm = ({ topic }: { topic: ITopic }) => {
           setFeedback(type);
           setLoadingType(null);
           form.reset({ topic: topic?._id || "", description: "", count: 1 });
-
           toast.success(
             <div
               style={{
@@ -65,10 +64,10 @@ export const RegisterTopicForm = ({ topic }: { topic: ITopic }) => {
               }}
             >
               <div>
-                <div style={{ fontWeight: 600, marginBottom: "2px", fontSize: "14px" }}>Zgłoszenie zapisane</div>
-                <div style={{ opacity: 0.8, fontSize: "13px" }}>
-                  Twoje zgłoszenie dla tematu <span style={{ fontWeight: 500, color: "#111827" }}>“{topic.title}”</span>{" "}
-                  zostało pomyślnie dodane.
+                <div className="mb-1 font-semibold text-green-800">Zgłoszenie zostało zapisane</div>
+                <div style={{ opacity: 0.85, fontSize: "13px" }}>
+                  Twoje zgłoszenie dla tematu <span style={{ fontWeight: 500 }}>“{topic.title}”</span> zostało pomyślnie
+                  zarejestrowane.
                 </div>
               </div>
             </div>,

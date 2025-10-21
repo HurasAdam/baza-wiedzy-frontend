@@ -123,7 +123,7 @@ export const TopicRegisterPage = () => {
               variant={hasFilters ? "default" : "outline"}
               size="sm"
             >
-              Resetuj
+              Wyczyść
             </Button>
             <Badge variant="outline" className="ml-auto">
               Znaleziono: {topics && topics.length}

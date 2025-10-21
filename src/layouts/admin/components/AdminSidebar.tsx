@@ -11,6 +11,7 @@ import {
   LucideArrowBigLeft,
   MessageSquareWarning,
   ShieldCheck,
+  SquareTerminal,
   UserCog,
   Users,
 } from "lucide-react";
@@ -48,6 +49,11 @@ const adminLinks = [
     title: "Zgłoszenia",
     href: "/admin/manage-reports",
     icon: MessageSquareWarning,
+  },
+  {
+    title: "Logi",
+    href: "/admin/logs",
+    icon: SquareTerminal,
   },
 ];
 

@@ -5,12 +5,12 @@ import {
   CheckCircleIcon,
   Copy,
   EyeIcon,
+  Heart,
   Info,
   Loader,
   MoreVertical,
   RefreshCw,
   SquarePen,
-  Star,
   XCircleIcon,
 } from "lucide-react";
 import { useState } from "react";
@@ -153,18 +153,32 @@ export const ArticleMainPage = () => {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
-                    onClick={openExtraInfoModal}
-                    variant="ghost"
-                    className="transition hover:bg-primary/20"
+                    onClick={() => handleFavouriteToggle(article._id)}
                     size="icon"
+                    variant={article.isFavourite ? "ghost" : "ghost"}
+                    className={`transition relative ${
+                      article.isFavourite ? " border-primary/30 hover:bg-primary/20" : "hover:bg-accent"
+                    }`}
+                    disabled={isFavouriteTogglePending} // blokuje przycisk podczas mutacji
                   >
-                    <Info className="w-4 h-4" />
+                    {isFavouriteTogglePending ? (
+                      <Loader className="w-4 h-4 animate-spin text-primary" />
+                    ) : (
+                      <Heart
+                        className={`w-4 h-4 transition ${
+                          article.isFavourite ? "fill-primary text-primary" : "text-muted-foreground"
+                        }`}
+                      />
+                    )}
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent className="bg-muted">Info</TooltipContent>
+                <TooltipContent className="bg-muted text-sm">
+                  {article.isFavourite ? "Usuń z ulubionych" : "Dodaj do ulubionych"}
+                </TooltipContent>
               </Tooltip>
             </div>
-            <div className="flex items-center space-x-2">
+
+            {/* <div className="flex items-center space-x-2">
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button onClick={onRefresh} variant="ghost" className="transition hover:bg-primary/20" size="icon">
@@ -177,12 +191,27 @@ export const ArticleMainPage = () => {
                 </TooltipTrigger>
                 <TooltipContent className="bg-muted">Odśwież</TooltipContent>
               </Tooltip>
-            </div>
+            </div> */}
           </TooltipProvider>
         </div>
         <div className="flex items-center gap-5  pr-2.5">
           <TooltipProvider>
-            <div className="flex items-center">
+            <div className="flex items-center space-x-2">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    onClick={openExtraInfoModal}
+                    variant="ghost"
+                    className="transition hover:bg-primary/20"
+                    size="icon"
+                  >
+                    <Info className="w-4 h-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent className="bg-muted">Info</TooltipContent>
+              </Tooltip>
+            </div>
+            {/* <div className="flex items-center">
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
@@ -209,7 +238,7 @@ export const ArticleMainPage = () => {
                   {article.isFavourite ? "Usuń z ulubionych" : "Dodaj do ulubionych"}
                 </TooltipContent>
               </Tooltip>
-            </div>
+            </div> */}
           </TooltipProvider>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
