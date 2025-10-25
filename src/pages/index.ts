@@ -28,6 +28,7 @@ import { DashboardPage } from "./dashboard/DashboardPage";
 import { EditRolePage } from "./edit-role/EditRolePage";
 import { FaqPage } from "./faq/FaqPage";
 import { FavoritesArticlesPage } from "./favorites-articles/FavoritesArticlesPage";
+import { FlaggedArticlesPage } from "./flagged-articles/FlaggedArticlesPage";
 import { FunnyMessages } from "./funny-messages/FunnyMessages";
 import { JstProjectsPage } from "./jst-projects/JstProjectsPage";
 import { MyEntriesPage } from "./my-entries/MyEntriesPage";
@@ -41,6 +42,7 @@ export const PAGES = {
   ForgotPasswordPage,
   DashboardPage,
   ArticlesPage,
+  FlaggedArticlesPage,
   ArticlePage,
   ArticleMainPage,
   ArticleAttachmentsPage,

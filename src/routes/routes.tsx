@@ -5,6 +5,7 @@ export const protectedRoutePaths = [
   { path: PROTECTED_ROUTES.ONBOARDING, element: <PAGES.OnboardingPage /> },
   { path: PROTECTED_ROUTES.DASHBOARD, element: <PAGES.DashboardPage /> },
   { path: PROTECTED_ROUTES.ARTICLES, element: <PAGES.ArticlesPage /> },
+  { path: PROTECTED_ROUTES.FLAGGED_ARTICLES, element: <PAGES.FlaggedArticlesPage /> },
   { path: PROTECTED_ROUTES.ARTICLE, element: <PAGES.ArticlePage /> },
   { path: PROTECTED_ROUTES.JST_PROJECTS, element: <PAGES.JstProjectsPage /> },
   { path: PROTECTED_ROUTES.FAQ, element: <PAGES.FaqPage /> },

@@ -10,6 +10,10 @@ export const getAllArticles = (params?: URLSearchParams) => {
   return api.get(baseUrl, { params });
 };
 
+export const getMyFlaggedArticles = (params?: URLSearchParams) => {
+  return api.get(`${baseUrl}/flagged`, { params });
+};
+
 export const getLatestArticles = (params: URLSearchParams) => {
   return api.get(buildUrl(baseUrl, "latest"), { params });
 };
@@ -115,6 +119,7 @@ const findAllByUser = (query: unknown) => {
 
 export const articlesService = {
   getAllArticles,
+  getMyFlaggedArticles,
   createArticle,
   followArticle,
   unfollowArticle,

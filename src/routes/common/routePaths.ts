@@ -1,6 +1,7 @@
 export const PROTECTED_ROUTES = {
   DASHBOARD: "/dashboard",
   ARTICLES: "/articles",
+  FLAGGED_ARTICLES: "/flagged-articles",
   PENDING_ARTICLES: "articles-pending",
   ARTICLE: "/articles/:id",
   REGISTER_TOPIC: "/register-topic",

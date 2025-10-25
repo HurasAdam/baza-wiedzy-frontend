@@ -75,6 +75,18 @@ export const useFindArticlesQuery = (params?: URLSearchParams) => {
   });
 };
 
+export const useFindMyFlaggedArticlesQuery = (params?: URLSearchParams) => {
+  return useQuery({
+    queryKey: ["my-flagged-articles", params?.toString()],
+    queryFn: () => {
+      return articlesService.getMyFlaggedArticles(params);
+    },
+    refetchOnWindowFocus: false,
+    staleTime: 0,
+    retry: false,
+  });
+};
+
 export const useFindArticleQuery = (articleId: string) => {
   return useQuery({
     queryKey: ["article", articleId],

@@ -18,7 +18,7 @@ export interface Article {
     variantName?: string;
     version: number;
     variantContent: string;
-  }[]; // <-- to jest nowa struktura
+  }[];
   verifiedBy?: {
     _id: string;
     name: string;
@@ -33,6 +33,11 @@ export interface Article {
   createdAt: string;
   isFavourite: boolean;
   isFollowed: boolean;
+  selectedFlag: {
+    _id: string;
+    name: string;
+    color: string;
+  } | null;
 }
 
 export interface ArticleListItem {
