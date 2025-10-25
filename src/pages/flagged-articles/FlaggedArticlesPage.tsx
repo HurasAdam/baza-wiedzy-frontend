@@ -7,7 +7,6 @@ import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from ".
 import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover";
 import queryClient from "../../config/query.client";
 import { useArticleToggleFavouriteMutation, useFindMyFlaggedArticlesQuery } from "../../hooks/articles/use-articles";
-
 import { useFindMyFlags } from "../../hooks/flag/user-flag";
 import { useFindCategoriesByProductQuery } from "../../hooks/product-categories/use-product-categories";
 import { useFindProductsQuery } from "../../hooks/products/use-products";
@@ -23,27 +22,31 @@ export const FlaggedArticlesPage: React.FC = () => {
   const selectedCategory = searchParams.get("category") || "";
   const [pendingId, setPendingId] = useState<string | null>(null);
 
-  // Pobierz flagi użytkownika
   const { data: userFlags = [], isLoading: isFlagsLoading } = useFindMyFlags(true);
 
-  // Active flag
-  const flagParam = searchParams.get("flag") || (userFlags[0]?._id ?? "");
-  const [activeFlag, setActiveFlag] = useState<string>(flagParam);
+  const [activeFlag, setActiveFlag] = useState<string>("");
   const [openFlags, setOpenFlags] = useState(false);
 
-  const { data, isLoading, isError } = useFindMyFlaggedArticlesQuery(searchParams);
   const { data: products = [] } = useFindProductsQuery(null);
   const { data: categories } = useFindCategoriesByProductQuery(selectedProduct);
+
   const { mutate } = useArticleToggleFavouriteMutation();
 
-  // Update searchParams when activeFlag changes
+  useEffect(() => {
+    if (!activeFlag && userFlags.length > 0) {
+      const flagFromQuery = searchParams.get("flag");
+      setActiveFlag(flagFromQuery || userFlags[0]._id);
+    }
+  }, [userFlags, searchParams, activeFlag]);
+
   useEffect(() => {
     if (!activeFlag) return;
-    setSearchParams((prev) => {
-      prev.set("flag", activeFlag);
-      return prev;
-    });
-  }, [activeFlag, setSearchParams]);
+    const params = new URLSearchParams(searchParams);
+    params.set("flag", activeFlag);
+    setSearchParams(params);
+  }, [activeFlag, searchParams, setSearchParams]);
+
+  const { data, isLoading, isError } = useFindMyFlaggedArticlesQuery(searchParams);
 
   const changeTitleHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -70,11 +73,8 @@ export const FlaggedArticlesPage: React.FC = () => {
 
   const changeCategoryHandler = (categoryId: string) => {
     setSearchParams((prev) => {
-      if (categoryId === "__clear__") {
-        prev.delete("category");
-      } else {
-        prev.set("category", categoryId);
-      }
+      if (categoryId === "__clear__") prev.delete("category");
+      else prev.set("category", categoryId);
       return prev;
     });
   };
@@ -94,7 +94,6 @@ export const FlaggedArticlesPage: React.FC = () => {
 
   const handleFlagChange = (articleId: string, flagId: string) => {
     console.log("Zmiana flagi artykułu", articleId, "na", flagId);
-    // API call
   };
 
   const handleSelectFlag = (flagId: string) => {
@@ -103,7 +102,7 @@ export const FlaggedArticlesPage: React.FC = () => {
   };
 
   const activeFlagData = useMemo(
-    () => userFlags.find((f) => f._id === activeFlag) || userFlags[0] || { name: "Brak flagi", color: "#ccc", _id: "" },
+    () => userFlags.find((f) => f._id === activeFlag) || { name: "Brak flagi", color: "#ccc", _id: "" },
     [activeFlag, userFlags]
   );
 
@@ -114,13 +113,13 @@ export const FlaggedArticlesPage: React.FC = () => {
         <Popover open={openFlags} onOpenChange={setOpenFlags}>
           <PopoverTrigger asChild>
             <div
-              className="w-14 h-14 rounded-xl flex items-center justify-center shadow-sm cursor-pointer transition-transform hover:scale-105 "
+              className="w-14 h-14 rounded-xl flex items-center justify-center shadow-sm cursor-pointer transition-transform hover:scale-105"
               style={{ backgroundColor: activeFlagData.color }}
             >
               <FlagIcon className="w-7 h-7 text-white" />
             </div>
           </PopoverTrigger>
-          <PopoverContent className="p-0 w-64  " side="bottom" align="start">
+          <PopoverContent className="p-0 w-64" side="bottom" align="start">
             <Command>
               <CommandList className="max-h-80 overflow-auto scrollbar-custom">
                 <CommandEmpty>Brak flag</CommandEmpty>
@@ -131,16 +130,16 @@ export const FlaggedArticlesPage: React.FC = () => {
                       <CommandItem
                         key={flag._id}
                         onSelect={() => handleSelectFlag(flag._id)}
-                        className={`cursor-pointer px-3 py-1.5 rounded flex items-center justify-between   ${
-                          isActive
-                            ? "bg-primary text-foreground font-semibold !hover:bg-card" // brak hover dla aktywnej
-                            : " text-muted-foreground " // hover tylko dla nieaktywnych
+                        className={`cursor-pointer px-3 py-1.5 rounded flex items-center justify-between ${
+                          isActive ? "bg-primary text-foreground font-semibold !hover:bg-card" : "text-muted-foreground"
                         }`}
                       >
                         <span>{flag.name}</span>
-                        <span className="flex-shrink-0 w-4 h-4 flex items-center justify-center text-primary">
-                          {isActive && <Check className="w-3 h-3" />}
-                        </span>
+                        {isActive && (
+                          <span className="flex-shrink-0 w-4 h-4 flex items-center justify-center text-primary">
+                            <Check className="w-3 h-3" />
+                          </span>
+                        )}
                       </CommandItem>
                     );
                   })}
@@ -149,7 +148,6 @@ export const FlaggedArticlesPage: React.FC = () => {
             </Command>
           </PopoverContent>
         </Popover>
-
         <h1 className="text-xl font-bold flex items-center gap-2">Kolekcja - {activeFlagData.name}</h1>
       </div>
 
@@ -191,7 +189,7 @@ export const FlaggedArticlesPage: React.FC = () => {
 
         {!isError &&
           data?.data.length > 0 &&
-          data?.data.map((article: ArticleListItem) => (
+          data.data.map((article: ArticleListItem) => (
             <TableFlaggedArticleCard
               key={article._id}
               article={article}
