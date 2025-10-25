@@ -5,18 +5,24 @@ import {
   CheckCircleIcon,
   Copy,
   EyeIcon,
+  Flag,
   Heart,
   Info,
   Loader,
   MoreVertical,
+  Plus,
   RefreshCw,
   SquarePen,
+  Tag,
+  X,
   XCircleIcon,
 } from "lucide-react";
 import { useState } from "react";
 import { NavLink, useOutletContext, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { ArticleExtraInfoModal } from "../../components/article/article-extra-info.modal";
+import { FlagArticleModal } from "../../components/flag/flag-article-modal";
+import { FlagModal } from "../../components/flag/flag-modal";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "../../components/ui/card";
@@ -30,10 +36,16 @@ import { Separator } from "../../components/ui/separator";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../components/ui/tooltip";
 import queryClient from "../../config/query.client";
 import {
+  useCreateArticleUserFlagMutation,
+  useFindOneArticleUserFlagQuery,
+  useUnflagArticleUserFlagMutation,
+} from "../../hooks/article-user-flag/use-article-user-flag";
+import {
   useArticleToggleFavouriteMutation,
   useFollowArticleMutation,
   useUnfollowArticleMutation,
 } from "../../hooks/articles/use-articles";
+import { useCreateFlagMutation } from "../../hooks/flag/user-flag";
 import type { Article } from "../../types/article";
 
 export interface ArticleOutletContext {
@@ -43,14 +55,31 @@ export interface ArticleOutletContext {
   userPermissions: {};
 }
 
+const dummyFlags = [
+  { _id: "1", name: "Czerwony", color: "#FF4C4C" },
+  { _id: "2", name: "Niebieski", color: "#4C6FFF" },
+  { _id: "3", name: "Zielony", color: "#4CFF6F" },
+  { _id: "4", name: "Żółty", color: "#FFE14C" },
+  { _id: "5", name: "Fioletowy", color: "#A14CFF" },
+  { _id: "6", name: "Pomarańczowy", color: "#FF944C" },
+];
+
 export const ArticleMainPage = () => {
   const { id } = useParams<{ id: string }>();
   const { article, refetch, isArticleRefreshing, userPermissions } = useOutletContext<ArticleOutletContext>();
+  const { data: articleUserFlag } = useFindOneArticleUserFlagQuery(id || null);
+
   const { mutate: followArticleMutate } = useFollowArticleMutation();
   const { mutate: unfollowArticleMutate } = useUnfollowArticleMutation();
   const { mutate: toggleArticleFavouriteMutate, isPending: isFavouriteTogglePending } =
     useArticleToggleFavouriteMutation();
+  const { mutate: createFlagMutate, isPending: isCreateFlagPending } = useCreateFlagMutation();
+  const { mutate: flagArticleMutate, isPending: isFlagingArticlePending } = useCreateArticleUserFlagMutation();
+  const { mutate: unflagMutate } = useUnflagArticleUserFlagMutation();
+
   const [isExtraInforModalOpen, setIsExtraInfoModalOpen] = useState(false);
+  const [isFlagModalOpen, setIsFlagModalOpen] = useState(false);
+  const [isCreateFlagModalOpen, setIsCreateFlagModalOpen] = useState(false);
 
   if (!article) {
     return <p className="text-center mt-10">Artykuł nie znaleziony</p>;
@@ -58,6 +87,49 @@ export const ArticleMainPage = () => {
 
   const openExtraInfoModal = () => {
     setIsExtraInfoModalOpen(true);
+  };
+
+  const openCreateFlagModal = (): void => {
+    setIsFlagModalOpen(true);
+  };
+  const onCreateFlag = (data) => {
+    createFlagMutate(data, {
+      onSuccess: () => {
+        toast.success("Zapisano zmian", {
+          position: "bottom-right",
+          description: "Dodano nową flagę",
+        });
+        setIsCreateFlagModalOpen(false);
+        queryClient.invalidateQueries({ queryKey: ["my-flags"] });
+      },
+    });
+  };
+
+  const onFlagArticle = (payload) => {
+    flagArticleMutate(payload, {
+      onSuccess: () => {
+        toast.success("Zmiany zostały zapisane", {
+          position: "bottom-right",
+          description: "Artykuł został oznaczny flagą",
+        });
+        setIsFlagModalOpen(false);
+        queryClient.invalidateQueries({ queryKey: ["article-user-flag", article._id] });
+      },
+    });
+  };
+
+  const onUnflag = (articleId: string): void => {
+    if (!article) return;
+    unflagMutate(articleId, {
+      onSuccess: () => {
+        toast.success("Oznaczenie artykułu zostało usunięte", {
+          position: "bottom-right",
+          description: "Artykuł nie jest już oznaczony flagą.",
+          duration: 4000,
+        });
+        queryClient.invalidateQueries({ queryKey: ["article-user-flag", article._id] });
+      },
+    });
   };
 
   const handleFollowToggle = (articleId: string, isFollowed: boolean) => {
@@ -178,20 +250,44 @@ export const ArticleMainPage = () => {
               </Tooltip>
             </div>
 
-            {/* <div className="flex items-center space-x-2">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button onClick={onRefresh} variant="ghost" className="transition hover:bg-primary/20" size="icon">
-                    {isArticleRefreshing ? (
-                      <Loader className="w-4 h-4 animate-spin" />
+            <div className="flex items-center space-x-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button size="icon" variant="ghost" className="transition hover:bg-accent">
+                    {articleUserFlag?.selectedFlag ? (
+                      <Flag className="w-4 h-4" style={{ color: articleUserFlag.selectedFlag.color }} />
                     ) : (
-                      <RefreshCw className="w-4 h-4" />
+                      <Flag className="w-4 h-4 text-muted-foreground" />
                     )}
                   </Button>
-                </TooltipTrigger>
-                <TooltipContent className="bg-muted">Odśwież</TooltipContent>
-              </Tooltip>
-            </div> */}
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent className="w-48 py-1">
+                  {/* Grupa głównych akcji */}
+                  {!articleUserFlag?.selectedFlag && (
+                    <DropdownMenuItem className="py-2" onClick={openCreateFlagModal}>
+                      <Tag className="w-4 h-4 mr-2 text-muted-foreground" />
+                      Oznacz artykuł
+                    </DropdownMenuItem>
+                  )}
+
+                  {articleUserFlag?.selectedFlag && (
+                    <DropdownMenuItem className="py-2" onClick={() => onUnflag(article._id)}>
+                      <X className="w-4 h-4 mr-2 text-muted-foreground " />
+                      Usuń oznaczenie
+                    </DropdownMenuItem>
+                  )}
+
+                  <Separator />
+
+                  {/* Grupa dodatkowa: Dodaj flagę */}
+                  <DropdownMenuItem onClick={() => setIsCreateFlagModalOpen(true)}>
+                    <Plus className="w-4 h-4 mr-2 text-muted-foreground" />
+                    Dodaj kolekcję
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </TooltipProvider>
         </div>
         <div className="flex items-center gap-5  pr-2.5">
@@ -211,34 +307,6 @@ export const ArticleMainPage = () => {
                 <TooltipContent className="bg-muted">Info</TooltipContent>
               </Tooltip>
             </div>
-            {/* <div className="flex items-center">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    onClick={() => handleFavouriteToggle(article._id)}
-                    size="icon"
-                    variant={article.isFavourite ? "default" : "outline"}
-                    className={`transition relative ${
-                      article.isFavourite ? "bg-primary/10 border-primary/30 hover:bg-primary/20" : "hover:bg-accent"
-                    }`}
-                    disabled={isFavouriteTogglePending} // blokuje przycisk podczas mutacji
-                  >
-                    {isFavouriteTogglePending ? (
-                      <Loader className="w-4 h-4 animate-spin text-primary" />
-                    ) : (
-                      <Star
-                        className={`w-4 h-4 transition ${
-                          article.isFavourite ? "fill-primary text-primary" : "text-muted-foreground"
-                        }`}
-                      />
-                    )}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent className="bg-muted text-sm">
-                  {article.isFavourite ? "Usuń z ulubionych" : "Dodaj do ulubionych"}
-                </TooltipContent>
-              </Tooltip>
-            </div> */}
           </TooltipProvider>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -330,6 +398,22 @@ export const ArticleMainPage = () => {
         ))}
       </div>
       <ArticleExtraInfoModal isOpen={isExtraInforModalOpen} article={article} setIsOpen={setIsExtraInfoModalOpen} />
+
+      <FlagArticleModal
+        key={article._id + (article.selectedFlag?._id || "no-flag")}
+        article={article}
+        articleUserFlag={articleUserFlag} // <-- tutaj
+        onSave={onFlagArticle}
+        isOpen={isFlagModalOpen}
+        setIsOpen={setIsFlagModalOpen}
+        isLoading={isFlagingArticlePending}
+      />
+      <FlagModal
+        isLoading={isCreateFlagPending}
+        onSave={onCreateFlag}
+        isOpen={isCreateFlagModalOpen}
+        setIsOpen={setIsCreateFlagModalOpen}
+      />
     </div>
   );
 };

@@ -11,6 +11,13 @@ import SkeletonArticleCard from "../pending-articles/components/SkeletonArticleC
 import ArticlesFilterBar from "./components/Articles-filterBar";
 import TableArticleCard from "./components/TableArticleCard";
 
+const dummyFlags = [
+  { _id: "1", name: "Red", labelColor: "#FF4C4C" },
+  { _id: "2", name: "Blue", labelColor: "#4C6FFF" },
+  { _id: "3", name: "Green", labelColor: "#4CFF6F" },
+  { _id: "4", name: "Yellow", labelColor: "#FFE14C" },
+];
+
 export const ArticlesPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const titleParam = searchParams.get("title") || "";
@@ -76,6 +83,10 @@ export const ArticlesPage: React.FC = () => {
     });
   };
 
+  const handleFlagChange = (articleId: string, flagId: string) => {
+    console.log("Zmiana flagi artykułu", articleId, "na", flagId);
+  };
+
   return (
     <div className="flex flex-col gap-1.5">
       {/* ------ State Loaders ------ */}
@@ -119,6 +130,8 @@ export const ArticlesPage: React.FC = () => {
             <TableArticleCard
               key={article._id}
               article={article}
+              flags={dummyFlags}
+              onFlagChange={handleFlagChange}
               toggleFavourite={toggleFavourite}
               toggleFavouriteLoading={pendingId === article._id}
             />
