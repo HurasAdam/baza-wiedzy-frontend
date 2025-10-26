@@ -1,16 +1,10 @@
-import { LayoutDashboard, Settings, Users } from "lucide-react";
 import { useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { SettingsModal } from "../../components/settings/settings-modal";
 import AdminHeader from "./components/AdminHeader";
 import { AdminSidebar } from "./components/AdminSidebar";
-const adminLinks = [
-  { title: "Dashboard", href: "/admin", icon: LayoutDashboard },
-  { title: "Użytkownicy", href: "/admin/users", icon: Users },
-  { title: "Ustawienia", href: "/admin/settings", icon: Settings },
-];
+
 const AdminLayout = () => {
-  const navigate = useNavigate();
   const [isCollapsed, setIsCollapes] = useState<boolean>(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   return (
@@ -31,10 +25,7 @@ const AdminLayout = () => {
         </main>
       </div>
 
-      <SettingsModal
-        isSettingsModalOpen={isSettingsModalOpen}
-        setIsSettingsModalOpen={setIsSettingsModalOpen}
-      />
+      <SettingsModal isSettingsModalOpen={isSettingsModalOpen} setIsSettingsModalOpen={setIsSettingsModalOpen} />
     </div>
   );
 };
