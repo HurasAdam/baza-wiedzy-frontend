@@ -1,4 +1,4 @@
-import { Ellipsis, Eye, FileIcon, XCircleIcon } from "lucide-react";
+import { Box, Ellipsis, Eye, FileIcon, XCircleIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Dropdown } from "../../../../components/Dropdown";
 import { Button } from "../../../../components/ui/button";
@@ -12,13 +12,15 @@ interface ProductCardProps {
 
 const ProductCard = ({ product, navigate, onEditProduct }: ProductCardProps) => {
   return (
-    <li key={product._id} className="flex items-center justify-between px-4 py-3 hover:bg-muted/40 transition group">
-      <div className="flex items-center gap-3">
-        <span className="inline-block w-5 h-5 rounded-full" style={{ backgroundColor: product.labelColor }}></span>
-
-        <div className="flex flex-col">
-          <span className="text-sm font-medium text-foreground">{product.name}</span>
-          <span className="text-xs text-muted-foreground">Artykuły: {product.articlesCount}</span>
+    <li
+      key={product._id}
+      className="flex items-center justify-between px-5 py-3 last:border-none hover:bg-muted/40 transition group"
+    >
+      <div className="flex items-center gap-4">
+        <Box className="w-5 h-5 text-muted-foreground" style={{ color: product.labelColor }} />
+        <div className="flex flex-col leading-tight">
+          <span className="text-sm font-semibold text-foreground tracking-tight">{product.name}</span>
+          <span className="text-xs text-muted-foreground mt-0.5">Artykuły: {product.articlesCount}</span>
         </div>
       </div>
 
@@ -26,7 +28,11 @@ const ProductCard = ({ product, navigate, onEditProduct }: ProductCardProps) => 
       <Dropdown
         withSeparators
         triggerBtn={
-          <Button variant="ghost" size="icon" className="opacity-0 group-hover:opacity-100 transition">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="opacity-0 group-hover:opacity-100 transition hover:ring-1 hover:ring-border"
+          >
             <Ellipsis className="w-4 h-4" />
           </Button>
         }
