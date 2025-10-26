@@ -7,7 +7,7 @@ import { AdminUserReportsPage } from "./admin-panel/admin-issue-report/admin-iss
 import { JstAdminProjectsPage } from "./admin-panel/admin-jst-projects";
 import { AdminLogsPage } from "./admin-panel/admin-logs/admin-logs-page";
 import { AdminProductDetailsPage } from "./admin-panel/admin-product-details/admin-product-details";
-import { ProductsPage } from "./admin-panel/admin-products";
+import { ProductsPage } from "./admin-panel/admin-products/admin-products";
 import { AdminRolesPage } from "./admin-panel/admin-roles/admin-roles";
 import { TagsPage } from "./admin-panel/admin-tags";
 import { AdminTopicsPage } from "./admin-panel/admin-topics/admin-topics";
