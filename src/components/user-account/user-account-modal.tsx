@@ -26,7 +26,7 @@ interface CreateWorkspaceProps {
   roles: RoleItem[];
   isCreatingUserAccount: boolean;
   setIsCreatingUserAccount: (isCreatingWorkspace: boolean) => void;
-  closeOnOutsideClick: boolean;
+  closeOnOutsideClick?: boolean;
 }
 
 export type UserAccountFormData = z.infer<typeof createUserAccountSchema> & { password?: string };
@@ -35,7 +35,7 @@ export const UserAccountModal = ({
   roles,
   isCreatingUserAccount,
   setIsCreatingUserAccount,
-  closeOnOutsideClick,
+  closeOnOutsideClick = false,
 }: CreateWorkspaceProps) => {
   const [generatedPassword, setGeneratedPassword] = useState("");
 
