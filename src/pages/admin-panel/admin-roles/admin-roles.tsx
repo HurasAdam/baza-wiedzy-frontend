@@ -1,15 +1,12 @@
-import { Ellipsis, FileIcon, Loader, Lock, Plus, User, UserCog, XCircleIcon } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useMemo, useState } from "react";
-import { toast } from "sonner";
 
-import { Dropdown } from "@/components/Dropdown";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useFindRoles } from "@/hooks/users/use-users";
 import { useNavigate } from "react-router-dom";
-import { iconMap } from "../../../constants/role-icons";
+import AdminRolesFilters from "./components/AdminRolesFilters";
+import AdminRolesHeader from "./components/AdminRolesHeader";
+import AdminRolesList from "./components/AdminRolesList";
 
 export const AdminRolesPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -31,112 +28,27 @@ export const AdminRolesPage = () => {
     },
   ];
 
-  const triggerBtn = (
-    <Button variant="default" className="flex items-center gap-1">
-      Dodaj <Plus className="w-4 h-4" />
-    </Button>
-  );
-
   return (
     <div className="mx-auto pb-6">
       {/* Header */}
       <div className="bg-background z-10 flex flex-col gap-4 mb-4">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-semibold text-foreground flex items-center gap-2">
-            <UserCog className="w-6 h-6 text-muted-foreground" /> Role i uprawnienia
-          </h1>
-          <Dropdown triggerBtn={triggerBtn} options={dropdownOptions} position={{ align: "end" }} />
-        </div>
+        <AdminRolesHeader
+          triggerBtn={
+            <Button variant="default" className="flex items-center gap-1">
+              Dodaj <Plus className="w-4 h-4" />
+            </Button>
+          }
+          dropdownOptions={dropdownOptions}
+        />
 
-        {/* Filters */}
-        <div className="flex  px-3 py-2 gap-3 items-center flex-wrap">
-          <Input
-            placeholder="Wyszukaj role..."
-            className="w-64 border-ring"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <Button variant="outline" size="sm" onClick={() => setSearchTerm("")}>
-            Resetuj
-          </Button>
-          <Badge variant="outline" className="ml-auto">
-            Znaleziono: {roles && roles.length}
-          </Badge>
-        </div>
+        <AdminRolesFilters roles={roles} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       </div>
 
       {/* Roles List */}
-      <div className="bg-card border rounded-xl overflow-hidden">
-        {isLoading && (
-          <div className="flex justify-center py-10">
-            <Loader className="animate-spin w-6 h-6" />
-          </div>
-        )}
 
-        {isError && (
-          <p className="text-destructive text-center py-10">
-            {(error as Error)?.message || "Błąd podczas ładowania produktów"}
-          </p>
-        )}
-
-        {!isLoading && !isError && roles.length === 0 && <p className="text-center py-10">Nie znaleziono roli</p>}
-
-        {!isLoading && !isError && roles.length > 0 && (
-          <ul className="divide-y divide-border">
-            {roles.map((role) => {
-              const Icon = iconMap[role.iconKey] || User; // fallback Icon
-              return (
-                <li
-                  key={role._id}
-                  className="flex items-center justify-between px-4 py-3 hover:bg-muted/40 transition group"
-                >
-                  {/* Left */}
-                  <div className="flex items-center gap-3">
-                    <Icon className="w-5 h-5 text-muted-foreground" />
-
-                    <span className="text-sm font-medium text-foreground">{role.name}</span>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="flex gap-40 items-center">
-                    {role.isUsed && (
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Lock className="w-3.5 h-3.5 text-muted-foreground cursor-help" />
-                        </TooltipTrigger>
-                        <TooltipContent side="top" align="center">
-                          Tag jest używany i nie można go usunąć
-                        </TooltipContent>
-                      </Tooltip>
-                    )}
-                    <Dropdown
-                      withSeparators
-                      triggerBtn={
-                        <Button variant="ghost" size="icon" className="opacity-0 group-hover:opacity-100 transition">
-                          <Ellipsis className="w-4 h-4" />
-                        </Button>
-                      }
-                      options={[
-                        {
-                          label: "Edytuj",
-                          icon: <FileIcon className="w-4 h-4" />,
-                          actionHandler: () => navigate(`/admin/manage-roles/${role._id}`),
-                        },
-                        {
-                          label: "Usuń",
-                          icon: <XCircleIcon className="w-4 h-4 text-red-500" />,
-                          actionHandler: () => toast.error(`Usuń ${role.name}`),
-                        },
-                      ]}
-                      position={{ align: "end" }}
-                    />
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </div>
+      {roles && (
+        <AdminRolesList roles={roles} isLoading={isLoading} isError={isError} navigate={navigate} error={error} />
+      )}
     </div>
   );
 };
