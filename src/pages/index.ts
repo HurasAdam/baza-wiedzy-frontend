@@ -9,7 +9,7 @@ import { AdminLogsPage } from "./admin-panel/admin-logs/admin-logs-page";
 import { AdminProductDetailsPage } from "./admin-panel/admin-product-details/admin-product-details";
 import { ProductsPage } from "./admin-panel/admin-products/admin-products";
 import { AdminRolesPage } from "./admin-panel/admin-roles/admin-roles";
-import { TagsPage } from "./admin-panel/admin-tags";
+import { TagsPage } from "./admin-panel/admin-tags/admin-tags";
 import { AdminTopicsPage } from "./admin-panel/admin-topics/admin-topics";
 import { AdminUserDetailsPage } from "./admin-panel/admin-user-details/admin-user-details";
 import { UsersPage } from "./admin-panel/admin-users/admin-users";
