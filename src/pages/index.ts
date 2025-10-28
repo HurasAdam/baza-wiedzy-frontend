@@ -4,7 +4,7 @@ import { AdminFaqDetailsPage } from "./admin-panel/admin-faq-details/admin-faq-d
 import { AdminFaqsListPage } from "./admin-panel/admin-faqs/admin-faqs";
 import { AdminIssueReportDetailsPage } from "./admin-panel/admin-issue-report/admin-issue-report-detailsPage";
 import { AdminUserReportsPage } from "./admin-panel/admin-issue-report/admin-issue-reports";
-import { JstAdminProjectsPage } from "./admin-panel/admin-jst-projects";
+import { JstAdminProjectsPage } from "./admin-panel/admin-jst-projects/admin-jst-projects";
 import { AdminLogsPage } from "./admin-panel/admin-logs/admin-logs-page";
 import { AdminProductDetailsPage } from "./admin-panel/admin-product-details/admin-product-details";
 import { ProductsPage } from "./admin-panel/admin-products/admin-products";
