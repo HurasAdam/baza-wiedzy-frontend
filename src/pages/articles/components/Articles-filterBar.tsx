@@ -11,6 +11,9 @@ type ArticlesFilterBarProps = {
   selectedTitle: string;
   selectedProduct: string;
   selectedCategory: string;
+  selectedPage: number;
+  currentPage: number;
+  totalPages?: number;
   products: IProduct[];
   categories?: ProductCategory[];
   onTitleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -24,19 +27,21 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
   selectedTitle,
   selectedProduct,
   selectedCategory,
+  selectedPage,
   products,
   categories,
+  currentPage,
+  totalPages,
   onTitleChange,
   onProductChange,
   onCategoryChange,
   onResetAll,
   resultsCount,
 }) => {
-  const hasFilters = selectedTitle || selectedProduct || selectedCategory;
+  const hasFilters = selectedTitle || selectedProduct || selectedCategory || selectedPage > 1;
 
   return (
-    <div className="bg-background flex flex-col gap-4 mb-4">
-      {/* ---- Header ---- */}
+    <div className="bg-background flex flex-col gap-4 mb-1">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-4 ">
@@ -46,7 +51,6 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
             <h1 className="text-xl font-semibold text-foreground flex items-center gap-2">Baza artykułów</h1>
           </div>
 
-          {/* Active filter badges */}
           <div className="flex gap-2 pt-2.5 flex-wrap px-2 h-6 mb-3">
             {selectedTitle && (
               <Badge
@@ -96,7 +100,7 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
       </div>
 
       {/* ---- Filters ---- */}
-      <div className="flex px-3 py-2 gap-3 items-center flex-wrap">
+      <div className="flex px-3 py-2 gap-3 items-between  flex-wrap">
         {/* Search */}
         <Input
           value={selectedTitle}
@@ -146,16 +150,24 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
           </SelectContent>
         </Select>
 
-        {/* Reset */}
-        <Button variant="outline" size="sm" disabled={!hasFilters} onClick={onResetAll} className="ml-auto">
+        <Button variant="outline" size="sm" disabled={!hasFilters} onClick={onResetAll} className="">
           Wyczyść filtry
         </Button>
 
-        {typeof resultsCount === "number" && (
-          <Badge variant="outline" className="ml-2">
-            Znaleziono: {resultsCount}
-          </Badge>
-        )}
+        <div className="ml-auto flex items-center gap-3 flex-col ">
+          {typeof resultsCount === "number" && (
+            <Badge variant="outline" className="text-xs font-medium px-3 py-1">
+              Znaleziono: {resultsCount}
+            </Badge>
+          )}
+
+          {currentPage && totalPages && (
+            <span className="text-muted-foreground text-xs">
+              Strona <span className="font-semibold">{currentPage}</span> z{" "}
+              <span className="font-semibold">{totalPages}</span>
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );

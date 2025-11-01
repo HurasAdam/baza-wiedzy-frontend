@@ -1,30 +1,26 @@
 import React, { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
-import { NoDataFound } from "../../components/shared/NoDataFound";
+import Pagination from "../../components/shared/Pagination";
 import queryClient from "../../config/query.client";
 import { useArticleToggleFavouriteMutation, useFindArticlesQuery } from "../../hooks/articles/use-articles";
 import { useFindCategoriesByProductQuery } from "../../hooks/product-categories/use-product-categories";
 import { useFindProductsQuery } from "../../hooks/products/use-products";
-import type { ArticleListItem } from "../../types/article";
-import SkeletonArticleCard from "../pending-articles/components/SkeletonArticleCard";
 import ArticlesFilterBar from "./components/Articles-filterBar";
-import TableArticleCard from "./components/TableArticleCard";
-
-const dummyFlags = [
-  { _id: "1", name: "Red", labelColor: "#FF4C4C" },
-  { _id: "2", name: "Blue", labelColor: "#4C6FFF" },
-  { _id: "3", name: "Green", labelColor: "#4CFF6F" },
-  { _id: "4", name: "Yellow", labelColor: "#FFE14C" },
-];
+import ArticlesList from "./components/ArticlesList";
 
 export const ArticlesPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const titleParam = searchParams.get("title") || "";
+  const pageParam = parseInt(searchParams.get("page") || "1", 10);
   const selectedProduct = searchParams.get("product") || "";
   const selectedCategory = searchParams.get("category") || "";
   const [pendingId, setPendingId] = useState<string | null>(null);
-  const { data, isLoading, isError } = useFindArticlesQuery(searchParams);
+  const {
+    data: articles = { data: [], pagination: { total: 0, page: 1, pages: 1 } },
+    isLoading,
+    isError,
+  } = useFindArticlesQuery(searchParams);
   const { data: products = [] } = useFindProductsQuery(null);
 
   const { data: categories } = useFindCategoriesByProductQuery(selectedProduct);
@@ -36,6 +32,7 @@ export const ArticlesPage: React.FC = () => {
     setSearchParams((prev) => {
       if (value) prev.set("title", value);
       else prev.delete("title");
+      prev.delete("page");
       return prev;
     });
   };
@@ -50,6 +47,7 @@ export const ArticlesPage: React.FC = () => {
         prev.delete("category");
         prev.set("product", product);
       }
+      prev.delete("page");
       return prev;
     });
   };
@@ -61,7 +59,7 @@ export const ArticlesPage: React.FC = () => {
       } else {
         prev.set("category", categoryId);
       }
-
+      prev.delete("page");
       return prev;
     });
   };
@@ -83,60 +81,48 @@ export const ArticlesPage: React.FC = () => {
     });
   };
 
-  const handleFlagChange = (articleId: string, flagId: string) => {
-    console.log("Zmiana flagi artykułu", articleId, "na", flagId);
-  };
-
   return (
-    <div className="flex flex-col gap-1.5">
-      {/* ------ State Loaders ------ */}
-      {/* ------ Filter Bar ------ */}
+    <div className="flex flex-col gap-1.5 pb-5">
       <ArticlesFilterBar
         selectedTitle={titleParam}
         selectedProduct={selectedProduct}
         selectedCategory={selectedCategory}
+        selectedPage={pageParam}
+        currentPage={pageParam}
+        totalPages={articles.pagination.pages}
         onTitleChange={changeTitleHandler}
         onProductChange={changeProductHandler}
         onCategoryChange={changeCategoryHandler}
         products={products}
         categories={categories}
         onResetAll={onResetAllFilters}
+        resultsCount={articles.pagination.total}
       />
-      <div className="flex-grow flex flex-col h-fit border border-border divide-y divide-border rounded-xl bg-card/90  ">
-        {isLoading && (
-          <ul className="divide-y divide-border py-2">
-            {Array(12)
-              .fill(0)
-              .map((_, i) => (
-                <SkeletonArticleCard key={i} withSpinner={i === 0} />
-              ))}
-          </ul>
-        )}
 
-        {isError && <p className="text-sm text-destructive">Błąd podczas ładowania artykułów.</p>}
+      <ArticlesList
+        articles={articles}
+        isLoading={isLoading}
+        isError={isError}
+        onResetAllFilters={onResetAllFilters}
+        toggleFavourite={toggleFavourite}
+        pendingId={pendingId}
+        selectedTitle={titleParam}
+        selectedProduct={selectedProduct}
+        selectedCategory={selectedCategory}
+      />
 
-        {!isLoading && !isError && data?.data.length === 0 && (titleParam || selectedProduct || selectedCategory) && (
-          <NoDataFound
-            title="Nie znaleziono żadnych artykułów"
-            description="Spróbuj zmienić filtry lub zresetuj wszystkie."
-            buttonText="Wyczyść filtry"
-            buttonAction={onResetAllFilters}
-          />
-        )}
-
-        {!isError &&
-          data?.data.length > 0 &&
-          data.data.map((article: ArticleListItem) => (
-            <TableArticleCard
-              key={article._id}
-              article={article}
-              flags={dummyFlags}
-              onFlagChange={handleFlagChange}
-              toggleFavourite={toggleFavourite}
-              toggleFavouriteLoading={pendingId === article._id}
-            />
-          ))}
-      </div>
+      {articles?.pagination.pages > 1 && (
+        <Pagination
+          currentPage={pageParam}
+          pages={articles.pagination.pages}
+          onPageChange={(page) => {
+            setSearchParams((prev) => {
+              prev.set("page", page.toString());
+              return prev;
+            });
+          }}
+        />
+      )}
     </div>
   );
 };

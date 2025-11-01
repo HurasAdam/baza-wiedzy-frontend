@@ -1,12 +1,13 @@
 import api from "@/config/api.client";
 import { buildUrl } from "@/utils/build-url";
 import type { AxiosResponse } from "axios";
+import type { ArticlesResponse } from "../pages/articles/components/ArticlesList";
 import type { Article, ToggleFavouriteResponse } from "../types/article";
 import type { ArticleCreateDto } from "../validation/article.schema";
 
 const baseUrl = "/articles";
 
-export const getAllArticles = (params?: URLSearchParams) => {
+export const getAllArticles = (params?: URLSearchParams): Promise<ArticlesResponse> => {
   return api.get(baseUrl, { params });
 };
 
