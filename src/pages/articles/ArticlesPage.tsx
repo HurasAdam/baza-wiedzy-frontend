@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
+import ArticleDrawer from "../../components/article-drawer/ArticleDrawer";
 import Pagination from "../../components/shared/Pagination";
 import queryClient from "../../config/query.client";
 import { useArticleToggleFavouriteMutation, useFindArticlesQuery } from "../../hooks/articles/use-articles";
@@ -16,6 +17,9 @@ export const ArticlesPage: React.FC = () => {
   const selectedProduct = searchParams.get("product") || "";
   const selectedCategory = searchParams.get("category") || "";
   const [pendingId, setPendingId] = useState<string | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [selectedArticleId, setSelectedArticleId] = useState<string | null>(null);
+  const [hoveredArticleId, setHoveredArticleId] = useState<string | null>(null);
   const {
     data: articles = { data: [], pagination: { total: 0, page: 1, pages: 1 } },
     isLoading,
@@ -81,6 +85,28 @@ export const ArticlesPage: React.FC = () => {
     });
   };
 
+  const openArticleDrawer = (articleId: string) => {
+    setSelectedArticleId(articleId);
+    setIsDrawerOpen(true);
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() === "v") {
+        if (!isDrawerOpen && hoveredArticleId) {
+          // Jeśli drawer jest zamknięty i najedziono na kartę → otwórz
+          openArticleDrawer(hoveredArticleId);
+        } else if (isDrawerOpen) {
+          // Jeśli drawer jest otwarty → zamknij
+          setIsDrawerOpen(false);
+          setSelectedArticleId(null);
+        }
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [hoveredArticleId, isDrawerOpen]);
+
   return (
     <div className="flex flex-col gap-1.5 pb-5">
       <ArticlesFilterBar
@@ -109,6 +135,8 @@ export const ArticlesPage: React.FC = () => {
         selectedTitle={titleParam}
         selectedProduct={selectedProduct}
         selectedCategory={selectedCategory}
+        openArticleDrawer={openArticleDrawer}
+        setHoveredArticleId={setHoveredArticleId}
       />
 
       {articles?.pagination.pages > 1 && (
@@ -123,6 +151,15 @@ export const ArticlesPage: React.FC = () => {
           }}
         />
       )}
+
+      <ArticleDrawer
+        articleId={selectedArticleId}
+        open={isDrawerOpen}
+        onOpenChange={(open) => {
+          setIsDrawerOpen(open);
+          if (!open) setSelectedArticleId(null); // czyszczenie ID po zamknięciu
+        }}
+      />
     </div>
   );
 };

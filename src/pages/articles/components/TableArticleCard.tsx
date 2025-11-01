@@ -64,6 +64,9 @@ interface TableArticleCardProps {
   onFlagChange: (articleId: string, flagId: string) => void;
   toggleFavourite: (id: string) => void;
   toggleFavouriteLoading: boolean;
+  openArticleDrawer: (articleId: string) => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
 const TableArticleCard = ({
@@ -72,6 +75,9 @@ const TableArticleCard = ({
   onFlagChange,
   toggleFavourite,
   toggleFavouriteLoading,
+  openArticleDrawer,
+  onMouseEnter,
+  onMouseLeave,
 }: TableArticleCardProps) => {
   const [selectedFlag, setSelectedFlag] = useState<string | undefined>();
 
@@ -84,6 +90,8 @@ const TableArticleCard = ({
 
   return (
     <div
+      onMouseEnter={() => onMouseEnter?.()}
+      onMouseLeave={() => onMouseLeave?.()}
       key={article._id}
       className="flex justify-between items-center px-4 py-3 text-sm hover:bg-muted transition-colors"
       title={`Autor: ${article.createdBy.name}`}

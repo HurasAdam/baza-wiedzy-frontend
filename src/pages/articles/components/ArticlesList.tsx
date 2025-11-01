@@ -61,6 +61,8 @@ interface ArticlesListProps {
   selectedTitle?: string;
   selectedProduct?: string;
   selectedCategory?: string;
+  openArticleDrawer: (articleId: string) => void;
+  setHoveredArticleId: (id: string | null) => void;
 }
 const ArticlesList = ({
   articles,
@@ -72,6 +74,8 @@ const ArticlesList = ({
   selectedTitle,
   selectedProduct,
   selectedCategory,
+  openArticleDrawer,
+  setHoveredArticleId,
 }: ArticlesListProps) => {
   return (
     <div className="flex-grow flex flex-col h-fit border border-border divide-y divide-border rounded-xl bg-card/90  ">
@@ -103,10 +107,13 @@ const ArticlesList = ({
         articles?.data.length > 0 &&
         articles.data.map((article) => (
           <TableArticleCard
+            onMouseEnter={() => setHoveredArticleId(article._id)}
+            onMouseLeave={() => setHoveredArticleId(null)}
             key={article._id}
             article={article}
             toggleFavourite={toggleFavourite}
             toggleFavouriteLoading={pendingId === article._id}
+            openArticleDrawer={openArticleDrawer}
           />
         ))}
     </div>

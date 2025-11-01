@@ -87,19 +87,16 @@ export const useFindMyFlaggedArticlesQuery = (params?: URLSearchParams) => {
   });
 };
 
-export const useFindArticleQuery = (articleId: string) => {
+export const useFindArticleQuery = (articleId?: string) => {
   return useQuery({
     queryKey: ["article", articleId],
-    queryFn: () => {
-      return articlesService.getArticle({ id: articleId });
-    },
-
+    queryFn: () => articlesService.getArticle({ id: articleId! }),
+    enabled: !!articleId,
     refetchOnWindowFocus: false,
     staleTime: 0,
     retry: false,
   });
 };
-
 export const useFindArticlesCreatedByUserQuery = (query) => {
   return useQuery({
     queryKey: ["user-articles", query],
