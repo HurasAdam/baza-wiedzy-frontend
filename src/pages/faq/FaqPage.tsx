@@ -105,7 +105,10 @@ export function FaqPage() {
     if (!pendingDeleteAction) return;
     deleteMutation(pendingDeleteAction.faqItemId, {
       onSuccess: () => {
-        toast.success("Pytanie zostało usunięte");
+        toast.success("Pytanie usunięte", {
+          position: "bottom-right",
+          description: "Pytanie zostało pomyślnie usunięte i nie jest już widoczne dla użytkowników.",
+        });
         queryClient.invalidateQueries({ queryKey: ["faq", activeFaqId] });
         setPendingDeleteAction(null);
       },

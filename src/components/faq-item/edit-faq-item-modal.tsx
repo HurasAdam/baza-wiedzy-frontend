@@ -37,7 +37,10 @@ export const EditFaqItemModal = ({
         onSuccess: () => {
           setIsEditingFaqItem(false);
           queryClient.invalidateQueries({ queryKey: ["faq", faqItem.faqId] });
-          toast.success("Zmiany zostały zapisane.");
+          toast.success("Zmiany zapisane", {
+            position: "bottom-right",
+            description: "Pytanie FAQ zostało pomyślnie zaktualizowane w systemie.",
+          });
         },
         onError: (error) => {
           const { status } = error as AxiosError;

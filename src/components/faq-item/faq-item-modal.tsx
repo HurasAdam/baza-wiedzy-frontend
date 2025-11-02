@@ -43,7 +43,10 @@ export const FaqItemModal = ({
     mutate(data, {
       onSuccess: ({ faqId }) => {
         setIsCreatingFaqItem(false);
-        toast.success("Pytanie zostało dodane");
+        toast.success("Zmiany zostały zapisane", {
+          position: "bottom-right",
+          description: "Pytanie zostało pomyślnie dodane i jest teraz widoczne w bazie FAQ.",
+        });
 
         queryClient.invalidateQueries({ queryKey: ["faq", faqId] });
         return;
