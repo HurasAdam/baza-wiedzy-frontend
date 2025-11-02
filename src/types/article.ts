@@ -14,11 +14,7 @@ export interface Article {
     name: string;
     surname: string;
   };
-  responseVariants: {
-    variantName?: string;
-    version: number;
-    variantContent: string;
-  }[];
+  responseVariants: ResponseVariant[];
   verifiedBy?: {
     _id: string;
     name: string;
@@ -38,6 +34,13 @@ export interface Article {
     name: string;
     color: string;
   } | null;
+}
+
+export interface ResponseVariant {
+  _id: string;
+  variantName?: string;
+  version: number;
+  variantContent: string;
 }
 
 export interface ArticleListItem {
