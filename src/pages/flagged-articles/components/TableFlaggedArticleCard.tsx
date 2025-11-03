@@ -3,10 +3,10 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../../components/ui/tooltip";
 import { cn } from "../../../lib/utils";
-import type { Article } from "../../../types/article";
+import type { FlaggedArticle } from "../../articles/components/ArticlesList";
 
 interface TableFlaggedArticleCardProps {
-  article: Article & { flag?: { id: string; name: string; color: string } };
+  article: FlaggedArticle;
   onFlagChange: (articleId: string, flagId: string) => void;
   toggleFavourite: (id: string) => void;
   toggleFavouriteLoading: boolean;
@@ -32,13 +32,12 @@ export const TableFlaggedArticleCard = ({
       className="flex items-center justify-between px-5 py-3 text-sm hover:bg-muted/70 transition-colors rounded-lg"
       title={`Autor: ${article.createdBy.name}`}
     >
-      {/* Lewa sekcja: flaga + tytuł + produkt */}
       <div className="flex items-center flex-1 min-w-0">
         {article.flag && (
           <div
             className={cn(
               "flex-shrink-0 w-5.5 h-5.5 rounded-full flex items-center justify-center",
-              selectedFlag === article.flag.id ? "ring-1 ring-border" : ""
+              selectedFlag === article.flag._id ? "ring-1 ring-border" : ""
             )}
             style={{ backgroundColor: article.flag.color }}
             title={article.flag.name}
@@ -89,7 +88,7 @@ export const TableFlaggedArticleCard = ({
               </TooltipContent>
             </Tooltip>
           ) : (
-            <div className="w-6 h-6" /> // rezerwacja miejsca
+            <div className="w-6 h-6" />
           )}
         </div>
       </div>

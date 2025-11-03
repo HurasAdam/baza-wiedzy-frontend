@@ -7,20 +7,20 @@ interface Tag {
   name: string;
 }
 
-interface ArticleAuthor {
+export interface ArticleAuthor {
   _id: string;
   name: string;
   surname: string;
 }
 
-interface Product {
+export interface Product {
   _id: string;
   name: string;
   labelColor: string;
   banner?: string;
 }
 
-interface Category {
+export interface Category {
   _id: string;
   name: string;
 }

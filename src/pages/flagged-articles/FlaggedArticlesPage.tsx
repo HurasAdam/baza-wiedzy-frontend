@@ -1,19 +1,14 @@
-import { Check, Flag as FlagIcon } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
-import { NoDataFound } from "../../components/shared/NoDataFound";
-import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "../../components/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover";
 import queryClient from "../../config/query.client";
 import { useArticleToggleFavouriteMutation, useFindMyFlaggedArticlesQuery } from "../../hooks/articles/use-articles";
 import { useFindMyFlags } from "../../hooks/flag/user-flag";
 import { useFindCategoriesByProductQuery } from "../../hooks/product-categories/use-product-categories";
 import { useFindProductsQuery } from "../../hooks/products/use-products";
-import type { ArticleListItem } from "../../types/article";
-import SkeletonArticleCard from "../pending-articles/components/SkeletonArticleCard";
 import FlaggedArticlesFilterBar from "./components/FlaggedArticles-filterBar";
-import { TableFlaggedArticleCard } from "./components/TableFlaggedArticleCard";
+import FlaggedArticlesHeader from "./components/FlaggedArticlesHeader";
+import FlaggedArticlesListSection from "./components/FlaggedArticlesListSection";
 
 export const FlaggedArticlesPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -46,7 +41,7 @@ export const FlaggedArticlesPage: React.FC = () => {
     setSearchParams(params);
   }, [activeFlag, searchParams, setSearchParams]);
 
-  const { data, isLoading, isError } = useFindMyFlaggedArticlesQuery(searchParams);
+  const { data: articles, isLoading, isError } = useFindMyFlaggedArticlesQuery(searchParams);
 
   const changeTitleHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -108,48 +103,14 @@ export const FlaggedArticlesPage: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-2">
-      {/* Header */}
-      <div className="flex items-center gap-3">
-        <Popover open={openFlags} onOpenChange={setOpenFlags}>
-          <PopoverTrigger asChild>
-            <div
-              className="w-14 h-14 rounded-xl flex items-center justify-center shadow-sm cursor-pointer transition-transform hover:scale-105"
-              style={{ backgroundColor: activeFlagData.color }}
-            >
-              <FlagIcon className="w-7 h-7 text-white" />
-            </div>
-          </PopoverTrigger>
-          <PopoverContent className="p-0 w-64" side="bottom" align="start">
-            <Command>
-              <CommandList className="max-h-80 overflow-auto scrollbar-custom">
-                <CommandEmpty>Brak flag</CommandEmpty>
-                <CommandGroup heading="Wybierz flagę">
-                  {userFlags.map((flag) => {
-                    const isActive = flag._id === activeFlag;
-                    return (
-                      <CommandItem
-                        key={flag._id}
-                        onSelect={() => handleSelectFlag(flag._id)}
-                        className={`cursor-pointer px-3 py-1.5 rounded flex items-center justify-between ${
-                          isActive ? "bg-primary text-foreground font-semibold !hover:bg-card" : "text-muted-foreground"
-                        }`}
-                      >
-                        <span>{flag.name}</span>
-                        {isActive && (
-                          <span className="flex-shrink-0 w-4 h-4 flex items-center justify-center text-primary">
-                            <Check className="w-3 h-3" />
-                          </span>
-                        )}
-                      </CommandItem>
-                    );
-                  })}
-                </CommandGroup>
-              </CommandList>
-            </Command>
-          </PopoverContent>
-        </Popover>
-        <h1 className="text-xl font-bold flex items-center gap-2">Kolekcja - {activeFlagData.name}</h1>
-      </div>
+      <FlaggedArticlesHeader
+        userFlags={userFlags}
+        handleSelectFlag={handleSelectFlag}
+        activeFlag={activeFlag}
+        activeFlagData={activeFlagData}
+        openFlags={openFlags}
+        setOpenFlags={setOpenFlags}
+      />
 
       {/* Filter Bar */}
       <FlaggedArticlesFilterBar
@@ -164,42 +125,19 @@ export const FlaggedArticlesPage: React.FC = () => {
         onResetAll={onResetAllFilters}
       />
 
-      {/* Articles List */}
-      <div className="flex-grow flex flex-col h-fit border border-border divide-y divide-border rounded-xl bg-card/90">
-        {isLoading && (
-          <ul className="divide-y divide-border py-2">
-            {Array(12)
-              .fill(0)
-              .map((_, i) => (
-                <SkeletonArticleCard key={i} withSpinner={i === 0} />
-              ))}
-          </ul>
-        )}
-
-        {isError && <p className="text-sm text-destructive">Błąd podczas ładowania artykułów.</p>}
-
-        {!isLoading && !isError && data?.data.length === 0 && (titleParam || selectedProduct || selectedCategory) && (
-          <NoDataFound
-            title="Nie znaleziono żadnych artykułów"
-            description="Spróbuj zmienić filtry lub zresetuj wszystkie."
-            buttonText="Wyczyść filtry"
-            buttonAction={onResetAllFilters}
-          />
-        )}
-
-        {!isError &&
-          data?.data.length > 0 &&
-          data.data.map((article: ArticleListItem) => (
-            <TableFlaggedArticleCard
-              key={article._id}
-              article={article}
-              flags={userFlags}
-              onFlagChange={handleFlagChange}
-              toggleFavourite={toggleFavourite}
-              toggleFavouriteLoading={pendingId === article._id}
-            />
-          ))}
-      </div>
+      <FlaggedArticlesListSection
+        articles={articles}
+        userFlags={userFlags}
+        isLoading={isLoading}
+        isError={isError}
+        handleFlagChange={handleFlagChange}
+        toggleFavourite={toggleFavourite}
+        onResetAllFilters={onResetAllFilters}
+        titleParam={titleParam}
+        selectedProduct={selectedProduct}
+        selectedCategory={selectedCategory}
+        pendingId={pendingId}
+      />
     </div>
   );
 };
