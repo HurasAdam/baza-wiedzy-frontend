@@ -1,15 +1,10 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BookOpen, ChartColumnDecreasing, ClipboardList, Edit3, Loader, MoreHorizontal } from "lucide-react";
 import { useState } from "react";
-import { NoDataFound } from "../../components/shared/NoDataFound";
-import { Button } from "../../components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover";
 import { UserStatisticsAddedArticlesModal } from "../../components/user-statistics-added-articles-details/user-statistics-added-articles.modal";
 import { UserStatisticsAddedConversationReportsModal } from "../../components/user-statistics-added-coversation-reports-details/user-statistics-added-conersation-reports.modal";
 import { UserStatisticsEditedArticlesModal } from "../../components/user-statistics-edited-articles-details/user-statistics-edited-articles.modal";
 import { useFindAllUsersStatistics } from "../../hooks/user-statistics/user-user-statistics";
-import { DateFilterBar } from "./components/DateFilterBar";
+import StatisticsHeader from "./components/StatisticsHeader";
+import StatisticsSection from "./components/StatisticsSection";
 
 export interface SelectedUser {
   userId: string;
@@ -24,11 +19,13 @@ export interface SelectedUser {
   };
 }
 
+export type ModalVariant = "ADDED_ARTICLES" | "EDITED_ARTICLES" | "ADDED_CONVERSATION_REPORTS" | "";
+
 export const StatisticsPage = () => {
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
   const [userStatisticsModal, setUserStatisticsModal] = useState<{
-    variant: "ADDED_ARTICLES" | "EDITED_ARTICLES" | "ADDED_CONVERSATION_REPORTS" | "";
+    variant: ModalVariant;
     isOpen: boolean;
     selectedUser: SelectedUser | null;
   }>({
@@ -39,233 +36,35 @@ export const StatisticsPage = () => {
   const backendBase = import.meta.env.VITE_BACKEND_BASE_URL ?? "http://localhost:5000";
   const hasFilters = startDate && endDate;
   const params = hasFilters ? { startDate, endDate } : undefined;
-  const { data, isLoading } = useFindAllUsersStatistics(params);
+  const { data = [], isLoading } = useFindAllUsersStatistics(params);
 
-  const renderUserCell = (u: any) => {
-    const avatarUrl = u.avatar ? `${backendBase}${u.avatar.replace(/^\/app/, "")}` : null;
-
-    return (
-      <div className="flex items-center gap-3.5">
-        <Avatar className="h-9 w-9">
-          {avatarUrl ? (
-            <AvatarImage
-              className="object-cover"
-              src={avatarUrl}
-              alt={`${u.name} ${u.surname}`}
-              crossOrigin="anonymous"
-              style={{ imageRendering: "auto" }} // lub "crisp-edges" / "pixelated"
-            />
-          ) : (
-            <AvatarFallback>
-              {u.name?.[0]}
-              {u.surname?.[0]}
-            </AvatarFallback>
-          )}
-        </Avatar>
-        <span>
-          {u.name} {u.surname}
-        </span>
-      </div>
-    );
-  };
-
-  const ActionsCell = ({
-    selectedUser,
-    context,
-    count = 0,
-  }: {
-    selectedUser: any;
-    context: "articlesAdded" | "articlesEdited" | "conversations";
-    count?: number;
-  }) => {
-    if (count === 0)
-      return (
-        <Button variant="ghost" disabled={true} className="">
-          <MoreHorizontal className="h-4 w-4" />
-        </Button>
-      ); // nie pokazuj, jeśli zero
-
-    const openModal = (selectedUser: string) => {
-      switch (context) {
-        case "articlesAdded":
-          setUserStatisticsModal({ variant: "ADDED_ARTICLES", isOpen: true, selectedUser });
-          break;
-        case "articlesEdited":
-          setUserStatisticsModal({ variant: "EDITED_ARTICLES", isOpen: true, selectedUser });
-          break;
-        case "conversations":
-          setUserStatisticsModal({ variant: "ADDED_CONVERSATION_REPORTS", isOpen: true, selectedUser });
-          break;
-        default:
-          console.warn(`Nieznany kontekst: ${context}`);
-      }
-    };
-
-    return (
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button variant="ghost" size="icon">
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-40 p-2 space-y-1">
-          <Button onClick={() => openModal(selectedUser)} variant="ghost" className="w-full justify-start">
-            Szczegóły
-          </Button>
-        </PopoverContent>
-      </Popover>
-    );
+  const openUserStatisticsModal = (variant: ModalVariant, selectedUser: SelectedUser) => {
+    if (!variant) return;
+    setUserStatisticsModal({
+      variant,
+      isOpen: true,
+      selectedUser,
+    });
   };
 
   return (
     <div className="space-y-6 pb-10">
-      {/* Header */}
-      <div className="flex items-center justify-between gap-4">
-        <h1 className="text-xl font-bold tracking-tight flex items-center gap-1.5">
-          <ChartColumnDecreasing /> Statystyki użytkowników
-        </h1>
+      <StatisticsHeader startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} />
 
-        <DateFilterBar startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} />
-      </div>
+      <StatisticsSection
+        isLoading={isLoading}
+        data={data}
+        backendBase={backendBase}
+        setUserStatisticsModal={openUserStatisticsModal}
+      />
 
-      <div className="text-sm text-muted-foreground mt-2 mb-4">
-        {startDate && endDate ? (
-          <p>
-            Wyświetlane statystyki od <strong>{startDate.toLocaleDateString()}</strong> do{" "}
-            <strong>{endDate.toLocaleDateString()}</strong>
-          </p>
-        ) : (
-          <p>
-            Wyświetlane statystyki za <strong>dzisiejszy dzień</strong>
-          </p>
-        )}
-      </div>
-
-      {/* Tables */}
-      {isLoading ? (
-        <div className="flex items-center justify-center py-20">
-          <Loader className="w-7 h-7 animate-spin" />
-        </div>
-      ) : !data?.length ? (
-        <NoDataFound
-          title="No data"
-          description="Pick a start and end date to view statistics"
-          buttonText="Pick Date"
-          buttonAction={() => {}}
-        />
-      ) : (
-        <div className="space-y-6">
-          {/* Dodane artykuły */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BookOpen className="w-4 h-4 text-primary" />
-                Dodane artykuły
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <table className="w-full text-sm border-collapse">
-                <thead>
-                  <tr className="border-b">
-                    <th className="text-left py-2">Użytkownik</th>
-                    <th className="text-left py-2">Wartość</th>
-                    <th className="text-center py-2">Akcje</th> {/* <--- nowa kolumna */}
-                  </tr>
-                </thead>
-                <tbody>
-                  {[...data]
-                    .sort((a, b) => b.stats.articlesAdded - a.stats.articlesAdded)
-                    .map((u) => (
-                      <tr key={u.userId} className="border-b hover:bg-muted/50">
-                        <td className="py-2">{renderUserCell(u)}</td>
-                        <td className="py-2">{u.stats.articlesAdded}</td>
-                        <td className="py-2 text-center">
-                          <ActionsCell selectedUser={u} context="articlesAdded" count={u.stats.articlesAdded} />
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </CardContent>
-          </Card>
-
-          {/* Edytowane artykuły */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Edit3 className="w-4 h-4 text-primary" />
-                Edytowane artykuły
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <table className="w-full text-sm border-collapse">
-                <thead>
-                  <tr className="border-b">
-                    <th className="text-left py-2">Użytkownik</th>
-                    <th className="text-left py-2">Wartość</th>
-                    <th className="text-center py-2">Akcje</th> {/* <--- nowa kolumna */}
-                  </tr>
-                </thead>
-                <tbody>
-                  {[...data]
-                    .sort((a, b) => b.stats.articlesEdited - a.stats.articlesEdited)
-                    .map((u) => {
-                      return (
-                        <tr key={u.userId} className="border-b hover:bg-muted/50">
-                          <td className="py-2">{renderUserCell(u)}</td>
-                          <td className="py-2">{u.stats.articlesEdited}</td>
-                          <td className="py-2 text-center">
-                            <ActionsCell selectedUser={u} context="articlesEdited" count={u.stats.articlesEdited} />
-                          </td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </table>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <ClipboardList className="w-4 h-4 text-primary" />
-                Odnotowane rozmowy i wiadomości
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <table className="w-full text-sm border-collapse">
-                <thead>
-                  <tr className="border-b">
-                    <th className="text-left py-2">Użytkownik</th>
-                    <th className="text-left py-2">Wartość</th>
-                    <th className="text-center py-2">Akcje</th> {/* <--- nowa kolumna */}
-                  </tr>
-                </thead>
-                <tbody>
-                  {[...data]
-                    .sort((a, b) => b.stats.conversationTopics - a.stats.conversationTopics)
-                    .map((u) => (
-                      <tr key={u.userId} className="border-b hover:bg-muted/50">
-                        <td className="py-2">{renderUserCell(u)}</td>
-                        <td className="py-2">{u.stats.conversationTopics}</td>
-                        <td className="py-2 text-center">
-                          <ActionsCell selectedUser={u} context="conversations" count={u.stats.conversationTopics} />
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </CardContent>
-          </Card>
-        </div>
-      )}
       {userStatisticsModal.isOpen &&
         userStatisticsModal.selectedUser &&
         userStatisticsModal.variant === "ADDED_ARTICLES" && (
           <UserStatisticsAddedArticlesModal
             isUserStatisticsModalOpen={userStatisticsModal.isOpen && userStatisticsModal.variant === "ADDED_ARTICLES"}
             selectedUser={userStatisticsModal.selectedUser}
-            setIsUserStatisticsModalOpen={setUserStatisticsModal}
+            setIsUserStatisticsModalOpen={(isOpen) => setUserStatisticsModal((prev) => ({ ...prev, isOpen }))}
             startDate={startDate}
             endDate={endDate}
           />
@@ -277,7 +76,7 @@ export const StatisticsPage = () => {
           <UserStatisticsEditedArticlesModal
             isUserStatisticsModalOpen={userStatisticsModal.isOpen && userStatisticsModal.variant === "EDITED_ARTICLES"}
             selectedUser={userStatisticsModal.selectedUser}
-            setIsUserStatisticsModalOpen={setUserStatisticsModal}
+            setIsUserStatisticsModalOpen={(isOpen) => setUserStatisticsModal((prev) => ({ ...prev, isOpen }))}
             startDate={startDate}
             endDate={endDate}
           />
@@ -290,7 +89,7 @@ export const StatisticsPage = () => {
               userStatisticsModal.isOpen && userStatisticsModal.variant === "ADDED_CONVERSATION_REPORTS"
             }
             selectedUser={userStatisticsModal.selectedUser}
-            setIsUserStatisticsModalOpen={setUserStatisticsModal}
+            setIsUserStatisticsModalOpen={(isOpen) => setUserStatisticsModal((prev) => ({ ...prev, isOpen }))}
             startDate={startDate}
             endDate={endDate}
           />

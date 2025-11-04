@@ -1,8 +1,9 @@
 import api from "@/config/api.client";
+import type { UserData } from "../pages/statistics/components/StatisticsSection";
 import { buildUrl } from "../utils/build-url";
 const baseUrl = "/statistics";
 
-export const findAllUsersStatistics = (params?: URLSearchParams) => {
+export const findAllUsersStatistics = (params?: URLSearchParams): Promise<UserData[]> => {
   //
   return api.get(buildUrl(baseUrl, "users"), { params });
 };

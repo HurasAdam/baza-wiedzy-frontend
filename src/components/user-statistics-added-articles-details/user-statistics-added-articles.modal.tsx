@@ -9,7 +9,6 @@ interface UserStatisticsAddedArticlesModalProps {
   selectedUser: SelectedUser;
   isUserStatisticsModalOpen: boolean;
   setIsUserStatisticsModalOpen: (isOpen: boolean) => void;
-  setPreviewArticle: (article: any) => void;
   startDate?: Date;
   endDate?: Date;
 }
@@ -18,7 +17,6 @@ export const UserStatisticsAddedArticlesModal = ({
   selectedUser,
   isUserStatisticsModalOpen,
   setIsUserStatisticsModalOpen,
-  setPreviewArticle,
   startDate,
   endDate,
 }: UserStatisticsAddedArticlesModalProps) => {

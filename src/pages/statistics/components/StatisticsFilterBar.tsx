@@ -1,13 +1,13 @@
 import { DatePicker } from "../../../components/shared/DatePicker";
 import { Button } from "../../../components/ui/button";
-interface DateFilterBarProps {
+interface StatisticsFilterBarProps {
   startDate?: Date;
   endDate?: Date;
   setStartDate: (date?: Date) => void;
   setEndDate: (date?: Date) => void;
 }
 
-export const DateFilterBar = ({ startDate, endDate, setStartDate, setEndDate }: DateFilterBarProps) => {
+export const StatisticsFilterBar = ({ startDate, endDate, setStartDate, setEndDate }: StatisticsFilterBarProps) => {
   const disableStartDate = (date: Date) => (endDate ? date > endDate : false);
   const disableEndDate = (date: Date) => (startDate ? date < startDate : false);
 

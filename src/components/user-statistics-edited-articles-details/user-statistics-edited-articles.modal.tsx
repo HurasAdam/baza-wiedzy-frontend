@@ -17,7 +17,7 @@ interface UserStatisticsDetailsModalProps {
   selectedUser: SelectedUser | null;
   isUserStatisticsModalOpen: boolean;
   setIsUserStatisticsModalOpen: (isOpen: boolean) => void;
-  setPreviewArticle: (article: any) => void;
+
   startDate?: Date;
   endDate?: Date;
 }
@@ -26,7 +26,7 @@ export const UserStatisticsEditedArticlesModal = ({
   selectedUser,
   isUserStatisticsModalOpen,
   setIsUserStatisticsModalOpen,
-  setPreviewArticle,
+
   startDate,
   endDate,
 }: UserStatisticsDetailsModalProps) => {
@@ -140,10 +140,6 @@ export const UserStatisticsEditedArticlesModal = ({
 
                           <td className="py-3 px-6 text-right">
                             <div className="flex justify-center gap-3">
-                              <button
-                                onClick={() => setPreviewArticle(article)}
-                                className="text-accent hover:underline font-medium text-xs"
-                              ></button>
                               <a
                                 href={`http://localhost:5173/articles/${article._id}/history`}
                                 target="_blank"
