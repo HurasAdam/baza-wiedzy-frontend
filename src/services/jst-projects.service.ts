@@ -1,7 +1,8 @@
+import type { JstProjectFormData } from "@/components/jst-project/jst-project-form";
 import api from "@/config/api.client";
 import type { JstProjectForm } from "../components/jst-project/jst-project-modal";
+import type { Project } from "../pages/admin-panel/admin-jst-projects/components/JstProjectCard";
 import type { IJstProject } from "../types";
-import type { JstProjectFormData } from "@/components/jst-project/jst-project-form";
 
 const BASE_URL = "/projects";
 
@@ -9,7 +10,7 @@ const create = async (formData: JstProjectForm) => {
   return api.post(BASE_URL, formData);
 };
 
-const find = (params: URLSearchParams): Promise<IJstProject[]> => {
+const find = (params: URLSearchParams): Promise<Project[]> => {
   return api.get(BASE_URL, { params });
 };
 
@@ -17,10 +18,7 @@ const findOne = (jstProjectId: string): Promise<IJstProject> => {
   return api.get(`${BASE_URL}/${jstProjectId}`);
 };
 
-const updateOne = (
-  jstProjectId: string,
-  data: JstProjectFormData
-): Promise<void> => {
+const updateOne = (jstProjectId: string, data: JstProjectFormData): Promise<void> => {
   return api.put(`${BASE_URL}/${jstProjectId}`, data);
 };
 
