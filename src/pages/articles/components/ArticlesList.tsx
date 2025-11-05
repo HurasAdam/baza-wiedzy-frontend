@@ -80,9 +80,9 @@ const ArticlesList = ({
   setHoveredArticleIdRef,
 }: ArticlesListProps) => {
   return (
-    <div className="flex-grow flex flex-col h-fit border border-border divide-y divide-border rounded-xl bg-card/90  ">
+    <div className="flex-grow flex flex-col h-fit border border-border divide-y divide-border rounded-xl  ">
       {isLoading && (
-        <ul className="divide-y divide-border py-2">
+        <ul className="divide-y divide-border ">
           {Array(12)
             .fill(0)
             .map((_, i) => (

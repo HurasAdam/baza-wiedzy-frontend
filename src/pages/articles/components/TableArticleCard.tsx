@@ -93,7 +93,12 @@ const TableArticleCard = ({
       onMouseEnter={() => onMouseEnter?.()}
       onMouseLeave={() => onMouseLeave?.()}
       key={article._id}
-      className="flex justify-between items-center px-4 py-3 text-sm hover:bg-muted transition-colors"
+      className={cn(
+        "flex justify-between items-center px-4 py-3 text-sm hover:bg-muted transition-colors bg-card/90",
+        "border-b last:border-0",
+        "first:rounded-t-xl",
+        "last:rounded-b-lg"
+      )}
       title={`Autor: ${article.createdBy.name}`}
     >
       {/* Left side */}
