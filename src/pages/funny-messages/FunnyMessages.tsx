@@ -14,7 +14,7 @@ export const FunnyMessages = () => {
   const [isCreatingFunnyMessage, setIsCreatingFunnyMessage] = useState<boolean>(false);
   const [filterTitle, setFilterTitle] = useState("");
   const [filterAuthor, setFilterAuthor] = useState("");
-  const [sortDateDesc, setSortDateDesc] = useState<boolean>(true);
+  const [sortDateDesc] = useState<boolean>(true);
 
   const filerParams = {
     ...(filterTitle && { title: filterTitle }),

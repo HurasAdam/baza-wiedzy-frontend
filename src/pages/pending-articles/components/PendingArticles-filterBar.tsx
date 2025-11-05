@@ -121,7 +121,7 @@ const PendingArticlesFilterBar: React.FC<PendingArticlesFilterBarProps> = ({
               {selectedTitle}
             </span>
             <button
-              onClick={() => onTitleChange({ target: { value: "" } } as any)}
+              onClick={() => onTitleChange({ target: { value: "" } } as React.ChangeEvent<HTMLInputElement>)}
               className="hover:text-destructive"
               aria-label="Usuń filtr tekstowy"
             >

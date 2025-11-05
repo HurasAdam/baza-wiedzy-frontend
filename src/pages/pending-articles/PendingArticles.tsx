@@ -1,12 +1,10 @@
+import type { AxiosError } from "axios";
 import { AlertTriangle, Clock, DiamondPlus } from "lucide-react";
 import React, { useState, type JSX } from "react";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { PendingArticleRejectionModal } from "../../components/pending-articles/pending-article-rejection-modal";
 import { Alert } from "../../components/shared/alert-modal";
-import EmptyState from "../../components/shared/EmptyState";
-import { NoDataFound } from "../../components/shared/NoDataFound";
-import { Tabs, TabsContent } from "../../components/ui/tabs";
 import queryClient from "../../config/query.client";
 import {
   useAproveArticleMutation,
@@ -16,11 +14,10 @@ import {
 import { useAuthQuery } from "../../hooks/auth/use-auth";
 import { useFindProductsQuery } from "../../hooks/products/use-products";
 import { useFindUsersForSelect } from "../../hooks/users/use-users";
-import StatusBar from "../my-entries/components/StatusBar";
 import type { StatusKey } from "../my-entries/MyEntriesPage";
-import PendingArticleCard from "./components/PendingArticleCard";
 import PendingArticlesFilterBar from "./components/PendingArticles-filterBar";
-import SkeletonArticleCard from "./components/SkeletonArticleCard";
+import PendingArticlesHeader from "./components/PendingArticlesHeader";
+import PendingArticlesList from "./components/PendingArticlesList";
 
 export const PendingArticles: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -35,13 +32,13 @@ export const PendingArticles: React.FC = () => {
   const params = new URLSearchParams(searchParams);
   params.set("status", currentStatus);
 
-  const [pendingId, setPendingId] = useState<string | null>(null);
+  const [, setPendingId] = useState<string | null>(null);
   const [rejectedArticleId, setRejectedArticleId] = useState<null | string>(null);
   const [approvedArticleId, setApprovedArticleId] = useState<null | string>(null);
   const [isCreatingArticleRejection, setIsCreatingArticleRejection] = useState<boolean>(false);
   const [isCreatinArticleApprove, setIsCreatingArticleApprove] = useState<boolean>(false);
 
-  const { data: articles, isLoading, error } = useFindArticlesQuery(params);
+  const { data: articles, isLoading } = useFindArticlesQuery(params);
   const { data: users } = useFindUsersForSelect();
   const { data: products = [] } = useFindProductsQuery();
 
@@ -74,7 +71,6 @@ export const PendingArticles: React.FC = () => {
 
   type PendingKey = (typeof statuses)[number]["key"];
 
-  // ---- Filter handlers  ----
   const changeTitleHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchParams((prev) => {
@@ -102,7 +98,6 @@ export const PendingArticles: React.FC = () => {
     });
   };
 
-  // ---- Action handlers  ----
   const onArticleAprove = (id: string) => {
     setApprovedArticleId(id);
     setIsCreatingArticleApprove(true);
@@ -116,7 +111,7 @@ export const PendingArticles: React.FC = () => {
           queryClient.invalidateQueries({ queryKey: ["articles"] });
           toast.success("Artykuł został zatwierdzony.");
         },
-        onError: (error: any) => {
+        onError: (error: AxiosError) => {
           const status = error?.status;
           if (status === 403) toast.warning("Brak wymaganych uprawnień.");
           else toast.error("Wystąpił nieoczekiwany błąd.");
@@ -156,27 +151,15 @@ export const PendingArticles: React.FC = () => {
     setIsCreatingArticleApprove(false);
     setApprovedArticleId(null);
   };
-  const currentStatusObj = statuses.find((status) => status.key === currentStatus);
+
   return (
     <div className="mx-auto pb-10">
-      <StatusBar
-        statuses={statuses}
+      <PendingArticlesHeader
         currentStatus={currentStatus}
-        setCurrentStatus={(key) => {
-          setCurrentStatus(key);
-          setSearchParams((prev) => {
-            prev.set("status", key);
-            return prev;
-          });
-        }}
+        setCurrentStatus={setCurrentStatus}
+        setSearchParams={setSearchParams}
+        statuses={statuses}
       />
-      <div className="flex items-center mb-4">
-        <h1 className="text-lg font-semibold text-foreground flex items-center gap-2">
-          <div className="rounded-lg bg-card p-2 ">{currentStatusObj?.icon}</div>
-
-          {currentStatusObj?.label}
-        </h1>
-      </div>
 
       <PendingArticlesFilterBar
         selectedTitle={titleParam}
@@ -197,41 +180,19 @@ export const PendingArticles: React.FC = () => {
         resultsCount={articles?.data.length}
       />
 
-      <Tabs value={currentStatus} className="w-full">
-        {statuses.map(({ key }) => (
-          <TabsContent key={key} value={key} className="p-0">
-            <div className=" rounded-xl overflow-hidden">
-              {isLoading || !users || !products ? (
-                <ul className="divide-y divide-border ">
-                  {Array(5)
-                    .fill(0)
-                    .map((_, i) => (
-                      <SkeletonArticleCard key={i} withSpinner={i === 0} />
-                    ))}
-                </ul>
-              ) : articles?.data.length === 0 ? (
-                hasFilters ? (
-                  <EmptyState onReset={() => setSearchParams(new URLSearchParams({ status: currentStatus }))} />
-                ) : (
-                  <NoDataFound title="Brak wyników" description="Brak artykułów do wyświetlenia." />
-                )
-              ) : (
-                <ul className="divide-y divide-border border bg-card rounded-xl ">
-                  {articles.data.map((article) => (
-                    <PendingArticleCard
-                      key={article._id}
-                      article={article}
-                      onApprove={onArticleAprove}
-                      onReject={onArticleReject}
-                      userPermissions={userPermissions}
-                    />
-                  ))}
-                </ul>
-              )}
-            </div>
-          </TabsContent>
-        ))}
-      </Tabs>
+      <PendingArticlesList
+        statuses={statuses}
+        articles={articles}
+        products={products}
+        users={users}
+        userPermissions={userPermissions}
+        currentStatus={currentStatus}
+        isLoading={isLoading}
+        hasFilters={hasFilters}
+        setSearchParams={setSearchParams}
+        onArticleAprove={onArticleAprove}
+        onArticleReject={onArticleReject}
+      />
 
       <PendingArticleRejectionModal
         onSubmit={onArticleRejectConfirm}
