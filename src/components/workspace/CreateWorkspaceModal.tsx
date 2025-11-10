@@ -3,25 +3,23 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import { Button } from "../ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "../ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 
 import { workspaceSchema } from "@/validation/workspace.schema";
+import {
+  AppWindow,
+  Coffee,
+  GraduationCap,
+  Layers,
+  LeafyGreen,
+  LibraryBig,
+  PanelsTopLeft,
+  Smartphone,
+} from "lucide-react";
+import { useCreateWorkspaceMutation } from "../../hooks/workspace/use-workspace";
 
 interface CreateWorkspaceProps {
   isCreatingWorkspace: boolean;
@@ -40,18 +38,29 @@ export const colorOptions = [
   "#34495E", // Navy
 ];
 
+export const WORKSPACE_ICONS = {
+  Layers,
+  Smartphone,
+  LibraryBig,
+  GraduationCap,
+  AppWindow,
+  PanelsTopLeft,
+  Coffee,
+  LeafyGreen,
+};
+export const iconOptions = Object.keys(WORKSPACE_ICONS); // ["Layers", "Grid", "Box", "Package", "Cpu"]
+
 export type WorkspaceForm = z.infer<typeof workspaceSchema>;
 
-export const CreateWorkspaceModal = ({
-  isCreatingWorkspace,
-  setIsCreatingWorkspace,
-}: CreateWorkspaceProps) => {
+export const CreateWorkspaceModal = ({ isCreatingWorkspace, setIsCreatingWorkspace }: CreateWorkspaceProps) => {
+  const { mutate } = useCreateWorkspaceMutation();
   const form = useForm<WorkspaceForm>({
     resolver: zodResolver(workspaceSchema),
     defaultValues: {
       name: "",
-      color: colorOptions[0],
+      labelColor: colorOptions[0],
       description: "",
+      icon: "",
     },
   });
 
@@ -69,19 +78,14 @@ export const CreateWorkspaceModal = ({
     //     console.log(error);
     //   },
     // });
+    mutate(data);
   };
 
   return (
-    <Dialog
-      open={isCreatingWorkspace}
-      onOpenChange={setIsCreatingWorkspace}
-      modal={true}
-    >
+    <Dialog open={isCreatingWorkspace} onOpenChange={setIsCreatingWorkspace} modal={true}>
       <DialogContent className="max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>
-            Utwórz prywanty moduł szablonów i odpowiedzi
-          </DialogTitle>
+          <DialogTitle>Utwórz prywanty moduł szablonów i odpowiedzi</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
@@ -107,11 +111,7 @@ export const CreateWorkspaceModal = ({
                   <FormItem>
                     <FormLabel>Opis</FormLabel>
                     <FormControl>
-                      <Textarea
-                        {...field}
-                        placeholder="Opis prywatnego modułu"
-                        rows={3}
-                      />
+                      <Textarea {...field} placeholder="Opis prywatnego modułu" rows={3} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -119,7 +119,7 @@ export const CreateWorkspaceModal = ({
               />
               <FormField
                 control={form.control}
-                name="color"
+                name="labelColor"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Kolor</FormLabel>
@@ -131,12 +131,42 @@ export const CreateWorkspaceModal = ({
                             onClick={() => field.onChange(color)}
                             className={cn(
                               "w-6 h-6 rounded-full cursor-pointer hover:opacity-80 transition-all duration-300",
-                              field.value === color &&
-                                "ring-2 ring-offset-2 ring-blue-500"
+                              field.value === color && "ring-2 ring-offset-2 ring-blue-500"
                             )}
                             style={{ backgroundColor: color }}
                           ></div>
                         ))}
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* ICONS */}
+              <FormField
+                control={form.control}
+                name="icon"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Ikona</FormLabel>
+                    <FormControl>
+                      <div className="flex gap-3 flex-wrap">
+                        {iconOptions.map((iconName) => {
+                          const IconComponent = WORKSPACE_ICONS[iconName];
+                          return (
+                            <div
+                              key={iconName}
+                              onClick={() => field.onChange(iconName)}
+                              className={cn(
+                                "w-10 h-10 flex items-center justify-center rounded-md cursor-pointer border hover:opacity-80 transition-all duration-300",
+                                field.value === iconName && "ring-2 ring-offset-2 ring-blue-500"
+                              )}
+                            >
+                              <IconComponent className="w-6 h-6" />
+                            </div>
+                          );
+                        })}
                       </div>
                     </FormControl>
                     <FormMessage />

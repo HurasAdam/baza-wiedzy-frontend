@@ -25,6 +25,7 @@ import { LoginPage } from "./auth/login/LoginPage";
 import { CreateArticlePage } from "./create-article/CreateArticlePage";
 import { CreateFaqPage } from "./create-faq/CreateFaqPage";
 import { CreateRolePage } from "./create-role/CreateRolePage";
+import { CreateWorkspaceArticlePage } from "./create-workspace-article/CreateWorkspaceArticle";
 import { DashboardPage } from "./dashboard/DashboardPage";
 import { EditRolePage } from "./edit-role/EditRolePage";
 import { FaqPage } from "./faq/FaqPage";
@@ -38,6 +39,8 @@ import { OnboardingPage } from "./onboarding/OnboardingPage";
 import { PendingArticles } from "./pending-articles/PendingArticles";
 import { StatisticsPage } from "./statistics/StatisticsPage";
 import { TopicRegisterPage } from "./TopicRegister/TopicRegisterPage";
+import { WorkspaceFolderPage } from "./workspace-folder-page/WorkspaceFolderPage";
+import { WorkspaceManageFoldersPage } from "./workspace-manage-folders/WorkspaceManageFoldersPage";
 export const PAGES = {
   LoginPage,
   ForgotPasswordPage,
@@ -78,4 +81,7 @@ export const PAGES = {
   AdminFaqDetailsPage,
   AdminUserDetailsPage,
   AdminLogsPage,
+  WorkspaceFolderPage,
+  CreateWorkspaceArticlePage,
+  WorkspaceManageFoldersPage,
 };

@@ -4,6 +4,7 @@ import {
   BookOpen,
   BookUser,
   ChartColumnDecreasing,
+  Check,
   ChevronsLeft,
   ChevronsRight,
   Clipboard,
@@ -11,8 +12,11 @@ import {
   FolderSearch,
   HeartIcon,
   Info,
+  Layers,
   LayoutDashboard,
+  Loader,
   Origami,
+  Plus,
   RectangleEllipsis,
   School,
   Smile,
@@ -24,14 +28,26 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import queryClient from "@/config/query.client";
 import { useAuthQuery, useLogoutMutation } from "@/hooks/auth/use-auth";
-import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "../../../components/ui/dropdown-menu";
+import { WORKSPACE_ICONS } from "../../../components/workspace/CreateWorkspaceModal";
+import { useFindUserWorkspacesQuery } from "../../../hooks/workspace/use-workspace";
 import { SidebarNav } from "./Sidebar-nav";
 
 type NavItem = {
   title: string;
   href: string;
   icon: React.ComponentType<any>;
-  requiredPermission?: string; // opcjonalna permisja do wyświetlenia
+  requiredPermission?: string;
 };
 
 const navItems: NavItem[] = [
@@ -70,8 +86,8 @@ export const Sidebar = ({
   const [isCollapsed, setIsCollapsed] = useState(false);
   const navigate = useNavigate();
   const { mutate } = useLogoutMutation();
+  const { data: workspaces = [], isPending } = useFindUserWorkspacesQuery();
 
-  // Pobranie użytkownika i jego permisji
   const { data: authData, isLoading } = useAuthQuery();
   const userPermissions = authData?.role?.permissions || [];
 
@@ -84,7 +100,6 @@ export const Sidebar = ({
     });
   };
 
-  // Filtrowanie zakładek po permisjach
   const filteredNavItems = navItems.filter((item) => {
     if (!item.requiredPermission) return true;
     return userPermissions.includes(item.requiredPermission);
@@ -98,19 +113,67 @@ export const Sidebar = ({
         isCollapsed ? "w-18 md:w[80px]" : "w-16 md:w-[240px] p-2.5"
       )}
     >
-      <div className="flex h-14 items-center border-b px-4 mb-4 gap-1">
-        <Link to="/dashboard" className="flex items-center">
-          {!isCollapsed && (
-            <div className="flex items-center gap-2">
-              <Origami className="size-6 text-sidebar-logo/65" />
-              <span className="font-semibold text-lg hidden md:block text-sidebar-foreground">Baza wiedzy</span>
-            </div>
-          )}
-          {isCollapsed && <Origami className="size-6 text-sidebar-primary" />}
-        </Link>
+      <div className="flex h-14 items-center border-b px-4 mb-4 gap-2">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button
+              className="flex items-center justify-center focus:outline-none focus:ring-0"
+              aria-label="Switch workspace"
+            >
+              <Origami className="size-6 text-sidebar-logo/65 hover:text-sidebar-primary transition-colors" />
+            </button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent className="w-56 rounded-lg shadow-md bg-background" align="start" sideOffset={4}>
+            <DropdownMenuLabel className="text-xs text-muted-foreground">Twoje kolekcje</DropdownMenuLabel>
+
+            {isPending ? (
+              <div className="flex items-center justify-center py-2">
+                <Loader className="w-4 h-4 animate-spin" />
+              </div>
+            ) : (
+              workspaces?.map((ws) => (
+                <DropdownMenuItem
+                  key={ws._id}
+                  onClick={() => navigate(`/workspace/${ws._id}`)}
+                  className="gap-2 p-2 cursor-pointer"
+                >
+                  <div className="flex size-6 items-center justify-center rounded-md border bg-background">
+                    {React.createElement(WORKSPACE_ICONS[ws.icon] || Layers, {
+                      className: "w-5 h-5",
+                      style: { color: ws.labelColor },
+                    })}
+                  </div>
+                  {ws.name}
+                  {currentWorkspace?._id === ws._id && (
+                    <DropdownMenuShortcut>
+                      <Check className="w-4 h-4" />
+                    </DropdownMenuShortcut>
+                  )}
+                </DropdownMenuItem>
+              ))
+            )}
+
+            <DropdownMenuSeparator />
+
+            <DropdownMenuItem
+              onClick={() => console.log("TODO: create workspace modal")}
+              className="gap-2 p-2 cursor-pointer"
+            >
+              <div className="flex size-6 items-center justify-center rounded-md border bg-background">
+                <Plus className="w-4 h-4" />
+              </div>
+              Dodaj kolekcję
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {!isCollapsed && (
+          <span className="font-semibold text-lg hidden md:block text-sidebar-foreground">Baza wiedzy</span>
+        )}
 
         <Button
-          variant={"ghost"}
+          variant="ghost"
           size="icon"
           className="ml-auto hidden md:block hover:bg-transparent"
           onClick={() => setIsCollapsed(!isCollapsed)}
@@ -121,7 +184,7 @@ export const Sidebar = ({
 
       <ScrollArea className="flex-1 px-3 py-2">
         <SidebarNav
-          items={filteredNavItems} // <- wyświetlamy tylko zakładki dostępne dla użytkownika
+          items={filteredNavItems}
           isCollapsed={isCollapsed}
           className={cn(isCollapsed && "items-center space-y-2")}
           currentWorkspace={currentWorkspace}

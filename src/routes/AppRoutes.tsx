@@ -6,6 +6,7 @@ import { OnboardingPage } from "@/pages/onboarding/OnboardingPage";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import AdminLayout from "../layouts/admin/admin.layout";
 import ArticleLayout from "../layouts/article/article-layout";
+import WorkspaceLayout from "../layouts/workspace/workspace.layout";
 import AdminDashboard from "../pages/admin-panel/admin-dashboard";
 import { AccountOnboardingRoute } from "./account.onboarding.route";
 import AdminProtectedRoute from "./admin.protected.route";
@@ -52,6 +53,12 @@ export function AppRoutes() {
               <Route path="history/:historyId" element={<PAGES.ArticleHistoryDetailPage />} />
             </Route>
           </Route>
+        </Route>
+
+        <Route path="/workspace/:workspaceId" element={<WorkspaceLayout />}>
+          <Route path="folders/:folderId" element={<PAGES.WorkspaceFolderPage />} />
+          <Route path="folders/:folderId/articles/new" element={<PAGES.CreateWorkspaceArticlePage />} />
+          <Route path="folders/manage" element={<PAGES.WorkspaceManageFoldersPage />} />
         </Route>
 
         {/* Ochrona admin panelu */}
