@@ -282,7 +282,7 @@
   --chart-5: oklch(0.645 0.246 16.439);
   --sidebar: oklch(0.21 0.006 285.885);
 
-  --sidebar-foreground: oklch(0.85 0.005 285.823);
+  --sidebar-foreground: oklch(0.76.5 0.015 285.903);
   --sidebar-primary: oklch(0.406 0.125 262.881);
   --sidebar-primary-foreground: oklch(0.98 0.016 73.684);
   --sidebar-accent: oklch(0.406 0.125 262.881);
@@ -874,20 +874,19 @@
 
 /* działa tylko w dark mode */
 :root[data-sidebar="sidebar-style-3"][class*="dark-"] {
-  --sidebar-stop-1: #080809;
-  --sidebar-stop-2: #121218;
-  --sidebar-stop-3: #1c1c24;
-  --sidebar-stop-4: #262631;
-  --sidebar-logo: #212631;
+  --sidebar-stop-1: rgba(18, 18, 20, 0.8);
+  --sidebar-stop-2: rgba(18, 18, 22, 0.6);
+  --sidebar-stop-3: rgba(18, 18, 24, 0.3);
   --sidebar: linear-gradient(
-    145deg,
+    to bottom,
     var(--sidebar-stop-1) 0%,
-    var(--sidebar-stop-2) 35%,
-    var(--sidebar-stop-3) 70%,
-    var(--sidebar-stop-4) 100%
+    var(--sidebar-stop-2) 50%,
+    var(--sidebar-stop-3) 100%
   );
 
-  --sidebar-border: #111119;
+  --sidebar-border: rgba(255, 255, 255, 0.05);
+  --sidebar-logo: rgba(32, 32, 38, 0.9);
+  --sidebar-shadow: inset 0 0 12px rgba(0, 0, 0, 0.25);
 }
 
 /* DEEP THEME SIDEBAR VARIANTS */

@@ -28,7 +28,7 @@ export const WorkspaceSidebar = ({
   const navigate = useNavigate();
 
   return (
-    <aside className="w-64 border-r flex flex-col bg-muted/10">
+    <aside className="w-64 border-r flex flex-col bg-gradient-to-b from-background/80 via-background/60 to-background/30 backdrop-blur-xl shadow-inner">
       <div className="border-b flex flex-col">
         <h2 className="text-lg font-semibold tracking-tight mb-2 px-2 pt-2">Workspaces</h2>
 

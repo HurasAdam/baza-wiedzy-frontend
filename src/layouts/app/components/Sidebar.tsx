@@ -108,7 +108,11 @@ export const Sidebar = ({
 
   return (
     <div
-      style={{ background: "var(--sidebar)" }}
+      style={{
+        background: "var(--sidebar)",
+        boxShadow: "var(--sidebar-shadow)",
+        borderColor: "var(--sidebar-border)",
+      }}
       className={cn(
         "flex flex-col border-r bg-sidebar transition-all duration-300",
         isCollapsed ? "w-18 md:w[80px]" : "w-16 md:w-[240px] p-2.5"

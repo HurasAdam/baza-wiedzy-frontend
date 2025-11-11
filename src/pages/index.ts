@@ -43,6 +43,7 @@ import { WorkspaceFolderPage } from "./workspace-folder-page/WorkspaceFolderPage
 import { WorkspaceManageFoldersPage } from "./workspace-manage-folders/WorkspaceManageFoldersPage";
 import { WorkspaceManageMembersPage } from "./workspace-manage-members/WorkspaceManageMembersPage";
 import { WorkspaceManageSettingsPage } from "./workspace-manage-settings/WorkspaceManageSettingsPage";
+import { WorkspaceOverviewPage } from "./workspace-overview/WorkspaceOverviewPage";
 export const PAGES = {
   LoginPage,
   ForgotPasswordPage,
@@ -88,4 +89,5 @@ export const PAGES = {
   WorkspaceManageFoldersPage,
   WorkspaceManageMembersPage,
   WorkspaceManageSettingsPage,
+  WorkspaceOverviewPage,
 };
