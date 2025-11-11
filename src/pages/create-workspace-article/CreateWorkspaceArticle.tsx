@@ -69,7 +69,7 @@ export const CreateWorkspaceArticlePage = () => {
         <WorkspaceArticleForm folders={folders} />
       </FormProvider>
 
-      <div className="flex justify-end gap-3 max-w-6xl mx-auto w-full">
+      <div className="flex justify-end gap-3 max-w-5xl mx-auto w-full pb-10">
         <Button variant="outline" onClick={() => navigate(-1)}>
           Anuluj
         </Button>

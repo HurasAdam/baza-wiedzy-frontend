@@ -57,7 +57,7 @@ export function AppRoutes() {
 
         <Route path="/workspace/:workspaceId" element={<WorkspaceLayout />}>
           <Route path="folders/:folderId" element={<PAGES.WorkspaceFolderPage />} />
-          <Route path="folders/:folderId/articles/new" element={<PAGES.CreateWorkspaceArticlePage />} />
+          <Route path="new-article" element={<PAGES.CreateWorkspaceArticlePage />} />
           <Route path="folders" element={<PAGES.WorkspaceManageFoldersPage />} />
           <Route path="members" element={<PAGES.WorkspaceManageMembersPage />} />
           <Route path="settings" element={<PAGES.WorkspaceManageSettingsPage />} />

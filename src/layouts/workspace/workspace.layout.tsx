@@ -1,4 +1,4 @@
-import { FolderKanban, Settings, Users } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { CreateWorkspaceFolderModal } from "../../components/workspace-folder/CreateWorkspaceFolderModal";
@@ -9,8 +9,8 @@ import { WorkspaceSidebar } from "./components/WorkspaceSidebar";
 export default function WorkspaceLayout() {
   const { workspaceId } = useParams();
   const navigate = useNavigate();
-  const { data: workspaces = [] } = useFindUserWorkspacesQuery();
-  const { data: workspace } = useFindWorkspaceQuery(workspaceId);
+  const { data: workspaces = [], isLoading: isWorkspacesLoading } = useFindUserWorkspacesQuery();
+  const { data: workspace, isLoading: isWorkspaceLoading } = useFindWorkspaceQuery(workspaceId);
   const { data: folders, isLoading: isFoldersLoading } = useFindWorkspaceFoldersQuery(workspaceId);
   const [isCreatingWorkspaceFolder, setIsCreatingWorkspaceFolder] = useState(false);
 
@@ -20,18 +20,16 @@ export default function WorkspaceLayout() {
     }
   }, [workspaceId, workspaces]);
 
-  const links = [
-    { to: `/workspaces/${workspaceId}/projects`, icon: FolderKanban, label: "Projekty" },
-    { to: `/workspaces/${workspaceId}/members`, icon: Users, label: "Zespół" },
-    { to: `/workspaces/${workspaceId}/settings`, icon: Settings, label: "Ustawienia" },
-  ];
-
   const handleAddFolder = () => setIsCreatingWorkspaceFolder(true);
   const handleNewArticle = () => {
-    if (workspaceId && folders?.[0]?._id) {
-      navigate(`/workspace/${workspaceId}/folders/${folders[0]._id}/articles/new`);
-    }
+    navigate(`/workspace/${workspaceId}/new-article`);
   };
+
+  const isLoading = isWorkspacesLoading || isWorkspaceLoading || isFoldersLoading;
+
+  if (isLoading) {
+    return <WorkspaceLoader message="Trwa ładowanie kolekcji" />;
+  }
 
   return (
     <div className="flex h-screen text-foreground bg-background">
@@ -57,6 +55,16 @@ export default function WorkspaceLayout() {
         setIsCreatingWorkspaceFolder={setIsCreatingWorkspaceFolder}
         workspaceId={workspace?._id}
       />
+    </div>
+  );
+}
+
+export function WorkspaceLoader({ message = "Trwa ładowanie..." }) {
+  return (
+    <div className="flex flex-col items-center justify-center h-screen w-screen  text-primary/70">
+      <Loader2 className="w-20 h-20 animate-spin text-primary mb-6" />
+      <p className="text-xl font-medium">{message}</p>
+      <p className="text-sm text-muted-foreground mt-2">To może chwilę potrwać…</p>
     </div>
   );
 }
