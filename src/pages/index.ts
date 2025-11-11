@@ -42,6 +42,7 @@ import { TopicRegisterPage } from "./TopicRegister/TopicRegisterPage";
 import { WorkspaceFolderPage } from "./workspace-folder-page/WorkspaceFolderPage";
 import { WorkspaceManageFoldersPage } from "./workspace-manage-folders/WorkspaceManageFoldersPage";
 import { WorkspaceManageMembersPage } from "./workspace-manage-members/WorkspaceManageMembersPage";
+import { WorkspaceManageSettingsPage } from "./workspace-manage-settings/WorkspaceManageSettingsPage";
 export const PAGES = {
   LoginPage,
   ForgotPasswordPage,
@@ -86,4 +87,5 @@ export const PAGES = {
   CreateWorkspaceArticlePage,
   WorkspaceManageFoldersPage,
   WorkspaceManageMembersPage,
+  WorkspaceManageSettingsPage,
 };

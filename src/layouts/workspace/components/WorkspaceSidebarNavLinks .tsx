@@ -8,7 +8,7 @@ interface WorkspaceSidebarNavLinksProps {
 
 export const WorkspaceSidebarNavLinks = ({ workspaceId }: WorkspaceSidebarNavLinksProps) => {
   const links = [
-    { to: `/workspace/${workspaceId}/members/manage`, icon: Users, label: "Zespół" },
+    { to: `/workspace/${workspaceId}/members`, icon: Users, label: "Zespół" },
     { to: `/workspace/${workspaceId}/settings`, icon: Settings, label: "Ustawienia" },
   ];
 

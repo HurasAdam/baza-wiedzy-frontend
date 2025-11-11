@@ -45,21 +45,22 @@ export const WORKSPACE_ICONS = {
 };
 export const iconOptions = Object.keys(WORKSPACE_ICONS); // ["Layers", "Grid", "Box", "Package", "Cpu"]
 
-const WorkspaceForm = ({ onSubmit }) => {
+const WorkspaceForm = ({ onSubmit, workspace }) => {
+  console.log(workspace);
   const form = useForm<WorkspaceForm>({
     resolver: zodResolver(workspaceSchema),
     defaultValues: {
-      name: "",
-      labelColor: colorOptions[0],
-      description: "",
-      icon: "",
+      name: workspace ? workspace.name : "",
+      labelColor: workspace ? workspace.labelColor : colorOptions[0],
+      description: workspace ? workspace.description : "",
+      icon: workspace ? workspace.icon : "",
     },
   });
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="space-y-4 py-4">
+        <div className="space-y-8 py-4">
           <FormField
             control={form.control}
             name="name"
