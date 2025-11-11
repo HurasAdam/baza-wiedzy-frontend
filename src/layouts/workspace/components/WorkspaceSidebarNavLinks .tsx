@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { FolderKanban, Settings, Users } from "lucide-react";
+import { Settings, Users } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 interface WorkspaceSidebarNavLinksProps {
@@ -8,9 +8,8 @@ interface WorkspaceSidebarNavLinksProps {
 
 export const WorkspaceSidebarNavLinks = ({ workspaceId }: WorkspaceSidebarNavLinksProps) => {
   const links = [
-    { to: `/workspaces/${workspaceId}/projects`, icon: FolderKanban, label: "Projekty" },
-    { to: `/workspaces/${workspaceId}/members`, icon: Users, label: "Zespół" },
-    { to: `/workspaces/${workspaceId}/settings`, icon: Settings, label: "Ustawienia" },
+    { to: `/workspace/${workspaceId}/members/manage`, icon: Users, label: "Zespół" },
+    { to: `/workspace/${workspaceId}/settings`, icon: Settings, label: "Ustawienia" },
   ];
 
   return (

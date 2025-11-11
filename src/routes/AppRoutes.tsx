@@ -59,6 +59,7 @@ export function AppRoutes() {
           <Route path="folders/:folderId" element={<PAGES.WorkspaceFolderPage />} />
           <Route path="folders/:folderId/articles/new" element={<PAGES.CreateWorkspaceArticlePage />} />
           <Route path="folders/manage" element={<PAGES.WorkspaceManageFoldersPage />} />
+          <Route path="members/manage" element={<PAGES.WorkspaceManageMembersPage />} />
         </Route>
 
         {/* Ochrona admin panelu */}

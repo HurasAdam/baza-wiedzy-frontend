@@ -17,6 +17,14 @@ export const useFindWorkspaceQuery = (workspaceId?: string) => {
     enabled: !!workspaceId, // odpala się dopiero, gdy workspaceId istnieje
   });
 };
+
+export const useFindWorkspaceMembersQuery = (workspaceId?: string) => {
+  return useQuery({
+    queryKey: ["workspace-members", workspaceId],
+    queryFn: () => workspaceService.findMembers(workspaceId!),
+    enabled: !!workspaceId, // odpala się dopiero, gdy workspaceId istnieje
+  });
+};
 export const useCreateWorkspaceMutation = () => {
   return useMutation({
     mutationFn: (payload) => {

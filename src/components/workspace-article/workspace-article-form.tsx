@@ -16,7 +16,7 @@ export const WorkspaceArticleForm = ({ folders = [] }) => {
   });
 
   return (
-    <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto">
+    <div className="flex flex-col gap-6 w-full max-w-5xl mx-auto">
       {/* Wybór folderu */}
       <div className="bg-muted/10 px-8 pt-8 pb-9 space-y-6 rounded-md">
         <FormField
