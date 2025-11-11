@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Folder, Pencil, Plus, Trash2 } from "lucide-react";
+import { Folder, Pencil, Trash2 } from "lucide-react";
 import { useOutletContext } from "react-router-dom";
 import { Separator } from "../../components/ui/separator";
 import ManageFoldersHeader from "./components/ManageFoldersHeader";
@@ -22,18 +22,11 @@ export const WorkspaceManageFoldersPage = () => {
 
   return (
     <div className="py-2 w-full ">
-      <ManageFoldersHeader />
+      <ManageFoldersHeader handleAddFolder={handleAddFolder} />
       <Separator className="my-4 " />
 
-      <div className="flex justify-end my-4 max-w-7xl mx-auto">
-        <Button variant="default" size="sm" onClick={handleAddFolder} className="flex items-center gap-1">
-          <Plus size={16} />
-          Dodaj folder
-        </Button>
-      </div>
-
       {/* Lista folderów */}
-      <div className="space-y-2 max-w-7xl mx-auto">
+      <div className="space-y-2 max-w-6xl mx-auto">
         {folders.map((folder) => (
           <div
             key={folder._id}
