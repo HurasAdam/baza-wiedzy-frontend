@@ -25,7 +25,7 @@ export const WorkspaceSidebarFoldersList = ({ isLoading, folders, onAddFolder }:
         <h3 className="text-xs font-medium text-muted-foreground/75 uppercase tracking-wide flex items-center gap-2">
           <button
             className="p-0 text-muted-foreground hover:text-primary transition-colors"
-            onClick={() => navigate(`/workspace/${workspaceId}/folders/manage`)}
+            onClick={() => navigate(`/workspace/${workspaceId}/folders`)}
             title="Zarządzaj folderami"
           >
             <Folders className="w-3.5 h-3.5" />

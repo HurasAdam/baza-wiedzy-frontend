@@ -1,9 +1,14 @@
 import api from "@/config/api.client";
+import type { WorkspaceDataForm } from "../validation/workspace.schema";
 const baseUrl = "/workspaces";
 const adminBaseUrl = "/admin";
 
-const createWorkspace = (payload) => {
+const createWorkspace = (payload: WorkspaceDataForm) => {
   return api.post(`${baseUrl}`, payload);
+};
+
+const updateWorkspace = (payload: { workspaceId: string; data: WorkspaceDataForm }) => {
+  return api.patch(`${baseUrl}/${payload.workspaceId}`, payload.data);
 };
 
 const findOne = (workspaceId: string) => {
@@ -20,6 +25,7 @@ const findMembers = (workspaceId: string) => {
 
 export const workspaceService = {
   createWorkspace,
+  updateWorkspace,
   find,
   findOne,
   findMembers,

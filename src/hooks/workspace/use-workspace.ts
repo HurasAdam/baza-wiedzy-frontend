@@ -32,3 +32,11 @@ export const useCreateWorkspaceMutation = () => {
     },
   });
 };
+
+export const useUpdateWorkspaceMutation = () => {
+  return useMutation({
+    mutationFn: (payload) => {
+      return workspaceService.updateWorkspace(payload);
+    },
+  });
+};

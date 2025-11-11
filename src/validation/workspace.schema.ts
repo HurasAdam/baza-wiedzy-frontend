@@ -15,3 +15,5 @@ export const workspaceSchema = z.object({
   icon: z.enum(iconOptions, { required_error: "Icon is required" }),
   description: z.string().optional(),
 });
+
+export type WorkspaceDataForm = z.infer<typeof workspaceSchema>;
