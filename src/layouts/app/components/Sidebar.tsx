@@ -39,7 +39,8 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu";
-import { WORKSPACE_ICONS } from "../../../components/workspace/CreateWorkspaceModal";
+
+import { WORKSPACE_ICONS } from "../../../components/workspace/workspace-form";
 import { useFindUserWorkspacesQuery } from "../../../hooks/workspace/use-workspace";
 import { SidebarNav } from "./Sidebar-nav";
 
