@@ -37,6 +37,8 @@ export default function WorkspaceLayout() {
 
       <WorkspaceSidebar
         workspaceId={workspaceId!}
+        workspace={workspace}
+        workspaces={workspaces}
         folders={folders}
         onAddFolder={handleAddFolder}
         onOpenNewArticle={handleNewArticle}

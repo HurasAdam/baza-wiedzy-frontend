@@ -1,9 +1,31 @@
 import { Button } from "@/components/ui/button";
+import { ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../../../components/ui/dropdown-menu";
+import { WORKSPACE_ICONS } from "../../../components/workspace/workspace-form";
 import { WorkspaceSidebarFoldersList } from "./WorkspaceSidebarFoldersList";
 import { WorkspaceSidebarNavLinks } from "./WorkspaceSidebarNavLinks ";
 
+interface Workspace {
+  _id: string;
+  name: string;
+  icon: string;
+  description: string;
+  labelColor: string;
+  owner: string;
+  inviteCode: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface WorkspaceSidebarProps {
+  workspace: Workspace;
+  workspaces: Workspace[];
   isLoading: boolean;
   workspaceId: string;
   folders: {
@@ -19,6 +41,8 @@ interface WorkspaceSidebarProps {
 }
 
 export const WorkspaceSidebar = ({
+  workspace,
+  workspaces,
   isLoading,
   workspaceId,
   folders,
@@ -27,12 +51,59 @@ export const WorkspaceSidebar = ({
 }: WorkspaceSidebarProps) => {
   const navigate = useNavigate();
 
+  console.log("WORK", workspace);
+
   return (
     <aside className="w-64 border-r flex flex-col bg-gradient-to-b from-background/80 via-background/60 to-background/30 backdrop-blur-xl shadow-inner">
-      <div className="border-b flex flex-col">
-        <h2 className="text-lg font-semibold tracking-tight mb-2 px-2 pt-2">Workspaces</h2>
+      <div className="border-b flex flex-col px-2 pt-2 pb-2">
+        {/* Workspace switcher w miejscu nagłówka */}
+        <DropdownMenu>
+          <DropdownMenuTrigger className="flex items-center hover:bg-muted/15 gap-3 p-3 mb-3 rounded-xl bg-gradient-to-r from-background/20 via-background/10 to-background/20 shadow-sm w-full justify-between">
+            <div className="flex items-center gap-3">
+              {workspace?.icon &&
+                WORKSPACE_ICONS[workspace.icon] &&
+                (() => {
+                  const IconComponent = WORKSPACE_ICONS[workspace.icon];
+                  return <IconComponent className="w-6 h-6" style={{ color: workspace.labelColor || "#6b7280" }} />;
+                })()}
+              <div className="flex flex-col">
+                <h2 className="text-md font-semibold text-foreground truncate">{workspace?.name || "Workspace"}</h2>
+                {workspace?.description && <span className="text-xs text-muted-foreground truncate">kolekcja</span>}
+              </div>
+            </div>
+            <ChevronDown className="w-4 h-4 text-muted-foreground" />
+          </DropdownMenuTrigger>
 
-        <div className="px-2 py-2">
+          <DropdownMenuContent
+            side="right" // dropdown rozwija się w górę
+            align="start" // wyrównanie do początku triggera (left)
+            className="w-full px-2 bg-background rounded-xl shadow-lg border border-border"
+          >
+            {workspaces.map((ws) => {
+              const IconComp = ws.icon ? WORKSPACE_ICONS[ws.icon] : null;
+              return (
+                <DropdownMenuItem
+                  key={ws._id}
+                  className="flex items-center gap-2"
+                  onClick={() => navigate(`/workspace/${ws._id}`)}
+                >
+                  {IconComp && <IconComp className="w-5 h-5" style={{ color: ws.labelColor }} />}
+                  <span className="truncate">{ws.name}</span>
+                </DropdownMenuItem>
+              );
+            })}
+
+            <DropdownMenuItem
+              className="text-primary font-medium mt-1 border-t border-border"
+              onClick={() => navigate("/workspace/new")}
+            >
+              + Utwórz nowy workspace
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {/* Przycisk Nowy artykuł */}
+        <div className="px-0.5 py-1">
           <Button size="sm" variant="outline" className="w-full" onClick={onOpenNewArticle}>
             + Nowy artykuł
           </Button>
