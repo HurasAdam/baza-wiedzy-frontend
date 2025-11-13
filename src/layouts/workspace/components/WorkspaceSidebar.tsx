@@ -51,10 +51,8 @@ export const WorkspaceSidebar = ({
 }: WorkspaceSidebarProps) => {
   const navigate = useNavigate();
 
-  console.log("WORK", workspace);
-
   return (
-    <aside className="w-64 border-r flex flex-col bg-gradient-to-b from-background/80 via-background/60 to-background/30 backdrop-blur-xl shadow-inner">
+    <aside className="w-64 border-r  flex flex-col bg-gradient-to-b from-background/80 via-background/60 to-background/30 backdrop-blur-xl shadow-inner">
       <div className="border-b flex flex-col px-2 pt-2 pb-2">
         {/* Workspace switcher w miejscu nagłówka */}
         <DropdownMenu>

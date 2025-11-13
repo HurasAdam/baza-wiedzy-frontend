@@ -18,7 +18,7 @@ export const WorkspaceManageMembersPage = () => {
   const { data, isLoading } = useFindWorkspaceMembersQuery(workspaceId);
 
   return (
-    <div className="max-w-5xl mx-auto  space-y-8">
+    <div className="max-w-6xl mx-auto py-8  space-y-8">
       {/* Header */}
       <header className="flex items-center justify-between">
         <div className="flex items-center gap-2">

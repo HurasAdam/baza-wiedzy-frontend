@@ -34,11 +34,14 @@ export const WorkspaceManageSettingsPage = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto ">
+    <div className="max-w-6xl mx-auto py-8  ">
       <header className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-2">
-          <Settings className="w-6 h-6 text-muted-foreground" />
-          <h1 className="text-2xl font-semibold tracking-tight">Ustawienia modułu</h1>
+        <div>
+          <div className="flex items-center gap-2">
+            <Settings className="w-6 h-6 text-muted-foreground" />
+            <h1 className="text-2xl font-semibold tracking-tight">Ustawienia modułu</h1>
+          </div>
+          <p className="text-muted-foreground text-sm mt-1">Zarządzaj ustawieniami kolekcji.</p>
         </div>
       </header>
       <Separator />

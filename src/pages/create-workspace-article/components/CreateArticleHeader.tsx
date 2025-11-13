@@ -9,7 +9,7 @@ const CreateArticleHeader = () => {
 
       <div>
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">Dodaj nowy artykuł</h1>
-        <p className="text-sm text-muted-foreground">Wprowadź nazwę i treść artykułu, aby rozpocząć.</p>
+        <p className="text-sm text-muted-foreground mt-1">Wprowadź nazwę i treść artykułu, aby rozpocząć.</p>
       </div>
     </header>
   );
