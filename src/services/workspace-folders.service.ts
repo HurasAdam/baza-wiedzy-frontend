@@ -6,6 +6,17 @@ const adminBaseUrl = "/admin";
 const createWorkspaceFolder = ({ workspaceId, payload }) => {
   return api.post(`${baseUrl}/${workspaceId}`, payload);
 };
+const editWorkspaceFolder = ({
+  workspaceId,
+  folderId,
+  payload,
+}: {
+  workspaceId: string;
+  folderId: string;
+  payload: unknown;
+}) => {
+  return api.patch(`${baseUrl}/${workspaceId}/folders/${folderId}`, payload);
+};
 
 const findWorkspaceFolders = (workspaceId: string) => {
   return api.get(`${baseUrl}/${workspaceId}/folders`);
@@ -19,4 +30,5 @@ export const workspaceFoldersService = {
   createWorkspaceFolder,
   findWorkspaceFolders,
   findOneWorkspaceFolder,
+  editWorkspaceFolder,
 };

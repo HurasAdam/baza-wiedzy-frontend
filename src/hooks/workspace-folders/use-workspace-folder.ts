@@ -9,6 +9,22 @@ export const useCreateWorkspaceFolderMutation = () => {
   });
 };
 
+export const useEditWorkspaceFolderMutation = () => {
+  return useMutation({
+    mutationFn: ({
+      workspaceId,
+      folderId,
+      payload,
+    }: {
+      workspaceId: string;
+      folderId: string;
+      payload: { name: string };
+    }) => {
+      return workspaceFoldersService.editWorkspaceFolder({ workspaceId, folderId, payload });
+    },
+  });
+};
+
 export const useFindWorkspaceFoldersQuery = (workspaceId: string) => {
   return useQuery({
     queryKey: ["workspace-folders", workspaceId],
