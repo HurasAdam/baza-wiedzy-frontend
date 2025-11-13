@@ -115,7 +115,7 @@ const WorkspaceArticlesList = ({
             title="Brak artykułów w tym folderze"
             description="Ten folder nie zawiera jeszcze żadnych artykułów. Dodaj nowy, aby rozpocząć."
             icon={<PackageSearch className="w-10 h-10 text-muted-foreground/70" />}
-            onReset={() => navigate(`/workspace/${workspaceId}/folders/${folderId}/articles/new`)}
+            onReset={() => navigate(`/workspace/${workspaceId}/new-article`)}
             resetLabel="Dodaj artykuł"
           />
         ))}
