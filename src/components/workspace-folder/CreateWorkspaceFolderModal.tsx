@@ -1,11 +1,6 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import type { z } from "zod";
-import { Button } from "../ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { Input } from "../ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 
+import type { AxiosError } from "axios";
 import {
   AppWindow,
   Coffee,
@@ -19,7 +14,8 @@ import {
 import { toast } from "sonner";
 import queryClient from "../../config/query.client";
 import { useCreateWorkspaceFolderMutation } from "../../hooks/workspace-folders/use-workspace-folder";
-import { workspaceFolderSchema } from "../../validation/workspace-folder.schema";
+import { type WorkspaceFolderFormData } from "../../validation/workspace-folder.schema";
+import WorkspaceFolderForm from "./WorkspaceFolderForm";
 
 interface CreateWorkspaceFolderModalProps {
   isCreatingWorkspaceFolder: boolean;
@@ -38,40 +34,18 @@ export const WORKSPACE_ICONS = {
   LeafyGreen,
 };
 
-export type WorkspaceFolderForm = z.infer<typeof workspaceFolderSchema>;
-
 export const CreateWorkspaceFolderModal = ({
   isCreatingWorkspaceFolder,
   setIsCreatingWorkspaceFolder,
   workspaceId,
 }: CreateWorkspaceFolderModalProps) => {
-  const { mutate } = useCreateWorkspaceFolderMutation();
-  const form = useForm<WorkspaceFolderForm>({
-    resolver: zodResolver(workspaceFolderSchema),
-    defaultValues: {
-      name: "",
-    },
-  });
+  const { mutate, isPending } = useCreateWorkspaceFolderMutation();
 
-  const onSubmit = (data: WorkspaceFolderForm) => {
-    console.log("FORMULARZ", data);
-    // mutate(data, {
-    //   onSuccess: (data: any) => {
-    //     form.reset();
-    //     setIsCreatingWorkspace(false);
-    //     toast.success("Workspace created successfully");
-    //     navigate(`/workspaces/${data._id}`);
-    //   },
-    //   onError: (error: any) => {
-    //     const errorMessage = error.response.data.message;
-    //     toast.error(errorMessage);
-    //     console.log(error);
-    //   },
-    // });
+  const onSubmit = (data: WorkspaceFolderFormData) => {
     mutate(
       {
-        workspaceId, // z props
-        payload: data, // dane formularza
+        workspaceId,
+        payload: data,
       },
       {
         onSuccess: () => {
@@ -80,6 +54,20 @@ export const CreateWorkspaceFolderModal = ({
             description: "Dodano nowy folder",
           });
           queryClient.invalidateQueries({ queryKey: ["workspace-folders", workspaceId] });
+        },
+        onError: (error) => {
+          const { status } = error as AxiosError;
+
+          if (status === 409) {
+            toast.error("Konflikt nazwy folderu", {
+              description: " Folder o tej nazwie już istnieje w kolekcji. Wybierz unikalną nazwę.",
+              duration: 8000,
+              position: "bottom-right",
+            });
+            return;
+          }
+
+          toast.error("Wystąpił błąd serwera");
         },
       }
     );
@@ -92,45 +80,12 @@ export const CreateWorkspaceFolderModal = ({
           <DialogTitle className="flex items-center gap-2 text-lg font-semibold tracking-tight">
             📁 Utwórz nowy folder w kolekcji
           </DialogTitle>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="text-sm text-muted-foreground  mt-1">
             Foldery pomagają organizować artykuły i zasoby w ramach kolekcji.
           </p>
         </DialogHeader>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="space-y-4 py-4">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nazwa</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Nazwa folderu" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="workspaceId"
-                render={({ field }) => (
-                  <FormControl>
-                    <input type="hidden" {...field} value={workspaceId} />
-                  </FormControl>
-                )}
-              />
-            </div>
-
-            <DialogFooter>
-              <Button className="cursor-pointer" type="submit">
-                Utwórz
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
+        <WorkspaceFolderForm workspaceId={workspaceId} isLoading={isPending} onSubmit={onSubmit} />
       </DialogContent>
     </Dialog>
   );
