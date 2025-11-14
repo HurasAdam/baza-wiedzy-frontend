@@ -54,6 +54,7 @@ export const CreateWorkspaceFolderModal = ({
             description: "Dodano nowy folder",
           });
           queryClient.invalidateQueries({ queryKey: ["workspace-folders", workspaceId] });
+          setIsCreatingWorkspaceFolder(false);
         },
         onError: (error) => {
           const { status } = error as AxiosError;
