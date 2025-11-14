@@ -23,7 +23,7 @@ export const WorkspaceManageMembersPage = () => {
       <header className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Users className="w-6 h-6 text-muted-foreground" />
-          <h1 className="text-2xl font-semibold tracking-tight">Członkowie workspace’u</h1>
+          <h1 className="text-2xl font-semibold tracking-tight"> Użytkownicy dodani do kolekcji</h1>
         </div>
         <Button>Dodaj członka</Button>
       </header>
@@ -43,7 +43,7 @@ export const WorkspaceManageMembersPage = () => {
 
       {/* Members list */}
       <section>
-        <h2 className="text-sm font-medium text-muted-foreground mb-3">Lista członków</h2>
+        <h2 className="text-sm font-medium text-muted-foreground mb-3">Lista użytkowników</h2>
 
         {isLoading ? (
           <p className="text-sm text-muted-foreground">Ładowanie członków...</p>
