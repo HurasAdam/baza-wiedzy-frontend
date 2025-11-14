@@ -3,7 +3,6 @@ import { AdminAccountsPage } from "./admin-panel/admin-admin-accounts/admin-admi
 import { AdminFaqDetailsPage } from "./admin-panel/admin-faq-details/admin-faq-details";
 import { AdminFaqsListPage } from "./admin-panel/admin-faqs/admin-faqs";
 import { AdminIssueReportDetailsPage } from "./admin-panel/admin-issue-reports/admin-issue-report-detailsPage";
-
 import { AdminUserReportsPage } from "./admin-panel/admin-issue-reports/admin-issue-reports";
 import { JstAdminProjectsPage } from "./admin-panel/admin-jst-projects/admin-jst-projects";
 import { AdminLogsPage } from "./admin-panel/admin-logs/admin-logs-page";
@@ -39,6 +38,7 @@ import { OnboardingPage } from "./onboarding/OnboardingPage";
 import { PendingArticles } from "./pending-articles/PendingArticles";
 import { StatisticsPage } from "./statistics/StatisticsPage";
 import { TopicRegisterPage } from "./TopicRegister/TopicRegisterPage";
+import { WorkspaceArticlePage } from "./workspace-article/WorkspaceArticlePage";
 import { WorkspaceFolderPage } from "./workspace-folder-page/WorkspaceFolderPage";
 import { WorkspaceManageFoldersPage } from "./workspace-manage-folders/WorkspaceManageFoldersPage";
 import { WorkspaceManageMembersPage } from "./workspace-manage-members/WorkspaceManageMembersPage";
@@ -90,4 +90,5 @@ export const PAGES = {
   WorkspaceManageMembersPage,
   WorkspaceManageSettingsPage,
   WorkspaceOverviewPage,
+  WorkspaceArticlePage,
 };

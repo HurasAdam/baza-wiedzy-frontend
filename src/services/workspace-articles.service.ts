@@ -21,6 +21,10 @@ const findArticlesByFolder = ({ folderId, title, page }: FindArticlesByFolderPar
   return api.get(`${baseUrl}/folder/${folderId}`, { params });
 };
 
+const findOne = (articleId: string) => {
+  return api.get(`${baseUrl}/${articleId}`);
+};
+
 // const findWorkspaceFolders = (workspaceId: string) => {
 //   return api.get(`${baseUrl}/${workspaceId}/folders`);
 // };
@@ -28,5 +32,6 @@ const findArticlesByFolder = ({ folderId, title, page }: FindArticlesByFolderPar
 export const workspaceArticlesService = {
   createWorkspaceArticle,
   findArticlesByFolder,
+  findOne,
   //   findWorkspaceFolders,
 };

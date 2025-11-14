@@ -124,6 +124,8 @@ const WorkspaceArticlesList = ({
         articles?.data.length > 0 &&
         articles.data.map((article) => (
           <WorkspaceArticleCard
+            folderId={folderId}
+            workspaceId={workspaceId}
             onMouseEnter={() => setHoveredArticleIdRef(article._id)}
             onMouseLeave={() => setHoveredArticleIdRef(null)}
             key={article._id}
