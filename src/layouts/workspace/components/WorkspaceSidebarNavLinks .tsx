@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Folders, Settings, Users } from "lucide-react";
+import { LayoutGrid, Settings, Users } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 interface WorkspaceSidebarNavLinksProps {
@@ -8,8 +8,8 @@ interface WorkspaceSidebarNavLinksProps {
 
 export const WorkspaceSidebarNavLinks = ({ workspaceId }: WorkspaceSidebarNavLinksProps) => {
   const links = [
-    { to: `/workspace/${workspaceId}`, icon: Folders, label: "Foldery" },
-    { to: `/workspace/${workspaceId}/members`, icon: Users, label: "Zespół" },
+    { to: `/workspace/${workspaceId}`, icon: LayoutGrid, label: "Foldery" },
+    { to: `/workspace/${workspaceId}/members`, icon: Users, label: "Użytkownicy" },
     { to: `/workspace/${workspaceId}/settings`, icon: Settings, label: "Ustawienia" },
   ];
 

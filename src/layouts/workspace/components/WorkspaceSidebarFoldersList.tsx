@@ -21,7 +21,7 @@ export const WorkspaceSidebarFoldersList = ({ isLoading, folders, onAddFolder }:
 
   return (
     <div className="flex flex-col flex-1 overflow-hidden">
-      <div className="flex items-center justify-between px-3.5 pt-3 pb-2">
+      <div className="flex items-center justify-between px-3.5 pt-3 pb-2 bg-muted/30">
         <h3 className="text-xs font-medium text-muted-foreground/75 uppercase tracking-wide flex items-center gap-2">
           <button
             className="p-0 text-muted-foreground hover:text-primary transition-colors"
