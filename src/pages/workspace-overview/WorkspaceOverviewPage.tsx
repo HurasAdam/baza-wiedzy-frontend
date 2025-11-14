@@ -33,10 +33,7 @@ export function WorkspaceOverviewPage() {
           <p className="text-sm text-muted-foreground mt-1">
             Utwórz nowy folder, aby rozpocząć organizację swoich materiałów.
           </p>
-          <Button
-            onClick={() => navigate(`/workspace/${workspaceId}/folders`)}
-            className="mt-6 gap-2 shadow-md hover:shadow-lg transition-all"
-          >
+          <Button onClick={handleAddFolder} className="mt-6 gap-2 shadow-md hover:shadow-lg transition-all">
             <Plus className="w-4 h-4" />
             Dodaj folder
           </Button>

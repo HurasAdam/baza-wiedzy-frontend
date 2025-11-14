@@ -16,7 +16,7 @@ import { useOutletContext } from "react-router-dom";
 import { EditWorkspaceFolderModal } from "../../components/workspace-folder/EditWorkspaceFolderModal";
 
 export const WorkspaceManageFoldersPage = () => {
-  const { folders, workspace } = useOutletContext<{ folders: any[] }>();
+  const { folders, workspace, handleAddFolder } = useOutletContext<{ folders: any[] }>();
 
   const [query, setQuery] = useState("");
   const [view, setView] = useState<"grid" | "list">("list");
@@ -56,7 +56,7 @@ export const WorkspaceManageFoldersPage = () => {
             <h1 className="text-2xl font-semibold">Zarządzaj folderami</h1>
             <p className="text-sm text-muted-foreground mt-1">Organizuj swoje foldery w workspace.</p>
           </div>
-          <Button onClick={openAdd}>
+          <Button onClick={handleAddFolder}>
             <Plus className="w-4 h-4 mr-2" /> Nowy folder
           </Button>
         </div>
@@ -121,7 +121,7 @@ export const WorkspaceManageFoldersPage = () => {
               <p className="text-sm text-muted-foreground mt-1">
                 Utwórz folder, aby zacząć organizować swoje artykuły.
               </p>
-              <Button onClick={openAdd} className="mt-4">
+              <Button onClick={handleAddFolder} className="mt-4">
                 <Plus className="w-4 h-4 mr-2" /> Utwórz folder
               </Button>
             </div>
@@ -192,22 +192,6 @@ export const WorkspaceManageFoldersPage = () => {
           )}
         </div>
       </div>
-
-      {/* ADD DIALOG */}
-      <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Nowy folder</DialogTitle>
-          </DialogHeader>
-          <Input placeholder="Nazwa folderu" value={formName} onChange={(e) => setFormName(e.target.value)} />
-          <DialogFooter>
-            <Button variant="ghost" onClick={() => setIsAddOpen(false)}>
-              Anuluj
-            </Button>
-            <Button disabled={!formName.trim()}>Utwórz</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
 
       <EditWorkspaceFolderModal
         isEditingWorkspaceFolder={isEditOpen}
