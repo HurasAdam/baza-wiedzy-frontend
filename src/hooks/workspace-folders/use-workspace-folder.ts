@@ -25,11 +25,19 @@ export const useEditWorkspaceFolderMutation = () => {
   });
 };
 
-export const useFindWorkspaceFoldersQuery = (workspaceId: string) => {
+export const useDeleteWorkspaceFolderMutation = () => {
+  return useMutation({
+    mutationFn: ({ workspaceId, folderId }: { workspaceId: string; folderId: string }) => {
+      return workspaceFoldersService.deleteOneWorkspaceFolder(workspaceId, folderId);
+    },
+  });
+};
+
+export const useFindWorkspaceFoldersQuery = (workspaceId: string, searchParams?: URLSearchParams) => {
   return useQuery({
-    queryKey: ["workspace-folders", workspaceId],
+    queryKey: ["workspace-folders", workspaceId, searchParams?.toString() ?? ""],
     queryFn: () => {
-      return workspaceFoldersService.findWorkspaceFolders(workspaceId);
+      return workspaceFoldersService.findWorkspaceFolders(workspaceId, searchParams);
     },
     enabled: !!workspaceId,
   });
