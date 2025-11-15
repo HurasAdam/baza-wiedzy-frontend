@@ -1,9 +1,10 @@
 import {
   Bell,
   ChevronDown,
+  CopyPlus,
   LogOut,
-  LucideCircleFadingPlus,
   LucidePhone,
+  NotebookPen,
   PlusCircle,
   Settings,
   User,
@@ -183,11 +184,14 @@ const Header = ({
           )}
           {userPermissions.includes("ADD_ARTICLE") && (
             <Button onClick={() => navigate("articles/new")} className="cursor-pointer" variant="ghost" size="icon">
-              <LucideCircleFadingPlus />
+              <NotebookPen />
             </Button>
           )}
           <Button className="cursor-pointer" variant="ghost" size="icon">
             <LucidePhone />
+          </Button>
+          <Button className="cursor-pointer" variant="ghost" size="icon">
+            <CopyPlus />
           </Button>
 
           <Button
