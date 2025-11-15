@@ -29,8 +29,6 @@ export const WorkspaceManageFoldersPage = () => {
   const sortParam: FolderSortType =
     searchParams.get("sort") === FolderSort.OLDEST ? FolderSort.OLDEST : FolderSort.NEWEST;
 
-  console.log("WOKR", workspace);
-
   const { data: folders = [], isLoading: isFoldersLoading } = useFindWorkspaceFoldersQuery(workspaceId!, searchParams);
 
   const [view, setView] = useState<"grid" | "list">("list");

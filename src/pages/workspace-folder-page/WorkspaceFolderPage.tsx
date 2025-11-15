@@ -36,7 +36,7 @@ export function WorkspaceFolderPage() {
   };
 
   return (
-    <div className="flex flex-col pb-5">
+    <div className="flex flex-col pb-5 px-0.5">
       <WorkspaceFolderHeader folder={folderData} isLoading={isFolderDataLoading} />
 
       <WorkspaceArticleFilters

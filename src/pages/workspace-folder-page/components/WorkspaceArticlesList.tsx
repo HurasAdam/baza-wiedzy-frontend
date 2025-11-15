@@ -105,8 +105,8 @@ const WorkspaceArticlesList = ({
         articles?.data.length === 0 &&
         (selectedTitle ? (
           <EmptyState
-            title="Nie znaleziono żadnych artykułów"
-            description="Spróbuj zmienić filtry lub zresetuj wszystkie."
+            title="Brak wyników"
+            description={`Nie znaleziono artykułów pasujących do wyszukiwania * ${selectedTitle} *`}
             onReset={onResetAllFilters}
             resetLabel="Wyczyść filtry"
           />

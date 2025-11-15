@@ -20,7 +20,7 @@ const EmptyState = ({
 }: EmptyStateProps) => {
   return (
     <div className="col-span-full flex flex-col items-center justify-center  py-12 2xl:py-30 bg-muted/15  text-center text-muted-foreground">
-      {icon ?? <PackageSearch className="w-10 h-10 text-muted" />}
+      {icon ?? <PackageSearch className="w-16 h-16 text-muted" />}
       <h3 className="text-lg font-semibold  mb-1 text-muted-foreground">{title}</h3>
       <p className="text-sm mb-4 max-w-[350px] text-muted-foreground">{description}</p>
       {onReset && (
