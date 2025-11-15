@@ -6,13 +6,16 @@ import {
   Layers,
   LeafyGreen,
   LibraryBig,
+  Loader,
   PanelsTopLeft,
+  Save,
   Smartphone,
 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
+import type { Workspace } from "../../layouts/workspace/components/WorkspaceSidebar";
 import { cn } from "../../lib/utils";
-import { workspaceSchema } from "../../validation/workspace.schema";
+import { workspaceSchema, type WorkspaceDataForm } from "../../validation/workspace.schema";
 import { Button } from "../ui/button";
 import { DialogFooter } from "../ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
@@ -45,8 +48,13 @@ export const WORKSPACE_ICONS = {
 };
 export const iconOptions = Object.keys(WORKSPACE_ICONS); // ["Layers", "Grid", "Box", "Package", "Cpu"]
 
-const WorkspaceForm = ({ onSubmit, workspace }) => {
-  console.log(workspace);
+interface WorkspaceFormProps {
+  onSubmit: (data: WorkspaceDataForm) => void;
+  workspace?: Workspace;
+  isLoading: boolean;
+}
+
+const WorkspaceForm = ({ onSubmit, workspace, isLoading }: WorkspaceFormProps) => {
   const form = useForm<WorkspaceForm>({
     resolver: zodResolver(workspaceSchema),
     defaultValues: {
@@ -56,7 +64,7 @@ const WorkspaceForm = ({ onSubmit, workspace }) => {
       icon: workspace ? workspace.icon : "",
     },
   });
-
+  console.log("UPD", workspace);
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -146,7 +154,8 @@ const WorkspaceForm = ({ onSubmit, workspace }) => {
         </div>
         <DialogFooter>
           <Button className="cursor-pointer" type="submit">
-            Utwórz
+            {isLoading ? <Loader className="animate-spin" /> : <Save />}
+            {workspace ? "Zapisz" : "Utwórz"}
           </Button>
         </DialogFooter>
       </form>

@@ -1,7 +1,8 @@
-import type { z } from "zod";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 
-import { workspaceSchema } from "@/validation/workspace.schema";
+import { type WorkspaceDataForm } from "@/validation/workspace.schema";
+import { toast } from "sonner";
+import queryClient from "../../config/query.client";
 import { useCreateWorkspaceMutation } from "../../hooks/workspace/use-workspace";
 import WorkspaceForm from "./workspace-form";
 
@@ -10,12 +11,10 @@ interface CreateWorkspaceProps {
   setIsCreatingWorkspace: (isCreatingWorkspace: boolean) => void;
 }
 
-export type WorkspaceForm = z.infer<typeof workspaceSchema>;
-
 export const CreateWorkspaceModal = ({ isCreatingWorkspace, setIsCreatingWorkspace }: CreateWorkspaceProps) => {
-  const { mutate } = useCreateWorkspaceMutation();
+  const { mutate, isPending } = useCreateWorkspaceMutation();
 
-  const onSubmit = (data: WorkspaceForm) => {
+  const onSubmit = (data: WorkspaceDataForm) => {
     // mutate(data, {
     //   onSuccess: (data: any) => {
     //     form.reset();
@@ -29,7 +28,15 @@ export const CreateWorkspaceModal = ({ isCreatingWorkspace, setIsCreatingWorkspa
     //     console.log(error);
     //   },
     // });
-    mutate(data);
+    mutate(data, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["my-workspaces"] });
+        toast.success("Dodano nową kolekcję", {
+          position: "bottom-right",
+          description: "Twoja lista kolekcji została zaktualizowana",
+        });
+      },
+    });
   };
 
   return (
@@ -39,7 +46,7 @@ export const CreateWorkspaceModal = ({ isCreatingWorkspace, setIsCreatingWorkspa
           <DialogTitle>Utwórz prywanty moduł szablonów i odpowiedzi</DialogTitle>
         </DialogHeader>
 
-        <WorkspaceForm onSubmit={onSubmit} />
+        <WorkspaceForm onSubmit={onSubmit} isLoading={isPending} />
       </DialogContent>
     </Dialog>
   );
