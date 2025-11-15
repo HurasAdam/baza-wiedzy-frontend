@@ -6,7 +6,7 @@ import queryClient from "../../config/query.client";
 import { useUpdateWorkspaceMutation } from "../../hooks/workspace/use-workspace";
 
 export const WorkspaceManageSettingsPage = () => {
-  const { mutate } = useUpdateWorkspaceMutation();
+  const { mutate, isPending } = useUpdateWorkspaceMutation();
   const { workspace } = useOutletContext();
 
   const onSubmit = (data) => {
@@ -28,6 +28,10 @@ export const WorkspaceManageSettingsPage = () => {
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["workspace", workspace._id] });
+          toast.success("Zapisano zmiany", {
+            position: "bottom-right",
+            description: "Dane kolekcji zostały zaktualizowane",
+          });
         },
       }
     );
@@ -48,7 +52,7 @@ export const WorkspaceManageSettingsPage = () => {
       {!workspace ? (
         <WorkspaceFormSkeleton />
       ) : workspace ? (
-        <WorkspaceForm workspace={workspace} onSubmit={onSubmit} />
+        <WorkspaceForm workspace={workspace} onSubmit={onSubmit} isLoading={isPending} />
       ) : (
         <div>Workspace nie istnieje</div>
       )}
@@ -56,6 +60,7 @@ export const WorkspaceManageSettingsPage = () => {
   );
 };
 
+import { toast } from "sonner";
 import { cn } from "../../lib/utils";
 
 export const WorkspaceFormSkeleton = () => {

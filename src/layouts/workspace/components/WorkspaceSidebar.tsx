@@ -11,7 +11,7 @@ import { WORKSPACE_ICONS } from "../../../components/workspace/workspace-form";
 import { WorkspaceSidebarFoldersList } from "./WorkspaceSidebarFoldersList";
 import { WorkspaceSidebarNavLinks } from "./WorkspaceSidebarNavLinks ";
 
-interface Workspace {
+export interface Workspace {
   _id: string;
   name: string;
   icon: string;
