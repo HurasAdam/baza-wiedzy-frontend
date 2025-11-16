@@ -37,6 +37,7 @@ interface HeaderProps {
   onOpenIssueReportsModal: () => void;
   onOpenSettingsModal: () => void;
   onOpenNotificationsPanel: () => void;
+  onOpenWorkspaceInviteModal: () => void;
 }
 
 const workspaces = [];
@@ -46,6 +47,7 @@ const Header = ({
   onOpenCreateIssueReport,
   onOpenIssueReportsModal,
   onOpenNotificationsPanel,
+  onOpenWorkspaceInviteModal,
 }: HeaderProps) => {
   const { data: notificationsData } = useFindMyNotificationsQuery();
   const unreadCount = notificationsData?.unreadCount || 0;
@@ -125,6 +127,12 @@ const Header = ({
       icon: <Settings className="hover:text-primary-foreground" />,
       actionHandler: () => onOpenSettingsModal(),
       requiredPermission: null,
+    },
+    {
+      label: "Dołącz do kolekcji",
+      icon: <PlusCircle className="hover:text-primary-foreground" />,
+      requiredPermission: null, // każdy użytkownik może dołączyć
+      actionHandler: () => onOpenWorkspaceInviteModal(), // funkcja otwierająca modal z inputem na invite code
     },
     {
       label: "Wyloguj się",
