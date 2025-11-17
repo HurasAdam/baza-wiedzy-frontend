@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useOutletContext, useParams } from "react-router-dom";
 import { Separator } from "../../components/ui/separator";
 import { useFindWorkspaceMembersQuery } from "../../hooks/workspace/use-workspace";
 import WorkspaceInviteLinkSection from "./components/WorkspaceInviteLinkSection";
@@ -7,6 +7,7 @@ import WorkspaceMembersSection from "./components/WorkspaceMembersSection";
 
 export const WorkspaceManageMembersPage = () => {
   const { workspaceId } = useParams();
+  const { workspace } = useOutletContext();
   const { data: workspaceMembers, isLoading } = useFindWorkspaceMembersQuery(workspaceId);
 
   return (
@@ -14,7 +15,7 @@ export const WorkspaceManageMembersPage = () => {
       <WorkspaceManageMembersHeader />
       <Separator />
 
-      {workspaceId && <WorkspaceInviteLinkSection workspaceId={workspaceId} />}
+      {workspaceId && <WorkspaceInviteLinkSection inviteCode={workspace.inviteCode} />}
 
       <WorkspaceMembersSection workspaceMembers={workspaceMembers} isLoading={isLoading} />
     </div>
