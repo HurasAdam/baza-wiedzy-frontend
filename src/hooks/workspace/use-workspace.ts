@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
+import type { WorkspaceInviteFormData } from "../../components/workspace-invite/WorkspaceInviteModal";
 import { workspaceService } from "../../services/workspace.service";
 
 export const useFindUserWorkspacesQuery = () => {
@@ -14,7 +15,7 @@ export const useFindWorkspaceQuery = (workspaceId?: string) => {
   return useQuery({
     queryKey: ["workspace", workspaceId],
     queryFn: () => workspaceService.findOne(workspaceId!),
-    enabled: !!workspaceId, // odpala się dopiero, gdy workspaceId istnieje
+    enabled: !!workspaceId,
   });
 };
 
@@ -22,7 +23,7 @@ export const useFindWorkspaceMembersQuery = (workspaceId?: string) => {
   return useQuery({
     queryKey: ["workspace-members", workspaceId],
     queryFn: () => workspaceService.findMembers(workspaceId!),
-    enabled: !!workspaceId, // odpala się dopiero, gdy workspaceId istnieje
+    enabled: !!workspaceId,
   });
 };
 export const useCreateWorkspaceMutation = () => {
@@ -37,6 +38,14 @@ export const useUpdateWorkspaceMutation = () => {
   return useMutation({
     mutationFn: (payload) => {
       return workspaceService.updateWorkspace(payload);
+    },
+  });
+};
+
+export const useJoinWorkspaceMutation = () => {
+  return useMutation({
+    mutationFn: (payload: WorkspaceInviteFormData) => {
+      return workspaceService.joinWorkspaceByInviteCode(payload);
     },
   });
 };

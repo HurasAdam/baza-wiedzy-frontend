@@ -1,4 +1,5 @@
 import api from "@/config/api.client";
+import type { WorkspaceInviteFormData } from "../components/workspace-invite/WorkspaceInviteModal";
 import type { WorkspaceDataForm } from "../validation/workspace.schema";
 const baseUrl = "/workspaces";
 const adminBaseUrl = "/admin";
@@ -23,10 +24,15 @@ const findMembers = (workspaceId: string) => {
   return api.get(`${baseUrl}/${workspaceId}/members`);
 };
 
+const joinWorkspaceByInviteCode = (inviteCode: WorkspaceInviteFormData) => {
+  return api.post(`${baseUrl}/join`, inviteCode);
+};
+
 export const workspaceService = {
   createWorkspace,
   updateWorkspace,
   find,
   findOne,
   findMembers,
+  joinWorkspaceByInviteCode,
 };

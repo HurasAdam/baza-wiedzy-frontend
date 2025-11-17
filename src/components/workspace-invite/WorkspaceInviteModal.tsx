@@ -1,7 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LayoutDashboard, Loader, UserPlus } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
+import queryClient from "../../config/query.client";
+import { useJoinWorkspaceMutation } from "../../hooks/workspace/use-workspace";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
@@ -20,6 +23,7 @@ interface WorkspaceInviteModalProps {
 }
 
 export const WorkspaceInviteModal = ({ isOpen, setIsOpen, onSave, isLoading }: WorkspaceInviteModalProps) => {
+  const { mutate: joinWorkspaceMutate } = useJoinWorkspaceMutation();
   const form = useForm<WorkspaceInviteFormData>({
     resolver: zodResolver(InviteCodeSchema),
     defaultValues: {
@@ -28,7 +32,16 @@ export const WorkspaceInviteModal = ({ isOpen, setIsOpen, onSave, isLoading }: W
   });
 
   const onSubmit = (data: WorkspaceInviteFormData) => {
-    onSave(data);
+    joinWorkspaceMutate(data, {
+      onSuccess: () => {
+        toast.success("Dołączono do kolekcji", {
+          position: "bottom-right",
+          description: "Masz teraz dostęp do zasobów kolekcji.",
+        });
+        queryClient.invalidateQueries({ queryKey: ["my-workspaces"] });
+        setIsOpen(false);
+      },
+    });
     form.reset();
   };
 

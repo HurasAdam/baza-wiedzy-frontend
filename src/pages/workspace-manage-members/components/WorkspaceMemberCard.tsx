@@ -13,11 +13,18 @@ interface WorkspaceMemberCardProps {
   member: WorkspaceMember;
 }
 
+const rolesMap: Record<string, string> = {
+  OWNER: "WŁAŚCICIEL",
+
+  VIEWER: "CZYTELNIK",
+  EDITOR: "MODERATOR",
+} as const;
+
 export const WorkspaceMemberCard = ({ member }: WorkspaceMemberCardProps) => (
   <div className="flex items-center justify-between p-4 hover:bg-muted/50 transition">
     <div className="flex items-center gap-3">
-      <Avatar>
-        <AvatarFallback>
+      <Avatar className="w-10 h-10">
+        <AvatarFallback className="">
           {member.name?.[0]}
           {member.surname?.[0]}
         </AvatarFallback>
@@ -32,11 +39,11 @@ export const WorkspaceMemberCard = ({ member }: WorkspaceMemberCardProps) => (
 
     <div className="flex items-center gap-3">
       <span
-        className={`px-2 py-1 text-xs font-medium rounded-full ${
+        className={`px-2 py-1.5 text-xs font-semibold rounded-xl ${
           member.role === "OWNER" ? "bg-purple-100 text-purple-800" : "bg-gray-100 text-gray-700"
         }`}
       >
-        {member.role}
+        {rolesMap[member.role]}
       </span>
 
       <DropdownMenu>
