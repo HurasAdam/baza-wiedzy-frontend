@@ -1,16 +1,18 @@
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
+
 import { CreateWorkspaceFolderModal } from "../../components/workspace-folder/CreateWorkspaceFolderModal";
 import { useFindWorkspaceFoldersQuery } from "../../hooks/workspace-folders/use-workspace-folder";
 import { useFindUserWorkspacesQuery, useFindWorkspaceQuery } from "../../hooks/workspace/use-workspace";
+import { WorkspaceAccessDenied } from "../../pages/workspace-denied-page/WorkspaceAccessDeniedPage";
 import { WorkspaceSidebar } from "./components/WorkspaceSidebar";
 
 export default function WorkspaceLayout() {
   const { workspaceId } = useParams();
   const navigate = useNavigate();
   const { data: workspaces = [], isLoading: isWorkspacesLoading } = useFindUserWorkspacesQuery();
-  const { data: workspace, isLoading: isWorkspaceLoading } = useFindWorkspaceQuery(workspaceId);
+  const { data: workspace, isLoading: isWorkspaceLoading, error } = useFindWorkspaceQuery(workspaceId);
   const { data: folders, isLoading: isFoldersLoading } = useFindWorkspaceFoldersQuery(workspaceId);
   const [isCreatingWorkspaceFolder, setIsCreatingWorkspaceFolder] = useState(false);
 
@@ -29,6 +31,10 @@ export default function WorkspaceLayout() {
 
   if (isLoading) {
     return <WorkspaceLoader message="Trwa ładowanie kolekcji" />;
+  }
+
+  if (error) {
+    return <WorkspaceAccessDenied message="Nie masz dostępu do tej kolekcji" />;
   }
 
   return (
