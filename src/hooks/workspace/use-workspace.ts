@@ -49,3 +49,11 @@ export const useJoinWorkspaceMutation = () => {
     },
   });
 };
+
+export const useRemoveWorkspaceMemberMutation = () => {
+  return useMutation({
+    mutationFn: ({ workspaceId, memberId }: { workspaceId: string; memberId: string }) => {
+      return workspaceService.removeMember(workspaceId, memberId);
+    },
+  });
+};

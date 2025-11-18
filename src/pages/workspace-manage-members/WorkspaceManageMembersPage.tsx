@@ -17,7 +17,7 @@ export const WorkspaceManageMembersPage = () => {
 
       {workspaceId && <WorkspaceInviteLinkSection inviteCode={workspace.inviteCode} />}
 
-      <WorkspaceMembersSection workspaceMembers={workspaceMembers} isLoading={isLoading} />
+      <WorkspaceMembersSection workspaceMembers={workspaceMembers} workspaceId={workspaceId} isLoading={isLoading} />
     </div>
   );
 };

@@ -24,6 +24,10 @@ const findMembers = (workspaceId: string) => {
   return api.get(`${baseUrl}/${workspaceId}/members`);
 };
 
+const removeMember = (workspaceId: string, memberId: string): Promise<void> => {
+  return api.delete(`${baseUrl}/${workspaceId}/members/${memberId}`);
+};
+
 const joinWorkspaceByInviteCode = (inviteCode: WorkspaceInviteFormData) => {
   return api.post(`${baseUrl}/join`, inviteCode);
 };
@@ -34,5 +38,6 @@ export const workspaceService = {
   find,
   findOne,
   findMembers,
+  removeMember,
   joinWorkspaceByInviteCode,
 };
