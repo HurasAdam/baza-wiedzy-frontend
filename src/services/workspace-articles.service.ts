@@ -1,4 +1,6 @@
 import api from "@/config/api.client";
+import type { WorkspaceArticle } from "../types/workspace-article";
+import type { WorkspaceArticleResponseVariantFormData } from "../validation/workspace-article-response-variant.schema";
 import type { WorkspaceArticleFormData } from "../validation/workspace-article.schema";
 const baseUrl = "/workspace-articles";
 const adminBaseUrl = "/admin";
@@ -21,7 +23,7 @@ const findArticlesByFolder = ({ folderId, title, page }: FindArticlesByFolderPar
   return api.get(`${baseUrl}/folder/${folderId}`, { params });
 };
 
-const findOne = (articleId: string) => {
+const findOne = (articleId: string): Promise<WorkspaceArticle> => {
   return api.get(`${baseUrl}/${articleId}`);
 };
 
@@ -29,9 +31,17 @@ const findOne = (articleId: string) => {
 //   return api.get(`${baseUrl}/${workspaceId}/folders`);
 // };
 
+const updateWorkspaceArticleResponseVariant = (
+  articleId: string,
+  responseVariantId: string,
+  payload: WorkspaceArticleResponseVariantFormData
+) => {
+  return api.put(`${baseUrl}/${articleId}/response-variants/${responseVariantId}`, payload);
+};
+
 export const workspaceArticlesService = {
   createWorkspaceArticle,
   findArticlesByFolder,
   findOne,
-  //   findWorkspaceFolders,
+  updateWorkspaceArticleResponseVariant,
 };

@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { workspaceArticlesService } from "../../services/workspace-articles.service";
+import type { WorkspaceArticleResponseVariantFormData } from "../../validation/workspace-article-response-variant.schema";
 import type { WorkspaceArticleFormData } from "../../validation/workspace-article.schema";
 
 export const useFindArticlesByFolderQuery = (params: { folderId: string; title?: string; page?: number }) => {
@@ -24,6 +25,22 @@ export const useCreateWorkspaceArticleMutation = () => {
   return useMutation({
     mutationFn: (payload: WorkspaceArticleFormData) => {
       return workspaceArticlesService.createWorkspaceArticle(payload);
+    },
+  });
+};
+
+export const useUpdateWorkspaceArticleVariantMutation = () => {
+  return useMutation({
+    mutationFn: ({
+      articleId,
+      responseVariantId,
+      payload,
+    }: {
+      articleId: string;
+      responseVariantId: string;
+      payload: WorkspaceArticleResponseVariantFormData;
+    }) => {
+      return workspaceArticlesService.updateWorkspaceArticleResponseVariant(articleId, responseVariantId, payload);
     },
   });
 };
