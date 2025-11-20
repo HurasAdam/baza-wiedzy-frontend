@@ -29,6 +29,22 @@ export const useCreateWorkspaceArticleMutation = () => {
   });
 };
 
+export const useCreateWorkspaceArticleVariantMutation = () => {
+  return useMutation({
+    mutationFn: ({
+      articleId,
+
+      payload,
+    }: {
+      articleId: string;
+
+      payload: WorkspaceArticleResponseVariantFormData;
+    }) => {
+      return workspaceArticlesService.createWorkspaceArticleResponseVariant(articleId, payload);
+    },
+  });
+};
+
 export const useUpdateWorkspaceArticleVariantMutation = () => {
   return useMutation({
     mutationFn: ({

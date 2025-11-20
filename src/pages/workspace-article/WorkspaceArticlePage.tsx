@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
+import { CreateWorkspaceArticleVariantModal } from "../../components/workspace-article-variant/CreateWorkspaceArticleVariantModal";
 import { useFindWorkspaceArticleQuery } from "../../hooks/workspace-articles/use-workspace-articles";
 import ArticleHeader from "./components/ArticleHeader";
 import { ArticleVariants } from "./components/ArticleVariants";
@@ -7,7 +9,13 @@ import { ArticleVariants } from "./components/ArticleVariants";
 export function WorkspaceArticlePage() {
   const { articleId } = useParams();
   const { data: article, isLoading } = useFindWorkspaceArticleQuery(articleId!);
+  const [isCreateVariantModalOpen, setIsCreateVariantModalOpen] = useState<boolean>(false);
+
   const navigate = useNavigate();
+
+  const onAddVariant = () => {
+    setIsCreateVariantModalOpen(true);
+  };
 
   if (isLoading) {
     return (
@@ -34,9 +42,15 @@ export function WorkspaceArticlePage() {
         createdBy={article.createdBy}
         createdAt={article.createdAt}
         onBack={() => navigate(-1)}
+        onAddVariant={onAddVariant}
       />
 
       <ArticleVariants articleId={article._id} variants={article.responseVariants} onCopy={copyToClipboard} />
+      <CreateWorkspaceArticleVariantModal
+        isOpen={isCreateVariantModalOpen}
+        articleId={article?._id}
+        onClose={setIsCreateVariantModalOpen}
+      />
     </div>
   );
 }

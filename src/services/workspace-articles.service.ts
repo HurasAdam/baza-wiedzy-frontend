@@ -31,6 +31,14 @@ const findOne = (articleId: string): Promise<WorkspaceArticle> => {
 //   return api.get(`${baseUrl}/${workspaceId}/folders`);
 // };
 
+const createWorkspaceArticleResponseVariant = (
+  articleId: string,
+
+  payload: WorkspaceArticleResponseVariantFormData
+) => {
+  return api.post(`${baseUrl}/${articleId}/response-variants`, payload);
+};
+
 const updateWorkspaceArticleResponseVariant = (
   articleId: string,
   responseVariantId: string,
@@ -43,5 +51,6 @@ export const workspaceArticlesService = {
   createWorkspaceArticle,
   findArticlesByFolder,
   findOne,
+  createWorkspaceArticleResponseVariant,
   updateWorkspaceArticleResponseVariant,
 };
