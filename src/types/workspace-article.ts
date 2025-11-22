@@ -26,3 +26,10 @@ export interface ArticleResponseVariant {
   variantName: string;
   variantContent: string;
 }
+
+export interface WorkspaceArticleUpdateResponse {
+  _id: string;
+  title: string;
+  workspaceId: string;
+  folderId: string;
+}

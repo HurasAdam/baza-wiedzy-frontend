@@ -1,5 +1,5 @@
 import api from "@/config/api.client";
-import type { WorkspaceArticle } from "../types/workspace-article";
+import type { WorkspaceArticle, WorkspaceArticleUpdateResponse } from "../types/workspace-article";
 import type { WorkspaceArticleResponseVariantFormData } from "../validation/workspace-article-response-variant.schema";
 import type { WorkspaceArticleFormData } from "../validation/workspace-article.schema";
 const baseUrl = "/workspace-articles";
@@ -31,6 +31,10 @@ const findOne = (articleId: string): Promise<WorkspaceArticle> => {
 //   return api.get(`${baseUrl}/${workspaceId}/folders`);
 // };
 
+const updateOne = (articleId: string, payload: unknown): Promise<WorkspaceArticleUpdateResponse> => {
+  return api.put(`${baseUrl}/${articleId}`, payload);
+};
+
 const createWorkspaceArticleResponseVariant = (
   articleId: string,
 
@@ -51,6 +55,7 @@ export const workspaceArticlesService = {
   createWorkspaceArticle,
   findArticlesByFolder,
   findOne,
+  updateOne,
   createWorkspaceArticleResponseVariant,
   updateWorkspaceArticleResponseVariant,
 };

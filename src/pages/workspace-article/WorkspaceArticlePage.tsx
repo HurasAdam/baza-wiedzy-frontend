@@ -1,20 +1,34 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { toast } from "sonner";
+import { EditWorkspaceArticleModal } from "../../components/workspace-article-edit/EditWorkspaceArticleModal";
 import { CreateWorkspaceArticleVariantModal } from "../../components/workspace-article-variant/CreateWorkspaceArticleVariantModal";
 import { useFindWorkspaceArticleQuery } from "../../hooks/workspace-articles/use-workspace-articles";
+import type { Folder } from "../workspace-manage-folders/components/ManageFoldersFilters";
 import ArticleHeader from "./components/ArticleHeader";
 import { ArticleVariants } from "./components/ArticleVariants";
 
 export function WorkspaceArticlePage() {
   const { articleId } = useParams();
+  const { folderId: currentFolderId } = useParams();
   const { data: article, isLoading } = useFindWorkspaceArticleQuery(articleId!);
   const [isCreateVariantModalOpen, setIsCreateVariantModalOpen] = useState<boolean>(false);
+  const [isEditTitleModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+
+  const { folders } = useOutletContext<{
+    folders: Folder[];
+    workspace: unknown;
+    handleAddFolder: () => void;
+  }>();
 
   const navigate = useNavigate();
 
   const onAddVariant = () => {
     setIsCreateVariantModalOpen(true);
+  };
+
+  const onArticleEdit = () => {
+    setIsEditModalOpen(true);
   };
 
   if (isLoading) {
@@ -43,14 +57,27 @@ export function WorkspaceArticlePage() {
         createdAt={article.createdAt}
         onBack={() => navigate(-1)}
         onAddVariant={onAddVariant}
+        onArticleEdit={onArticleEdit}
       />
 
       <ArticleVariants articleId={article._id} variants={article.responseVariants} onCopy={copyToClipboard} />
+
       <CreateWorkspaceArticleVariantModal
         isOpen={isCreateVariantModalOpen}
         articleId={article?._id}
-        onClose={setIsCreateVariantModalOpen}
+        onClose={() => setIsCreateVariantModalOpen(false)}
       />
+
+      {isEditTitleModalOpen && currentFolderId && (
+        <EditWorkspaceArticleModal
+          isOpen={isEditTitleModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          article={article}
+          folders={folders}
+          currentFolderId={currentFolderId}
+          navigate={navigate}
+        />
+      )}
     </div>
   );
 }

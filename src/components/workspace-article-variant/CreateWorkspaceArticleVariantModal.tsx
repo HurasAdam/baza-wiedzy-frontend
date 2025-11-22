@@ -9,14 +9,12 @@ import { WorkspaceArticleVariantForm } from "./workspaceArticleVariantForm";
 interface CreateVariantModalProps {
   isOpen: boolean;
   articleId: string;
-  variant: { _id: string; variantName: string; variantContent: string } | null;
-  onClose: () => void;
+
+  onClose: (open?: boolean) => void;
 }
 
-export function CreateWorkspaceArticleVariantModal({ articleId, isOpen, variant, onClose }: CreateVariantModalProps) {
+export function CreateWorkspaceArticleVariantModal({ articleId, isOpen, onClose }: CreateVariantModalProps) {
   const { mutate, isPending } = useCreateWorkspaceArticleVariantMutation();
-
-  console.log("VARIANTTT", variant);
 
   const handleSubmit = (data: WorkspaceArticleResponseVariantFormData) => {
     mutate(
@@ -58,7 +56,7 @@ export function CreateWorkspaceArticleVariantModal({ articleId, isOpen, variant,
         </DialogHeader>
 
         <WorkspaceArticleVariantForm
-          defaultValues={variant ?? { variantName: "", variantContent: "" }}
+          defaultValues={{ variantName: "", variantContent: "" }}
           onSubmit={handleSubmit}
           isSaving={isPending}
           onClose={onClose}

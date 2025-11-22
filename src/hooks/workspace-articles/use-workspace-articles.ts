@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { workspaceArticlesService } from "../../services/workspace-articles.service";
+import type { EditWorkspaceArticleFormData } from "../../validation/edit-workspace-article.schema";
 import type { WorkspaceArticleResponseVariantFormData } from "../../validation/workspace-article-response-variant.schema";
 import type { WorkspaceArticleFormData } from "../../validation/workspace-article.schema";
 
@@ -41,6 +42,22 @@ export const useCreateWorkspaceArticleVariantMutation = () => {
       payload: WorkspaceArticleResponseVariantFormData;
     }) => {
       return workspaceArticlesService.createWorkspaceArticleResponseVariant(articleId, payload);
+    },
+  });
+};
+
+export const useUpdateWorkspaceArticleMutation = () => {
+  return useMutation({
+    mutationFn: ({
+      articleId,
+
+      payload,
+    }: {
+      articleId: string;
+
+      payload: EditWorkspaceArticleFormData;
+    }) => {
+      return workspaceArticlesService.updateOne(articleId, payload);
     },
   });
 };
