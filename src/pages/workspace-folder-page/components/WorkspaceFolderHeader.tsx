@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Folder, MoreVertical, Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface FolderAuthor {
   _id: string;
@@ -30,6 +31,7 @@ interface WorkspaceFolderHeaderProps {
 }
 
 export function WorkspaceFolderHeader({ folder, isLoading }: WorkspaceFolderHeaderProps) {
+  const navigate = useNavigate();
   if (isLoading) {
     return (
       <div className="flex items-center justify-between  pb-5 mb-4">
@@ -57,7 +59,7 @@ export function WorkspaceFolderHeader({ folder, isLoading }: WorkspaceFolderHead
 
       {/* Right side */}
       <div className="flex items-center gap-2">
-        <Button variant="outline" size="sm">
+        <Button onClick={() => navigate(`/workspace/${folder?.workspaceId}/new-article`)} variant="outline" size="sm">
           <Plus className="w-4 h-4 mr-1" /> Nowy artykuł
         </Button>
         <DropdownMenu>
