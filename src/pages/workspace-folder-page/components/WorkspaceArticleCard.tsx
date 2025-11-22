@@ -93,24 +93,20 @@ const WorkspaceArticleCard = ({
   const selectedFlagColor = selectedFlag ? flags.find((f) => f._id === selectedFlag)?.labelColor : "#999";
 
   return (
-    <div
-      onMouseEnter={() => onMouseEnter?.()}
-      onMouseLeave={() => onMouseLeave?.()}
-      key={article._id}
+    <Link
+      to={`/workspace/${workspaceId}/folders/${folderId}/articles/${article._id}`}
+      state={{ from: location.pathname + location.search }}
       className={cn(
         "flex justify-between items-center px-4 py-2 text-sm hover:bg-muted transition-colors bg-muted/15",
         "border-b last:border-0",
         "first:rounded-t-xl",
         "last:rounded-b-lg"
       )}
-      title={`Autor: ${article.createdBy.name}`}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
       {/* Left side */}
-      <Link
-        to={`/workspace/${workspaceId}/folders/${folderId}/articles/${article._id}`}
-        state={{ from: location.pathname + location.search }}
-        className="flex items-center gap-3 min-w-0 overflow-hidden flex-grow"
-      >
+      <div className="flex items-center gap-3 min-w-0 overflow-hidden flex-grow">
         <div className="relative flex-shrink-0">
           <FileText className="w-5 h-5 text-muted-foreground" />
           {article.responseVariantsCount > 1 && (
@@ -122,16 +118,21 @@ const WorkspaceArticleCard = ({
 
         <div className="flex flex-col overflow-hidden">
           <span className="font-medium text-muted-foreground truncate">{article.title}</span>
-          {/* <span className="text-muted-foreground text-xs">{article.product.name}</span> */}
         </div>
-      </Link>
+      </div>
 
-      {/* Right side*/}
+      {/* Right side */}
       <div className="flex items-center gap-2">
         {article.status === "pending" && (
           <Tooltip>
             <TooltipTrigger asChild>
-              <div className="flex items-center justify-center w-6 h-6 cursor-default">
+              <div
+                className="flex items-center justify-center w-6 h-6 cursor-default"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                }}
+              >
                 <svg
                   className="w-4 h-4 text-amber-600 dark:text-amber-400 animate-pulse"
                   fill="currentColor"
@@ -152,6 +153,7 @@ const WorkspaceArticleCard = ({
           size="icon"
           onClick={(e) => {
             e.stopPropagation();
+            e.preventDefault();
             toggleFavourite(article._id);
           }}
         >
@@ -166,40 +168,8 @@ const WorkspaceArticleCard = ({
             />
           )}
         </Button>
-
-        {/* Dropdown flag */}
-        {/* <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" onClick={(e) => e.stopPropagation()}>
-              <FlagIcon className="h-5 w-5" style={{ color: selectedFlagColor }} />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="bg-background shadow-lg rounded-lg py-1 min-w-[150px]">
-            {flags.length === 0 && (
-              <DropdownMenuItem disabled className="text-muted-foreground">
-                Brak flag
-              </DropdownMenuItem>
-            )}
-            {flags.map((flag) => (
-              <DropdownMenuItem
-                key={flag._id}
-                onSelect={(e) => {
-                  e.stopPropagation();
-                  handleFlagSelect(flag._id);
-                }}
-                className="flex items-center gap-2 hover:bg-muted/80 transition-colors rounded-md px-2 py-1 cursor-pointer"
-              >
-                <span
-                  className="inline-block w-3 h-3 rounded-full flex-shrink-0"
-                  style={{ backgroundColor: flag.color }}
-                />
-                <span className="text-sm">{flag.name}</span>
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu> */}
       </div>
-    </div>
+    </Link>
   );
 };
 
