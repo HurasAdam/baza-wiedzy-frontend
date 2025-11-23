@@ -1,4 +1,4 @@
-import { FileText, HeartIcon, Loader } from "lucide-react";
+import { FileText, HeartIcon, List, Loader } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "../../../components/ui/button";
@@ -106,14 +106,9 @@ const WorkspaceArticleCard = ({
       onMouseLeave={onMouseLeave}
     >
       {/* Left side */}
-      <div className="flex items-center gap-3 min-w-0 overflow-hidden flex-grow">
-        <div className="relative flex-shrink-0">
-          <FileText className="w-5 h-5 text-muted-foreground" />
-          {article.responseVariantsCount > 1 && (
-            <span className="absolute -top-1 -right-1.5 flex items-center justify-center w-4 h-4 text-[9px] font-medium text-white bg-primary/90 shadow-sm rounded-full">
-              {article.responseVariantsCount}
-            </span>
-          )}
+      <div className="flex items-center gap-1.5 min-w-0 overflow-hidden flex-grow ">
+        <div className="relative flex-shrink-0  p-1.5 rounded-md  bg-muted/40 border border-muted/50">
+          <FileText className="w-4.5 h-4.5 text-muted-foreground" />
         </div>
 
         <div className="flex flex-col overflow-hidden">
@@ -122,7 +117,17 @@ const WorkspaceArticleCard = ({
       </div>
 
       {/* Right side */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-20">
+        {/* Liczba wariantów */}
+        {/* Liczba wariantów z ikoną */}
+        {article.responseVariantsCount > 1 && (
+          <div className="flex items-center gap-1 px-2 py-1 rounded-full text-xs text-muted-foreground">
+            <List className="w-3.5 h-3.5 text-muted-foreground" />
+            <span className="text-xs">{article.responseVariantsCount}</span>
+          </div>
+        )}
+
+        {/* Status pending */}
         {article.status === "pending" && (
           <Tooltip>
             <TooltipTrigger asChild>
@@ -148,6 +153,7 @@ const WorkspaceArticleCard = ({
           </Tooltip>
         )}
 
+        {/* Ulubione */}
         <Button
           variant="ghost"
           size="icon"
