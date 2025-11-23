@@ -13,12 +13,16 @@ export const useFindArticlesByFolderQuery = (params: { folderId: string; title?:
   });
 };
 
-export const useFindWorkspaceArticleQuery = (articleId: string) => {
+export const useFindWorkspaceArticleQuery = (articleId?: string) => {
   return useQuery({
     queryKey: ["workspace-article", articleId],
     queryFn: () => {
-      return workspaceArticlesService.findOne(articleId);
+      return workspaceArticlesService.findOne(articleId!);
     },
+    enabled: !!articleId,
+    refetchOnWindowFocus: false,
+    staleTime: 0,
+    retry: false,
   });
 };
 

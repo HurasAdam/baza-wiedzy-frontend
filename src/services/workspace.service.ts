@@ -2,7 +2,6 @@ import api from "@/config/api.client";
 import type { WorkspaceInviteFormData } from "../components/workspace-invite/WorkspaceInviteModal";
 import type { WorkspaceDataForm } from "../validation/workspace.schema";
 const baseUrl = "/workspaces";
-const adminBaseUrl = "/admin";
 
 const createWorkspace = (payload: WorkspaceDataForm) => {
   return api.post(`${baseUrl}`, payload);

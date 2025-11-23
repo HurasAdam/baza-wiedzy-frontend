@@ -14,7 +14,7 @@ const VariantsShortcutTooltip = () => (
         <h4 className="text-sm font-semibold text-foreground mb-2">Skróty klawiszowe</h4>
 
         <div className="flex items-center gap-2 mb-1">
-          <kbd className="px-2 py-1 bg-muted rounded border text-sm font-medium">1–4</kbd>
+          <kbd className="px-2 py-1 bg-muted rounded border text-sm font-medium">1–6</kbd>
           <span className="text-xs text-muted-foreground">Przełączanie wariantów odpowiedzi</span>
         </div>
 

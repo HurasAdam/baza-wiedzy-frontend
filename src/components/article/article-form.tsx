@@ -14,12 +14,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Textarea } from "../ui/textarea";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 
-const dropZoneConfig = {
-  maxFiles: 5,
-  maxSize: 1024 * 1024 * 4, // 4MB
-  multiple: true,
-};
-
 interface ArticleFormProps {
   onCancel?: () => void;
   article?: Article;

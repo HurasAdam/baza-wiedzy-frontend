@@ -1,4 +1,6 @@
+import { useEffect, useRef, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
+import WorkspaceArticleDrawer from "../../components/workspace-article-drawer/WorkspaceArticleDrawer";
 import { useFindArticlesByFolderQuery } from "../../hooks/workspace-articles/use-workspace-articles";
 import { useFindOneWorkspaceFolderQuery } from "../../hooks/workspace-folders/use-workspace-folder";
 import WorkspaceArticleFilters from "./components/WorkspaceArticleFilters";
@@ -9,7 +11,10 @@ export function WorkspaceFolderPage() {
   const { folderId } = useParams();
   const { workspaceId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const [selectedArticleId, setSelectedArticleId] = useState<string | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [hoveredArticleId, setHoveredArticleId] = useState<string | null>(null);
+  const hoveredArticleIdRef = useRef<string | null>(null);
   const titleParam = searchParams.get("title") || "";
   const pageParam = parseInt(searchParams.get("page") || "1", 10);
 
@@ -34,6 +39,29 @@ export function WorkspaceFolderPage() {
       return prev;
     });
   };
+
+  const openArticleDrawer = (articleId: string) => {
+    setSelectedArticleId(articleId);
+    setIsDrawerOpen(true);
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() === "v") {
+        const currentHoveredId = hoveredArticleIdRef.current;
+        console.log("DUPA");
+        if (!isDrawerOpen && currentHoveredId) {
+          // Otwórz drawer jeśli najechano na artykuł
+          openArticleDrawer(currentHoveredId);
+        } else if (isDrawerOpen) {
+          setIsDrawerOpen(false);
+          setSelectedArticleId(null);
+        }
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isDrawerOpen]);
 
   return (
     <div className="flex flex-col pb-5 px-0.5">
@@ -62,9 +90,18 @@ export function WorkspaceFolderPage() {
         onResetAllFilters={onResetAllFilters}
         toggleFavourite={() => {}}
         pendingId={null}
-        openArticleDrawer={() => {}}
-        setHoveredArticleId={() => {}}
-        setHoveredArticleIdRef={() => {}}
+        openArticleDrawer={openArticleDrawer}
+        setHoveredArticleId={setHoveredArticleId}
+        setHoveredArticleIdRef={(id) => (hoveredArticleIdRef.current = id)}
+      />
+
+      <WorkspaceArticleDrawer
+        articleId={selectedArticleId}
+        open={isDrawerOpen}
+        onOpenChange={(open) => {
+          setIsDrawerOpen(open);
+          if (!open) setSelectedArticleId(null);
+        }}
       />
     </div>
   );
