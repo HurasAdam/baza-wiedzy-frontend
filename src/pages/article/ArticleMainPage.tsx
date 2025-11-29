@@ -156,7 +156,7 @@ export const ArticleMainPage = () => {
 
   const onRefresh = async () => {
     try {
-      const result = await refetch(); // czeka aż zakończy się odświeżanie
+      const result = await refetch();
       if (!result.error) {
         toast.success("Odświeżono.", {
           description: "Dane artykułu zostały zaktualizowane.",
@@ -364,13 +364,13 @@ export const ArticleMainPage = () => {
         </div>
       </div>
       {article.employeeDescription && (
-        <Card>
-          <CardContent>
-            <div className="flex justify-between items-center mb-2">
-              <h3 className="text-sm font-semibold">{`Instrukcja dla pracownika`}</h3>
+        <Card className="rounded-xl p-6 shadow-md border-l-6  border-l-primary">
+          <CardContent className="p-0">
+            <div className="flex items-center gap-3 mb-4">
+              <Tag className="w-5 h-5 text-primary" />
+              <h3 className="text-lg font-semibold text-foreground">Instrukcja dla pracownika</h3>
             </div>
-            <Separator />
-            <p className="text-sm whitespace-pre-wrap mt-3">{article.employeeDescription}</p>
+            <p className="text-sm text-foreground whitespace-pre-wrap leading-relaxed">{article.employeeDescription}</p>
           </CardContent>
         </Card>
       )}
