@@ -1,4 +1,4 @@
-import { FileText, HeartIcon, Loader } from "lucide-react";
+import { FileText, HeartIcon, List, Loader, Star } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "../../../components/ui/button";
@@ -86,8 +86,6 @@ const TableArticleCard = ({
     onFlagChange(article._id, flagId);
   };
 
-  const selectedFlagColor = selectedFlag ? flags.find((f) => f._id === selectedFlag)?.labelColor : "#999";
-
   return (
     <div
       onMouseEnter={() => onMouseEnter?.()}
@@ -95,106 +93,98 @@ const TableArticleCard = ({
       key={article._id}
       className={cn(
         "flex justify-between items-center px-4 py-3 text-sm hover:bg-muted transition-colors bg-card/90",
-        "border-b last:border-0",
-        "first:rounded-t-xl",
-        "last:rounded-b-lg"
+        "border-b last:border-0 first:rounded-t-xl last:rounded-b-lg"
       )}
       title={`Autor: ${article.createdBy.name}`}
     >
-      {/* Left side */}
+      {/* LEFT SIDE: FileText / Status Icon + Title + Product */}
       <Link
         to={`/articles/${article._id}`}
         state={{ from: location.pathname + location.search }}
         className="flex items-center gap-3 min-w-0 overflow-hidden flex-grow"
       >
-        <div className="relative flex-shrink-0">
-          <FileText className="w-5 h-5 text-muted-foreground" />
-          {article.responseVariantsCount > 1 && (
-            <span className="absolute -top-1 -right-1.5 flex items-center justify-center w-4 h-4 text-[9px] font-medium text-white bg-primary/90 shadow-sm rounded-full">
-              {article.responseVariantsCount}
-            </span>
+        <div className="relative flex-shrink-0 flex items-center justify-center p-2 rounded-full border border-muted/40 bg-muted/10">
+          {article.status === "pending" ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Star className="w-4.5 h-4.5 text-primary/80" />
+              </TooltipTrigger>
+              <TooltipContent className="bg-muted p-2 rounded-md text-xs">Wymaga weryfikacji</TooltipContent>
+            </Tooltip>
+          ) : (
+            <FileText className="w-4.5 h-4.5 text-muted-foreground" />
           )}
         </div>
 
+        {/* Tytuł + Produkt */}
         <div className="flex flex-col overflow-hidden">
-          <span className="font-medium text-foreground truncate">{article.title}</span>
-          <span className="text-muted-foreground text-xs">{article.product.name}</span>
+          <span className="font-semibold text-foreground truncate">{article.title}</span>
+          <span className="text-xs text-muted-foreground truncate">{article.product.name}</span>
         </div>
       </Link>
 
-      {/* Right side*/}
-      <div className="flex items-center gap-2">
-        {article.status === "pending" && (
+      {/* RIGHT SIDE: Response Variants, Meta Data, Favourite */}
+      <div className="flex items-center gap-4">
+        {/* Liczba wariantów */}
+        {article.responseVariantsCount > 1 && (
           <Tooltip>
             <TooltipTrigger asChild>
-              <div className="flex items-center justify-center w-6 h-6 cursor-default">
-                <svg
-                  className="w-4 h-4 text-amber-600 dark:text-amber-400 animate-pulse"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 4a1 1 0 011 1v3a1 1 0 11-2 0V7a1 1 0 011-1zm0 6a1 1 0 110 2 1 1 0 010-2z" />
-                </svg>
+              <div className="flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-muted/10 border border-muted/30 shadow-sm">
+                <List className="w-3 h-3" />
+                {article.responseVariantsCount}
               </div>
             </TooltipTrigger>
-            <TooltipContent className="bg-muted" side="top">
-              Wymaga weryfikacji
+            <TooltipContent className="bg-muted p-2 rounded-md text-xs" side="top">
+              ilość wariantów
             </TooltipContent>
           </Tooltip>
         )}
 
-        {/* Ulubione */}
+        {/* Meta dane: status + attachment */}
+        <div className="flex items-center gap-2 w-4 h-4  rounded-md p-2.5 ">
+          {article.status === "pending" ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center justify-center w-4 h-4">
+                  <svg
+                    className="w-4 h-4 text-amber-600 dark:text-amber-400 animate-pulse"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 4a1 1 0 011 1v3a1 1 0 11-2 0V7a1 1 0 011-1zm0 6a1 1 0 110 2 1 1 0 010-2z" />
+                  </svg>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent className="bg-muted p-2 rounded-md text-xs" side="top">
+                Wymaga weryfikacji
+              </TooltipContent>
+            </Tooltip>
+          ) : (
+            <div className="w-4 h-4"></div>
+          )}
+        </div>
+
+        {/* Favourite */}
         <Button
           variant="ghost"
           size="icon"
+          className="ml-6"
           onClick={(e) => {
-            e.stopPropagation(); // <-- zatrzymujemy propagację
+            e.stopPropagation();
             toggleFavourite(article._id);
           }}
         >
           {toggleFavouriteLoading ? (
-            <Loader className="animate-spin" />
+            <Loader className="animate-spin w-5 h-5" />
           ) : (
             <HeartIcon
               className={cn(
-                "h-4 w-4",
+                "w-5 h-5",
                 article.isFavourite ? "text-primary/65 fill-primary/65" : "text-muted-foreground"
               )}
             />
           )}
         </Button>
-
-        {/* Dropdown flag */}
-        {/* <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" onClick={(e) => e.stopPropagation()}>
-              <FlagIcon className="h-5 w-5" style={{ color: selectedFlagColor }} />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="bg-background shadow-lg rounded-lg py-1 min-w-[150px]">
-            {flags.length === 0 && (
-              <DropdownMenuItem disabled className="text-muted-foreground">
-                Brak flag
-              </DropdownMenuItem>
-            )}
-            {flags.map((flag) => (
-              <DropdownMenuItem
-                key={flag._id}
-                onSelect={(e) => {
-                  e.stopPropagation();
-                  handleFlagSelect(flag._id);
-                }}
-                className="flex items-center gap-2 hover:bg-muted/80 transition-colors rounded-md px-2 py-1 cursor-pointer"
-              >
-                <span
-                  className="inline-block w-3 h-3 rounded-full flex-shrink-0"
-                  style={{ backgroundColor: flag.color }}
-                />
-                <span className="text-sm">{flag.name}</span>
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu> */}
       </div>
     </div>
   );

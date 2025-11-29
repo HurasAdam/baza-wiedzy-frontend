@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch"; // zakładam, że masz taki komponent switch
+import { Switch } from "@/components/ui/switch";
 import { Volume } from "lucide-react";
 import { useSound } from "../../providers/sound-provider";
 
