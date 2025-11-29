@@ -10,7 +10,7 @@ const SoundContext = createContext<SoundProviderState | undefined>(undefined);
 export const SoundProvider = ({ children }: { children: React.ReactNode }) => {
   const [soundEnabled, setSoundEnabledState] = useState<boolean>(() => {
     const saved = localStorage.getItem("soundEnabled");
-    return saved === null ? true : saved === "true";
+    return saved === null ? false : saved === "true";
   });
 
   const setSoundEnabled = (enabled: boolean) => {
