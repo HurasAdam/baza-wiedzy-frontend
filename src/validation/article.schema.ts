@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const articleSchema = z.object({
-  title: z.string().min(3, { message: "Tytuł artykułu musi zawierać co najmniej 3 znaki." }).max(140, {
-    message: "Tytuł artykułu może zawierać maksymalnie 140 znaków.",
+  title: z.string().min(3, { message: "Tytuł artykułu musi zawierać co najmniej 3 znaki." }).max(200, {
+    message: "Tytuł artykułu może zawierać maksymalnie 200 znaków.",
   }),
   product: z.string().min(1, {
     message: "Produkt jest wymagany. Wybierz jedną z dostępnych opcji.",
@@ -38,8 +38,8 @@ export const articleSchema = z.object({
     .min(1),
   employeeDescription: z
     .string()
-    .min(6, {
-      message: "Notatka dla pracownika musi zawierać co najmniej 6 znaków.",
+    .min(1, {
+      message: "Notatka dla pracownika musi zawierać co najmniej 1 znak.",
     })
     .max(9000, {
       message: "Notatka dla pracownika może zawierać maksymalnie 9000 znaków.",

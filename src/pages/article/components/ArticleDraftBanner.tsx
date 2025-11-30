@@ -22,7 +22,7 @@ export const ArticleDraftBanner: React.FC<ArticleDraftBannerProps> = ({
 }) => {
   const isDraft = status === "draft";
 
-  const title = isDraft ? "Nowy artykuł oczekuje na zatwierdzenie" : "Artykuł wymaga ponownej weryfikacji";
+  const title = isDraft ? "Ten artykuł oczekuje na zatwierdzenie" : "Artykuł wymaga ponownej weryfikacji";
 
   const description = isDraft
     ? "Ten artykuł został dodany i wymaga zatwierdzenia. Obecnie nie jest widoczny dla innych użytkowników"
