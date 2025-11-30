@@ -392,7 +392,7 @@ export const ArticleMainPage = () => {
                 )}
               </div>
               <Separator></Separator>
-              <p className="text-sm whitespace-pre-wrap text-foreground mt-3">{desc.variantContent}</p>
+              <p className="text-sm whitespace-pre-wrap break-words text-foreground mt-3">{desc.variantContent}</p>
             </CardContent>
           </Card>
         ))}
