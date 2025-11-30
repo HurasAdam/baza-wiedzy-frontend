@@ -87,11 +87,11 @@ export const ArticleHistoryDetailsUpdated = ({ changes }: ArticleHistoryUpdatedP
                           <div className="grid md:grid-cols-2 gap-4 text-sm">
                             <div>
                               <strong>Poprzednia wersja:</strong>
-                              <p className="whitespace-pre-line">{oldVariant?.variantContent || "Brak"}</p>
+                              <p className="whitespace-pre-wrap break-words">{oldVariant?.variantContent || "Brak"}</p>
                             </div>
                             <div>
                               <strong>Nowa wersja:</strong>
-                              <p className="whitespace-pre-line">{variant.variantContent}</p>
+                              <p className="whitespace-pre-wrap break-words">{variant.variantContent}</p>
                             </div>
                           </div>
                         </div>
