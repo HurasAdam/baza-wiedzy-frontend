@@ -81,11 +81,22 @@ export const ArticleExtraInfoModal = ({ isOpen, setIsOpen, article }: ArticleInf
           {article.status === "approved" && article.verifiedBy ? (
             <div>
               <h3 className="text-sm font-semibold mb-2">Zweryfikowany przez</h3>
-              <div className="flex items-center gap-3">
-                {renderAvatar(article.verifiedBy)}
-                <div className="text-sm">
-                  <div className="font-medium">{`${article.verifiedBy.name} ${article.verifiedBy.surname}`}</div>
-                  <div className="text-muted-foreground text-xs">Zweryfikował</div>
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-3">
+                  {renderAvatar(article.verifiedBy)}
+                  <div className="text-sm">
+                    <div className="font-medium">{`${article.verifiedBy.name} ${article.verifiedBy.surname}`}</div>
+                    <div className="text-muted-foreground text-xs">
+                      Zweryfikował
+                      {article.lastVerifiedAt
+                        ? ` dnia ${new Date(article.lastVerifiedAt).toLocaleDateString("pl-PL", {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                          })}`
+                        : ""}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
