@@ -92,7 +92,7 @@ const TableArticleCard = ({
       onMouseLeave={() => onMouseLeave?.()}
       key={article._id}
       className={cn(
-        "flex justify-between items-center px-4 py-3 text-sm hover:bg-muted transition-colors bg-card/90",
+        "flex justify-between items-center px-4 py-3 text-sm hover:bg-muted/85 transition-colors bg-card/45 ",
         "border-b last:border-0 first:rounded-t-xl last:rounded-b-lg"
       )}
       title={`Autor: ${article.createdBy.name}`}
@@ -107,7 +107,7 @@ const TableArticleCard = ({
           {article.status === "pending" ? (
             <Tooltip>
               <TooltipTrigger asChild>
-                <Star className="w-4.5 h-4.5 text-primary/80" />
+                <Star className="w-4.5 h-4.5 text-primary/90" />
               </TooltipTrigger>
               <TooltipContent className="bg-muted p-2 rounded-md text-xs">Wymaga weryfikacji</TooltipContent>
             </Tooltip>
@@ -116,10 +116,22 @@ const TableArticleCard = ({
           )}
         </div>
 
-        {/* Tytuł + Produkt */}
         <div className="flex flex-col overflow-hidden">
-          <span className="font-semibold text-foreground truncate">{article.title}</span>
-          <span className="text-xs text-muted-foreground truncate">{article.product.name}</span>
+          {/* Tytuł – zawsze główny */}
+          <span className="font-semibold text-foreground/90 truncate">{article.title}</span>
+
+          {/* Produkt – subtelny chip poniżej tytułu */}
+          <span
+            className="inline-flex items-center px-2 py-[1px] mt-1 rounded-full text-[9px] font-medium uppercase tracking-wide w-fit"
+            style={{
+              backgroundColor: `${article.product.labelColor}1A`, // półprzezroczysty
+              color: article.product.labelColor,
+              border: `1px solid ${article.product.labelColor}33`,
+              opacity: 0.85, // subtelny efekt
+            }}
+          >
+            {article.product.name}
+          </span>
         </div>
       </Link>
 
