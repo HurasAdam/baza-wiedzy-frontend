@@ -1,14 +1,4 @@
-import {
-  Bell,
-  ChevronDown,
-  CopyPlus,
-  LogOut,
-  LucidePhone,
-  NotebookPen,
-  PlusCircle,
-  Settings,
-  User,
-} from "lucide-react";
+import { Bell, ChevronDown, CopyPlus, LogOut, LucidePhone, Plus, PlusCircle, Settings, User } from "lucide-react";
 
 import { Dropdown } from "@/components/Dropdown";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -28,6 +18,7 @@ import { getAvatarFallbackText } from "@/utils/avatar";
 import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../../../components/ui/tooltip";
 import { useFindMyNotificationsQuery } from "../../../hooks/notifications/use-notifications";
 import { useSound } from "../../../providers/sound-provider";
 const backendBase = import.meta.env.VITE_BACKEND_BASE_URL ?? "http://localhost:5000";
@@ -191,10 +182,28 @@ const Header = ({
             </Button>
           )}
           {userPermissions.includes("ADD_ARTICLE") && (
-            <Button onClick={() => navigate("articles/new")} className="cursor-pointer" variant="ghost" size="icon">
-              <NotebookPen />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={() => navigate("articles/new")}
+                  size="icon"
+                  variant="ghost"
+                  className="
+          w-8 h-8 flex items-center justify-center
+          bg-primary/10 text-primary
+          rounded-lg shadow-sm
+          transition-all duration-150 ease-in-out
+          hover:bg-primary/20 hover:scale-105
+          
+        "
+                >
+                  <Plus className="w-7 h-7 stroke-[2]" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent className="bg-muted text-sm rounded-md px-2 py-1 shadow-md">Dodaj artykuł</TooltipContent>
+            </Tooltip>
           )}
+
           <Button className="cursor-pointer" variant="ghost" size="icon">
             <LucidePhone />
           </Button>
