@@ -69,8 +69,8 @@ export const ArticleMainPage = () => {
   const { article, refetch, isArticleRefreshing, userPermissions } = useOutletContext<ArticleOutletContext>();
   const { data: articleUserFlag } = useFindOneArticleUserFlagQuery(id || null);
 
-  const { mutate: followArticleMutate } = useFollowArticleMutation();
-  const { mutate: unfollowArticleMutate } = useUnfollowArticleMutation();
+  const { mutate: followArticleMutate, isPending: isFollowPending } = useFollowArticleMutation();
+  const { mutate: unfollowArticleMutate, isPending: isUnfollowPending } = useUnfollowArticleMutation();
   const { mutate: toggleArticleFavouriteMutate, isPending: isFavouriteTogglePending } =
     useArticleToggleFavouriteMutation();
   const { mutate: createFlagMutate, isPending: isCreateFlagPending } = useCreateFlagMutation();
@@ -221,39 +221,69 @@ export const ArticleMainPage = () => {
             <EyeIcon className="w-4 h-4 mr-1" /> {article.viewsCounter} wyświetleń
           </Badge>
           <TooltipProvider>
-            <div className="flex items-center space-x-2">
+            {/* <div className="flex items-center space-x-2">
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
                     onClick={() => handleFavouriteToggle(article._id)}
                     size="icon"
-                    variant={article.isFavourite ? "ghost" : "ghost"}
-                    className={`transition relative ${
-                      article.isFavourite ? " border-primary/30 hover:bg-primary/20" : "hover:bg-accent"
-                    }`}
-                    disabled={isFavouriteTogglePending} // blokuje przycisk podczas mutacji
+                    variant="ghost"
+                    className="relative rounded-full transition-all duration-200 ease-in-out hover:scale-105 hover:bg-primary/10 focus:outline-none "
+                    disabled={isFavouriteTogglePending}
                   >
                     {isFavouriteTogglePending ? (
-                      <Loader className="w-4 h-4 animate-spin text-primary" />
+                      <Loader className="w-5 h-5 animate-spin text-primary" />
                     ) : (
                       <Heart
-                        className={`w-4 h-4 transition ${
+                        className={`w-5 h-5 transition-colors ${
                           article.isFavourite ? "fill-primary text-primary" : "text-muted-foreground"
                         }`}
                       />
                     )}
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent className="bg-muted text-sm">
+                <TooltipContent className="bg-muted text-sm shadow-md px-2 py-1 rounded-md">
                   {article.isFavourite ? "Usuń z ulubionych" : "Dodaj do ulubionych"}
                 </TooltipContent>
               </Tooltip>
+            </div> */}
+            {/* DZWON */}
+            <div className="flex items-center space-x-2">
+              {/* FOLLOW */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    onClick={() => handleFollowToggle(article._id, article.isFollowed)}
+                    size="icon"
+                    variant="ghost"
+                    className="relative rounded-full transition-all duration-200 ease-in-out hover:scale-105 hover:bg-primary/10 focus:outline-none "
+                    disabled={isFollowPending || isUnfollowPending}
+                  >
+                    {isFollowPending || isUnfollowPending ? (
+                      <Loader className="w-5 h-5 animate-spin text-primary" />
+                    ) : article.isFollowed ? (
+                      <span className="relative">
+                        <Bell className="w-5 h-5 text-primary" />
+                        <BellOff className="absolute w-5 h-5 text-primary opacity-0 hover:opacity-100 transition-opacity" />
+                      </span>
+                    ) : (
+                      <Bell className="w-5 h-5 text-muted-foreground" />
+                    )}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent className="bg-muted text-sm shadow-md px-2 py-1 rounded-md">
+                  {article.isFollowed ? "Przestań obserwować" : "Obserwuj"}
+                </TooltipContent>
+              </Tooltip>
             </div>
-
             <div className="flex items-center space-x-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button size="icon" variant="ghost" className="transition hover:bg-accent">
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="rounded-full transition-all duration-200 ease-in-out hover:scale-105 hover:bg-primary/10 focus:outline-none  "
+                  >
                     {articleUserFlag?.selectedFlag ? (
                       <Flag className="w-4 h-4" style={{ color: articleUserFlag.selectedFlag.color }} />
                     ) : (
@@ -266,15 +296,15 @@ export const ArticleMainPage = () => {
                   {/* Grupa głównych akcji */}
                   {!articleUserFlag?.selectedFlag && (
                     <DropdownMenuItem className="py-2" onClick={openCreateFlagModal}>
-                      <Tag className="w-4 h-4 mr-2 text-muted-foreground" />
-                      Oznacz artykuł
+                      <Heart className="w-4 h-4 mr-2 text-muted-foreground" />
+                      Dodaj do ulubionych
                     </DropdownMenuItem>
                   )}
 
                   {articleUserFlag?.selectedFlag && (
                     <DropdownMenuItem className="py-2" onClick={() => onUnflag(article._id)}>
                       <X className="w-4 h-4 mr-2 text-muted-foreground " />
-                      Usuń oznaczenie
+                      Usuń z ulubionych
                     </DropdownMenuItem>
                   )}
 
@@ -283,7 +313,7 @@ export const ArticleMainPage = () => {
                   {/* Grupa dodatkowa: Dodaj flagę */}
                   <DropdownMenuItem onClick={() => setIsCreateFlagModalOpen(true)}>
                     <Plus className="w-4 h-4 mr-2 text-muted-foreground" />
-                    Dodaj kolekcję
+                    Dodaj etykietę
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -297,14 +327,14 @@ export const ArticleMainPage = () => {
                 <TooltipTrigger asChild>
                   <Button
                     onClick={openExtraInfoModal}
-                    variant="ghost"
-                    className="transition hover:bg-primary/20"
                     size="icon"
+                    variant="ghost"
+                    className="relative rounded-full transition-all duration-200 ease-in-out hover:scale-105 hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1"
                   >
-                    <Info className="w-4 h-4" />
+                    <Info className="w-5 h-5 text-muted-foreground" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent className="bg-muted">Info</TooltipContent>
+                <TooltipContent className="bg-muted text-sm shadow-md px-2 py-1 rounded-md">Info</TooltipContent>
               </Tooltip>
             </div>
           </TooltipProvider>

@@ -8,7 +8,6 @@ import {
   ChevronsLeft,
   ChevronsRight,
   Clipboard,
-  FolderKanban,
   FolderSearch,
   HeartIcon,
   Info,
@@ -54,7 +53,7 @@ type NavItem = {
 const navItems: NavItem[] = [
   { title: "Start", href: "/dashboard", icon: LayoutDashboard },
   { title: "Baza artykułów", href: "/articles", icon: FolderSearch },
-  { title: "Moje kolekcje", href: `/flagged-articles`, icon: FolderKanban, requiredPermission: "ADD_ARTICLE" },
+  { title: "Moje ulubione", href: `/flagged-articles`, icon: HeartIcon },
   { title: "Rejestr tematów", href: "/register-topic", icon: Clipboard },
 
   { title: "Moje wpisy", href: `/my-entries`, icon: UserRoundPen, requiredPermission: "ADD_ARTICLE" },

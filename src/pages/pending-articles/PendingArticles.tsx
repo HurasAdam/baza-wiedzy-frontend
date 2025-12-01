@@ -53,18 +53,18 @@ export const PendingArticles: React.FC = () => {
   const statuses: { key: StatusKey; label: string; icon: JSX.Element }[] = [
     {
       key: "draft",
-      label: "Nowe",
+      label: "Nowe wpisy",
       icon: <DiamondPlus className="w-5 h-5 " />,
     },
     {
       key: "pending",
-      label: "Oczekujące",
+      label: "wymagające aktualizacji",
       icon: <Clock className="w-5 h-5 " />,
     },
 
     {
       key: "rejected",
-      label: "Odrzucone",
+      label: "Odrzucone wpisy",
       icon: <AlertTriangle className="w-5 h-5 " />,
     },
   ];
