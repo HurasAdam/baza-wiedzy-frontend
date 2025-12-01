@@ -137,7 +137,7 @@ export const RegisterTopicForm = ({ topic }: { topic: ITopic }) => {
             variant={feedback === "call" ? "ghost" : "default"}
             onClick={form.handleSubmit((data) => onSubmit(data, "call"))}
             disabled={loadingType === "call"}
-            className="w-14 h-10 rounded-md transition-all hover:scale-105"
+            className="w-14 h-10 rounded-md text-primary  hover:scale-105 bg-primary/10 hover:text-foreground  hover:bg-primary/35 transition-all duration-150 ease-in-out"
           >
             {loadingType === "call" ? (
               <Loader className="animate-spin w-5 h-5" />
@@ -153,7 +153,7 @@ export const RegisterTopicForm = ({ topic }: { topic: ITopic }) => {
             variant={feedback === "message" ? "outline" : "default"}
             onClick={form.handleSubmit((data) => onSubmit(data, "message"))}
             disabled={loadingType === "message"}
-            className="w-14 h-10 rounded-md transition-all hover:scale-105"
+            className="w-14 h-10 rounded-md text-primary  hover:scale-105 bg-primary/10 hover:text-foreground  hover:bg-primary/35 transition-all duration-150 ease-in-out"
           >
             {loadingType === "message" ? (
               <Loader className="animate-spin w-5 h-5" />
