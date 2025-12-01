@@ -68,7 +68,7 @@ const FlaggedArticlesListSection = ({
   pendingId,
 }: FlaggedArticlesListSectionProps) => {
   return (
-    <div className="flex-grow flex flex-col h-fit border border-border divide-y divide-border rounded-xl bg-card/90">
+    <div className="flex-grow flex flex-col h-fit  divide-y divide-border rounded-xl bg-card/90">
       {isLoading && (
         <ul className="divide-y divide-border py-2">
           {Array(12)

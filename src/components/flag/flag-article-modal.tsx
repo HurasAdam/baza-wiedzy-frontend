@@ -58,7 +58,7 @@ export const FlagArticleModal = ({
   const renderEmptyState = () => (
     <div className="flex flex-col items-center justify-center h-[55vh] text-center px-6">
       <Flag className="w-16 h-16 text-muted-foreground mb-4" />
-      <h3 className="text-lg font-semibold text-foreground mb-2">Nie masz jeszcze żadnych flag</h3>
+      <h3 className="text-lg font-semibold text-foreground mb-2">Nie masz jeszcze żadnych etykiet</h3>
       <p className="text-sm text-muted-foreground">
         Flagi pozwalają oznaczać artykuły i organizować je w sposób bardziej przejrzysty.
       </p>
@@ -72,7 +72,7 @@ export const FlagArticleModal = ({
         <DialogHeader className="px-6 pt-6 pb-3 border-b border-border/20 bg-gradient-to-r from-background/80 to-muted/40 flex items-center gap-2">
           <DialogTitle className="text-lg font-semibold text-foreground flex items-center gap-2">
             <Flag className="w-5 h-5 text-primary" />
-            Oznacz artykuł
+            Wybierz etykiete i oznacz artykuł
           </DialogTitle>
         </DialogHeader>
 

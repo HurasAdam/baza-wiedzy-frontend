@@ -97,13 +97,14 @@ export const FlaggedArticlesPage: React.FC = () => {
   };
 
   const activeFlagData = useMemo(
-    () => userFlags.find((f) => f._id === activeFlag) || { name: "Brak flagi", color: "#ccc", _id: "" },
+    () => userFlags.find((f) => f._id === activeFlag) || { name: "Ładowanie...", color: "#ccc", _id: "" },
     [activeFlag, userFlags]
   );
 
   return (
     <div className="flex flex-col gap-2">
       <FlaggedArticlesHeader
+        isLoading={isFlagsLoading}
         userFlags={userFlags}
         handleSelectFlag={handleSelectFlag}
         activeFlag={activeFlag}
