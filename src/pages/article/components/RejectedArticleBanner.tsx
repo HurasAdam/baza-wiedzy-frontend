@@ -10,21 +10,30 @@ interface RejectedArticleBannerProps {
   article: Article;
   onResubmit: () => void;
   isResubmitting: boolean;
+  currentUserPermissions?: string[]; // przekazujemy uprawnienia zalogowanego użytkownika
 }
 
 export const RejectedArticleBanner: React.FC<RejectedArticleBannerProps> = ({
   article,
   onResubmit,
   isResubmitting,
+  currentUserPermissions = [],
 }) => {
-  const [isRejectionReasonAlertOpen, setIsRejectionReasonAlertOpen] = useState<boolean>(false);
+  const [isRejectionReasonModalOpen, setIsRejectionReasonModalOpen] = useState(false);
 
-  const onRejectionModalOpen = () => {
-    setIsRejectionReasonAlertOpen(true);
-  };
-  const onRejectonModalClose = () => {
-    setIsRejectionReasonAlertOpen(false);
-  };
+  const openModal = () => setIsRejectionReasonModalOpen(true);
+  const closeModal = () => setIsRejectionReasonModalOpen(false);
+
+  // Sprawdzenie, czy użytkownik ma prawo widzieć rejectionNote
+  const canViewRejectionNote =
+    !!article.rejectionNote ||
+    currentUserPermissions.includes("VERIFY_ARTICLE") ||
+    currentUserPermissions.includes("APPROVE_ARTICLE");
+
+  // Komunikat zależny od uprawnień
+  const bannerMessage = canViewRejectionNote
+    ? "Artykuł został odrzucony. Zapoznaj się z uwagami i wprowadź zmiany przed ponownym zgłoszeniem."
+    : "Artykuł został odrzucony i wymaga poprawek.";
 
   return (
     <>
@@ -36,21 +45,16 @@ export const RejectedArticleBanner: React.FC<RejectedArticleBannerProps> = ({
 
           <div className="space-y-1">
             <h2 className="text-base font-semibold text-foreground">Artykuł został odrzucony</h2>
-            <p className="text-sm text-foreground">
-              Artykuł został odrzucony przez moderatora. Zapoznaj się z uwagami i wprowadź poprawki przed ponownym
-              zgłoszeniem.
-            </p>
-            {article && article.rejectionReason && (
-              <Button
-                onClick={onRejectionModalOpen}
-                size="sm"
-                className="text-foreground cursor-pointer"
-                variant="link"
-              >
+            <p className="text-sm text-foreground">{bannerMessage}</p>
+
+            {/* Przycisk pokazujący szczegóły tylko dla uprawnionych */}
+            {canViewRejectionNote && article.rejectionNote?.text && (
+              <Button onClick={openModal} size="sm" className="text-foreground cursor-pointer" variant="link">
                 Pokaż więcej...
               </Button>
             )}
           </div>
+
           <div className="flex gap-2">
             <Button onClick={onResubmit} size="sm" variant="default">
               {isResubmitting ? <Loader className="w-4 h-4 animate-spin" /> : <CheckCircleIcon className="w-4 h-4" />}
@@ -59,12 +63,10 @@ export const RejectedArticleBanner: React.FC<RejectedArticleBannerProps> = ({
           </div>
         </CardContent>
       </Card>
-      {article && article.rejectionReason && (
-        <ArticleRejectionReasonModal
-          article={article}
-          open={isRejectionReasonAlertOpen}
-          setOpen={onRejectonModalClose}
-        />
+
+      {/* Modal tylko dla uprawnionych */}
+      {canViewRejectionNote && article.rejectionNote?.text && (
+        <ArticleRejectionReasonModal article={article} open={isRejectionReasonModalOpen} setOpen={closeModal} />
       )}
     </>
   );

@@ -17,6 +17,11 @@ export interface Article {
   isVerified: boolean;
   status: "approved" | "rejected" | "pending";
   rejectionReason: string | null;
+  rejectionNote: {
+    text: string;
+    createdBy: unknown;
+    createdAt: string;
+  } | null;
   rejectedBy: Author | null;
   createdBy: Author;
   viewsCounter: number;
