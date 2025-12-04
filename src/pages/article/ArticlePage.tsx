@@ -34,7 +34,7 @@ import { EditArticlePage } from "../edit-article/EditArticlePage";
 import ArticleAttachmentsTab from "./components/ArticleAttachmentsTab";
 import ArticleHistoryTab from "./components/ArticleHistoryTab";
 import { ArticleVerificationBanner } from "./components/ArticleVerificationBanner";
-import { RejectedArticleBanner } from "./components/RejectedArticleBanner";
+
 import { ArticlePageSkeleton } from "./skeleton/ArticlePageSkeleton";
 
 const getFileIcon = (type: string) => {
@@ -134,9 +134,9 @@ export const ArticlePage = () => {
 
   return (
     <div className="mx-auto pb-6">
-      {activeTab !== "edit" && article.status === "rejected" && (
-        <RejectedArticleBanner article={article} isResubmitting={isApproveLoading} onResubmit={onArticleAprove} />
-      )}
+      {/* {activeTab !== "edit" && article.status === "rejected" && (
+        // <RejectedArticleBanner article={article} isResubmitting={isApproveLoading} onResubmit={onArticleAprove} />
+      )} */}
 
       {["pending", "draft"].includes(article.status) && activeTab !== "edit" && (
         <ArticleVerificationBanner status={article.status} onApprove={onArticleAprove} onReject={onArticleReject} />

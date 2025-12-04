@@ -59,8 +59,13 @@ export const aproveOne = ({ id }: { id: string }) => {
   return api.post(buildUrl(baseUrl, id, "aprove"));
 };
 export const rejectOne = ({ articleId, rejectionReason }: { articleId: string; rejectionReason: string }) => {
-  console.log("SERIS", articleId, rejectionReason);
   return api.post(buildUrl(baseUrl, articleId, "reject"), {
+    rejectionReason,
+  });
+};
+
+export const rejectChanges = ({ articleId, rejectionReason }: { articleId: string; rejectionReason: string }) => {
+  return api.post(buildUrl(baseUrl, articleId, "reject-changes"), {
     rejectionReason,
   });
 };
@@ -144,6 +149,7 @@ export const articlesService = {
   findByUser,
   aproveOne,
   rejectOne,
+  rejectChanges,
   requestReviewOne,
   findAllByUser,
 };

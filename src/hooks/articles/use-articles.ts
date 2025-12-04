@@ -51,6 +51,12 @@ export const useRejectArticleMutation = () => {
   });
 };
 
+export const useRejectArticleChangesMutation = () => {
+  return useMutation<AxiosResponse, AxiosError, RejectArticleDto>({
+    mutationFn: (data) => articlesService.rejectChanges(data),
+  });
+};
+
 export const useRequestReviewArticleMutation = () => {
   return useMutation<AxiosResponse, AxiosError, string>({
     mutationFn: (id) => articlesService.requestReviewOne({ id }),

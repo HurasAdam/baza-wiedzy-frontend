@@ -60,7 +60,6 @@ export const ArticleHistoryDetailsUpdated = ({ changes }: ArticleHistoryUpdatedP
   return (
     <div className="space-y-6">
       {changes.map((change) => {
-        // Obsługa wariantów odpowiedzi osobno
         if (change.field === "responseVariants") {
           return (
             <Card key={change._id}>

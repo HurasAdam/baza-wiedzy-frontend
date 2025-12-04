@@ -92,7 +92,7 @@ const TableArticleCard = ({
       onMouseLeave={() => onMouseLeave?.()}
       key={article._id}
       className={cn(
-        "flex justify-between items-center px-4 py-3 text-sm hover:bg-muted/85 transition-colors bg-card/45 ",
+        "flex justify-between items-center px-4 py-3 text-sm hover:bg-muted/45 transition-colors bg-card/45 ",
         "border-b last:border-0 first:rounded-t-xl last:rounded-b-lg"
       )}
       title={`Autor: ${article.createdBy.name}`}
