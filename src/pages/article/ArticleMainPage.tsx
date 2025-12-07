@@ -21,8 +21,8 @@ import { useState } from "react";
 import { NavLink, useOutletContext, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { ArticleExtraInfoModal } from "../../components/article/article-extra-info.modal";
-import { FlagArticleModal } from "../../components/flag/flag-article-modal";
 import { FlagModal } from "../../components/flag/flag-modal";
+import { MarkWithFlagArticleModal } from "../../components/flag/mark-with-flag-article-modal";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "../../components/ui/card";
@@ -429,10 +429,10 @@ export const ArticleMainPage = () => {
       </div>
       <ArticleExtraInfoModal isOpen={isExtraInforModalOpen} article={article} setIsOpen={setIsExtraInfoModalOpen} />
 
-      <FlagArticleModal
+      <MarkWithFlagArticleModal
         key={article._id + (article.selectedFlag?._id || "no-flag")}
         article={article}
-        articleUserFlag={articleUserFlag} // <-- tutaj
+        articleUserFlag={articleUserFlag}
         onSave={onFlagArticle}
         isOpen={isFlagModalOpen}
         setIsOpen={setIsFlagModalOpen}

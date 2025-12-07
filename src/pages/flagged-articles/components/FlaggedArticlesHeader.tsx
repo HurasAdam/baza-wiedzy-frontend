@@ -97,7 +97,6 @@ const FlaggedArticlesHeader = ({
             </PopoverContent>
           </Popover>
 
-          {/* --- Title --- */}
           <h1 className="text-xl font-semibold flex items-center gap-2">
             Moje ulubione — <span className="text-muted-foreground">{activeFlagData.name}</span>
           </h1>

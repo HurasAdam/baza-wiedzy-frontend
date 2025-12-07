@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { EditFlagArticleModal, type FlaggedArticleForModal } from "../../../components/flag/edit-flag-article-modal";
 import { NoDataFound } from "../../../components/shared/NoDataFound";
 import type { ArticleAuthor, Category, Product } from "../../articles/components/ArticlesList";
 import SkeletonArticleCard from "../../pending-articles/components/SkeletonArticleCard";
@@ -7,22 +9,17 @@ export interface Flag {
   _id: string;
   name: string;
   color: string;
-  createdBy: string;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
 }
 
 export interface FlaggedArticle {
   _id: string;
   title: string;
-
   status: string;
-  rejectionReason: string | null; // zmiana tu
+  rejectionReason: string | null;
   rejectedBy?: string | null;
   createdBy: ArticleAuthor;
-  viewsCounter: number; // zmiana tu
-  isTrashed: boolean; // zmiana tu
+  viewsCounter: number;
+  isTrashed: boolean;
   product: Product;
   category: Category;
   createdAt: string;
@@ -30,6 +27,10 @@ export interface FlaggedArticle {
   flag: { _id: string; name: string; color: string };
   responseVariantsCount: number;
 }
+
+type FlaggedArticleWithSelected = FlaggedArticle & {
+  selectedFlag: Flag | null;
+};
 
 export interface FlaggedArticleResponse {
   data: FlaggedArticle[];
@@ -62,11 +63,22 @@ const FlaggedArticlesListSection = ({
   titleParam,
   selectedProduct,
   selectedCategory,
-  userFlags,
   handleFlagChange,
   toggleFavourite,
   pendingId,
 }: FlaggedArticlesListSectionProps) => {
+  const [isFlagModalOpen, setIsFlagModalOpen] = useState(false);
+  const [selectedArticle, setSelectedArticle] = useState<FlaggedArticleForModal | null>(null);
+
+  const openFlagModal = (article: FlaggedArticleForModal) => {
+    const articleForModal: FlaggedArticleForModal = {
+      ...article,
+      selectedFlag: article.flag ? { _id: article.flag._id, name: article.flag.name, color: article.flag.color } : null,
+    };
+
+    setSelectedArticle(articleForModal);
+    setIsFlagModalOpen(true);
+  };
   return (
     <div className="flex-grow flex flex-col h-fit  divide-y divide-border rounded-xl bg-card/90">
       {isLoading && (
@@ -99,8 +111,20 @@ const FlaggedArticlesListSection = ({
             onFlagChange={handleFlagChange}
             toggleFavourite={toggleFavourite}
             toggleFavouriteLoading={pendingId === article._id}
+            openFlagModal={openFlagModal}
           />
         ))}
+
+      {selectedArticle && (
+        <EditFlagArticleModal
+          isOpen={isFlagModalOpen}
+          setIsOpen={setIsFlagModalOpen}
+          article={selectedArticle}
+          articleUserFlag={{
+            selectedFlag: selectedArticle.selectedFlag ?? null,
+          }}
+        />
+      )}
     </div>
   );
 };

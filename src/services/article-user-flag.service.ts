@@ -16,8 +16,13 @@ const unflagOne = async (articleId: string): Promise<void> => {
   return api.delete(`${BASE_URL}/${articleId}`);
 };
 
+const updateFlag = async (articleId: string, flagId: string): Promise<void> => {
+  return api.put(`${BASE_URL}/${articleId}`, { flagId });
+};
+
 export const articleUserFlagService = {
   create,
   findOne,
   unflagOne,
+  updateFlag,
 };

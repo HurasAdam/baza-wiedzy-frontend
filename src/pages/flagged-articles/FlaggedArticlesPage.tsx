@@ -127,7 +127,7 @@ export const FlaggedArticlesPage: React.FC = () => {
       />
 
       <FlaggedArticlesListSection
-        articles={articles}
+        articles={articles ?? { data: [], pagination: { total: 0, page: 1, pages: 0 } }}
         userFlags={userFlags}
         isLoading={isLoading}
         isError={isError}

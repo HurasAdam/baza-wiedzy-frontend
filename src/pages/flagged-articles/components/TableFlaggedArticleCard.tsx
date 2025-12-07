@@ -1,7 +1,14 @@
-import { FileText, Flag } from "lucide-react";
+import { FileText, Flag, MoreVertical, Tag, Trash } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../../../components/ui/tooltip";
+import { Button } from "../../../components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../../../components/ui/dropdown-menu";
 import { cn } from "../../../lib/utils";
 import type { FlaggedArticle } from "../../articles/components/ArticlesList";
 
@@ -9,6 +16,7 @@ interface TableFlaggedArticleCardProps {
   article: FlaggedArticle;
   onFlagChange: (articleId: string, flagId: string) => void;
   toggleFavourite: (id: string) => void;
+  openFlagModal: (article: FlaggedArticle) => void;
   toggleFavouriteLoading: boolean;
 }
 
@@ -16,16 +24,17 @@ export const TableFlaggedArticleCard = ({
   article,
   onFlagChange,
   toggleFavourite,
+  openFlagModal,
   toggleFavouriteLoading,
 }: TableFlaggedArticleCardProps) => {
   const location = useLocation();
-  const [selectedFlag, setSelectedFlag] = useState(article.flag?.id);
+  const [selectedFlag, setSelectedFlag] = useState(article.flag?._id);
 
   const handleFlagSelect = (flagId: string) => {
     setSelectedFlag(flagId);
     onFlagChange(article._id, flagId);
   };
-
+  console.log("CARDOWER", article);
   return (
     <div
       key={article._id}
@@ -51,13 +60,13 @@ export const TableFlaggedArticleCard = ({
           state={{ from: location.pathname + location.search }}
           className="flex flex-col overflow-hidden flex-grow ml-3"
         >
-          <span className="font-medium text-foreground truncate leading-tight">{article.title}</span>
+          <span className="font-medium text-foreground  break-after-all leading-tight">{article.title}</span>
           <span className="text-muted-foreground text-xs truncate">{article.product?.name ?? "—"}</span>
         </Link>
       </div>
 
       {/* Prawa sekcja: FileText + liczba wariantów + status */}
-      <div className="flex items-center gap-3 pr-2 min-w-[60px] justify-end">
+      <div className="flex items-center gap-16 pr-2 min-w-[60px] justify-end">
         {/* Ikona artykułu */}
         <div className="relative flex-shrink-0">
           <FileText className="w-5 h-5 text-muted-foreground" />
@@ -68,8 +77,7 @@ export const TableFlaggedArticleCard = ({
           )}
         </div>
 
-        {/* Status — z rezerwacją miejsca */}
-        <div className="flex items-center justify-center w-6 h-6">
+        {/* <div className="flex items-center justify-center w-6 h-6">
           {article.status === "pending" ? (
             <Tooltip>
               <TooltipTrigger asChild>
@@ -90,7 +98,35 @@ export const TableFlaggedArticleCard = ({
           ) : (
             <div className="w-6 h-6" />
           )}
-        </div>
+        </div> */}
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="sm" className="transition-colors">
+              <MoreVertical className="w-4 h-4 text-muted-foreground" />
+            </Button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent className="w-52 bg-background shadow-xl border border-border rounded-lg py-1 animate-fade-in">
+            {/* Sekcja 1: zmiana etykiety */}
+            <DropdownMenuItem
+              onClick={() => openFlagModal(article)}
+              className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 transition-colors cursor-pointer"
+            >
+              <Tag className="w-5 h-5 text-primary" />
+              Zmień etykietę
+            </DropdownMenuItem>
+
+            {/* Separator */}
+            <DropdownMenuSeparator />
+
+            {/* Sekcja 2: akcje destrukcyjne */}
+            <DropdownMenuItem className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-destructive/10 transition-colors cursor-pointer">
+              <Trash className="w-5 h-5 text-destructive" />
+              Usuń z ulubionych
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );

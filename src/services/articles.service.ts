@@ -2,6 +2,7 @@ import api from "@/config/api.client";
 import { buildUrl } from "@/utils/build-url";
 import type { AxiosResponse } from "axios";
 import type { ArticlesResponse } from "../pages/articles/components/ArticlesList";
+import type { FlaggedArticleResponse } from "../pages/flagged-articles/components/FlaggedArticlesListSection";
 import type { Article, ToggleFavouriteResponse } from "../types/article";
 import type { ArticleCreateDto } from "../validation/article.schema";
 
@@ -11,7 +12,7 @@ export const getAllArticles = (params?: URLSearchParams): Promise<ArticlesRespon
   return api.get(baseUrl, { params });
 };
 
-export const getMyFlaggedArticles = (params?: URLSearchParams) => {
+export const getMyFlaggedArticles = (params?: URLSearchParams): Promise<FlaggedArticleResponse> => {
   return api.get(`${baseUrl}/flagged`, { params });
 };
 

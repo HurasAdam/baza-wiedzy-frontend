@@ -54,22 +54,31 @@ const AppLayout = () => {
         onOpenChange={setIsNotificationsPanelOpen}
         onMarkAsRead={(id) => console.log("Oznaczono jako przeczytane:", id)}
       />
-      <IssueReportsModal
-        isIssueReportsModalOpen={isIssueReportsModalOpen}
-        setIsIssueReportsModalOpen={setIsIssueReportsModalOpen}
-      />
+      {isIssueReportsModalOpen && (
+        <IssueReportsModal
+          isIssueReportsModalOpen={isIssueReportsModalOpen}
+          setIsIssueReportsModalOpen={setIsIssueReportsModalOpen}
+        />
+      )}
 
-      <CreateWorkspaceModal isCreatingWorkspace={isCreatingWorkspace} setIsCreatingWorkspace={setIsCreatingWorkspace} />
+      {isCreatingWorkspace && (
+        <CreateWorkspaceModal
+          isCreatingWorkspace={isCreatingWorkspace}
+          setIsCreatingWorkspace={setIsCreatingWorkspace}
+        />
+      )}
       <SendIssueReportModal
         isCreatingIssueReport={isCreatingIssueReport}
         setIsCreatingIssueReport={setIsCreatingIssueReport}
       />
-      <WorkspaceInviteModal
-        isOpen={isWorkspaceInviteModalOpen}
-        setIsOpen={setIsWorkspaceInviteModalOpen}
-        isLoading={false}
-        onSave={() => {}}
-      />
+      {isWorkspaceInviteModalOpen && (
+        <WorkspaceInviteModal
+          isOpen={isWorkspaceInviteModalOpen}
+          setIsOpen={setIsWorkspaceInviteModalOpen}
+          isLoading={false}
+          onSave={() => {}}
+        />
+      )}
       <ChangeLogModal isChangeLogModalOpen={isChangeLogModalOpen} setIsChangeLogModalOpen={setIsChangeLogModalOpen} />
     </div>
   );

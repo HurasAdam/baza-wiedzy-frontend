@@ -24,3 +24,11 @@ export const useUnflagArticleUserFlagMutation = () => {
     },
   });
 };
+
+export const useUpdateArticleUserFlagMutation = () => {
+  return useMutation({
+    mutationFn: ({ articleId, flagId }: { articleId: string; flagId: string }) => {
+      return articleUserFlagService.updateFlag(articleId, flagId);
+    },
+  });
+};
