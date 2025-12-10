@@ -102,6 +102,17 @@ const FlaggedArticlesListSection = ({
         />
       )}
 
+      {/* Brak artykułów, ale użytkownik NIE używa filtrów */}
+      {!isLoading &&
+        !isError &&
+        articles?.data.length === 0 &&
+        !(titleParam || selectedProduct || selectedCategory) && (
+          <NoDataFound
+            title="Brak oznaczonych artykułów"
+            description="Nie masz jeszcze żadnych artykułów z przypisaną etykietą."
+          />
+        )}
+
       {!isError &&
         articles?.data.length > 0 &&
         articles.data.map((article) => (
