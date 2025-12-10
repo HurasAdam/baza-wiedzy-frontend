@@ -69,6 +69,18 @@ export const useArticleToggleFavouriteMutation = () => {
   });
 };
 
+export const useMarkAsImportantMutation = () => {
+  return useMutation({
+    mutationFn: (articleId: string) => articlesService.markAsImportant(articleId),
+  });
+};
+
+export const useUnmarkAsImportantMutation = () => {
+  return useMutation({
+    mutationFn: (articleId: string) => articlesService.unmarkAsImportant(articleId),
+  });
+};
+
 export const useFindArticlesQuery = (params?: URLSearchParams) => {
   return useQuery({
     queryKey: ["articles", params?.toString()],

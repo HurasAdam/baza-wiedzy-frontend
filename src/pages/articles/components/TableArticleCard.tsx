@@ -16,6 +16,7 @@ export interface Article {
   title: string;
   tags: Tag[];
   isVerified: boolean;
+  isImportant: boolean;
   status: "approved" | "rejected" | "pending";
   rejectionReason: string | null;
   rejectedBy: string | null;
@@ -104,10 +105,10 @@ const TableArticleCard = ({
         className="flex items-center gap-3 min-w-0 overflow-hidden flex-grow"
       >
         <div className="relative flex-shrink-0 flex items-center justify-center p-2 rounded-full border border-muted/40 bg-muted/10">
-          {article.status === "pending" ? (
+          {article.isImportant ? (
             <Tooltip>
               <TooltipTrigger asChild>
-                <Star className="w-4.5 h-4.5 text-primary/90" />
+                <Star className="w-4.5 h-4.5 text-yellow-600/90 " />
               </TooltipTrigger>
               <TooltipContent className="bg-muted p-2 rounded-md text-xs">Wymaga weryfikacji</TooltipContent>
             </Tooltip>
@@ -117,17 +118,15 @@ const TableArticleCard = ({
         </div>
 
         <div className="flex flex-col overflow-hidden">
-          {/* Tytuł – zawsze główny */}
-          <span className="font-semibold text-foreground/90 truncate">{article.title}</span>
+          <span className="font-semibold text-foreground/90 break-words">{article.title}</span>
 
-          {/* Produkt – subtelny chip poniżej tytułu */}
           <span
             className="inline-flex items-center px-2 py-[1px] mt-1 rounded-full text-[9px] font-medium uppercase tracking-wide w-fit"
             style={{
-              backgroundColor: `${article.product.labelColor}1A`, // półprzezroczysty
+              backgroundColor: `${article.product.labelColor}1A`,
               color: article.product.labelColor,
               border: `1px solid ${article.product.labelColor}33`,
-              opacity: 0.85, // subtelny efekt
+              opacity: 0.85,
             }}
           >
             {article.product.name}
@@ -138,7 +137,7 @@ const TableArticleCard = ({
       {/* RIGHT SIDE: Response Variants, Meta Data, Favourite */}
       <div className="flex items-center gap-4">
         {/* Liczba wariantów */}
-        {article.responseVariantsCount > 1 && (
+        {article.responseVariantsCount > 1 ? (
           <Tooltip>
             <TooltipTrigger asChild>
               <div className="flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-muted/10 border border-muted/30 shadow-sm">
@@ -150,31 +149,11 @@ const TableArticleCard = ({
               ilość wariantów
             </TooltipContent>
           </Tooltip>
+        ) : (
+          <div className="opacity-0 pointer-events-none px-2 py-1 text-xs">
+            <List className="w-3 h-3" />
+          </div>
         )}
-
-        {/* Meta dane: status + attachment */}
-        <div className="flex items-center gap-2 w-4 h-4  rounded-md p-2.5 ">
-          {article.status === "pending" ? (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div className="flex items-center justify-center w-4 h-4">
-                  <svg
-                    className="w-4 h-4 text-amber-600 dark:text-amber-400 animate-pulse"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 4a1 1 0 011 1v3a1 1 0 11-2 0V7a1 1 0 011-1zm0 6a1 1 0 110 2 1 1 0 010-2z" />
-                  </svg>
-                </div>
-              </TooltipTrigger>
-              <TooltipContent className="bg-muted p-2 rounded-md text-xs" side="top">
-                Wymaga weryfikacji
-              </TooltipContent>
-            </Tooltip>
-          ) : (
-            <div className="w-4 h-4"></div>
-          )}
-        </div>
 
         {/* Favourite */}
         <Button

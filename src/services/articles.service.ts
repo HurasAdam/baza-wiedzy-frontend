@@ -81,6 +81,13 @@ export const markArticleAsFavourite = ({ id }: { id: string }): Promise<ToggleFa
 export const updateArticle = ({ articleId, dto }) => {
   return api.put(buildUrl(baseUrl, articleId), dto);
 };
+
+export const markAsImportant = (articleId: string) => {
+  return api.post(buildUrl(baseUrl, articleId, "mark-important"));
+};
+export const unmarkAsImportant = (articleId: string) => {
+  return api.post(buildUrl(baseUrl, articleId, "unmark-important"));
+};
 export const simpleUpdateArticle = ({ articleId, dto }) => {
   return api.put(buildUrl(baseUrl, articleId, "simple-update"), dto);
 };
@@ -153,4 +160,6 @@ export const articlesService = {
   rejectChanges,
   requestReviewOne,
   findAllByUser,
+  markAsImportant,
+  unmarkAsImportant,
 };

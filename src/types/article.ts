@@ -5,6 +5,7 @@ import type { Tag } from "./tags";
 export interface Article {
   _id: string;
   title: string;
+  isImportant: boolean;
   tags: Tag[];
   isVerified: boolean;
   updatedAt: string;

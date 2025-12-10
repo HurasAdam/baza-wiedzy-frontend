@@ -4,7 +4,6 @@ import {
   BellOff,
   CheckCircleIcon,
   Copy,
-  EyeIcon,
   Flag,
   Heart,
   Info,
@@ -13,6 +12,8 @@ import {
   Plus,
   RefreshCw,
   SquarePen,
+  Star,
+  StarOff,
   Tag,
   X,
   XCircleIcon,
@@ -43,7 +44,9 @@ import {
 import {
   useArticleToggleFavouriteMutation,
   useFollowArticleMutation,
+  useMarkAsImportantMutation,
   useUnfollowArticleMutation,
+  useUnmarkAsImportantMutation,
 } from "../../hooks/articles/use-articles";
 import { useCreateFlagMutation } from "../../hooks/flag/user-flag";
 import type { Article } from "../../types/article";
@@ -76,6 +79,8 @@ export const ArticleMainPage = () => {
   const { mutate: createFlagMutate, isPending: isCreateFlagPending } = useCreateFlagMutation();
   const { mutate: flagArticleMutate, isPending: isFlagingArticlePending } = useCreateArticleUserFlagMutation();
   const { mutate: unflagMutate } = useUnflagArticleUserFlagMutation();
+  const { mutate: markAsImportantMutate } = useMarkAsImportantMutation();
+  const { mutate: unmarkAsImportantMutate } = useUnmarkAsImportantMutation();
 
   const [isExtraInforModalOpen, setIsExtraInfoModalOpen] = useState(false);
   const [isFlagModalOpen, setIsFlagModalOpen] = useState(false);
@@ -154,6 +159,24 @@ export const ArticleMainPage = () => {
     }
   };
 
+  const handleMarkAsImportant = (articleId: string) => {
+    markAsImportantMutate(articleId, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["article", articleId] });
+        toast.success("Artykuł oznaczono jako ważny");
+      },
+    });
+  };
+
+  const handleUnmarkAsImportant = (articleId: string) => {
+    unmarkAsImportantMutate(articleId, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["article", articleId] });
+        toast.success("Oznaczenie ważności zostało usunięte");
+      },
+    });
+  };
+
   const onRefresh = async () => {
     try {
       const result = await refetch();
@@ -184,7 +207,6 @@ export const ArticleMainPage = () => {
 
   const sortedDescriptions = [...(article?.responseVariants ?? [])].sort((a, b) => a.version - b.version);
 
-  // helper
   const copyToClipboardWithToast = (value: string) => {
     navigator.clipboard.writeText(value);
     toast.success("Odpowiedź została skopiowana do schowka", {
@@ -217,9 +239,15 @@ export const ArticleMainPage = () => {
               <XCircleIcon className="w-4 h-4 mr-1" /> Odrzucony
             </Badge>
           )}
-          <Badge variant="secondary" className="flex items-center whitespace-nowrap">
+          {/* <Badge variant="secondary" className="flex items-center whitespace-nowrap">
             <EyeIcon className="w-4 h-4 mr-1" /> {article.viewsCounter} wyświetleń
-          </Badge>
+          </Badge> */}
+
+          {article.isImportant && (
+            <Badge className="bg-yellow-100 text-yellow-800 px-3 border border-yellow-300 flex items-center whitespace-nowrap">
+              <Star className="w-4 h-4 mr-1" /> Ważny
+            </Badge>
+          )}
           <TooltipProvider>
             {/* <div className="flex items-center space-x-2">
               <Tooltip>
@@ -247,7 +275,7 @@ export const ArticleMainPage = () => {
                 </TooltipContent>
               </Tooltip>
             </div> */}
-            {/* DZWON */}
+
             <div className="flex items-center space-x-2">
               {/* FOLLOW */}
               <Tooltip>
@@ -353,7 +381,6 @@ export const ArticleMainPage = () => {
               <DropdownMenuItem onClick={openExtraInfoModal}>
                 <Info className="w-4 h-4 mr-1.5" /> Informacje
               </DropdownMenuItem>
-
               {userPermissions.includes("EDIT_ARTICLE") && (
                 <DropdownMenuItem asChild>
                   <NavLink to={`/articles/${id}/edit`}>
@@ -372,6 +399,17 @@ export const ArticleMainPage = () => {
               <DropdownMenuItem onClick={refetch}>
                 <RefreshCw className="w-4 h-4 mr-1.5" /> Odśwież
               </DropdownMenuItem>
+              {article.isImportant ? (
+                <DropdownMenuItem onClick={() => handleUnmarkAsImportant(article._id)}>
+                  <StarOff className="w-4 h-4 mr-2 text-destructive" />
+                  Usuń priorytet
+                </DropdownMenuItem>
+              ) : (
+                <DropdownMenuItem onClick={() => handleMarkAsImportant(article._id)}>
+                  <Star className="w-4 h-4 mr-2 text-primary" />
+                  Oznacz jako priorytetowy
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
