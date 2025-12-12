@@ -163,7 +163,9 @@ export const ArticleMainPage = () => {
     markAsImportantMutate(articleId, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["article", articleId] });
-        toast.success("Artykuł oznaczono jako ważny");
+        toast.success("Artykuł oznaczono jako ważny", {
+          position: "bottom-right",
+        });
       },
     });
   };
@@ -172,7 +174,9 @@ export const ArticleMainPage = () => {
     unmarkAsImportantMutate(articleId, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["article", articleId] });
-        toast.success("Oznaczenie ważności zostało usunięte");
+        toast.success("Oznaczenie ważności zostało usunięte", {
+          position: "bottom-right",
+        });
       },
     });
   };
