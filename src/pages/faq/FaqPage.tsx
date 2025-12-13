@@ -116,7 +116,7 @@ export function FaqPage() {
   };
 
   return (
-    <section className="mx-auto bg-background h-full ">
+    <section className="bg-background h-full max-w-[1440px] mx-auto">
       <FaqHeader
         isFaqsLoading={isFaqsLoading}
         isFaqLoading={isFaqLoading}

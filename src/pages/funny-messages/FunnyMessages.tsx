@@ -33,7 +33,7 @@ export const FunnyMessages = () => {
   };
 
   return (
-    <div className="flex w-full pb-12 ">
+    <div className="flex w-full pb-12 max-w-[1440px] mx-auto ">
       <div className="w-full">
         <FunnyMessagesHeader onCreateFunnyMessage={onCreateFunnyMessage} userPermissions={userPermissions} />
 

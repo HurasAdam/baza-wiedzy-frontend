@@ -50,7 +50,7 @@ export const TopicRegisterPage = () => {
   };
 
   return (
-    <div className="flex w-full ">
+    <div className="flex w-full max-w-[1440px] mx-auto">
       <div className="w-full">
         <TopicRegisterHeader
           products={products}

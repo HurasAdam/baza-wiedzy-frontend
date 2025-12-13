@@ -21,7 +21,7 @@ const FaqItemsSection = ({
   onDeleteRequest,
 }: FaqItemsSectionProps) => {
   return (
-    <Card>
+    <Card className="bg-card/70">
       <FaqItemsHeader
         isFaqLoading={isFaqLoading}
         faqItemCount={faq?.items?.length}

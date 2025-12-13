@@ -48,7 +48,7 @@ export const StatisticsPage = () => {
   };
 
   return (
-    <div className="space-y-6 pb-10">
+    <div className="space-y-6 pb-10 max-w-[1440px] mx-auto">
       <StatisticsHeader startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} />
 
       <StatisticsSection
