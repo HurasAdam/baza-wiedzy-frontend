@@ -93,7 +93,7 @@ const TableArticleCard = ({
       onMouseLeave={() => onMouseLeave?.()}
       key={article._id}
       className={cn(
-        "flex justify-between items-center px-4 py-3 text-sm hover:bg-muted/45 transition-colors bg-card/45 ",
+        "flex justify-between items-center px-3.5 py-3 text-sm hover:bg-muted/45 transition-colors bg-card/60 ",
         "border-b last:border-0 first:rounded-t-xl last:rounded-b-lg"
       )}
       title={`Autor: ${article.createdBy.name}`}
@@ -104,21 +104,21 @@ const TableArticleCard = ({
         state={{ from: location.pathname + location.search }}
         className="flex items-center gap-3 min-w-0 overflow-hidden flex-grow"
       >
-        <div className="relative flex-shrink-0 flex items-center justify-center p-2 rounded-full border border-muted/40 bg-muted/10">
+        <div className="relative  flex-shrink-0 w-7.5 h-7.5 flex items-center justify-center  rounded-md border border-muted/40 bg-muted/70">
           {article.isImportant ? (
             <Tooltip>
               <TooltipTrigger asChild>
-                <Star className="w-4.5 h-4.5 text-yellow-600/90 " />
+                <Star className="w-4 h-4 text-yellow-600/90 " />
               </TooltipTrigger>
               <TooltipContent className="bg-muted p-2 rounded-md text-xs">Wymaga weryfikacji</TooltipContent>
             </Tooltip>
           ) : (
-            <FileText className="w-4.5 h-4.5 text-muted-foreground" />
+            <FileText className="w-4 h-4 text-muted-foreground" />
           )}
         </div>
 
         <div className="flex flex-col overflow-hidden">
-          <span className="font-semibold text-foreground/90 break-words">{article.title}</span>
+          <span className="font-semibold text-foreground/95  break-words">{article.title}</span>
 
           <span
             className="inline-flex items-center px-2 py-[1px] mt-1 rounded-full text-[9px] font-medium uppercase tracking-wide w-fit"

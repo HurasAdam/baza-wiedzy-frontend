@@ -1,4 +1,4 @@
-import { FileText, Flag, MoreVertical, Tag, Trash } from "lucide-react";
+import { Flag, List, MoreVertical, Tag, Trash } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "../../../components/ui/button";
@@ -9,6 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../../../components/ui/tooltip";
 import { cn } from "../../../lib/utils";
 import type { FlaggedArticle } from "../../articles/components/ArticlesList";
 
@@ -68,14 +69,23 @@ export const TableFlaggedArticleCard = ({
       {/* Prawa sekcja: FileText + liczba wariantów + status */}
       <div className="flex items-center gap-16 pr-2 min-w-[60px] justify-end">
         {/* Ikona artykułu */}
-        <div className="relative flex-shrink-0">
-          <FileText className="w-5 h-5 text-muted-foreground" />
-          {article.responseVariantsCount > 1 && (
-            <span className="absolute -top-1 -right-1.5 flex items-center justify-center w-4 h-4 text-[9px] font-medium text-white bg-primary/90 shadow-sm rounded-full">
-              {article.responseVariantsCount}
-            </span>
-          )}
-        </div>
+        {article.responseVariantsCount > 1 ? (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-muted/10 border border-muted/30 shadow-sm">
+                <List className="w-3 h-3" />
+                {article.responseVariantsCount}
+              </div>
+            </TooltipTrigger>
+            <TooltipContent className="bg-muted p-2 rounded-md text-xs" side="top">
+              ilość wariantów
+            </TooltipContent>
+          </Tooltip>
+        ) : (
+          <div className="opacity-0 pointer-events-none px-2 py-1 text-xs">
+            <List className="w-3 h-3" />
+          </div>
+        )}
 
         {/* <div className="flex items-center justify-center w-6 h-6">
           {article.status === "pending" ? (
