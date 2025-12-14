@@ -147,7 +147,7 @@ const Header = ({
           </DropdownMenuTrigger>
 
           <DropdownMenuContent>
-            <DropdownMenuLabel>Moduł</DropdownMenuLabel>
+            <DropdownMenuLabel>Kolekcje</DropdownMenuLabel>
             <DropdownMenuSeparator />
 
             <DropdownMenuGroup>
@@ -165,7 +165,7 @@ const Header = ({
             <DropdownMenuGroup>
               <DropdownMenuItem onClick={onCreateWorkspace}>
                 <PlusCircle className="w-4 h-4 mr-2" />
-                Dodaj Moduł
+                Dodaj kolekcje
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>

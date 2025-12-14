@@ -64,7 +64,7 @@ const WorkspaceForm = ({ onSubmit, workspace, isLoading }: WorkspaceFormProps) =
       icon: workspace ? workspace.icon : "",
     },
   });
-  console.log("UPD", workspace);
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -76,7 +76,7 @@ const WorkspaceForm = ({ onSubmit, workspace, isLoading }: WorkspaceFormProps) =
               <FormItem>
                 <FormLabel>Nazwa</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="Nazwa modułu" />
+                  <Input {...field} placeholder="Nazwa kolekcji" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -89,7 +89,7 @@ const WorkspaceForm = ({ onSubmit, workspace, isLoading }: WorkspaceFormProps) =
               <FormItem>
                 <FormLabel>Opis</FormLabel>
                 <FormControl>
-                  <Textarea {...field} placeholder="Opis prywatnego modułu" rows={3} />
+                  <Textarea {...field} placeholder="Opis kolekcji" rows={3} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

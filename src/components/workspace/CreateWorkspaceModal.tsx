@@ -41,9 +41,9 @@ export const CreateWorkspaceModal = ({ isCreatingWorkspace, setIsCreatingWorkspa
 
   return (
     <Dialog open={isCreatingWorkspace} onOpenChange={setIsCreatingWorkspace} modal={true}>
-      <DialogContent className="max-h-[80vh] overflow-y-auto">
+      <DialogContent className="max-h-[80vh] overflow-y-auto min-w-2xl">
         <DialogHeader>
-          <DialogTitle>Utwórz prywanty moduł szablonów i odpowiedzi</DialogTitle>
+          <DialogTitle>Utwórz nową kolekcję</DialogTitle>
         </DialogHeader>
 
         <WorkspaceForm onSubmit={onSubmit} isLoading={isPending} />
