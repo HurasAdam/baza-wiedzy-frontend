@@ -87,10 +87,6 @@ export const FlaggedArticlesPage: React.FC = () => {
     });
   };
 
-  const handleFlagChange = (articleId: string, flagId: string) => {
-    console.log("Zmiana flagi artykułu", articleId, "na", flagId);
-  };
-
   const handleSelectFlag = (flagId: string) => {
     setActiveFlag(flagId);
     setOpenFlags(false);
@@ -131,7 +127,6 @@ export const FlaggedArticlesPage: React.FC = () => {
         userFlags={userFlags}
         isLoading={isLoading}
         isError={isError}
-        handleFlagChange={handleFlagChange}
         toggleFavourite={toggleFavourite}
         onResetAllFilters={onResetAllFilters}
         titleParam={titleParam}

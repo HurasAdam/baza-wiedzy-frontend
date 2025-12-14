@@ -15,27 +15,16 @@ import type { FlaggedArticle } from "../../articles/components/ArticlesList";
 
 interface TableFlaggedArticleCardProps {
   article: FlaggedArticle;
-  onFlagChange: (articleId: string, flagId: string) => void;
   toggleFavourite: (id: string) => void;
+  onUnflag: (article: FlaggedArticle) => void;
   openFlagModal: (article: FlaggedArticle) => void;
   toggleFavouriteLoading: boolean;
 }
 
-export const TableFlaggedArticleCard = ({
-  article,
-  onFlagChange,
-  toggleFavourite,
-  openFlagModal,
-  toggleFavouriteLoading,
-}: TableFlaggedArticleCardProps) => {
+export const TableFlaggedArticleCard = ({ article, openFlagModal, onUnflag }: TableFlaggedArticleCardProps) => {
   const location = useLocation();
   const [selectedFlag, setSelectedFlag] = useState(article.flag?._id);
 
-  const handleFlagSelect = (flagId: string) => {
-    setSelectedFlag(flagId);
-    onFlagChange(article._id, flagId);
-  };
-  console.log("CARDOWER", article);
   return (
     <div
       key={article._id}
@@ -87,29 +76,6 @@ export const TableFlaggedArticleCard = ({
           </div>
         )}
 
-        {/* <div className="flex items-center justify-center w-6 h-6">
-          {article.status === "pending" ? (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div className="flex items-center justify-center w-6 h-6 cursor-default">
-                  <svg
-                    className="w-4 h-4 text-amber-600 dark:text-amber-400 animate-pulse"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 4a1 1 0 011 1v3a1 1 0 11-2 0V7a1 1 0 011-1zm0 6a1 1 0 110 2 1 1 0 010-2z" />
-                  </svg>
-                </div>
-              </TooltipTrigger>
-              <TooltipContent className="bg-muted" side="top">
-                Wymaga weryfikacji
-              </TooltipContent>
-            </Tooltip>
-          ) : (
-            <div className="w-6 h-6" />
-          )}
-        </div> */}
-
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="sm" className="transition-colors">
@@ -131,7 +97,10 @@ export const TableFlaggedArticleCard = ({
             <DropdownMenuSeparator />
 
             {/* Sekcja 2: akcje destrukcyjne */}
-            <DropdownMenuItem className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-destructive/10 transition-colors cursor-pointer">
+            <DropdownMenuItem
+              onClick={() => onUnflag(article)}
+              className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-destructive/10 transition-colors cursor-pointer"
+            >
               <Trash className="w-5 h-5 text-destructive" />
               Usuń z ulubionych
             </DropdownMenuItem>

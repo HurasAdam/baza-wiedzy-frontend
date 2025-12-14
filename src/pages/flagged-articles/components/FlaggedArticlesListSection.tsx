@@ -1,6 +1,10 @@
 import { useState } from "react";
+import { toast } from "sonner";
 import { EditFlagArticleModal, type FlaggedArticleForModal } from "../../../components/flag/edit-flag-article-modal";
+import { Alert } from "../../../components/shared/alert-modal";
 import { NoDataFound } from "../../../components/shared/NoDataFound";
+import queryClient from "../../../config/query.client";
+import { useUnflagArticleUserFlagMutation } from "../../../hooks/article-user-flag/use-article-user-flag";
 import type { ArticleAuthor, Category, Product } from "../../articles/components/ArticlesList";
 import SkeletonArticleCard from "../../pending-articles/components/SkeletonArticleCard";
 import { TableFlaggedArticleCard } from "./TableFlaggedArticleCard";
@@ -46,7 +50,6 @@ interface FlaggedArticlesListSectionProps {
   isError: boolean;
   articles: FlaggedArticleResponse;
   onResetAllFilters: () => void;
-  handleFlagChange: (articleId: string, flagId: string) => void;
   toggleFavourite: (articleId: string) => void;
   titleParam: string;
   selectedProduct: string;
@@ -63,13 +66,13 @@ const FlaggedArticlesListSection = ({
   titleParam,
   selectedProduct,
   selectedCategory,
-  handleFlagChange,
   toggleFavourite,
   pendingId,
 }: FlaggedArticlesListSectionProps) => {
   const [isFlagModalOpen, setIsFlagModalOpen] = useState(false);
+  const [isUnflagModalOpen, setIsUnflagModalOpen] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState<FlaggedArticleForModal | null>(null);
-
+  const { mutate: unflagMutate, isPending: isUnflagArticlePending } = useUnflagArticleUserFlagMutation();
   const openFlagModal = (article: FlaggedArticleForModal) => {
     const articleForModal: FlaggedArticleForModal = {
       ...article,
@@ -79,6 +82,33 @@ const FlaggedArticlesListSection = ({
     setSelectedArticle(articleForModal);
     setIsFlagModalOpen(true);
   };
+
+  const onUnflag = (article: FlaggedArticleForModal) => {
+    setSelectedArticle(article);
+    setIsUnflagModalOpen(true);
+  };
+
+  const onUnflageCancel = () => {
+    setSelectedArticle(null);
+    setIsUnflagModalOpen(false);
+  };
+
+  const onUnflagConfirm = (articleId: string) => {
+    unflagMutate(articleId, {
+      onSuccess: () => {
+        toast.success("Usunięto z ulubionych", {
+          position: "bottom-right",
+          description: "Artykuł został usunięty z listy ulubionych.",
+        });
+        setSelectedArticle(null);
+        setIsUnflagModalOpen(false);
+        queryClient.invalidateQueries({
+          queryKey: ["my-flagged-articles"],
+        });
+      },
+    });
+  };
+
   return (
     <div className="flex-grow flex flex-col h-fit  divide-y divide-border rounded-xl bg-card/90">
       {isLoading && (
@@ -102,7 +132,6 @@ const FlaggedArticlesListSection = ({
         />
       )}
 
-      {/* Brak artykułów, ale użytkownik NIE używa filtrów */}
       {!isLoading &&
         !isError &&
         articles?.data.length === 0 &&
@@ -119,10 +148,10 @@ const FlaggedArticlesListSection = ({
           <TableFlaggedArticleCard
             key={article._id}
             article={article}
-            onFlagChange={handleFlagChange}
             toggleFavourite={toggleFavourite}
             toggleFavouriteLoading={pendingId === article._id}
             openFlagModal={openFlagModal}
+            onUnflag={onUnflag}
           />
         ))}
 
@@ -135,6 +164,26 @@ const FlaggedArticlesListSection = ({
             selectedFlag: selectedArticle.selectedFlag ?? null,
           }}
         />
+      )}
+
+      {selectedArticle && (
+        <Alert
+          isOpen={isUnflagModalOpen}
+          title="Usuń artykuł z ulubionych"
+          onCancel={onUnflageCancel}
+          onConfirm={() => onUnflagConfirm(selectedArticle._id)}
+          isLoading={isUnflagArticlePending}
+          type="warning"
+        >
+          <div className="space-y-2">
+            <p>
+              Artykuł <strong>{selectedArticle.title}</strong> zostanie usunięty z listy ulubionych.
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Artykuł pozostanie dostępny w systemie i w każdej chwili możesz ponownie dodać go do ulubionych.
+            </p>
+          </div>
+        </Alert>
       )}
     </div>
   );
