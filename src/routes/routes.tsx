@@ -23,6 +23,9 @@ export const protectedRoutePaths = [
   },
   { path: PROTECTED_ROUTES.STATISTICS, element: <PAGES.StatisticsPage /> },
   { path: PROTECTED_ROUTES.MY_ENTRIES, element: <PAGES.MyEntriesPage /> },
+  { path: PROTECTED_ROUTES.MY_WORKSPACES, element: <PAGES.MyWorkspaces /> },
+  { path: PROTECTED_ROUTES.MY_FLAGS, element: <PAGES.MyFlagsPage /> },
+  { path: PROTECTED_ROUTES.REPORTS, element: <PAGES.ReportsPage /> },
   { path: PROTECTED_ROUTES.FUNNY_MESSAGES, element: <PAGES.FunnyMessages /> },
   {
     path: PROTECTED_ROUTES.CREATE_ARTICLE,

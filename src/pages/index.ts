@@ -33,9 +33,12 @@ import { FlaggedArticlesPage } from "./flagged-articles/FlaggedArticlesPage";
 import { FunnyMessages } from "./funny-messages/FunnyMessages";
 import { JstProjectsPage } from "./jst-projects/JstProjectsPage";
 import { MyEntriesPage } from "./my-entries/MyEntriesPage";
+import { MyFlagsPage } from "./my-flags/MyFlagsPage";
+import { MyWorkspaces } from "./my-workspaces/MyWorkspaces";
 import { NotFoundPage } from "./notFound/NotFoungPage";
 import { OnboardingPage } from "./onboarding/OnboardingPage";
 import { PendingArticles } from "./pending-articles/PendingArticles";
+import { ReportsPage } from "./reports/ReportsPage";
 import { StatisticsPage } from "./statistics/StatisticsPage";
 import { TopicRegisterPage } from "./TopicRegister/TopicRegisterPage";
 import { WorkspaceArticlePage } from "./workspace-article/WorkspaceArticlePage";
@@ -91,4 +94,7 @@ export const PAGES = {
   WorkspaceManageSettingsPage,
   WorkspaceOverviewPage,
   WorkspaceArticlePage,
+  MyFlagsPage,
+  ReportsPage,
+  MyWorkspaces,
 };

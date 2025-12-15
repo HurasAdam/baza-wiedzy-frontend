@@ -16,4 +16,7 @@ export const PROTECTED_ROUTES = {
   ONBOARDING: "account-onboarding",
   FAQ: "faq",
   CREATE_FAQ: "faq/create",
+  MY_FLAGS: "my-flags",
+  REPORTS: "reports",
+  MY_WORKSPACES: "my-workspaces",
 };

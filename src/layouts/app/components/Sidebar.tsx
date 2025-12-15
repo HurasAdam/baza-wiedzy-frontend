@@ -92,13 +92,13 @@ export const myNavItems: MySectionNavItem[] = [
   },
   {
     title: "Etykiety",
-    href: "/my-entries",
+    href: "/my-flags",
     icon: LandPlot,
     requiredPermission: "ADD_ARTICLE",
   },
   {
     title: "Zgłoszenia",
-    href: "/my-entries",
+    href: "/reports",
     icon: MailQuestionMark,
     requiredPermission: "ADD_ARTICLE",
   },
