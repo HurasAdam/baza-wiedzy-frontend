@@ -21,7 +21,7 @@ export const SidebarNav = ({ items, isCollapsed, className, currentWorkspace, ..
   const navigate = useNavigate();
 
   return (
-    <nav className={cn("flex flex-col gap-y-2", className)} {...props}>
+    <nav className={cn("flex flex-col gap-y-1.5 p-2.5", className)} {...props}>
       {items.map((el) => {
         const Icon = el.icon;
         const isActive = location.pathname === el.href || location.pathname.startsWith(el.href + "/");
@@ -29,7 +29,7 @@ export const SidebarNav = ({ items, isCollapsed, className, currentWorkspace, ..
         const handleClick = () => {
           if (el.href === "/workspaces") {
             navigate(el.href);
-          } else if (currentWorkspace && currentWorkspace._id) {
+          } else if (currentWorkspace?._id) {
             navigate(`${el.href}?workspaceId=/${currentWorkspace._id}`);
           } else {
             navigate(el.href);
@@ -41,15 +41,15 @@ export const SidebarNav = ({ items, isCollapsed, className, currentWorkspace, ..
             key={el.href}
             variant={isActive ? "outline" : "ghost"}
             className={cn(
-              "justify-start text-sidebar-foreground border-transparent hover:text-sidebar-accent-foreground hover:bg-transparent",
+              "justify-start text-sidebar-foreground border-transparent hover:text-sidebar-accent-foreground hover:bg-sidebar-hover rounded-md transition-colors duration-200  ",
               isActive &&
-                "bg-sidebar-primary hover:bg-sidebar-primary border-sidebar-border text-sidebar-primary-foreground font-medium",
-              isCollapsed && "w-10 "
+                "bg-sidebar-primary hover:bg-sidebar-primary border-sidebar-border text-sidebar-primary-foreground font-semibold ",
+              isCollapsed && "w-10 justify-center "
             )}
             onClick={handleClick}
           >
-            <Icon className="mr-2 size-4" />
-            {isCollapsed ? <span className="sr-only">{el.title}</span> : el.title}
+            <Icon className={cn("w-5 h-5", isCollapsed && "mx-auto")} />
+            {!isCollapsed && <span className="ml-1.5">{el.title}</span>}
           </Button>
         );
       })}

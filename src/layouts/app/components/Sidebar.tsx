@@ -11,9 +11,12 @@ import {
   FolderSearch,
   HeartIcon,
   Info,
+  LandPlot,
   Layers,
+  Layers2,
   LayoutDashboard,
   Loader,
+  MailQuestionMark,
   Origami,
   Plus,
   RectangleEllipsis,
@@ -25,8 +28,7 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import queryClient from "@/config/query.client";
-import { useAuthQuery, useLogoutMutation } from "@/hooks/auth/use-auth";
+import { useAuthQuery } from "@/hooks/auth/use-auth";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -41,6 +43,7 @@ import {
 
 import { WORKSPACE_ICONS } from "../../../components/workspace/workspace-form";
 import { useFindUserWorkspacesQuery } from "../../../hooks/workspace/use-workspace";
+import { SidebarMyNav, type MySectionNavItem } from "./Sidebar-my-nav";
 import { SidebarNav } from "./Sidebar-nav";
 
 type NavItem = {
@@ -53,24 +56,52 @@ type NavItem = {
 const navItems: NavItem[] = [
   { title: "Start", href: "/dashboard", icon: LayoutDashboard },
   { title: "Baza artykułów", href: "/articles", icon: FolderSearch },
-  { title: "Moje ulubione", href: `/flagged-articles`, icon: HeartIcon },
+  // { title: "Moje ulubione", href: `/flagged-articles`, icon: HeartIcon },
   { title: "Rejestr tematów", href: "/register-topic", icon: Clipboard },
-
-  { title: "Moje wpisy", href: `/my-entries`, icon: UserRoundPen, requiredPermission: "ADD_ARTICLE" },
-
-  { title: "Ulubione", href: "/favorites-articles", icon: HeartIcon },
+  // { title: "Moje wpisy", href: `/my-entries`, icon: UserRoundPen, requiredPermission: "ADD_ARTICLE" },
   { title: "FAQ", href: "/faq", icon: BookOpen },
   { title: "Statystyki", href: `/statistics`, icon: ChartColumnDecreasing },
   { title: "Szkoły projektowe", href: `/jst-projects`, icon: School },
   { title: "Działy i kontakty", href: `/achieved`, icon: BookUser },
 
   {
-    title: "do zweryfikowania",
+    title: "Do zweryfikowania",
     href: "/articles-pending",
     icon: RectangleEllipsis,
     requiredPermission: "ACCESS_PENDING_ARTICLES_PANEL",
   },
   { title: "Zabawne wiad.", href: "/funny-messages", icon: Smile },
+];
+
+export const myNavItems: MySectionNavItem[] = [
+  {
+    title: "Kolekcje",
+    href: "/my-workspaces",
+    icon: Layers2,
+  },
+  {
+    title: "Ulubione",
+    href: "/flagged-articles",
+    icon: HeartIcon,
+  },
+  {
+    title: "Wpisy",
+    href: "/my-entries",
+    icon: UserRoundPen,
+    requiredPermission: "ADD_ARTICLE",
+  },
+  {
+    title: "Etykiety",
+    href: "/my-entries",
+    icon: LandPlot,
+    requiredPermission: "ADD_ARTICLE",
+  },
+  {
+    title: "Zgłoszenia",
+    href: "/my-entries",
+    icon: MailQuestionMark,
+    requiredPermission: "ADD_ARTICLE",
+  },
 ];
 
 const APP_VERSION = import.meta.env.VITE_APP_VERSION;
@@ -85,20 +116,10 @@ export const Sidebar = ({
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const navigate = useNavigate();
-  const { mutate } = useLogoutMutation();
   const { data: workspaces = [], isPending } = useFindUserWorkspacesQuery();
 
   const { data: authData, isLoading } = useAuthQuery();
   const userPermissions = authData?.role?.permissions || [];
-
-  const onLogout = () => {
-    mutate(undefined, {
-      onSuccess: () => {
-        queryClient.clear();
-        navigate("/auth/login", { replace: true });
-      },
-    });
-  };
 
   const filteredNavItems = navItems.filter((item) => {
     if (!item.requiredPermission) return true;
@@ -114,7 +135,7 @@ export const Sidebar = ({
       }}
       className={cn(
         "flex flex-col border-r bg-sidebar transition-all duration-300",
-        isCollapsed ? "w-18 md:w[80px]" : "w-16 md:w-[240px] p-2.5"
+        isCollapsed ? "w-18 md:w[80px]" : "w-16 md:w-[240px] "
       )}
     >
       <div className="flex h-14 items-center border-b px-4 mb-4 gap-2">
@@ -186,13 +207,14 @@ export const Sidebar = ({
         </Button>
       </div>
 
-      <ScrollArea className="flex-1 px-3 py-2">
+      <ScrollArea className="flex-1 py-2 ">
         <SidebarNav
           items={filteredNavItems}
           isCollapsed={isCollapsed}
-          className={cn(isCollapsed && "items-center space-y-2")}
+          className={cn(isCollapsed && "items-center space-y-2 ")}
           currentWorkspace={currentWorkspace}
         />
+        <SidebarMyNav items={myNavItems} isCollapsed={isCollapsed} />
       </ScrollArea>
 
       <div className="flex flex-col items-center py-4 mt-auto text-xs text-muted-foreground">
