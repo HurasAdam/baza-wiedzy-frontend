@@ -52,7 +52,7 @@ export const FlagModal = ({ isOpen, setIsOpen, onSave, isLoading }: FlagModalPro
     <Dialog open={isOpen} onOpenChange={setIsOpen} modal>
       <DialogContent className="max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Dodaj nową kolekcję</DialogTitle>
+          <DialogTitle>Dodaj etykietę</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
@@ -67,7 +67,7 @@ export const FlagModal = ({ isOpen, setIsOpen, onSave, isLoading }: FlagModalPro
                   <FormControl>
                     <input
                       {...field}
-                      placeholder="Nazwa kolekcji"
+                      placeholder="Nazwa etykiety"
                       className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                     />
                   </FormControl>
