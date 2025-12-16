@@ -22,7 +22,7 @@ import { useState } from "react";
 import { NavLink, useOutletContext, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { ArticleExtraInfoModal } from "../../components/article/article-extra-info.modal";
-import { FlagModal } from "../../components/flag/flag-modal";
+import { FlagModal, type FlagForm } from "../../components/flag/flag-modal";
 import { MarkWithFlagArticleModal } from "../../components/flag/mark-with-flag-article-modal";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
@@ -97,7 +97,7 @@ export const ArticleMainPage = () => {
   const openCreateFlagModal = (): void => {
     setIsFlagModalOpen(true);
   };
-  const onCreateFlag = (data) => {
+  const onCreateFlag = (data: FlagForm) => {
     createFlagMutate(data, {
       onSuccess: () => {
         toast.success("Zapisano zmian", {

@@ -21,11 +21,11 @@ export const MyWorkspaces = () => {
   }
 
   return (
-    <div className="flex flex-col h-full w-full py-8 px-6 lg:px-12 bg-gradient-to-br from-background via-background/90 to-background/60 backdrop-blur-md">
+    <div className="flex flex-col h-full w-full py-4 px-6 lg:px-12 bg-gradient-to-br from-background via-background/90 to-background/60 backdrop-blur-md ">
       {/* Header */}
       <div className="flex items-center justify-between mb-10">
         <div>
-          <h1 className="text-2xl font-semibold text-foreground">Twoje kolekcje</h1>
+          <h1 className="text-2xl font-semibold text-foreground">Moje kolekcje</h1>
           <p className="text-muted-foreground text-sm mt-1">Zarządzaj swoimi kolekcjami.</p>
         </div>
 
@@ -47,7 +47,7 @@ export const MyWorkspaces = () => {
           </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-16">
           {workspaces.map((ws) => {
             const Icon = WORKSPACE_ICONS[ws.icon] ?? Layers;
 
