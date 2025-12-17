@@ -10,6 +10,23 @@ export const useCreateFlagMutation = () => {
   });
 };
 
+export const useUpdateOneFlagMutation = () => {
+  return useMutation({
+    mutationFn: ({ flagId, data }: { flagId: string; data: FlagForm }) => {
+      return flagService.updateOne(flagId, data);
+    },
+  });
+};
+
+export const useFindOneFlagQuery = (flagId: string) => {
+  return useQuery({
+    queryKey: ["my-flag", flagId],
+    queryFn: () => flagService.findOne(flagId),
+    enabled: !!flagId,
+    staleTime: 1000 * 60 * 5,
+  });
+};
+
 export const useFindMyFlags = (enabled: boolean) => {
   return useQuery({
     queryKey: ["my-flags"],

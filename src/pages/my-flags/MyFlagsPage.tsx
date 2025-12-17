@@ -1,11 +1,17 @@
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { ArrowRight, Flag, MoreHorizontal, Pencil, Plus, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import { useState } from "react";
 import { toast } from "sonner";
+import { EditFlagModal } from "../../components/flag/edit-flag-modal";
 import { FlagModal, type FlagForm } from "../../components/flag/flag-modal";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../../components/ui/dropdown-menu";
 import queryClient from "../../config/query.client";
 import { useCreateFlagMutation, useFindMyFlagsWithStats } from "../../hooks/flag/user-flag";
 
@@ -13,7 +19,9 @@ export const MyFlagsPage = () => {
   const navigate = useNavigate();
   const { data: userFlags = [], isLoading: isFlagsLoading } = useFindMyFlagsWithStats(true);
   const { mutate: createFlagMutate, isPending: isCreateFlagPending } = useCreateFlagMutation();
+
   const [isCreateFlagModalOpen, setIsCreateFlagModalOpen] = useState(false);
+  const [selectedFlag, setSelectedFlag] = useState<null | string>(null);
 
   const handleCreateFlag = () => {
     setIsCreateFlagModalOpen(true);
@@ -31,7 +39,7 @@ export const MyFlagsPage = () => {
     });
   };
 
-  const handleEditFlag = (flagId: string) => console.log("Edit flag", flagId);
+  const handleEditFlag = (flagId: string) => setSelectedFlag(flagId);
   const handleDeleteFlag = (flagId: string) => console.log("Delete flag", flagId);
 
   if (isFlagsLoading) {
@@ -44,7 +52,7 @@ export const MyFlagsPage = () => {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-semibold text-foreground">Moje etykiety</h1>
-          <p className="text-muted-foreground text-sm mt-1">Zarządzaj własnymi etykietami</p>
+          <p className="text-muted-foreground text-sm mt-1">Zarządzaj dodanymi etykietami</p>
         </div>
         <Button onClick={handleCreateFlag} size="sm" className="gap-2 shadow-md hover:shadow-lg transition-all">
           <Plus className="w-4 h-4" />
@@ -102,24 +110,24 @@ export const MyFlagsPage = () => {
 
               {/* Bottom right*/}
               <div className="flex justify-end gap-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                <Button variant="ghost" size="icon" onClick={() => handleEditFlag(flag._id)}>
-                  <Pencil className="w-4 h-4" />
-                </Button>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span>
-                      <Button variant="ghost" size="icon" onClick={() => handleDeleteFlag(flag._id)}>
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </span>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom" align="start" className="bg-muted p-3 space-y-1">
-                    <p>Usuń tę etykietę</p>
-                  </TooltipContent>
-                </Tooltip>
-                <Button variant="ghost" size="icon">
-                  <MoreHorizontal className="w-4 h-4" />
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                      <MoreHorizontal className="w-4 h-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onSelect={() => handleEditFlag(flag._id)}>
+                      <Pencil className="w-3 h-3" />
+                      Edytuj
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem onSelect={() => handleDeleteFlag(flag._id)}>
+                      <Trash2 className="w-3 h-3" />
+                      Usuń
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
           ))}
@@ -132,6 +140,18 @@ export const MyFlagsPage = () => {
         isOpen={isCreateFlagModalOpen}
         setIsOpen={setIsCreateFlagModalOpen}
       />
+
+      {selectedFlag && (
+        <EditFlagModal
+          selectedFlag={selectedFlag}
+          isOpen={!!selectedFlag}
+          setIsOpen={(open) => {
+            if (!open) setSelectedFlag(null);
+          }}
+          onSave={() => {}}
+          isLoading={false}
+        />
+      )}
     </div>
   );
 };
