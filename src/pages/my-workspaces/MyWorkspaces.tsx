@@ -21,7 +21,7 @@ export const MyWorkspaces = () => {
   }
 
   return (
-    <div className="flex flex-col h-full w-full py-4 px-6 lg:px-12 bg-gradient-to-br from-background via-background/90 to-background/60 backdrop-blur-md ">
+    <div className="flex flex-col h-full w-full py-4 px-6 lg:px-12 bg-gradient-to-br from-background via-background/90 to-background/60 backdrop-blur-md max-w-7xl mx-auto">
       {/* Header */}
       <div className="flex items-center justify-between mb-10">
         <div>
@@ -47,7 +47,7 @@ export const MyWorkspaces = () => {
           </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
           {workspaces.map((ws) => {
             const Icon = WORKSPACE_ICONS[ws.icon] ?? Layers;
 
@@ -55,10 +55,8 @@ export const MyWorkspaces = () => {
               <div
                 key={ws._id}
                 onClick={() => handleOpenWorkspace(ws._id)}
-                className="cursor-pointer group rounded-2xl p-5 border border-border/40 
-                           bg-gradient-to-br from-card/70 to-card/40 backdrop-blur-sm
-                           shadow-sm hover:shadow-xl hover:border-primary/40 
-                           hover:from-card/80 transition-all duration-200"
+                className="group relative border rounded-xl p-4 bg-gradient-to-br from-card/70 to-card/40 backdrop-blur-sm
+                         shadow-sm hover:bg-muted/40 transition-all flex flex-col justify-between"
               >
                 <div className="flex items-center justify-between mb-4">
                   <div
