@@ -1,10 +1,10 @@
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader, Save } from "lucide-react";
+import { Loader, Plus, Save } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "../ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
+import { Dialog, DialogContent, DialogFooter, DialogTitle } from "../ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 
 // Predefiniowane kolory
@@ -51,9 +51,12 @@ export const FlagModal = ({ isOpen, setIsOpen, onSave, isLoading }: FlagModalPro
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen} modal>
       <DialogContent className="max-h-[80vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Dodaj etykietę</DialogTitle>
-        </DialogHeader>
+        <DialogTitle className="flex items-center gap-2">
+          <div className="border p-1.5 bg-muted/40 rounded-lg">
+            <Plus className="w-4.5 h-4.5" />
+          </div>
+          Dodaj etykietę
+        </DialogTitle>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
