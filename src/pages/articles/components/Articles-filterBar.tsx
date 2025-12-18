@@ -114,10 +114,10 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
           onValueChange={(value) => onProductChange(value === "all" ? "__clear__" : value)}
           value={selectedProduct || "all"}
         >
-          <SelectTrigger className="w-48 border-ring">
+          <SelectTrigger className="w-48 border-ring ">
             <SelectValue placeholder="Produkt" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="max-h-[66vh] overflow-auto scrollbar-custom">
             <SelectGroup>
               <SelectItem value="all">Wszystkie</SelectItem>
               {products.map(({ _id, name }) => (
@@ -138,7 +138,7 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
           <SelectTrigger className="w-48 border-ring">
             <SelectValue placeholder="Kategoria" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="max-h-[66vh] overflow-auto scrollbar-custom">
             <SelectGroup>
               <SelectItem value="all">Wszystkie</SelectItem>
               {categories?.map(({ _id, name }) => (

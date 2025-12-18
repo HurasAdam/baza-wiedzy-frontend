@@ -42,7 +42,7 @@ const TopicRegisterFilters = ({
           <SelectTrigger className="w-40 border-ring">
             <SelectValue placeholder="Produkt" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="max-h-[66vh] overflow-auto scrollbar-custom">
             <SelectItem value="all">Wszystkie</SelectItem>
             {products.map(({ _id, name }) => (
               <SelectItem key={_id} value={_id}>

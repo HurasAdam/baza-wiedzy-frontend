@@ -51,7 +51,7 @@ const PendingArticlesFilterBar: React.FC<PendingArticlesFilterBarProps> = ({
           <SelectTrigger className="w-48 border-ring">
             <SelectValue placeholder="Produkt" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="max-h-[66vh] overflow-auto scrollbar-custom">
             <SelectGroup>
               {isLoadingProducts ? (
                 <div className="p-2 text-sm text-muted-foreground">Ładowanie produktów...</div>
@@ -74,7 +74,7 @@ const PendingArticlesFilterBar: React.FC<PendingArticlesFilterBarProps> = ({
           <SelectTrigger className="w-50 border-ring">
             <SelectValue placeholder="Autor" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="max-h-[66vh] overflow-auto scrollbar-custom">
             <SelectGroup>
               {isLoadingAuthors ? (
                 <div className="p-2 text-sm text-muted-foreground">Ładowanie autorów...</div>
