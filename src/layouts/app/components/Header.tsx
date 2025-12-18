@@ -1,4 +1,4 @@
-import { Bell, ChevronDown, CopyPlus, LogOut, LucidePhone, Plus, PlusCircle, Settings, User } from "lucide-react";
+import { Bell, ChevronDown, Layers, Layers2, LogOut, Plus, PlusCircle, Settings, User } from "lucide-react";
 
 import { Dropdown } from "@/components/Dropdown";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -140,37 +140,58 @@ const Header = ({
 
   return (
     <div className="bg-background sticky top-0 z-40 border-b ">
-      <div className="flex h-14 items-center justify-between px-4 sm:px-6 lg:px-8 py-4">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button />
-          </DropdownMenuTrigger>
+      <div className="flex h-14 items-center justify-between px-4 sm:px-6 lg:px-16 py-4 ">
+        <div className="flex items-center gap-4">
+          {/* Primary Actions */}
+          <div className="flex items-center gap-2">
+            {userPermissions.includes("ADD_ARTICLE") && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    onClick={() => navigate("articles/new")}
+                    size="icon"
+                    variant="ghost"
+                    className="w-9 h-9 flex items-center justify-center bg-primary/10 text-primary rounded-full shadow-sm hover:bg-primary/20 transition-transform duration-150 hover:scale-105"
+                  >
+                    <Plus className="w-6 h-6 stroke-[2]" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent className="bg-muted text-sm rounded-md px-2 py-1 shadow-md">
+                  Dodaj artykuł
+                </TooltipContent>
+              </Tooltip>
+            )}
 
-          <DropdownMenuContent>
-            <DropdownMenuLabel>Kolekcje</DropdownMenuLabel>
-            <DropdownMenuSeparator />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="w-9 h-9 flex items-center justify-center bg-primary/10 text-primary rounded-full shadow-sm hover:bg-primary/20 transition-transform duration-150 hover:scale-105"
+                >
+                  <Layers className="w-6 h-6" />
+                </Button>
+              </DropdownMenuTrigger>
 
-            <DropdownMenuGroup>
-              {workspaces.map((ws) => (
-                <DropdownMenuItem key={ws._id} onClick={() => onWorkspaceSelected(ws)}>
-                  {ws.color && (
-                    // <WorkspaceAvatar color={ws.color} name={ws.name} />
-                    <div className="border bg-orange-600">OK</div>
-                  )}
-                  <span className="ml-2">{ws.name}</span>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>Kolekcje</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  {workspaces.map((ws) => (
+                    <DropdownMenuItem key={ws._id}>
+                      {ws.color && <div className="w-3 h-3 rounded-full" style={{ backgroundColor: ws.color }} />}
+                      <span className="ml-2">{ws.name}</span>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuGroup>
+                <DropdownMenuItem onClick={onCreateWorkspace}>
+                  <PlusCircle className="w-4 h-4 mr-2" />
+                  Dodaj kolekcję
                 </DropdownMenuItem>
-              ))}
-            </DropdownMenuGroup>
-
-            <DropdownMenuGroup>
-              <DropdownMenuItem onClick={onCreateWorkspace}>
-                <PlusCircle className="w-4 h-4 mr-2" />
-                Dodaj kolekcje
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
-
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
         <div className="flex items-center gap-2">
           {/* FEEDBACK BUTTON */}
           {userPermissions.includes("SEND_REPORT") && (
@@ -181,34 +202,9 @@ const Header = ({
               </span>
             </Button>
           )}
-          {userPermissions.includes("ADD_ARTICLE") && (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  onClick={() => navigate("articles/new")}
-                  size="icon"
-                  variant="ghost"
-                  className="
-          w-8 h-8 flex items-center justify-center
-          bg-primary/10 text-primary
-          rounded-lg shadow-sm
-          transition-all duration-150 ease-in-out
-          hover:bg-primary/20 hover:scale-105
-          
-        "
-                >
-                  <Plus className="w-7 h-7 stroke-[2]" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent className="bg-muted text-sm rounded-md px-2 py-1 shadow-md">Dodaj artykuł</TooltipContent>
-            </Tooltip>
-          )}
 
           <Button className="cursor-pointer" variant="ghost" size="icon">
-            <LucidePhone />
-          </Button>
-          <Button className="cursor-pointer" variant="ghost" size="icon">
-            <CopyPlus />
+            <Layers2 />
           </Button>
 
           <Button
@@ -235,7 +231,7 @@ const Header = ({
             options={filteredProfileOptions}
             triggerBtn={
               <div className="rounded-full flex items-center gap-0.5 cursor-pointer bg-muted/90 py-1 px-1.5 hover:bg-muted ml-0.5 ">
-                <Avatar className="size-7 ">
+                <Avatar className="size-7.5 ">
                   <AvatarImage className="object-cover" src={avatarUrl} alt={user?.name} crossOrigin="anonymous" />
                   <AvatarFallback className="text-base font-sembibold bg-primary text-primary-foreground">
                     {initials}
