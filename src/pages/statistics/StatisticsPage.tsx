@@ -2,7 +2,7 @@ import { useState } from "react";
 import { UserStatisticsAddedArticlesModal } from "../../components/user-statistics-added-articles-details/user-statistics-added-articles.modal";
 import { UserStatisticsAddedConversationReportsModal } from "../../components/user-statistics-added-coversation-reports-details/user-statistics-added-conersation-reports.modal";
 import { UserStatisticsEditedArticlesModal } from "../../components/user-statistics-edited-articles-details/user-statistics-edited-articles.modal";
-import { useFindAllUsersStatistics } from "../../hooks/user-statistics/user-user-statistics";
+import { useExportUsersStatistics, useFindAllUsersStatistics } from "../../hooks/user-statistics/user-user-statistics";
 import StatisticsHeader from "./components/StatisticsHeader";
 import StatisticsSection from "./components/StatisticsSection";
 
@@ -37,6 +37,7 @@ export const StatisticsPage = () => {
   const hasFilters = startDate && endDate;
   const params = hasFilters ? { startDate, endDate } : undefined;
   const { data = [], isLoading } = useFindAllUsersStatistics(params);
+  const { mutate: downloadStatisticsMutate, isPending } = useExportUsersStatistics();
 
   const openUserStatisticsModal = (variant: ModalVariant, selectedUser: SelectedUser) => {
     if (!variant) return;
@@ -48,8 +49,15 @@ export const StatisticsPage = () => {
   };
 
   return (
-    <div className="space-y-6 pb-10 max-w-[1440px] mx-auto">
-      <StatisticsHeader startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} />
+    <div className="space-y-6 pb-10 max-w-[1440px] mx-auto py-4 ">
+      <StatisticsHeader
+        startDate={startDate}
+        endDate={endDate}
+        setStartDate={setStartDate}
+        setEndDate={setEndDate}
+        onExport={() => downloadStatisticsMutate(startDate && endDate ? { startDate, endDate } : {})}
+        isExportLoading={isPending}
+      />
 
       <StatisticsSection
         isLoading={isLoading}
