@@ -9,8 +9,9 @@ interface FunnyMessagesHeaderProps {
 
 const FunnyMessagesHeader = ({ userPermissions, onCreateFunnyMessage }: FunnyMessagesHeaderProps) => {
   const triggerBtn = (
-    <Button variant="default" className="flex items-center gap-1 cursor-pointer">
-      Dodaj <Plus className="w-4 h-4" />
+    <Button size="sm" className="gap-2 shadow-md hover:shadow-lg transition-all">
+      <Plus className="w-4 h-4" />
+      Dodaj wiadomość
     </Button>
   );
 
@@ -18,20 +19,25 @@ const FunnyMessagesHeader = ({ userPermissions, onCreateFunnyMessage }: FunnyMes
     {
       label: "Dodaj wiadomość",
       icon: <Plus className="w-4 h-4" />,
-      actionHandler: () => {
-        onCreateFunnyMessage();
-      },
+      actionHandler: onCreateFunnyMessage,
     },
   ];
 
   return (
-    <div className="flex justify-between mb-2">
+    <div className="flex items-center justify-between mb-8">
+      {/* Left */}
       <div className="flex items-center gap-4">
-        <div className="rounded-xl bg-primary/10">
-          <Smile className="w-6 h-6 text-muted-foreground" />
+        <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10">
+          <Smile className="w-6 h-6 text-primary" />
         </div>
-        <h1 className="text-xl font-semibold text-foreground flex items-center">Zabawne wiadomości</h1>
+
+        <div>
+          <h1 className="text-3xl font-semibold text-foreground">Zabawne wiadomości</h1>
+          <p className="text-sm text-muted-foreground mt-1">Najdziwniejsze pytania, jakie trafiły na helpdesk</p>
+        </div>
       </div>
+
+      {/* Right */}
       {userPermissions.includes("ADD_FUN_MESSAGE") && (
         <Dropdown triggerBtn={triggerBtn} options={dropdownOptions} position={{ align: "end" }} />
       )}
