@@ -8,10 +8,15 @@ export interface IFunnyMessage {
   title: string;
   type: "single" | "dialog";
   entries: IFunnyMessageEntry[];
-  createdBy?: string;
+  createdBy: {
+    _id: string;
+    name: string;
+    surname: string;
+  };
   isTrashed?: boolean;
   isVerified?: boolean;
   createdAt: string;
+
   updatedAt?: string;
 }
 

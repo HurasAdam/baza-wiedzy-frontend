@@ -1,80 +1,94 @@
-import { Mail } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Mail, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import type { IFunnyMessage } from "../../../types/funny-message";
 
-interface IFunyMessageProps {
+interface IFunnyMessageCardProps {
   msg: IFunnyMessage;
+  onEdit?: (msgId: string) => void;
+  onDelete?: (msg: IFunnyMessage) => void;
+  currentUserId?: string;
 }
 
-const FunnyMessageCard = ({ msg }: IFunyMessageProps) => {
+const FunnyMessageCard = ({ msg, onEdit, onDelete, currentUserId }: IFunnyMessageCardProps) => {
   return (
     <article
-      key={msg._id}
-      className="rounded-lg bg-card border border-border shadow-sm"
-      // style={{ color: "var(--color-card-foreground)" }}
       aria-label={`Wiadomość: ${msg.title}`}
+      className="
+        group
+        rounded-xl
+        bg-gradient-to-br
+        from-card/80
+        to-card/40
+        backdrop-blur-sm
+        border
+        shadow-sm
+        hover:shadow-md
+        transition-all
+      "
     >
-      <header className="flex justify-between items-center px-4 py-3 border-b border-border">
-        <h2 className="text-base font-semibold text-header-foreground tracking-wide flex items-center gap-2 ">
-          <Mail className="w-3.5 h-3.5 " /> {msg.title}
-        </h2>
-        <time
-          dateTime={msg.createdAt}
-          className="text-xs text-header-foreground"
-          title={new Date(msg.createdAt).toLocaleString()}
-        >
-          {new Date(msg.createdAt).toLocaleDateString()}
-        </time>
+      <header className="flex items-start justify-between px-6 pt-5 pb-3">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-primary/10">
+            <Mail className="w-4 h-4 text-primary" />
+          </div>
+          <h2 className="text-base font-semibold text-foreground leading-snug">{msg.title}</h2>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <time dateTime={msg.createdAt} className="text-xs text-muted-foreground whitespace-nowrap">
+            {new Date(msg.createdAt).toLocaleDateString()}
+          </time>
+
+          {msg.createdBy._id === currentUserId && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onSelect={() => onEdit?.(msg._id)}>
+                  <Pencil className="w-3 h-3 mr-2" /> Edytuj
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => onDelete?.(msg)}>
+                  <Trash2 className="w-3 h-3 mr-2" /> Usuń
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
+        </div>
       </header>
 
-      <div className="px-5 py-4 space-y-4">
+      {/* Content */}
+      <div className="px-6 pb-6 pt-1 space-y-4">
+        {/* Single message */}
         {msg.type === "single" && msg.entries[0] && (
-          <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground">{msg.entries[0].content}</p>
+          <div className="rounded-xl bg-muted/50 px-4 py-3 shadow-sm hover:shadow-md transition-all">
+            <span className="text-xs font-medium text-primary">Pracownik</span>
+            <p className="mt-1 text-sm leading-relaxed text-foreground">{msg.entries[0].content}</p>
+          </div>
         )}
 
+        {/* Dialog */}
         {msg.type === "dialog" && (
-          <div className="flex flex-col space-y-2">
-            {msg.entries.map((entry, idx) => {
-              const isEmployee = entry.author.toLowerCase() === "pracownik";
-
-              return (
-                <div key={idx} className="flex items-start space-x-1.5 py-1 ">
-                  {/* ----- Letter sign ----- */}
-                  <div
-                    className="flex items-center  justify-start min-w-[24px] gap-1.5"
-                    aria-label={isEmployee ? "Pracownik" : "Klient"}
-                    title={isEmployee ? "Pracownik" : "Klient"}
-                    style={{
-                      color: "var(--color-muted-foreground)",
-                      fontWeight: 700,
-                      fontSize: "0.875rem",
-                      userSelect: "none",
-                      lineHeight: 1,
-                      height: "24px",
-                    }}
-                  >
-                    {/*--------- arrow mark ------- */}
-                    <span
-                      aria-hidden="true"
-                      style={{
-                        width: 0,
-                        height: 0,
-                        borderTop: "5px solid transparent",
-                        borderBottom: "5px solid transparent",
-                        borderLeft: `5px solid ${
-                          isEmployee ? "var(--color-primary)" : "var(--color-muted-foreground)"
-                        }`,
-                      }}
-                    />
-                    {isEmployee ? "P" : "K"} :
-                  </div>
-
-                  {/* --------- msg content ----- */}
-                  <div className="whitespace-pre-wrap flex-1 text-sm leading-relaxed text-foreground my-auto">
-                    {entry.content}
-                  </div>
-                </div>
-              );
-            })}
+          <div className="space-y-3">
+            {msg.entries.map((entry, idx) => (
+              <div
+                key={idx}
+                className="flex flex-col rounded-xl bg-muted/50 px-4 py-3 text-foreground shadow-sm hover:shadow-md transition-all"
+              >
+                <span className="text-xs font-medium text-primary">
+                  {entry.author.toLowerCase() === "pracownik" ? "Pracownik" : "Klient"}
+                </span>
+                <p className="mt-1 text-sm leading-relaxed text-foreground">{entry.content}</p>
+              </div>
+            ))}
           </div>
         )}
       </div>

@@ -12,3 +12,13 @@ export const funnyMessageSchema = z.object({
     )
     .min(1, "Musisz dodać przynajmniej jedną wypowiedź"),
 });
+
+export const updateFunnyMessageSchema = z.object({
+  title: z.string().min(1, "Tytuł jest wymagany"),
+  entries: z.array(
+    z.object({
+      author: z.enum(["KLIENT", "PRACOWNIK"]),
+      content: z.string().min(1, "Treść jest wymagana"),
+    })
+  ),
+});
