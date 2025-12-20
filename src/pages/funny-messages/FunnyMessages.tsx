@@ -18,6 +18,7 @@ import FunnyMessagesHeader from "./components/FunnyMessagesHeader";
 export const FunnyMessages = () => {
   const { data: user } = useAuthQuery();
   const { data: usersData } = useFindUsersForSelect();
+
   const userPermissions = user?.role?.permissions || [];
   const [isCreatingFunnyMessage, setIsCreatingFunnyMessage] = useState<boolean>(false);
   const [selectedMessageId, setSelectedMessageId] = useState<string | null>(null);
@@ -69,12 +70,16 @@ export const FunnyMessages = () => {
     setFilterAuthor("");
   };
 
+  const hasMessages = (funnyMessages?.data?.length ?? 0) > 0;
+  const hasFilters = !!filterTitle || !!filterAuthor;
+  const showFilterBar = usersData && (hasMessages || hasFilters);
+
   return (
     <div className="flex w-full pb-12 max-w-7xl mx-auto">
       <div className="w-full">
         <FunnyMessagesHeader onCreateFunnyMessage={onCreateFunnyMessage} userPermissions={userPermissions} />
 
-        {usersData && (
+        {showFilterBar && (
           <FunnyMessagesFilterBar
             selectedTitle={filterTitle}
             selectedAuthor={filterAuthor}
@@ -82,7 +87,7 @@ export const FunnyMessages = () => {
             onTitleChange={(e) => setFilterTitle(e.target.value)}
             onAuthorChange={(id) => setFilterAuthor(id)}
             onResetAll={onResetAllFilters}
-            resultsCount={funnyMessages?.data.length ?? 0}
+            resultsCount={funnyMessages?.data?.length ?? 0}
           />
         )}
         <FunnyMessagesList
@@ -91,6 +96,9 @@ export const FunnyMessages = () => {
           currentUserId={user?._id}
           onEdit={onEditFunnyMessage}
           onDelete={onDeleteClick}
+          onCreate={onCreateFunnyMessage}
+          canCreate={userPermissions.includes("ADD_FUN_MESSAGE")}
+          hasActiveFilters={hasFilters}
         />
       </div>
 

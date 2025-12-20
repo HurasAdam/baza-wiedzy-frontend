@@ -32,8 +32,8 @@ const FunnyMessagesHeader = ({ userPermissions, onCreateFunnyMessage }: FunnyMes
         </div>
 
         <div>
-          <h1 className="text-3xl font-semibold text-foreground">Zabawne wiadomości</h1>
-          <p className="text-sm text-muted-foreground mt-1">Najdziwniejsze pytania, jakie trafiły na helpdesk</p>
+          <h1 className="text-2xl font-semibold text-foreground">Zabawne wiadomości</h1>
+          <p className="text-sm text-muted-foreground mt-1"> najbardziej nietypowe pytania i wiadomości.</p>
         </div>
       </div>
 
