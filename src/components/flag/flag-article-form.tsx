@@ -36,8 +36,8 @@ export default function FlagArticleForm({
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col flex-1">
-        <div className="flex-1 overflow-y-auto px-6 py-4 scrollbar-custom">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto px-6 py-4 scrollbar-custom ">
           {isFlagListLoading
             ? Array.from({ length: 8 }).map((_, i) => (
                 <div key={i} className="h-11 w-full my-0.5 rounded-xl bg-muted/30 animate-pulse" />
