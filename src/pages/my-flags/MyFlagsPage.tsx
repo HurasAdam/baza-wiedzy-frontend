@@ -6,6 +6,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { EditFlagModal } from "../../components/flag/edit-flag-modal";
 import { FlagModal, type FlagForm } from "../../components/flag/flag-modal";
+import { Alert } from "../../components/shared/alert-modal";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,15 +14,17 @@ import {
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu";
 import queryClient from "../../config/query.client";
-import { useCreateFlagMutation, useFindMyFlagsWithStats } from "../../hooks/flag/user-flag";
+import { useCreateFlagMutation, useDeleteOneFlagMutation, useFindMyFlagsWithStats } from "../../hooks/flag/user-flag";
 
 export const MyFlagsPage = () => {
   const navigate = useNavigate();
   const { data: userFlags = [], isLoading: isFlagsLoading } = useFindMyFlagsWithStats(true);
   const { mutate: createFlagMutate, isPending: isCreateFlagPending } = useCreateFlagMutation();
+  const { mutate: deleteFlagMutate, isPending: isDeleteLoading } = useDeleteOneFlagMutation();
 
   const [isCreateFlagModalOpen, setIsCreateFlagModalOpen] = useState(false);
   const [selectedFlag, setSelectedFlag] = useState<null | string>(null);
+  const [flagToDelete, setFlagToDelete] = useState(null);
 
   const handleCreateFlag = () => {
     setIsCreateFlagModalOpen(true);
@@ -39,8 +42,28 @@ export const MyFlagsPage = () => {
     });
   };
 
+  const onDeleteCancel = () => {
+    setFlagToDelete(null);
+  };
+
+  const onDeleteFlagClick = (flag) => {
+    setFlagToDelete(flag);
+  };
+
+  const onDeleteConfirm = (flagId: string) => {
+    deleteFlagMutate(flagId, {
+      onSuccess: () => {
+        onDeleteCancel();
+        toast.success("Zmiany zostały zapisane", {
+          position: "bottom-right",
+          description: "Etykieta została usunięta",
+        });
+        queryClient.invalidateQueries({ queryKey: ["my-flags-with-stats"] });
+      },
+    });
+  };
+
   const handleEditFlag = (flagId: string) => setSelectedFlag(flagId);
-  const handleDeleteFlag = (flagId: string) => console.log("Delete flag", flagId);
 
   if (isFlagsLoading) {
     return <div className="flex items-center justify-center h-[60vh] text-muted-foreground">Ładowanie etykiet…</div>;
@@ -122,7 +145,7 @@ export const MyFlagsPage = () => {
                       Edytuj
                     </DropdownMenuItem>
 
-                    <DropdownMenuItem onSelect={() => handleDeleteFlag(flag._id)}>
+                    <DropdownMenuItem onSelect={() => onDeleteFlagClick(flag)}>
                       <Trash2 className="w-3 h-3" />
                       Usuń
                     </DropdownMenuItem>
@@ -151,6 +174,18 @@ export const MyFlagsPage = () => {
           onSave={() => {}}
           isLoading={false}
         />
+      )}
+
+      {flagToDelete && (
+        <Alert
+          isOpen={!!flagToDelete}
+          title="Usuń etykietkę"
+          onCancel={onDeleteCancel}
+          onConfirm={() => onDeleteConfirm(flagToDelete?._id)}
+          isLoading={isDeleteLoading}
+        >
+          Czy na pewno chcesz usunąć etykietkę : <strong>{flagToDelete?.name}</strong>?
+        </Alert>
       )}
     </div>
   );

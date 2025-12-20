@@ -18,6 +18,14 @@ export const useUpdateOneFlagMutation = () => {
   });
 };
 
+export const useDeleteOneFlagMutation = () => {
+  return useMutation({
+    mutationFn: (flagId: string) => {
+      return flagService.deleteOne(flagId);
+    },
+  });
+};
+
 export const useFindOneFlagQuery = (flagId: string) => {
   return useQuery({
     queryKey: ["my-flag", flagId],

@@ -25,10 +25,15 @@ const updateOne = (flagId: string, data: JstProjectFormData): Promise<void> => {
   return api.put(`${BASE_URL}/${flagId}`, data);
 };
 
+const deleteOne = (flagId: string): Promise<void> => {
+  return api.delete(`${BASE_URL}/${flagId}`);
+};
+
 export const flagService = {
   find,
   findWithStats,
   create,
   findOne,
   updateOne,
+  deleteOne,
 };
