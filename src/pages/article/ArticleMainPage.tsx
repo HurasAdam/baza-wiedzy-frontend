@@ -2,7 +2,6 @@ import {
   Archive,
   Bell,
   BellOff,
-  CheckCircleIcon,
   Copy,
   Flag,
   Heart,
@@ -16,7 +15,6 @@ import {
   StarOff,
   Tag,
   X,
-  XCircleIcon,
 } from "lucide-react";
 import { useState } from "react";
 import { NavLink, useOutletContext, useParams } from "react-router-dom";
@@ -219,157 +217,115 @@ export const ArticleMainPage = () => {
   };
 
   return (
-    <div className="bg-background z-10 py-0 flex flex-col gap-3 pb-9">
+    <div className="bg-background z-10 py-0 flex flex-col gap-3 pb-9 pt-6">
       {/* ---- Status i akcje ---- */}
       <div className="flex justify-between items-center flex-wrap gap-3">
-        <div className="flex items-center gap-1.5">
-          {article.status === "approved" && (
-            <Badge className="bg-emerald-100 text-emerald-700 border border-emerald-300 flex items-center whitespace-nowrap">
-              <CheckCircleIcon className="w-4 h-4 mr-1" /> Zweryfikowany
-            </Badge>
-          )}
-          {article.status === "pending" && (
-            <Badge className="bg-yellow-100 text-yellow-800 border border-yellow-300 flex items-center whitespace-nowrap">
-              <XCircleIcon className="w-4 h-4 mr-1" /> Wymaga weryfikacji
-            </Badge>
-          )}
-          {article.status === "draft" && (
-            <Badge className="bg-destructive/10 text-rose-800/95 border border-destructive/30 flex items-center whitespace-nowrap">
-              <XCircleIcon className="w-4 h-4 mr-1" /> Wymaga zatwierdzenia
-            </Badge>
-          )}
-          {article.status === "rejected" && (
-            <Badge className="bg-destructive/10 text-rose-800/95 border border-destructive/30 flex items-center whitespace-nowrap">
-              <XCircleIcon className="w-4 h-4 mr-1" /> Odrzucony
-            </Badge>
-          )}
-          {/* <Badge variant="secondary" className="flex items-center whitespace-nowrap">
-            <EyeIcon className="w-4 h-4 mr-1" /> {article.viewsCounter} wyświetleń
-          </Badge> */}
-
-          {article.isImportant && (
-            <Badge className="bg-yellow-100 text-yellow-800 px-3 border border-yellow-300 flex items-center whitespace-nowrap">
-              <Star className="w-4 h-4 mr-1" /> Ważny
-            </Badge>
-          )}
-          <TooltipProvider>
-            {/* <div className="flex items-center space-x-2">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    onClick={() => handleFavouriteToggle(article._id)}
-                    size="icon"
-                    variant="ghost"
-                    className="relative rounded-full transition-all duration-200 ease-in-out hover:scale-105 hover:bg-primary/10 focus:outline-none "
-                    disabled={isFavouriteTogglePending}
-                  >
-                    {isFavouriteTogglePending ? (
-                      <Loader className="w-5 h-5 animate-spin text-primary" />
-                    ) : (
-                      <Heart
-                        className={`w-5 h-5 transition-colors ${
-                          article.isFavourite ? "fill-primary text-primary" : "text-muted-foreground"
-                        }`}
-                      />
-                    )}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent className="bg-muted text-sm shadow-md px-2 py-1 rounded-md">
-                  {article.isFavourite ? "Usuń z ulubionych" : "Dodaj do ulubionych"}
-                </TooltipContent>
-              </Tooltip>
-            </div> */}
-
-            <div className="flex items-center space-x-2">
-              {/* FOLLOW */}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    onClick={() => handleFollowToggle(article._id, article.isFollowed)}
-                    size="icon"
-                    variant="ghost"
-                    className="relative rounded-full transition-all duration-200 ease-in-out hover:scale-105 hover:bg-primary/10 focus:outline-none "
-                    disabled={isFollowPending || isUnfollowPending}
-                  >
-                    {isFollowPending || isUnfollowPending ? (
-                      <Loader className="w-5 h-5 animate-spin text-primary" />
-                    ) : article.isFollowed ? (
-                      <span className="relative">
-                        <Bell className="w-5 h-5 text-primary" />
-                        <BellOff className="absolute w-5 h-5 text-primary opacity-0 hover:opacity-100 transition-opacity" />
-                      </span>
-                    ) : (
-                      <Bell className="w-5 h-5 text-muted-foreground" />
-                    )}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent className="bg-muted text-sm shadow-md px-2 py-1 rounded-md">
-                  {article.isFollowed ? "Przestań obserwować" : "Obserwuj"}
-                </TooltipContent>
-              </Tooltip>
-            </div>
-            <div className="flex items-center space-x-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    className="rounded-full transition-all duration-200 ease-in-out hover:scale-105 hover:bg-primary/10 focus:outline-none  "
-                  >
-                    {articleUserFlag?.selectedFlag ? (
-                      <Flag className="w-4 h-4" style={{ color: articleUserFlag.selectedFlag.color }} />
-                    ) : (
-                      <Flag className="w-4 h-4 text-muted-foreground" />
-                    )}
-                  </Button>
-                </DropdownMenuTrigger>
-
-                <DropdownMenuContent className="w-48 py-1">
-                  {/* Grupa głównych akcji */}
-                  {!articleUserFlag?.selectedFlag && (
-                    <DropdownMenuItem className="py-2" onClick={openCreateFlagModal}>
-                      <Heart className="w-4 h-4 mr-2 text-muted-foreground" />
-                      Dodaj do ulubionych
-                    </DropdownMenuItem>
-                  )}
-
-                  {articleUserFlag?.selectedFlag && (
-                    <DropdownMenuItem className="py-2" onClick={() => onUnflag(article._id)}>
-                      <X className="w-4 h-4 mr-2 text-muted-foreground " />
-                      Usuń z ulubionych
-                    </DropdownMenuItem>
-                  )}
-
-                  <Separator />
-
-                  {/* Grupa dodatkowa: Dodaj flagę */}
-                  <DropdownMenuItem onClick={() => setIsCreateFlagModalOpen(true)}>
-                    <Plus className="w-4 h-4 mr-2 text-muted-foreground" />
-                    Dodaj etykietę
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </TooltipProvider>
+        {/* ---- Product/Category/Tag Badges ---- */}
+        <div className="flex justify-between mt-2 ">
+          <div className="flex flex-wrap items-center gap-2 ">
+            {article.tags.map((tag) => (
+              <Badge key={tag._id} variant="outline" className="whitespace-nowrap  text-muted-foreground">
+                # {tag.name}
+              </Badge>
+            ))}
+          </div>
         </div>
-        <div className="flex items-center gap-5  pr-2.5">
-          <TooltipProvider>
-            <div className="flex items-center space-x-2">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    onClick={openExtraInfoModal}
-                    size="icon"
-                    variant="ghost"
-                    className="relative rounded-full transition-all duration-200 ease-in-out hover:scale-105 hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1"
-                  >
-                    <Info className="w-5 h-5 text-muted-foreground" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent className="bg-muted text-sm shadow-md px-2 py-1 rounded-md">Info</TooltipContent>
-              </Tooltip>
-            </div>
-          </TooltipProvider>
+        <div className="flex items-center gap-5">
+          <div className="flex items-center gap-2">
+            <TooltipProvider>
+              <div className="flex items-center space-x-2">
+                {/* FOLLOW */}
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      onClick={() => handleFollowToggle(article._id, article.isFollowed)}
+                      size="icon"
+                      variant="ghost"
+                      className={`relative rounded-full transition-all duration-200 ease-in-out hover:scale-105 hover:bg-primary/10 focus:outline-none ${
+                        article.isFollowed ? "bg-primary/10" : "bg-transparent"
+                      }`}
+                      disabled={isFollowPending || isUnfollowPending}
+                    >
+                      {isFollowPending || isUnfollowPending ? (
+                        <Loader className="w-5 h-5 animate-spin text-primary" />
+                      ) : article.isFollowed ? (
+                        <span className="relative">
+                          <Bell className="w-5 h-5 text-primary" />
+                          <BellOff className="absolute w-5 h-5 text-primary opacity-0 hover:opacity-100 transition-opacity" />
+                        </span>
+                      ) : (
+                        <Bell className="w-5 h-5 text-muted-foreground" />
+                      )}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent className="bg-muted text-sm shadow-md px-2 py-1 rounded-md">
+                    {article.isFollowed ? "Przestań obserwować" : "Obserwuj"}
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+              <div className="flex items-center space-x-2">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="rounded-full transition-all duration-200 ease-in-out hover:scale-105 hover:bg-primary/10 focus:outline-none  "
+                    >
+                      {articleUserFlag?.selectedFlag ? (
+                        <Flag className="w-4 h-4" style={{ color: articleUserFlag.selectedFlag.color }} />
+                      ) : (
+                        <Flag className="w-4 h-4 text-muted-foreground" />
+                      )}
+                    </Button>
+                  </DropdownMenuTrigger>
+
+                  <DropdownMenuContent className="w-48 py-1">
+                    {/* Grupa głównych akcji */}
+                    {!articleUserFlag?.selectedFlag && (
+                      <DropdownMenuItem className="py-2" onClick={openCreateFlagModal}>
+                        <Heart className="w-4 h-4 mr-2 text-muted-foreground" />
+                        Dodaj do ulubionych
+                      </DropdownMenuItem>
+                    )}
+
+                    {articleUserFlag?.selectedFlag && (
+                      <DropdownMenuItem className="py-2" onClick={() => onUnflag(article._id)}>
+                        <X className="w-4 h-4 mr-2 text-muted-foreground " />
+                        Usuń z ulubionych
+                      </DropdownMenuItem>
+                    )}
+
+                    <Separator />
+
+                    {/* Grupa dodatkowa: Dodaj flagę */}
+                    <DropdownMenuItem onClick={() => setIsCreateFlagModalOpen(true)}>
+                      <Plus className="w-4 h-4 mr-2 text-muted-foreground" />
+                      Dodaj etykietę
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </TooltipProvider>
+
+            <TooltipProvider>
+              <div className="flex items-center space-x-2">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      onClick={openExtraInfoModal}
+                      size="icon"
+                      variant="ghost"
+                      className="relative rounded-full transition-all duration-200 ease-in-out hover:scale-105 hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1"
+                    >
+                      <Info className="w-5 h-5 text-muted-foreground" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent className="bg-muted text-sm shadow-md px-2 py-1 rounded-md">Info</TooltipContent>
+                </Tooltip>
+              </div>
+            </TooltipProvider>
+          </div>
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm">
@@ -418,23 +374,6 @@ export const ArticleMainPage = () => {
           </DropdownMenu>
         </div>
       </div>
-
-      {/* ---- Product/Category/Tag Badges ---- */}
-      <div className="flex justify-between mt-2 mb-4">
-        <div className="flex flex-wrap items-center gap-2">
-          <Badge variant="outline" className="whitespace-nowrap">
-            Produkt: {article.product.name}
-          </Badge>
-          <Badge variant="outline" className="whitespace-nowrap">
-            Kategoria: {article.category.name}
-          </Badge>
-          {article.tags.map((tag) => (
-            <Badge key={tag._id} variant="outline" className="whitespace-nowrap">
-              # {tag.name}
-            </Badge>
-          ))}
-        </div>
-      </div>
       {article.employeeDescription && (
         <Card className="rounded-xl p-6 shadow-md border-l-6  border-l-primary">
           <CardContent className="p-0">
@@ -464,7 +403,9 @@ export const ArticleMainPage = () => {
                 )}
               </div>
               <Separator></Separator>
-              <p className="text-sm whitespace-pre-wrap break-words text-foreground mt-3">{desc.variantContent}</p>
+              <p className="text-sm whitespace-pre-wrap break-words text-foreground/90 mt-3 text-[15.5px] ">
+                {desc.variantContent}
+              </p>
             </CardContent>
           </Card>
         ))}
