@@ -1,4 +1,4 @@
-import { Card } from "../../../components/ui/card";
+// FaqItemsSection.tsx
 import type { Faq, FaqItem } from "../../../types/faq";
 import FaqItemsHeader from "./FaqItemsHeader";
 import FaqItemsList from "./FaqItemsList";
@@ -21,7 +21,7 @@ const FaqItemsSection = ({
   onDeleteRequest,
 }: FaqItemsSectionProps) => {
   return (
-    <Card className="bg-card/70">
+    <div className="flex flex-col gap-6">
       <FaqItemsHeader
         isFaqLoading={isFaqLoading}
         faqItemCount={faq?.items?.length}
@@ -36,7 +36,7 @@ const FaqItemsSection = ({
         onEdit={onEditFaqItemRequest}
         onDelete={onDeleteRequest}
       />
-    </Card>
+    </div>
   );
 };
 

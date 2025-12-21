@@ -1,3 +1,4 @@
+// FaqItemsHeader.tsx
 import { Plus } from "lucide-react";
 import { Button } from "../../../components/ui/button";
 import { CardHeader, CardTitle } from "../../../components/ui/card";
@@ -16,16 +17,23 @@ const FaqItemsHeader = ({
   userPermissions,
 }: FaqItemsHeaderProps) => {
   return (
-    <CardHeader className="flex justify-between items-center">
+    <CardHeader className="flex justify-between items-center bg-card/70 p-4 rounded-xl shadow-sm">
       {isFaqLoading ? (
-        <CardTitle>Ładowanie ...</CardTitle>
+        <CardTitle className="text-muted-foreground">Ładowanie...</CardTitle>
       ) : (
-        <CardTitle className="text-header-foreground">Pytania i odpowiedzi({faqItemCount || 0})</CardTitle>
+        <CardTitle className="text-lg font-semibold text-foreground">
+          Pytania i odpowiedzi ({faqItemCount || 0})
+        </CardTitle>
       )}
 
       {userPermissions.includes("ADD_FAQ_QUESTION") && (
-        <Button onClick={onCreateFaqItemRequest} variant="default" size="sm">
-          <Plus className="w-4 h-4 mr-1" /> Dodaj pytanie
+        <Button
+          onClick={onCreateFaqItemRequest}
+          variant="default"
+          size="sm"
+          className="gap-1 shadow-md hover:shadow-lg transition-all"
+        >
+          <Plus className="w-4 h-4" /> Dodaj pytanie
         </Button>
       )}
     </CardHeader>
