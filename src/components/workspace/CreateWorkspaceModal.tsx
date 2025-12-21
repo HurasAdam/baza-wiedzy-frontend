@@ -9,32 +9,25 @@ import WorkspaceForm from "./workspace-form";
 interface CreateWorkspaceProps {
   isCreatingWorkspace: boolean;
   setIsCreatingWorkspace: (isCreatingWorkspace: boolean) => void;
+  onClose: () => void;
 }
 
-export const CreateWorkspaceModal = ({ isCreatingWorkspace, setIsCreatingWorkspace }: CreateWorkspaceProps) => {
+export const CreateWorkspaceModal = ({
+  isCreatingWorkspace,
+  setIsCreatingWorkspace,
+  onClose,
+}: CreateWorkspaceProps) => {
   const { mutate, isPending } = useCreateWorkspaceMutation();
 
   const onSubmit = (data: WorkspaceDataForm) => {
-    // mutate(data, {
-    //   onSuccess: (data: any) => {
-    //     form.reset();
-    //     setIsCreatingWorkspace(false);
-    //     toast.success("Workspace created successfully");
-    //     navigate(`/workspaces/${data._id}`);
-    //   },
-    //   onError: (error: any) => {
-    //     const errorMessage = error.response.data.message;
-    //     toast.error(errorMessage);
-    //     console.log(error);
-    //   },
-    // });
     mutate(data, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["my-workspaces"] });
-        toast.success("Dodano nową kolekcję", {
+        toast.success("Zmiany zostały zapisane", {
           position: "bottom-right",
-          description: "Twoja lista kolekcji została zaktualizowana",
+          description: "Dodano nową kolekcję",
         });
+        onClose();
       },
     });
   };

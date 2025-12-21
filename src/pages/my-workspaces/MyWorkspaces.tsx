@@ -2,18 +2,25 @@ import { Button } from "@/components/ui/button";
 import { WORKSPACE_ICONS } from "@/components/workspace/workspace-form";
 import { useFindUserWorkspacesQuery } from "@/hooks/workspace/use-workspace";
 import { Layers, Plus } from "lucide-react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { CreateWorkspaceModal } from "../../components/workspace/CreateWorkspaceModal";
 
 export const MyWorkspaces = () => {
   const navigate = useNavigate();
   const { data: workspaces = [], isPending } = useFindUserWorkspacesQuery();
+  const [isCreatingWorkspace, setIsCreatingWorkspace] = useState<boolean>(false);
 
   const handleOpenWorkspace = (id: string) => {
     navigate(`/workspace/${id}`);
   };
 
-  const handleCreateWorkspace = () => {
-    console.log("TODO: open create workspace modal");
+  const onCreateWorkspace = () => {
+    setIsCreatingWorkspace(true);
+  };
+
+  const onCloseCreateWorkspaceModal = () => {
+    setIsCreatingWorkspace(false);
   };
 
   if (isPending) {
@@ -29,7 +36,7 @@ export const MyWorkspaces = () => {
           <p className="text-muted-foreground text-sm mt-1">Zarządzaj swoimi kolekcjami.</p>
         </div>
 
-        <Button onClick={handleCreateWorkspace} size="sm" className="gap-2 shadow-md hover:shadow-lg transition-all">
+        <Button onClick={onCreateWorkspace} size="sm" className="gap-2 shadow-md hover:shadow-lg transition-all">
           <Plus className="w-4 h-4" />
           Nowa kolekcja
         </Button>
@@ -41,7 +48,7 @@ export const MyWorkspaces = () => {
           <Layers className="w-20 h-20 mb-4 text-muted-foreground/50" />
           <p className="text-lg font-medium">Nie masz jeszcze żadnej kolekcji</p>
           <p className="text-sm text-muted-foreground mt-1">Utwórz workspace, aby zacząć organizować wiedzę.</p>
-          <Button onClick={handleCreateWorkspace} className="mt-6 gap-2 shadow-md hover:shadow-lg transition-all">
+          <Button onClick={onCreateWorkspace} className="mt-6 gap-2 shadow-md hover:shadow-lg transition-all">
             <Plus className="w-4 h-4" />
             Dodaj kolekcję
           </Button>
@@ -81,6 +88,14 @@ export const MyWorkspaces = () => {
             );
           })}
         </div>
+      )}
+
+      {isCreatingWorkspace && (
+        <CreateWorkspaceModal
+          isCreatingWorkspace={isCreatingWorkspace}
+          setIsCreatingWorkspace={setIsCreatingWorkspace}
+          onClose={onCloseCreateWorkspaceModal}
+        />
       )}
     </div>
   );

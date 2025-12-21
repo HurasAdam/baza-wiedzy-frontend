@@ -65,6 +65,7 @@ const AppLayout = () => {
         <CreateWorkspaceModal
           isCreatingWorkspace={isCreatingWorkspace}
           setIsCreatingWorkspace={setIsCreatingWorkspace}
+          onClose={() => setIsCreatingWorkspace(false)}
         />
       )}
       <SendIssueReportModal
