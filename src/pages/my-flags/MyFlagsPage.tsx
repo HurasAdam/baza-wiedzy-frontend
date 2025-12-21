@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Flag, MoreHorizontal, Pencil, Plus, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
+import type { AxiosError } from "axios";
 import { useState } from "react";
 import { toast } from "sonner";
 import { EditFlagModal } from "../../components/flag/edit-flag-modal";
@@ -13,6 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../../components/ui/tooltip";
 import queryClient from "../../config/query.client";
 import { useCreateFlagMutation, useDeleteOneFlagMutation, useFindMyFlagsWithStats } from "../../hooks/flag/user-flag";
 
@@ -59,6 +61,26 @@ export const MyFlagsPage = () => {
           description: "Etykieta została usunięta",
         });
         queryClient.invalidateQueries({ queryKey: ["my-flags-with-stats"] });
+      },
+      onError: (error) => {
+        const { status } = error as AxiosError;
+
+        if (status === 409) {
+          toast.error("Nie można usunąć etykiety", {
+            position: "bottom-right",
+            description:
+              "Ta etykieta jest używana do oznaczenia co najmniej jednego artykułu. Usuń powiązania z artykułami i spróbuj ponownie.",
+          });
+        } else if (status === 403) {
+          toast.error("Brak wymaganych uprawnień", {
+            position: "bottom-right",
+          });
+        } else {
+          toast.error("Wystąpił błąd", {
+            position: "bottom-right",
+            description: "Spróbuj ponownie później.",
+          });
+        }
       },
     });
   };
@@ -144,11 +166,29 @@ export const MyFlagsPage = () => {
                       <Pencil className="w-3 h-3" />
                       Edytuj
                     </DropdownMenuItem>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <DropdownMenuItem
+                          onSelect={(e) => {
+                            if (flag.articlesCount > 0) {
+                              e.preventDefault();
+                              return;
+                            }
+                            onDeleteFlagClick(flag);
+                          }}
+                          className={flag.articlesCount > 0 ? "opacity-50 " : ""}
+                        >
+                          <Trash2 className="w-3 h-3 mr-2" />
+                          Usuń
+                        </DropdownMenuItem>
+                      </TooltipTrigger>
 
-                    <DropdownMenuItem onSelect={() => onDeleteFlagClick(flag)}>
-                      <Trash2 className="w-3 h-3" />
-                      Usuń
-                    </DropdownMenuItem>
+                      {flag.articlesCount > 0 && (
+                        <TooltipContent side="right" className="bg-muted">
+                          Nie można usunąć etykiety przypisanej do artykułów
+                        </TooltipContent>
+                      )}
+                    </Tooltip>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
