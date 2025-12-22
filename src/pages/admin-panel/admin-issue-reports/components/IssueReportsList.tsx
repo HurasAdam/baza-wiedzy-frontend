@@ -61,39 +61,50 @@ const IssueReportsList = ({ isLoading, isError, error, reports, navigate }: Issu
         </p>
       )}
 
-      {!isLoading && !isError && reports.length === 0 && <p className="text-center py-10">Brak zgłoszeń</p>}
+      {!isLoading && !isError && reports.length === 0 && (
+        <p className="text-center py-10 text-muted-foreground">Brak zgłoszeń</p>
+      )}
 
       {!isLoading && !isError && reports.length > 0 && (
         <ul className="divide-y divide-border">
           {reports.map((report) => (
             <li
               key={report._id}
-              className="flex items-center justify-between px-4 py-3 hover:bg-muted/40 transition group"
+              className="flex items-center justify-between px-4 py-3 group hover:bg-muted/30 transition-all bg-gradient-to-br from-card/70 to-card/40 backdrop-blur-sm border-b last:border-b-0 rounded-none"
             >
-              {/* Left */}
-              <div className="flex items-center gap-3">
-                {report.type === "bug" ? (
-                  <Bug className="w-5 h-5 text-red-500" />
-                ) : (
-                  <Lightbulb className="w-5 h-5 text-yellow-500" />
-                )}
-                <div className="flex flex-col">
-                  <span className="text-sm font-semibold">{report.title}</span>
-                  <span className="text-xs text-muted-foreground">
-                    {report.createdBy.name} {report.createdBy.surname} •{" "}
-                    {new Date(report.createdAt).toLocaleDateString("pl-PL")}
+              <div className="flex items-center gap-3 min-w-0">
+                <div
+                  className={`flex items-center justify-center w-8 h-8 rounded-md ${
+                    report.type === "bug" ? "bg-red-500/20" : "bg-yellow-400/20"
+                  }`}
+                >
+                  {report.type === "bug" ? (
+                    <Bug className="w-4 h-4 text-red-500" />
+                  ) : (
+                    <Lightbulb className="w-4 h-4 text-yellow-500" />
+                  )}
+                </div>
+
+                <div className="flex flex-col min-w-0">
+                  <span className="text-sm font-semibold text-foreground truncate">{report.title}</span>
+
+                  <span
+                    className="inline-flex items-center px-2 py-[1px] mt-1 rounded-full text-[9px] font-medium uppercase tracking-wide w-fit
+                                   bg-muted/10 text-muted-foreground border border-muted/20"
+                  >
+                    {report.category}
                   </span>
                 </div>
               </div>
 
-              {/* Right */}
-              <div className="flex items-center gap-14">
-                <div className="flex items-center gap-10">
-                  <Badge variant="secondary">{report.category}</Badge>
-                  <Badge variant="outline">{getStatusLabel(report.status)}</Badge>
-                </div>
+              <div className="flex items-center gap-4">
+                <span className="text-xs text-muted-foreground whitespace-nowrap">
+                  {report.createdBy.name} {report.createdBy.surname} •{" "}
+                  {new Date(report.createdAt).toLocaleDateString("pl-PL")}
+                </span>
 
-                {/* Actions */}
+                <Badge variant="outline">{getStatusLabel(report.status)}</Badge>
+
                 <Dropdown
                   withSeparators
                   triggerBtn={

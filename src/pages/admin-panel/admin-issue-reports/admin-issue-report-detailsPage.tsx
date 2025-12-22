@@ -56,8 +56,8 @@ export function AdminIssueReportDetailsPage() {
   }
 
   return (
-    <div className="mx-auto px-6  h-full">
-      <div className="flex items-center justify-between border-b border-border pb-4 mb-6">
+    <div className="mx-auto px-6  h-full  ">
+      <div className="flex items-center justify-between border-b border-border pb-4 mb-6 ">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
             <ArrowLeft className="w-4 h-4 mr-1" /> Powrót
@@ -102,16 +102,16 @@ export function AdminIssueReportDetailsPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 min-h-[calc(100vh-240px)]">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 min-h-[calc(100vh-240px)] ">
         {/* Opis zgłoszenia */}
-        <Card className="md:col-span-2 shadow-sm border">
+        <Card className="md:col-span-2 shadow-sm border bg-card/70 ">
           <CardContent>
             <h2 className="text-lg text-header-foreground font-semibold mb-4">Opis zgłoszenia</h2>
-            <p className="text-muted-foreground leading-relaxed">{report.description}</p>
+            <p className="text-muted-foreground leading-relaxed text-[15px]">{report.description}</p>
           </CardContent>
         </Card>
 
-        <Card className="shadow-sm border">
+        <Card className="shadow-sm border bg-card/70">
           <CardContent className="flex flex-col gap-6">
             {[
               {
