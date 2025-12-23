@@ -64,7 +64,7 @@ export default function ArticleLayout() {
   }
 
   return (
-    <div className="space-y-1 px-6 ">
+    <div className="space-y-1 max-w-[1400px] mx-auto ">
       {article && showHeader && (
         <ArticlePageHeader article={article} returnUrl="/articles" userPermissions={userPermissions} />
       )}

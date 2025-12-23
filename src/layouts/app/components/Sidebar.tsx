@@ -149,7 +149,11 @@ export const Sidebar = ({
             </button>
           </DropdownMenuTrigger>
 
-          <DropdownMenuContent className="w-56 rounded-lg shadow-md bg-background" align="start" sideOffset={4}>
+          <DropdownMenuContent
+            className="w-56 rounded-lg shadow-md bg-background scrollbar-custom"
+            align="start"
+            sideOffset={4}
+          >
             <DropdownMenuLabel className="text-xs text-muted-foreground">Twoje kolekcje</DropdownMenuLabel>
 
             {isPending ? (

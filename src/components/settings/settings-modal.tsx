@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { Bell, Palette, Settings, ShieldUser, User, Volume2 } from "lucide-react";
+import { Palette, Settings, ShieldUser, User, Volume2 } from "lucide-react";
 import { useState } from "react";
 import { Card, CardContent, CardTitle } from "../ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
@@ -18,7 +18,6 @@ const tabs = [
   { key: "account", label: "Konto", icon: ShieldUser },
   { key: "profile", label: "Profil", icon: User },
   { key: "theme", label: "Wygląd", icon: Palette },
-  { key: "notifications", label: "Powiadomienia", icon: Bell },
   { key: "sounds", label: "Efekty dzwiękowe", icon: Volume2 }, // nowy tab
 ];
 
