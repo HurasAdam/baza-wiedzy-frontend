@@ -87,9 +87,6 @@ export const ArticlePageHeader: React.FC<Props> = ({ article, returnUrl, userPer
                   <XCircleIcon className="w-4 h-4 mr-1" /> Odrzucony
                 </Badge>
               )}
-              {/* <Badge variant="secondary" className="flex items-center whitespace-nowrap">
-            <EyeIcon className="w-4 h-4 mr-1" /> {article.viewsCounter} wyświetleń
-          </Badge> */}
 
               {article.isImportant && (
                 <Badge className="bg-yellow-100 text-yellow-800 px-3 border border-yellow-300 flex items-center whitespace-nowrap">
@@ -100,8 +97,7 @@ export const ArticlePageHeader: React.FC<Props> = ({ article, returnUrl, userPer
           </div>
         </div>
 
-        {/* Zakładki po prawej */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 rounded-lg bg-muted/40 p-1 backdrop-blur-sm">
           {filteredTabOptions.map((tab) => (
             <NavLink
               key={tab.path}
@@ -110,10 +106,9 @@ export const ArticlePageHeader: React.FC<Props> = ({ article, returnUrl, userPer
               state={{ from: returnUrl }}
               className={({ isActive }) =>
                 cn(
-                  "px-3 py-1.5 rounded-md text-sm font-medium transition-colors whitespace-nowrap",
-                  isActive
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "bg-muted hover:bg-muted/80 text-foreground"
+                  "px-3 py-1.5 text-sm font-medium rounded-md transition-all whitespace-nowrap",
+                  "text-muted-foreground hover:text-foreground",
+                  isActive ? "bg-primary/90 text-foreground shadow-sm border border-border" : "hover:bg-background/40"
                 )
               }
             >
