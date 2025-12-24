@@ -127,7 +127,7 @@ export const CreateArticlePage = () => {
 
   return (
     tags && (
-      <div className="pb-12">
+      <div className="pb-12 max-w-[1400px] mx-auto">
         <header className="px-2.5 py-8 flex  space-x-6 bg-background justify-between">
           <div className="flex gap-6 items-start">
             <div className="rounded-lg p-3 bg-primary/90 text-primary-foreground">
