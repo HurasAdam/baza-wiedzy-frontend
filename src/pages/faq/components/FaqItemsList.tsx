@@ -1,8 +1,12 @@
 // FaqItemsList.tsx
 import { Edit, MoreHorizontal, Pin, Trash } from "lucide-react";
-import { Dropdown } from "../../../components/Dropdown";
 import { Button } from "../../../components/ui/button";
-import { Card, CardContent } from "../../../components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../../../components/ui/dropdown-menu";
 import type { FaqItem } from "../../../types/faq";
 
 interface FaqItemsListProps {
@@ -16,59 +20,57 @@ interface FaqItemsListProps {
 const FaqItemsList = ({ isFaqLoading, items, canEdit, onEdit, onDelete }: FaqItemsListProps) => {
   if (isFaqLoading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4">
         {Array.from({ length: 3 }).map((_, i) => (
-          <Card key={i} className="animate-pulse h-60 bg-muted/50 rounded-xl" />
+          <div key={i} className="animate-pulse h-44 bg-muted/50 rounded-xl" />
         ))}
       </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 gap-4">
       {items?.map((item) => (
-        <Card key={item._id} className="bg-card/70 rounded-xl shadow-sm hover:shadow-md transition-all">
-          <CardContent className="flex flex-col gap-3">
-            {/* Pytanie */}
-            <div className="flex justify-between items-start">
-              <div className="flex items-center gap-2">
-                <Pin className="w-5 h-5 text-primary-foreground" />
-                <h3 className="font-semibold text-foreground">{item.question}</h3>
+        <article
+          key={item._id}
+          className="group rounded-xl bg-gradient-to-br from-card/90 to-card/70 border border-border backdrop-blur-sm shadow-sm hover:shadow-lg transition-all"
+        >
+          {/* Nagłowek pytania */}
+          <header className="flex justify-between items-start px-6 py-4 cursor-pointer">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10">
+                <Pin className="w-5 h-5 text-primary" />
               </div>
-
-              {canEdit && (
-                <Dropdown
-                  triggerBtn={
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      aria-label="Opcje pytania"
-                      className="p-1 rounded  group-hover:opacity-100 transition-opacity"
-                    >
-                      <MoreHorizontal className="w-5 h-5" />
-                    </Button>
-                  }
-                  options={[
-                    {
-                      label: "Edytuj",
-                      icon: <Edit className="w-4 h-4" />,
-                      actionHandler: () => onEdit(item._id),
-                    },
-                    {
-                      label: "Usuń",
-                      icon: <Trash className="w-4 h-4 text-rose-600/80" />,
-                      actionHandler: () => onDelete(item),
-                    },
-                  ]}
-                  position={{ align: "end" }}
-                />
-              )}
+              <h2 className="text-base font-semibold text-foreground leading-snug">{item.question}</h2>
             </div>
 
-            {/* Odpowiedź */}
-            <p className="text-sm text-foreground leading-relaxed bg-muted/10 rounded-lg p-3">{item.answer}</p>
-          </CardContent>
-        </Card>
+            {canEdit && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onSelect={() => onEdit(item._id)}>
+                    <Edit className="w-3 h-3 mr-2" /> Edytuj
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => onDelete(item)}>
+                    <Trash className="w-3 h-3 mr-2 text-rose-600/80" /> Usuń
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+          </header>
+
+          {/* Odpowiedź */}
+          <div className="px-6 pb-6">
+            <div className="rounded-xl bg-muted/50 px-5 py-4 shadow-sm hover:shadow-md transition-all">
+              <span className="text-xs font-medium text-primary uppercase tracking-wide">Odpowiedź</span>
+              <p className="mt-2 text-sm leading-relaxed text-foreground">{item.answer}</p>
+            </div>
+          </div>
+        </article>
       ))}
     </div>
   );
