@@ -25,7 +25,7 @@ const JstSchoolFilters = ({ filterField, setFilterField, filterQuery, setFilterQ
   ];
 
   return (
-    <div className="mb-8 p-4 bg-filterbar-background border border-border rounded-xl shadow-sm">
+    <div className="mb-8 p-4 bg-gradient-to-br from-card/90 to-card/70 border border-border rounded-xl shadow-sm">
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2 text-muted-foreground text-sm font-medium min-w-[100px]">
           <Filter className="w-4 h-4" /> Wyszukaj szkołę
