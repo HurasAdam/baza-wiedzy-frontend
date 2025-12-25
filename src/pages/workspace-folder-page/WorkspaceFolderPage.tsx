@@ -64,7 +64,7 @@ export function WorkspaceFolderPage() {
   }, [isDrawerOpen]);
 
   return (
-    <div className="flex flex-col pb-5 px-0.5">
+    <div className="flex flex-col pb-5 max-w-[1400px] mx-auto">
       <WorkspaceFolderHeader folder={folderData} isLoading={isFolderDataLoading} />
 
       <WorkspaceArticleFilters

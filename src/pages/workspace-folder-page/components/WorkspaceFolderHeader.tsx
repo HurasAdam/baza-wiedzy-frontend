@@ -45,7 +45,7 @@ export function WorkspaceFolderHeader({ folder, isLoading }: WorkspaceFolderHead
   }
 
   return (
-    <div className="flex items-center justify-between shadow-sm bg-background  pb-2 mb-4">
+    <div className="flex items-center justify-between shadow-sm bg-background  pb-2 mb-4 ">
       {/* Left side */}
       <div className="flex items-center gap-3">
         <div className="p-3 bg-primary/10 rounded-xl">
@@ -53,7 +53,7 @@ export function WorkspaceFolderHeader({ folder, isLoading }: WorkspaceFolderHead
         </div>
         <div className="flex flex-col">
           <p className="text-xs text-muted-foreground">Folder</p>
-          <h1 className="text-xl font-semibold leading-tight">{folder?.name}</h1>
+          <h1 className="text-xl font-semibold leading-tight truncate  max-w-[450px]">{folder?.name}</h1>
         </div>
       </div>
 
