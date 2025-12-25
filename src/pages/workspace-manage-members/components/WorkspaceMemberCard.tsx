@@ -13,16 +13,15 @@ interface WorkspaceMemberCardProps {
   member: WorkspaceMember;
   workspaceId: string;
   onRequestRemove: (member: WorkspaceMember) => void;
+  onRequestEdit: (member: WorkspaceMember) => void;
 }
 
-const rolesMap: Record<string, string> = {
-  OWNER: "WŁAŚCICIEL",
-
-  VIEWER: "CZYTELNIK",
-  EDITOR: "MODERATOR",
-} as const;
-
-export const WorkspaceMemberCard = ({ member, workspaceId, onRequestRemove }: WorkspaceMemberCardProps) => {
+export const WorkspaceMemberCard = ({
+  member,
+  workspaceId,
+  onRequestRemove,
+  onRequestEdit,
+}: WorkspaceMemberCardProps) => {
   return (
     <div className="flex items-center justify-between p-4 hover:bg-muted/50 transition">
       <div className="flex items-center gap-3">
@@ -42,11 +41,11 @@ export const WorkspaceMemberCard = ({ member, workspaceId, onRequestRemove }: Wo
 
       <div className="flex items-center gap-3">
         <span
-          className={`px-2 py-1.5 text-xs font-semibold rounded-xl ${
-            member.role === "OWNER" ? "bg-purple-100 text-purple-800" : "bg-gray-100 text-gray-700"
+          className={`px-2.5 py-2 text-xs font-semibold rounded-xl uppercase ${
+            member.isOwner ? "bg-primary/20 text-primary" : "bg-muted text-foreground "
           }`}
         >
-          {rolesMap[member.role]}
+          {member.isOwner ? "Właściciel" : "Użytkownik"}
         </span>
 
         <DropdownMenu>
@@ -57,7 +56,7 @@ export const WorkspaceMemberCard = ({ member, workspaceId, onRequestRemove }: Wo
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem>Ustaw jako właściciela</DropdownMenuItem>
-            <DropdownMenuItem>Zmień rolę</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onRequestEdit(member)}>Uprawnienia</DropdownMenuItem>
             <DropdownMenuItem onClick={() => onRequestRemove(member)} className="text-destructive">
               Usuń z kolekcji
             </DropdownMenuItem>

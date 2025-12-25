@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { Alert } from "../../../components/shared/alert-modal";
+import { WorkspaceUserPermissionsModal } from "../../../components/workspace-user-permissions/WorkspaceUserPermissionsModal";
 import queryClient from "../../../config/query.client";
 import { useRemoveWorkspaceMemberMutation } from "../../../hooks/workspace/use-workspace";
 import { WorkspaceMembersList } from "./WorkspaceMembersList";
@@ -10,7 +11,8 @@ export interface WorkspaceMember {
   name: string;
   surname: string;
   email: string;
-  role: string;
+  isOwner: boolean;
+  permissions: Record<string, boolean>;
 }
 
 interface WorkspaceMembersSectionProps {
@@ -21,6 +23,7 @@ interface WorkspaceMembersSectionProps {
 
 const WorkspaceMembersSection = ({ isLoading, workspaceMembers, workspaceId }: WorkspaceMembersSectionProps) => {
   const [memberToRemove, setMemberToRemove] = useState<WorkspaceMember | null>(null);
+  const [selectedMember, setSelectedMember] = useState<WorkspaceMember | null>(null);
   const { mutate: removeMember, isPending: isRemoving } = useRemoveWorkspaceMemberMutation();
 
   const handleConfirmRemove = () => {
@@ -42,6 +45,7 @@ const WorkspaceMembersSection = ({ isLoading, workspaceMembers, workspaceId }: W
   };
 
   const handleCancelRemove = () => setMemberToRemove(null);
+  const handleCancelEdit = () => setSelectedMember(null);
   return (
     <section>
       <h2 className="text-sm font-medium text-muted-foreground mb-3">Lista użytkowników</h2>
@@ -51,6 +55,7 @@ const WorkspaceMembersSection = ({ isLoading, workspaceMembers, workspaceId }: W
         isLoading={isLoading}
         workspaceId={workspaceId}
         onRequestRemove={setMemberToRemove}
+        onRequestEdit={setSelectedMember}
       />
 
       <Alert
@@ -72,6 +77,15 @@ const WorkspaceMembersSection = ({ isLoading, workspaceMembers, workspaceId }: W
           Po usunięciu użytkownik straci dostęp do zasobów tej kolekcji.
         </p>
       </Alert>
+
+      {selectedMember && (
+        <WorkspaceUserPermissionsModal
+          isOpen={!!selectedMember}
+          onClose={handleCancelEdit}
+          member={selectedMember}
+          workspaceId={workspaceId}
+        />
+      )}
     </section>
   );
 };
