@@ -15,6 +15,7 @@ const PERMISSION_LABELS: Record<string, string> = {
   deleteArticle: "Usuwanie artykułów",
   addMember: "Dodawanie użytkowników",
   removeMember: "Usuwanie użytkowników",
+  editWorkspace: "Edycja kolekcji",
 };
 
 interface WorkspaceUserPermissionsModalProps {

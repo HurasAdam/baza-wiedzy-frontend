@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
@@ -35,6 +35,7 @@ interface WorkspaceSidebarProps {
     createdBy: string;
     updatedBy: string;
     articlesCount: number;
+    permissions?: Record<string, boolean>;
   }[];
   onAddFolder: () => void;
   onOpenNewArticle: () => void;
@@ -46,6 +47,7 @@ export const WorkspaceSidebar = ({
   isLoading,
   workspaceId,
   folders,
+  permissions,
   onAddFolder,
   onOpenNewArticle,
 }: WorkspaceSidebarProps) => {
@@ -100,17 +102,30 @@ export const WorkspaceSidebar = ({
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* Przycisk Nowy artykuł */}
-        <div className="px-0.5 py-1">
-          <Button size="sm" variant="outline" className="w-full" onClick={onOpenNewArticle}>
+        <div className="px-0.5 py-1" title={!permissions?.addArticle ? "Brak uprawnień" : ""}>
+          <Button
+            size="sm"
+            variant={permissions?.addArticle ? "outline" : "ghost"}
+            className="w-full flex items-center justify-center gap-2 relative disabled:border"
+            onClick={permissions?.addArticle ? onOpenNewArticle : undefined}
+            disabled={!permissions?.addArticle}
+          >
             + Nowy artykuł
+            {!permissions?.addArticle && (
+              <Lock className="w-4 h-4 text-gray-400 absolute right-3 pointer-events-none" />
+            )}
           </Button>
         </div>
 
         <WorkspaceSidebarNavLinks workspaceId={workspaceId} />
       </div>
 
-      <WorkspaceSidebarFoldersList folders={folders} onAddFolder={onAddFolder} isLoading={isLoading} />
+      <WorkspaceSidebarFoldersList
+        folders={folders}
+        onAddFolder={onAddFolder}
+        isLoading={isLoading}
+        permissions={permissions}
+      />
 
       <div className="border-t p-4">
         <Button

@@ -4,6 +4,7 @@ import { Outlet, useNavigate, useParams } from "react-router-dom";
 
 import { CreateWorkspaceFolderModal } from "../../components/workspace-folder/CreateWorkspaceFolderModal";
 import { useFindWorkspaceFoldersQuery } from "../../hooks/workspace-folders/use-workspace-folder";
+import { useFindCurrentWorkspaceMemberQuery } from "../../hooks/workspace-members/use-workspace-member";
 import { useFindUserWorkspacesQuery, useFindWorkspaceQuery } from "../../hooks/workspace/use-workspace";
 import { WorkspaceAccessDenied } from "../../pages/workspace-denied-page/WorkspaceAccessDeniedPage";
 import { WorkspaceSidebar } from "./components/WorkspaceSidebar";
@@ -11,10 +12,13 @@ import { WorkspaceSidebar } from "./components/WorkspaceSidebar";
 export default function WorkspaceLayout() {
   const { workspaceId } = useParams();
   const navigate = useNavigate();
+  const { data: currentWorkspaceMember } = useFindCurrentWorkspaceMemberQuery(workspaceId!);
   const { data: workspaces = [], isLoading: isWorkspacesLoading } = useFindUserWorkspacesQuery();
   const { data: workspace, isLoading: isWorkspaceLoading, error } = useFindWorkspaceQuery(workspaceId);
   const { data: folders, isLoading: isFoldersLoading } = useFindWorkspaceFoldersQuery(workspaceId);
   const [isCreatingWorkspaceFolder, setIsCreatingWorkspaceFolder] = useState(false);
+
+  console.log(currentWorkspaceMember?.permissions);
 
   useEffect(() => {
     if (!workspaceId && workspaces.length > 0) {
@@ -49,12 +53,15 @@ export default function WorkspaceLayout() {
         onAddFolder={handleAddFolder}
         onOpenNewArticle={handleNewArticle}
         isLoading={isFoldersLoading}
+        permissions={currentWorkspaceMember?.permissions}
       />
 
       <div className="flex flex-col flex-1">
         <main className="flex-1 overflow-y-auto h-full w-full  scrollbar-custom">
           <div className="mx-auto container px-2 sm:px-6 lg:px-8 py-0 md:py-10 w-full h-full">
-            <Outlet context={{ workspace, folders, handleAddFolder }} />
+            <Outlet
+              context={{ workspace, folders, handleAddFolder, permissions: currentWorkspaceMember.permissions }}
+            />
           </div>
         </main>
       </div>

@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { FileText, FolderKanban, Plus } from "lucide-react";
+import { FileText, FolderKanban, Lock, Plus } from "lucide-react";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 
 export function WorkspaceOverviewPage() {
   const navigate = useNavigate();
   const { workspaceId } = useParams();
-  const { folders = [], handleAddFolder } = useOutletContext<{ folders: any[] }>();
+  const { folders = [], handleAddFolder, permissions } = useOutletContext<{ folders: any[] }>();
 
   const handleOpenFolder = (folderId: string) => {
     navigate(`/workspace/${workspaceId}/folders/${folderId}`);
@@ -19,8 +19,13 @@ export function WorkspaceOverviewPage() {
           <h1 className="text-2xl font-semibold text-foreground">Twoje foldery</h1>
           <p className="text-muted-foreground text-sm mt-1">Przeglądaj i zarządzaj folderami w swojej kolekcji.</p>
         </div>
-        <Button onClick={handleAddFolder} size="sm" className="gap-2 shadow-md hover:shadow-lg transition-all">
-          <Plus className="w-4 h-4" />
+        <Button
+          disabled={!permissions.addFolder}
+          onClick={handleAddFolder}
+          size="sm"
+          className="gap-2 shadow-md hover:shadow-lg transition-all"
+        >
+          {!permissions.addFolder ? <Lock className="w-3 h-3" /> : <Plus className="w-4 h-4" />}
           Nowy folder
         </Button>
       </div>
@@ -33,10 +38,12 @@ export function WorkspaceOverviewPage() {
           <p className="text-sm text-muted-foreground mt-1">
             Utwórz nowy folder, aby rozpocząć organizację swoich materiałów.
           </p>
-          <Button onClick={handleAddFolder} className="mt-6 gap-2 shadow-md hover:shadow-lg transition-all">
-            <Plus className="w-4 h-4" />
-            Dodaj folder
-          </Button>
+          {permissions.addFolder && (
+            <Button onClick={handleAddFolder} className="mt-6 gap-2 shadow-md hover:shadow-lg transition-all">
+              <Plus className="w-4 h-4" />
+              Dodaj folder
+            </Button>
+          )}
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

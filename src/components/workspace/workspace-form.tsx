@@ -52,9 +52,10 @@ interface WorkspaceFormProps {
   onSubmit: (data: WorkspaceDataForm) => void;
   workspace?: Workspace;
   isLoading: boolean;
+  permissions: Record<string, boolean>;
 }
 
-const WorkspaceForm = ({ onSubmit, workspace, isLoading }: WorkspaceFormProps) => {
+const WorkspaceForm = ({ onSubmit, workspace, isLoading, permissions }: WorkspaceFormProps) => {
   const form = useForm<WorkspaceForm>({
     resolver: zodResolver(workspaceSchema),
     defaultValues: {
@@ -70,6 +71,7 @@ const WorkspaceForm = ({ onSubmit, workspace, isLoading }: WorkspaceFormProps) =
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="space-y-8 py-4">
           <FormField
+            disabled={!permissions.editWorkspace}
             control={form.control}
             name="name"
             render={({ field }) => (
@@ -83,6 +85,7 @@ const WorkspaceForm = ({ onSubmit, workspace, isLoading }: WorkspaceFormProps) =
             )}
           />
           <FormField
+            disabled={!permissions.editWorkspace}
             control={form.control}
             name="description"
             render={({ field }) => (
@@ -96,6 +99,7 @@ const WorkspaceForm = ({ onSubmit, workspace, isLoading }: WorkspaceFormProps) =
             )}
           />
           <FormField
+            disabled={!permissions.editWorkspace}
             control={form.control}
             name="labelColor"
             render={({ field }) => (
@@ -106,13 +110,19 @@ const WorkspaceForm = ({ onSubmit, workspace, isLoading }: WorkspaceFormProps) =
                     {colorOptions.map((color) => (
                       <div
                         key={color}
-                        onClick={() => field.onChange(color)}
+                        onClick={() => {
+                          if (!permissions.editWorkspace) return;
+                          field.onChange(color);
+                        }}
                         className={cn(
-                          "w-6 h-6 rounded-full cursor-pointer hover:opacity-80 transition-all duration-300",
+                          "w-6 h-6 rounded-full transition-all duration-300",
+                          permissions.editWorkspace
+                            ? "cursor-pointer hover:opacity-80"
+                            : "opacity-40 cursor-not-allowed pointer-events-none",
                           field.value === color && "ring-2 ring-offset-2 ring-blue-500"
                         )}
                         style={{ backgroundColor: color }}
-                      ></div>
+                      />
                     ))}
                   </div>
                 </FormControl>
@@ -123,6 +133,7 @@ const WorkspaceForm = ({ onSubmit, workspace, isLoading }: WorkspaceFormProps) =
 
           {/* ICONS */}
           <FormField
+            disabled={!permissions.editWorkspace}
             control={form.control}
             name="icon"
             render={({ field }) => (
@@ -135,9 +146,15 @@ const WorkspaceForm = ({ onSubmit, workspace, isLoading }: WorkspaceFormProps) =
                       return (
                         <div
                           key={iconName}
-                          onClick={() => field.onChange(iconName)}
+                          onClick={() => {
+                            if (!permissions.editWorkspace) return;
+                            field.onChange(iconName);
+                          }}
                           className={cn(
-                            "w-10 h-10 flex items-center justify-center rounded-md cursor-pointer border hover:opacity-80 transition-all duration-300",
+                            "w-10 h-10 flex items-center justify-center rounded-md border transition-all duration-300",
+                            permissions.editWorkspace
+                              ? "cursor-pointer hover:opacity-80"
+                              : "opacity-40 cursor-not-allowed pointer-events-none",
                             field.value === iconName && "ring-2 ring-offset-2 ring-blue-500"
                           )}
                         >
@@ -153,8 +170,12 @@ const WorkspaceForm = ({ onSubmit, workspace, isLoading }: WorkspaceFormProps) =
           />
         </div>
         <DialogFooter>
-          <Button className="cursor-pointer" type="submit">
-            {isLoading ? <Loader className="animate-spin" /> : <Save />}
+          <Button
+            type="submit"
+            disabled={!permissions.editWorkspace || isLoading}
+            className={cn("flex items-center gap-2", !permissions.editWorkspace && "opacity-50 cursor-not-allowed")}
+          >
+            {isLoading ? <Loader className="animate-spin w-4 h-4" /> : <Save className="w-4 h-4" />}
             {workspace ? "Zapisz" : "Utwórz"}
           </Button>
         </DialogFooter>

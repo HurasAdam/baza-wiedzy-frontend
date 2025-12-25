@@ -7,22 +7,9 @@ import { useUpdateWorkspaceMutation } from "../../hooks/workspace/use-workspace"
 
 export const WorkspaceManageSettingsPage = () => {
   const { mutate, isPending } = useUpdateWorkspaceMutation();
-  const { workspace } = useOutletContext();
+  const { workspace, permissions } = useOutletContext();
 
   const onSubmit = (data) => {
-    // mutate(data, {
-    //   onSuccess: (data: any) => {
-    //     form.reset();
-    //     setIsCreatingWorkspace(false);
-    //     toast.success("Workspace created successfully");
-    //     navigate(`/workspaces/${data._id}`);
-    //   },
-    //   onError: (error: any) => {
-    //     const errorMessage = error.response.data.message;
-    //     toast.error(errorMessage);
-    //     console.log(error);
-    //   },
-    // });
     mutate(
       { workspaceId: workspace._id, data },
       {
@@ -52,7 +39,7 @@ export const WorkspaceManageSettingsPage = () => {
       {!workspace ? (
         <WorkspaceFormSkeleton />
       ) : workspace ? (
-        <WorkspaceForm workspace={workspace} onSubmit={onSubmit} isLoading={isPending} />
+        <WorkspaceForm workspace={workspace} onSubmit={onSubmit} isLoading={isPending} permissions={permissions} />
       ) : (
         <div>Workspace nie istnieje</div>
       )}

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Folder, FolderOpen, Folders } from "lucide-react";
+import { Folder, FolderOpen, Folders, Lock } from "lucide-react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 
 interface Folder {
@@ -13,9 +13,15 @@ interface WorkspaceFoldersListProps {
   isLoading: boolean;
   folders: Folder[];
   onAddFolder: () => void;
+  permissions: Record<string, boolean>;
 }
 
-export const WorkspaceSidebarFoldersList = ({ isLoading, folders, onAddFolder }: WorkspaceFoldersListProps) => {
+export const WorkspaceSidebarFoldersList = ({
+  isLoading,
+  folders,
+  onAddFolder,
+  permissions,
+}: WorkspaceFoldersListProps) => {
   const { workspaceId } = useParams();
   const navigate = useNavigate();
 
@@ -33,15 +39,25 @@ export const WorkspaceSidebarFoldersList = ({ isLoading, folders, onAddFolder }:
           Foldery
         </h3>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-6 w-6 text-muted-foreground hover:text-primary"
-          onClick={onAddFolder}
-          title="Dodaj folder"
-        >
-          +
-        </Button>
+        {permissions?.addFolder ? (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-6 w-6 text-muted-foreground hover:text-primary"
+            onClick={onAddFolder}
+            title="Dodaj folder"
+          >
+            +
+          </Button>
+        ) : (
+          // jeśli brak permisji, pokazujemy kłódkę zamiast przycisku
+          <div
+            className="h-6 w-6 flex items-center justify-center text-muted-foreground cursor-not-allowed"
+            title="Brak uprawnień do dodawania folderów"
+          >
+            <Lock className="w-3.5 h-3.5 text-foreground/40" />
+          </div>
+        )}
       </div>
 
       {isLoading ? (
