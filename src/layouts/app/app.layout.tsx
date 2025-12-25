@@ -48,7 +48,9 @@ const AppLayout = () => {
         </main>
       </div>
 
-      <SettingsModal isSettingsModalOpen={isSettingsModalOpen} setIsSettingsModalOpen={setIsSettingsModalOpen} />
+      {isSettingsModalOpen && (
+        <SettingsModal isSettingsModalOpen={isSettingsModalOpen} setIsSettingsModalOpen={setIsSettingsModalOpen} />
+      )}
       <NotificationsPanel
         isOpen={isNotificationsPanelOpen}
         onOpenChange={setIsNotificationsPanelOpen}
@@ -68,10 +70,12 @@ const AppLayout = () => {
           onClose={() => setIsCreatingWorkspace(false)}
         />
       )}
-      <SendIssueReportModal
-        isCreatingIssueReport={isCreatingIssueReport}
-        setIsCreatingIssueReport={setIsCreatingIssueReport}
-      />
+      {isCreatingIssueReport && (
+        <SendIssueReportModal
+          isCreatingIssueReport={isCreatingIssueReport}
+          setIsCreatingIssueReport={setIsCreatingIssueReport}
+        />
+      )}
       {isWorkspaceInviteModalOpen && (
         <WorkspaceInviteModal
           isOpen={isWorkspaceInviteModalOpen}
@@ -80,7 +84,9 @@ const AppLayout = () => {
           onSave={() => {}}
         />
       )}
-      <ChangeLogModal isChangeLogModalOpen={isChangeLogModalOpen} setIsChangeLogModalOpen={setIsChangeLogModalOpen} />
+      {isChangeLogModalOpen && (
+        <ChangeLogModal isChangeLogModalOpen={isChangeLogModalOpen} setIsChangeLogModalOpen={setIsChangeLogModalOpen} />
+      )}
     </div>
   );
 };
