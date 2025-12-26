@@ -16,9 +16,10 @@ interface FolderListViewProps {
   folders: IFolder[];
   openEdit: (folder: IFolder) => void;
   openDelete: (folder: IFolder) => void;
+  permissions: Record<string, boolean>;
 }
 
-const FolderListView = ({ view, folders, openEdit, openDelete }: FolderListViewProps) => {
+const FolderListView = ({ view, folders, openEdit, openDelete, permissions }: FolderListViewProps) => {
   if (view === "grid") {
     return (
       <div className="mt-6">
@@ -41,14 +42,14 @@ const FolderListView = ({ view, folders, openEdit, openDelete }: FolderListViewP
                 </div>
               </div>
               <div className="flex justify-end gap-2 mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                <Button variant="ghost" size="icon" onClick={() => openEdit(folder)}>
+                <Button disabled={!permissions.editFolder} variant="ghost" size="icon" onClick={() => openEdit(folder)}>
                   <Pencil className="w-4 h-4" />
                 </Button>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <span>
                       <Button
-                        disabled={folder.articlesCount > 0}
+                        disabled={folder.articlesCount > 0 || !permissions.deleteFolder}
                         variant="ghost"
                         size="icon"
                         onClick={() => openDelete(folder)}
@@ -98,14 +99,14 @@ const FolderListView = ({ view, folders, openEdit, openDelete }: FolderListViewP
                 <Badge variant="secondary">{folder.articlesCount}</Badge>
               </div>
               <div className="flex items-center gap-2">
-                <Button variant="ghost" size="icon" onClick={() => openEdit(folder)}>
+                <Button disabled={!permissions.editFolder} variant="ghost" size="icon" onClick={() => openEdit(folder)}>
                   <Pencil className="w-4 h-4" />
                 </Button>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <span>
                       <Button
-                        disabled={folder.articlesCount > 0}
+                        disabled={folder.articlesCount > 0 || !permissions.deleteFolder}
                         variant="ghost"
                         size="icon"
                         onClick={() => openDelete(folder)}

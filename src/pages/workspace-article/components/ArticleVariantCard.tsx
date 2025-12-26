@@ -13,9 +13,10 @@ interface ArticleVariantCardProps {
   onCopy: (text: string) => void;
   onEdit: () => void;
   onDelete: () => void;
+  permissions: Record<string, boolean>;
 }
 
-export function ArticleVariantCard({ name, content, onCopy, onEdit, onDelete }: ArticleVariantCardProps) {
+export function ArticleVariantCard({ name, content, onCopy, onEdit, onDelete, permissions }: ArticleVariantCardProps) {
   return (
     <Card className="shadow-sm border transition bg-muted/35">
       <CardContent className="flex flex-col gap-3">
@@ -30,8 +31,12 @@ export function ArticleVariantCard({ name, content, onCopy, onEdit, onDelete }: 
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start">
-                <DropdownMenuItem onClick={onEdit}>Edytuj</DropdownMenuItem>
-                <DropdownMenuItem onClick={onDelete}>Usuń</DropdownMenuItem>
+                <DropdownMenuItem disabled={!permissions.editArticle} onClick={onEdit}>
+                  Edytuj
+                </DropdownMenuItem>
+                <DropdownMenuItem disabled={!permissions.editArticle} onClick={onDelete}>
+                  Usuń
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 

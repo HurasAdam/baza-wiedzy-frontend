@@ -17,7 +17,7 @@ import ManageFoldersHeader from "./components/ManageFoldersHeader";
 import ManageFoldersListSection from "./components/ManageFoldersListSection";
 
 export const WorkspaceManageFoldersPage = () => {
-  const { workspace, handleAddFolder } = useOutletContext<{
+  const { workspace, permissions, handleAddFolder } = useOutletContext<{
     folders: unknown[];
     workspace: Workspace;
     handleAddFolder: () => void;
@@ -102,7 +102,7 @@ export const WorkspaceManageFoldersPage = () => {
   return (
     <div className="py-6 w-full ">
       <div className="max-w-6xl mx-auto px-4">
-        <ManageFoldersHeader handleAddFolder={handleAddFolder} />
+        <ManageFoldersHeader handleAddFolder={handleAddFolder} permissions={permissions} />
         <Separator className="my-4" />
 
         <ManageFoldersFilters
@@ -126,6 +126,7 @@ export const WorkspaceManageFoldersPage = () => {
             resetFilters={resetFilters}
             openEdit={openEdit}
             openDelete={openDelete}
+            permissions={permissions}
           />
         )}
       </div>

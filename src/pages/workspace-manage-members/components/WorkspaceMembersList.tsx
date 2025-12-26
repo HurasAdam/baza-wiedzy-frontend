@@ -8,6 +8,7 @@ interface WorkspaceMembersListProps {
   workspaceId: string;
   onRequestRemove: (member: WorkspaceMember) => void;
   onRequestEdit: (member: WorkspaceMember) => void;
+  permissions: Record<string, boolean>;
 }
 
 export const WorkspaceMembersList = ({
@@ -16,6 +17,7 @@ export const WorkspaceMembersList = ({
   workspaceId,
   onRequestRemove,
   onRequestEdit,
+  permissions,
 }: WorkspaceMembersListProps) => {
   if (isLoading) return <p className="text-sm text-muted-foreground">Ładowanie listy użytkowników...</p>;
   if (!workspaceMembers?.length)
@@ -30,6 +32,7 @@ export const WorkspaceMembersList = ({
           workspaceId={workspaceId}
           onRequestRemove={onRequestRemove}
           onRequestEdit={onRequestEdit}
+          permissions={permissions}
         />
       ))}
     </div>

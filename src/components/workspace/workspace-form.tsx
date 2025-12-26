@@ -52,7 +52,7 @@ interface WorkspaceFormProps {
   onSubmit: (data: WorkspaceDataForm) => void;
   workspace?: Workspace;
   isLoading: boolean;
-  permissions: Record<string, boolean>;
+  permissions?: Record<string, boolean>;
 }
 
 const WorkspaceForm = ({ onSubmit, workspace, isLoading, permissions }: WorkspaceFormProps) => {
@@ -71,7 +71,7 @@ const WorkspaceForm = ({ onSubmit, workspace, isLoading, permissions }: Workspac
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="space-y-8 py-4">
           <FormField
-            disabled={!permissions.editWorkspace}
+            disabled={permissions && !permissions?.editWorkspace}
             control={form.control}
             name="name"
             render={({ field }) => (
@@ -85,7 +85,7 @@ const WorkspaceForm = ({ onSubmit, workspace, isLoading, permissions }: Workspac
             )}
           />
           <FormField
-            disabled={!permissions.editWorkspace}
+            disabled={permissions && !permissions?.editWorkspace}
             control={form.control}
             name="description"
             render={({ field }) => (
@@ -99,7 +99,7 @@ const WorkspaceForm = ({ onSubmit, workspace, isLoading, permissions }: Workspac
             )}
           />
           <FormField
-            disabled={!permissions.editWorkspace}
+            disabled={permissions && !permissions?.editWorkspace}
             control={form.control}
             name="labelColor"
             render={({ field }) => (
@@ -111,14 +111,12 @@ const WorkspaceForm = ({ onSubmit, workspace, isLoading, permissions }: Workspac
                       <div
                         key={color}
                         onClick={() => {
-                          if (!permissions.editWorkspace) return;
+                          // if (!permissions?.editWorkspace) return;
                           field.onChange(color);
                         }}
                         className={cn(
                           "w-6 h-6 rounded-full transition-all duration-300",
-                          permissions.editWorkspace
-                            ? "cursor-pointer hover:opacity-80"
-                            : "opacity-40 cursor-not-allowed pointer-events-none",
+                          permissions?.editWorkspace ? "cursor-pointer hover:opacity-80" : "",
                           field.value === color && "ring-2 ring-offset-2 ring-blue-500"
                         )}
                         style={{ backgroundColor: color }}
@@ -133,8 +131,8 @@ const WorkspaceForm = ({ onSubmit, workspace, isLoading, permissions }: Workspac
 
           {/* ICONS */}
           <FormField
-            disabled={!permissions.editWorkspace}
             control={form.control}
+            disabled={permissions && !permissions?.editWorkspace}
             name="icon"
             render={({ field }) => (
               <FormItem>
@@ -147,14 +145,11 @@ const WorkspaceForm = ({ onSubmit, workspace, isLoading, permissions }: Workspac
                         <div
                           key={iconName}
                           onClick={() => {
-                            if (!permissions.editWorkspace) return;
                             field.onChange(iconName);
                           }}
                           className={cn(
                             "w-10 h-10 flex items-center justify-center rounded-md border transition-all duration-300",
-                            permissions.editWorkspace
-                              ? "cursor-pointer hover:opacity-80"
-                              : "opacity-40 cursor-not-allowed pointer-events-none",
+                            permissions?.editWorkspace ? "cursor-pointer hover:opacity-80" : "",
                             field.value === iconName && "ring-2 ring-offset-2 ring-blue-500"
                           )}
                         >
@@ -172,8 +167,11 @@ const WorkspaceForm = ({ onSubmit, workspace, isLoading, permissions }: Workspac
         <DialogFooter>
           <Button
             type="submit"
-            disabled={!permissions.editWorkspace || isLoading}
-            className={cn("flex items-center gap-2", !permissions.editWorkspace && "opacity-50 cursor-not-allowed")}
+            disabled={isLoading || (permissions && !permissions?.editWorkspace)}
+            className={cn(
+              "flex items-center gap-2",
+              permissions && !permissions?.editWorkspace && "opacity-50 cursor-not-allowed"
+            )}
           >
             {isLoading ? <Loader className="animate-spin w-4 h-4" /> : <Save className="w-4 h-4" />}
             {workspace ? "Zapisz" : "Utwórz"}

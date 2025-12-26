@@ -19,9 +19,15 @@ interface WorkspaceMembersSectionProps {
   isLoading: boolean;
   workspaceMembers: WorkspaceMember[];
   workspaceId: string;
+  permissions: Record<string, boolean>;
 }
 
-const WorkspaceMembersSection = ({ isLoading, workspaceMembers, workspaceId }: WorkspaceMembersSectionProps) => {
+const WorkspaceMembersSection = ({
+  isLoading,
+  workspaceMembers,
+  workspaceId,
+  permissions,
+}: WorkspaceMembersSectionProps) => {
   const [memberToRemove, setMemberToRemove] = useState<WorkspaceMember | null>(null);
   const [selectedMember, setSelectedMember] = useState<WorkspaceMember | null>(null);
   const { mutate: removeMember, isPending: isRemoving } = useRemoveWorkspaceMemberMutation();
@@ -56,6 +62,7 @@ const WorkspaceMembersSection = ({ isLoading, workspaceMembers, workspaceId }: W
         workspaceId={workspaceId}
         onRequestRemove={setMemberToRemove}
         onRequestEdit={setSelectedMember}
+        permissions={permissions}
       />
 
       <Alert

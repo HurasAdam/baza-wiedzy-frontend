@@ -12,9 +12,10 @@ interface ArticleVariantsGridProps {
   articleId: string;
   variants: Variant[];
   onCopy: (text: string) => void;
+  permissions: Record<string, boolean>;
 }
 
-export function ArticleVariants({ articleId, variants, onCopy }: ArticleVariantsGridProps) {
+export function ArticleVariants({ articleId, variants, onCopy, permissions }: ArticleVariantsGridProps) {
   const [editingVariant, setEditingVariant] = useState<Variant | null>(null);
 
   return (
@@ -28,6 +29,7 @@ export function ArticleVariants({ articleId, variants, onCopy }: ArticleVariants
             onCopy={onCopy}
             onEdit={() => setEditingVariant(v)}
             onDelete={() => {}}
+            permissions={permissions}
           />
         ))}
       </div>

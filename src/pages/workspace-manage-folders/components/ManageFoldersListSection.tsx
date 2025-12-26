@@ -13,6 +13,7 @@ interface ManageFoldersListSectionProps {
   openDelete: (folder: Folder) => void;
   isLoading: boolean;
   resetFilters: () => void;
+  permissions: Record<string, boolean>;
 }
 
 const ManageFoldersListSection = ({
@@ -24,6 +25,7 @@ const ManageFoldersListSection = ({
   openDelete,
   isLoading,
   resetFilters,
+  permissions,
 }: ManageFoldersListSectionProps) => {
   if (isLoading) {
     return <FolderListSkeleton view={view} />;
@@ -37,10 +39,12 @@ const ManageFoldersListSection = ({
         <p className="text-sm text-muted-foreground mt-1">
           Utwórz nowy folder, aby rozpocząć organizację swoich zasobów.
         </p>
-        <Button onClick={handleAddFolder} className="mt-6 gap-2 shadow-md hover:shadow-lg transition-all">
-          <Plus className="w-4 h-4" />
-          Dodaj folder
-        </Button>
+        {permissions.addFolder && (
+          <Button onClick={handleAddFolder} className="mt-6 gap-2 shadow-md hover:shadow-lg transition-all">
+            <Plus className="w-4 h-4" />
+            Dodaj folder
+          </Button>
+        )}
       </div>
     );
   }
@@ -61,7 +65,15 @@ const ManageFoldersListSection = ({
     );
   }
 
-  return <FolderListView view={view} folders={folders} openEdit={openEdit} openDelete={openDelete} />;
+  return (
+    <FolderListView
+      view={view}
+      folders={folders}
+      openEdit={openEdit}
+      openDelete={openDelete}
+      permissions={permissions}
+    />
+  );
 };
 
 export default ManageFoldersListSection;

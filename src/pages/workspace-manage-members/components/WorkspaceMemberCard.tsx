@@ -14,6 +14,7 @@ interface WorkspaceMemberCardProps {
   workspaceId: string;
   onRequestRemove: (member: WorkspaceMember) => void;
   onRequestEdit: (member: WorkspaceMember) => void;
+  permissions: Record<string, boolean>;
 }
 
 export const WorkspaceMemberCard = ({
@@ -21,6 +22,7 @@ export const WorkspaceMemberCard = ({
   workspaceId,
   onRequestRemove,
   onRequestEdit,
+  permissions,
 }: WorkspaceMemberCardProps) => {
   return (
     <div className="flex items-center justify-between p-4 hover:bg-muted/50 transition">
@@ -49,9 +51,9 @@ export const WorkspaceMemberCard = ({
         </span>
 
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger asChild disabled={!permissions.isOwner}>
             <Button variant="ghost" size="icon">
-              <MoreVertical className="w-4 h-4" />
+              {permissions.isOwner && <MoreVertical className="w-4 h-4" />}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

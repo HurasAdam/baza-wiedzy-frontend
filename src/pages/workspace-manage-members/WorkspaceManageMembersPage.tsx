@@ -7,7 +7,7 @@ import WorkspaceMembersSection from "./components/WorkspaceMembersSection";
 
 export const WorkspaceManageMembersPage = () => {
   const { workspaceId } = useParams();
-  const { workspace } = useOutletContext();
+  const { workspace, permissions } = useOutletContext();
   const { data: workspaceMembers, isLoading } = useFindWorkspaceMembersQuery(workspaceId);
 
   return (
@@ -17,7 +17,12 @@ export const WorkspaceManageMembersPage = () => {
 
       {workspaceId && <WorkspaceInviteLinkSection inviteCode={workspace.inviteCode} />}
 
-      <WorkspaceMembersSection workspaceMembers={workspaceMembers} workspaceId={workspaceId} isLoading={isLoading} />
+      <WorkspaceMembersSection
+        workspaceMembers={workspaceMembers}
+        workspaceId={workspaceId}
+        isLoading={isLoading}
+        permissions={permissions}
+      />
     </div>
   );
 };

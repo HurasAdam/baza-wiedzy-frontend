@@ -15,7 +15,7 @@ export function WorkspaceArticlePage() {
   const [isCreateVariantModalOpen, setIsCreateVariantModalOpen] = useState<boolean>(false);
   const [isEditTitleModalOpen, setIsEditModalOpen] = useState<boolean>(false);
 
-  const { folders } = useOutletContext<{
+  const { folders, permissions } = useOutletContext<{
     folders: Folder[];
     workspace: unknown;
     handleAddFolder: () => void;
@@ -58,9 +58,15 @@ export function WorkspaceArticlePage() {
         onBack={() => navigate(-1)}
         onAddVariant={onAddVariant}
         onArticleEdit={onArticleEdit}
+        permissions={permissions}
       />
 
-      <ArticleVariants articleId={article._id} variants={article.responseVariants} onCopy={copyToClipboard} />
+      <ArticleVariants
+        articleId={article._id}
+        variants={article.responseVariants}
+        onCopy={copyToClipboard}
+        permissions={permissions}
+      />
 
       <CreateWorkspaceArticleVariantModal
         isOpen={isCreateVariantModalOpen}

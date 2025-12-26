@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useOutletContext, useParams, useSearchParams } from "react-router-dom";
 import WorkspaceArticleDrawer from "../../components/workspace-article-drawer/WorkspaceArticleDrawer";
 import { useFindArticlesByFolderQuery } from "../../hooks/workspace-articles/use-workspace-articles";
 import { useFindOneWorkspaceFolderQuery } from "../../hooks/workspace-folders/use-workspace-folder";
@@ -25,6 +25,7 @@ export function WorkspaceFolderPage() {
   });
 
   const { data: folderData, isLoading: isFolderDataLoading } = useFindOneWorkspaceFolderQuery(workspaceId, folderId);
+  const { permissions } = useOutletContext();
 
   const onResetAllFilters = () => {
     setSearchParams({});
@@ -65,7 +66,7 @@ export function WorkspaceFolderPage() {
 
   return (
     <div className="flex flex-col pb-5 max-w-[1400px] mx-auto">
-      <WorkspaceFolderHeader folder={folderData} isLoading={isFolderDataLoading} />
+      <WorkspaceFolderHeader folder={folderData} isLoading={isFolderDataLoading} permissions={permissions} />
 
       <WorkspaceArticleFilters
         selectedTitle={titleParam}

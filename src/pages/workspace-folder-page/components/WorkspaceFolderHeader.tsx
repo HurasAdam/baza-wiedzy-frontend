@@ -6,7 +6,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Folder, MoreVertical, Plus } from "lucide-react";
+import { Folder, Lock, MoreVertical, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface FolderAuthor {
@@ -28,9 +28,10 @@ export interface FolderData {
 interface WorkspaceFolderHeaderProps {
   folder?: FolderData;
   isLoading: boolean;
+  permissions: Record<string, boolean>;
 }
 
-export function WorkspaceFolderHeader({ folder, isLoading }: WorkspaceFolderHeaderProps) {
+export function WorkspaceFolderHeader({ folder, isLoading, permissions }: WorkspaceFolderHeaderProps) {
   const navigate = useNavigate();
   if (isLoading) {
     return (
@@ -59,8 +60,13 @@ export function WorkspaceFolderHeader({ folder, isLoading }: WorkspaceFolderHead
 
       {/* Right side */}
       <div className="flex items-center gap-2">
-        <Button onClick={() => navigate(`/workspace/${folder?.workspaceId}/new-article`)} variant="outline" size="sm">
-          <Plus className="w-4 h-4 mr-1" /> Nowy artykuł
+        <Button
+          disabled={!permissions.addArticle}
+          onClick={() => navigate(`/workspace/${folder?.workspaceId}/new-article`)}
+          variant="outline"
+          size="sm"
+        >
+          {!permissions.addArticle ? <Lock className="w-3 h-3" /> : <Plus className="w-4 h-4 mr-1" />}Nowy artykuł
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

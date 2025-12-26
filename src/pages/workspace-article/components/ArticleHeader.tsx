@@ -6,7 +6,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ArrowLeft, FolderOpenDot, MoreHorizontal, Pencil, PlusCircle, User } from "lucide-react";
+import { ArrowLeft, FolderOpenDot, Lock, MoreHorizontal, Pencil, PlusCircle, User } from "lucide-react";
 
 interface ArticleHeaderProps {
   title: string;
@@ -17,6 +17,7 @@ interface ArticleHeaderProps {
 
   onArticleEdit: () => void;
   onAddVariant: () => void;
+  permissions: Record<string, boolean>;
 }
 
 function ArticleHeader({
@@ -27,6 +28,7 @@ function ArticleHeader({
   onBack,
   onArticleEdit,
   onAddVariant,
+  permissions,
 }: ArticleHeaderProps) {
   return (
     <div className="flex flex-col gap-3">
@@ -60,13 +62,21 @@ function ArticleHeader({
             className="w-48 shadow-lg
         "
           >
-            <DropdownMenuItem onClick={onArticleEdit} className="gap-2  cursor-pointer rounded-md">
-              <Pencil className="w-4 h-4 text-muted-foreground" />
+            <DropdownMenuItem
+              disabled={!permissions.editArticle}
+              onClick={onArticleEdit}
+              className="gap-2  cursor-pointer rounded-md"
+            >
+              {!permissions.editArticle ? <Lock /> : <Pencil className="w-4 h-4 text-muted-foreground" />}
               Edytuj
             </DropdownMenuItem>
             <DropdownMenuSeparator className="my-2" />
-            <DropdownMenuItem onClick={onAddVariant} className="gap-2 cursor-pointer rounded-md">
-              <PlusCircle className="w-4 h-4 text-muted-foreground" />
+            <DropdownMenuItem
+              disabled={!permissions.editArticle}
+              onClick={onAddVariant}
+              className="gap-2 cursor-pointer rounded-md"
+            >
+              {!permissions.editArticle ? <Lock /> : <PlusCircle className="w-4 h-4 text-muted-foreground" />}
               Dodaj wariant
             </DropdownMenuItem>
           </DropdownMenuContent>

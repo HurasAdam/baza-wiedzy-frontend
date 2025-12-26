@@ -58,7 +58,15 @@ export default function WorkspaceLayout() {
         <main className="flex-1 overflow-y-auto h-full w-full  scrollbar-custom">
           <div className="mx-auto container px-2 sm:px-6 lg:px-8 py-0 md:py-10 w-full h-full">
             <Outlet
-              context={{ workspace, folders, handleAddFolder, permissions: currentWorkspaceMember?.permissions }}
+              context={{
+                workspace,
+                folders,
+                handleAddFolder,
+                permissions: {
+                  ...currentWorkspaceMember?.permissions,
+                  isOwner: currentWorkspaceMember?.isOwner || false,
+                },
+              }}
             />
           </div>
         </main>
