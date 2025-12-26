@@ -18,8 +18,6 @@ export default function WorkspaceLayout() {
   const { data: folders, isLoading: isFoldersLoading } = useFindWorkspaceFoldersQuery(workspaceId);
   const [isCreatingWorkspaceFolder, setIsCreatingWorkspaceFolder] = useState(false);
 
-  console.log(currentWorkspaceMember?.permissions);
-
   useEffect(() => {
     if (!workspaceId && workspaces.length > 0) {
       navigate(`/workspace/${workspaces[0]._id}`, { replace: true });
@@ -60,7 +58,7 @@ export default function WorkspaceLayout() {
         <main className="flex-1 overflow-y-auto h-full w-full  scrollbar-custom">
           <div className="mx-auto container px-2 sm:px-6 lg:px-8 py-0 md:py-10 w-full h-full">
             <Outlet
-              context={{ workspace, folders, handleAddFolder, permissions: currentWorkspaceMember.permissions }}
+              context={{ workspace, folders, handleAddFolder, permissions: currentWorkspaceMember?.permissions }}
             />
           </div>
         </main>
