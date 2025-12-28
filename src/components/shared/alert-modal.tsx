@@ -51,7 +51,7 @@ export function Alert({
   }, [isOpen]);
 
   if (!isOpen) {
-    return null;
+    return false;
   }
 
   return (
