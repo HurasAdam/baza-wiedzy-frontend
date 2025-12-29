@@ -100,7 +100,7 @@ const TableArticleCard = ({
     >
       {/* LEFT SIDE: FileText / Status Icon + Title + Product */}
       <Link
-        to={`/articles/${article._id}`}
+        to={`/articles/v2/${article._id}`}
         state={{ from: location.pathname + location.search }}
         className="flex items-center gap-3 min-w-0 overflow-hidden flex-grow"
       >

@@ -6,6 +6,7 @@ import { OnboardingPage } from "@/pages/onboarding/OnboardingPage";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import AdminLayout from "../layouts/admin/admin.layout";
 import ArticleLayout from "../layouts/article/article-layout";
+import Articlev2Layout from "../layouts/articlev2/articlev2-layout";
 import WorkspaceLayout from "../layouts/workspace/workspace.layout";
 import AdminDashboard from "../pages/admin-panel/admin-dashboard";
 import { AccountOnboardingRoute } from "./account.onboarding.route";
@@ -49,6 +50,17 @@ export function AppRoutes() {
               <Route index element={<PAGES.ArticleMainPage />} /> {/* /articles/:id */}
               <Route path="attachments" element={<PAGES.ArticleAttachmentsPage />} /> {/* /articles/:id/attachments */}
               <Route path="history" element={<PAGES.ArticleHistoryPage />} /> {/* /articles/:id/history */}
+              <Route path="edit" element={<PAGES.ArticleEditPage />} /> {/* /articles/:id/history */}
+              <Route path="history/:historyId" element={<PAGES.ArticleHistoryDetailPage />} />
+            </Route>
+
+            {/* article V2 */}
+
+            <Route path="/articles/v2/:id" element={<Articlev2Layout />}>
+              <Route index element={<PAGES.Articlev2MainPage />} /> {/* /articles/:id */}
+              <Route path="attachments" element={<PAGES.Articlev2AttachmentsPage />} />{" "}
+              {/* /articles/:id/attachments */}
+              <Route path="history" element={<PAGES.Articlev2HistoryPage />} /> {/* /articles/:id/history */}
               <Route path="edit" element={<PAGES.ArticleEditPage />} /> {/* /articles/:id/history */}
               <Route path="history/:historyId" element={<PAGES.ArticleHistoryDetailPage />} />
             </Route>

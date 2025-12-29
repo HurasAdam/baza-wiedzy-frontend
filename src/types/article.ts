@@ -8,6 +8,7 @@ export interface Article {
   isImportant: boolean;
   tags: Tag[];
   isVerified: boolean;
+  isVisible: boolean;
   updatedAt: string;
   status: "approved" | "rejected" | "pending" | "draft";
   createdBy: {
@@ -30,6 +31,7 @@ export interface Article {
   createdAt: string;
   isFavourite: boolean;
   isFollowed: boolean;
+  rejectionNote: {};
   selectedFlag: {
     _id: string;
     name: string;

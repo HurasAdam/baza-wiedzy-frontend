@@ -56,8 +56,9 @@ export function AdminIssueReportDetailsPage() {
   }
 
   return (
-    <div className="mx-auto px-6  h-full  ">
-      <div className="flex items-center justify-between border-b border-border pb-4 mb-6 ">
+    <div className="mx-auto px-6 h-full">
+      {/* Header */}
+      <div className="flex items-center justify-between border-b border-border pb-4 mb-6">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
             <ArrowLeft className="w-4 h-4 mr-1" /> Powrót
@@ -65,10 +66,11 @@ export function AdminIssueReportDetailsPage() {
           <div className="space-y-2">
             <h1 className="text-2xl font-semibold">{report.title}</h1>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <span>ID: {report._id}</span> •<span>Typ: {typeLabels[report.type]}</span>
+              <span>ID: {report._id}</span> • <span>Typ: {typeLabels[report.type]}</span>
             </div>
           </div>
         </div>
+
         <div className="flex items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -78,14 +80,11 @@ export function AdminIssueReportDetailsPage() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               {Object.keys(statusColors).map((status) => (
-                <DropdownMenuItem key={status} onClick={() => alert(`Change to ${status}`)}>
-                  {getStatusLabel(status)}
-                </DropdownMenuItem>
+                <DropdownMenuItem key={status}>{getStatusLabel(status)}</DropdownMenuItem>
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Menu akcji */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon">
@@ -93,25 +92,34 @@ export function AdminIssueReportDetailsPage() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => alert("Edytuj")}>Edytuj</DropdownMenuItem>
-              <DropdownMenuItem className="text-red-600" onClick={() => alert("Usuń")}>
-                Usuń
-              </DropdownMenuItem>
+              <DropdownMenuItem>Edytuj</DropdownMenuItem>
+              <DropdownMenuItem className="text-red-600">Usuń</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 min-h-[calc(100vh-240px)] ">
-        {/* Opis zgłoszenia */}
-        <Card className="md:col-span-2 shadow-sm border bg-card/70 ">
+      {/* Content */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+        {/* Lewa karta 1 */}
+        <Card className="md:col-span-2 shadow-sm border bg-card/70">
           <CardContent>
-            <h2 className="text-lg text-header-foreground font-semibold mb-4">Opis zgłoszenia</h2>
-            <p className="text-muted-foreground leading-relaxed text-[15px]">{report.description}</p>
+            <h2 className="text-lg font-semibold mb-4">Opis zgłoszenia</h2>
+            <p className="text-[15.5px] whitespace-pre-wrap break-words text-foreground/90">
+              Pozwoliłem sobie zweryfikować sytuację na Państwa koncie i zauważyłem, że do Państwa Konta LIBRUS zostały
+              powiązane konta LIBRUS Synergia dla dwójki dzieci...
+            </p>
+            <br></br>
+            <p>
+              Jeśli jednak dokonali Państwo opłaty za każde z kont, a usługa jest aktywna tylko na jednym (lub nie jest
+              dostępna na żadnym z kont), proszę o przesłanie odpowiedniego potwierdzenia zakupu dla każdej z
+              transakcji, w zależności od miejsca zakupu:
+            </p>
           </CardContent>
         </Card>
 
-        <Card className="shadow-sm border bg-card/70">
+        {/* 🔥 Prawa karta – MUSI być tutaj */}
+        <Card className="md:col-span-1 md:row-span-2 shadow-sm border bg-card/70">
           <CardContent className="flex flex-col gap-6">
             {[
               {
@@ -142,25 +150,25 @@ export function AdminIssueReportDetailsPage() {
               {
                 label: "Data utworzenia",
                 icon: <Calendar className="w-4 h-4 text-gray-500" />,
-                value: new Date(report.createdAt).toLocaleString("pl-PL", {
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                }),
+                value: new Date(report.createdAt).toLocaleString("pl-PL"),
               },
             ].map((item, i) => (
               <div key={i} className="flex items-center gap-3">
                 {item.icon}
                 <div>
-                  <h3 className="text-xs font-medium text-muted-foreground mb-0.5 uppercase tracking-wide">
-                    {item.label}
-                  </h3>
-                  <p className="text-sm font-medium text-foreground">{item.value}</p>
+                  <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{item.label}</h3>
+                  <p className="text-sm font-medium">{item.value}</p>
                 </div>
               </div>
             ))}
+          </CardContent>
+        </Card>
+
+        {/* Lewa karta 2 */}
+        <Card className="md:col-span-2 shadow-sm border bg-card/70">
+          <CardContent>
+            <h2 className="text-lg font-semibold mb-4">Szczegóły</h2>
+            <p className="text-[15.5px] whitespace-pre-wrap break-words text-foreground/90">{report.description}</p>
           </CardContent>
         </Card>
       </div>

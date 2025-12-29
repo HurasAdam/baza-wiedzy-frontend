@@ -1,10 +1,10 @@
 import { Info } from "lucide-react";
-import type { Article } from "../../pages/my-entries/components/MyEntryCard";
+import type { ArticleData } from "../../pages/articlev2/ArticleMainPage/components/ArticleStatusBannerSection";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../ui/dialog";
 
 interface ArticleRejectionReasonModalProps {
-  article: Article;
+  article: ArticleData;
   open: boolean;
   setOpen: (isOpen: boolean) => void;
 }
@@ -41,7 +41,6 @@ export const ArticleRejectionReasonModal = ({ article, open, setOpen }: ArticleR
           </DialogDescription>
         </DialogHeader>
 
-        {/* Sekcja: Autor uwagi + dymek */}
         {author && (
           <div className="flex flex-col items-start gap-3 mb-8">
             <div className="text-xs text-muted-foreground uppercase font-medium">Autor uwag</div>
@@ -53,15 +52,13 @@ export const ArticleRejectionReasonModal = ({ article, open, setOpen }: ArticleR
               </div>
             </div>
 
-            {/* Dymek z treścią uwagi */}
             <div className="bg-card text-foreground/90 rounded-xl p-5 border relative w-full mt-4">
-              {rejectionNote?.text || article.rejectionReason || "Brak szczegółów."}
+              {rejectionNote?.text || "Brak szczegółów."}
               <div className="absolute left-0 -ml-4 top-6 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-r-[12px] border-r-card"></div>
             </div>
           </div>
         )}
 
-        {/* Sekcja: Target uwagi */}
         {targetUser && (
           <div className="text-sm text-foreground/70">
             <div className="font-medium mb-2">Uwaga dotyczy zmian wprowadzonych przez:</div>

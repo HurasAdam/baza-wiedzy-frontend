@@ -5,6 +5,7 @@ export const useFindArticleHistoryQuery = (articleId: string) => {
   return useQuery({
     queryKey: ["faq-item", articleId],
     queryFn: () => articlesHistoryService.findArticleHistory({ id: articleId }),
+    refetchOnWindowFocus: false,
   });
 };
 

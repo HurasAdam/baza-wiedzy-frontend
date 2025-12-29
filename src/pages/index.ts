@@ -19,6 +19,9 @@ import { ArticleHistoryDetailPage } from "./article/ArticleHistoryDetailPage";
 import { ArticleHistoryPage } from "./article/ArticleHistoryPage";
 import { ArticleMainPage } from "./article/ArticleMainPage";
 import { ArticlesPage } from "./articles/ArticlesPage";
+import { Articlev2MainPage } from "./articlev2/ArticleMainPage/Articlev2MainPage";
+import { Articlev2AttachmentsPage } from "./articlev2/Articlev2AttachmentsPage";
+import { Articlev2HistoryPage } from "./articlev2/Articlev2HistoryPage";
 import { ForgotPasswordPage } from "./auth/forgot-password/ForgotPasswordPage";
 import { LoginPage } from "./auth/login/LoginPage";
 import { CreateArticlePage } from "./create-article/CreateArticlePage";
@@ -97,4 +100,7 @@ export const PAGES = {
   MyFlagsPage,
   ReportsPage,
   MyWorkspaces,
+  Articlev2MainPage,
+  Articlev2HistoryPage,
+  Articlev2AttachmentsPage,
 };

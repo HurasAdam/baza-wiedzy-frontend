@@ -53,7 +53,8 @@ export interface ArticleOutletContext {
   article: Article;
   refetch: () => Promise<void>;
   isArticleRefreshing: boolean;
-  userPermissions: {};
+  userPermissions: string[];
+  articleUserFlag: { selectedFlag: { _id: string; name: string; color: string } | null };
 }
 
 const dummyFlags = [
