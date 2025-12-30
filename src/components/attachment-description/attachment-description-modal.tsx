@@ -1,4 +1,4 @@
-import { Info, Loader } from "lucide-react";
+import { Loader, Paperclip } from "lucide-react";
 import { useFindArticleAttachmentQuery } from "../../hooks/attachments/use-article-attachments";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
@@ -33,7 +33,16 @@ export const AttachmentDescriptionModal = ({
     <Dialog open={isArticleAttachmentDescriptionModalOpen} onOpenChange={handleOpenChange} modal>
       <DialogContent
         {...(!closeOnOutsideClick ? { onInteractOutside: (e) => e.preventDefault() } : {})}
-        className="max-h-[80vh] min-w-[620px] overflow-y-auto p-6 rounded-2xl shadow-lg bg-card text-card-foreground"
+        className="max-h-[80vh] min-w-[620px] overflow-y-auto p-6   shadow-lg text-card-foreground
+        
+                  rounded-xl
+          
+          bg-background/95
+          backdrop-blur-sm
+          border 
+     
+          scrollbar-custom
+        "
       >
         {isAttachmentLoading ? (
           <div className="flex flex-col items-center justify-center py-12">
@@ -44,29 +53,28 @@ export const AttachmentDescriptionModal = ({
           attachment && (
             <>
               {/* Nagłówek */}
-              <div className="flex items-center gap-2 mb-3">
-                <Info />
-                <span className="text-xs text-muted-foreground uppercase font-semibold ">Szczegóły załącznika</span>
+              <div className="flex items-center gap-2 mb-4">
+                <Paperclip className="text-muted-foreground" />
+                <span className="text-sm text-muted-foreground uppercase font-semibold ">Szczegóły załącznika</span>
               </div>
 
-              <DialogHeader className="space-y-2 mb-4">
+              <DialogHeader className="space-y-2.5 mb-4">
                 <p className="text-xs text-muted-foreground ">
                   Tytuł pliku:{" "}
-                  <span className="font-base text-foreground text-base">{attachment.title || "Brak tytułu"}</span>
+                  <span className="font-base text-foreground text-sm">{attachment.title || "Brak tytułu"}</span>
                 </p>
                 <p className="text-sm text-muted-foreground ">
-                  Nazwa pliku: <span className="font-medium  text-foreground">{attachment.filename}</span>
+                  Nazwa pliku: <span className="font-medium  text-sm text-foreground">{attachment.filename}</span>
                 </p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   Typ pliku: <span className="font-medium text-foreground ">{attachment.mimeType}</span>
                 </p>
               </DialogHeader>
               <Separator className="my-2" />
 
-              {/* Opis */}
-              <section className="mb-2 p-3 bg-popover rounded-lg">
-                <h3 className="text-sm font-semibold text-popover-foreground mb-1">Opis</h3>
-                <p className="text-sm">{attachment.description || "Brak opisu"}</p>
+              <section className="mb-2 py-3 px-4 bg-popover rounded-lg min-h-20">
+                <h3 className="font-semibold  mb-2 text-xs text-muted-foreground">Opis</h3>
+                <p className="text-sm text-muted-foreground">{attachment.description || "Brak opisu"}</p>
               </section>
 
               <Separator className="my-4" />
