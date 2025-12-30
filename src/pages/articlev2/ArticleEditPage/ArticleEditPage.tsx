@@ -47,7 +47,7 @@ export const ArticleEditPage = () => {
   const { mutate, isPending: isUpdatedLoading } = useUpdateArticleMutation();
   const { mutate: simpleArticleUpdateMutate, isPending: isSimpleUpdatePending } = useSimpleUpdateArticleMutation();
 
-  const onEditCancel = () => navigate(`/articles/${articleId}`);
+  const onEditCancel = () => navigate(-1);
 
   const onCloseArticleApproveAlert = () => setSaveAlertState((state) => ({ ...state, isOpen: false, saveVariant: "" }));
 
