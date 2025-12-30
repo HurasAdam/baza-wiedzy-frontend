@@ -203,7 +203,7 @@ export const Articlev2MainPage = () => {
   };
 
   return (
-    <div className="mx-auto h-full ">
+    <div className="mx-auto h-full">
       {/* Header */}
 
       <ArticleMainPageHeader

@@ -33,7 +33,7 @@ export const ArticleMainPageHeader = ({ article, userPermissions, actions }) => 
 
   const navigate = useNavigate();
   return (
-    <div className="flex items-center justify-between border-b border-border pb-4 mb-6">
+    <div className="flex items-center justify-between border-b border-border pb-4 mb-5">
       <div className="flex items-center gap-4">
         <Button
           variant="outline"
@@ -95,7 +95,7 @@ export const ArticleMainPageHeader = ({ article, userPermissions, actions }) => 
             </DropdownMenuItem>
             {userPermissions.includes("EDIT_ARTICLE") && (
               <DropdownMenuItem asChild>
-                <NavLink to={`/articles/${article._id}/edit`}>
+                <NavLink to={`/articles/v2/${article._id}/edit`}>
                   <div className="flex items-center gap-2">
                     <SquarePen className="w-4 h-4 mr-1.5" /> Edytuj
                   </div>

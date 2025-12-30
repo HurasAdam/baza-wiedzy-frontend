@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { AxiosError } from "axios";
-import { CheckCircle, ChevronRight, Edit3, Loader, RefreshCw } from "lucide-react";
+import { ArrowLeft, CheckCircle, Edit3, Loader, RefreshCw } from "lucide-react";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
@@ -30,7 +30,7 @@ export type SelectOption = {
 
 export const ArticleEditPage = () => {
   const { id: articleId } = useParams();
-  const { data: article, isLoading, isError, error } = useFindArticleQuery(articleId!);
+  const { data: article } = useFindArticleQuery(articleId!);
   const navigate = useNavigate();
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [saveAlertState, setSaveAlertState] = useState<{
@@ -45,31 +45,14 @@ export const ArticleEditPage = () => {
   const { mutate, isPending: isUpdatedLoading } = useUpdateArticleMutation();
   const { mutate: simpleArticleUpdateMutate, isPending: isSimpleUpdatePending } = useSimpleUpdateArticleMutation();
 
-  const onEditCancel = () => {
-    navigate(`/articles/${articleId}`);
-  };
+  const onEditCancel = () => navigate(`/articles/${articleId}`);
 
-  const onCloseArticleApproveAlert = () => {
-    setSaveAlertState((state) => ({
-      ...state,
-      isOpen: false,
-      saveVariant: "",
-    }));
-  };
+  const onCloseArticleApproveAlert = () => setSaveAlertState((state) => ({ ...state, isOpen: false, saveVariant: "" }));
 
-  const onOpenArticleAproveAlert = () => {
-    setSaveAlertState((state) => ({
-      ...state,
-      isOpen: true,
-    }));
-  };
+  const onOpenArticleApproveAlert = () => setSaveAlertState((state) => ({ ...state, isOpen: true }));
 
-  const onArticleSaveModeSelect = (type: "simple" | "full") => {
-    setSaveAlertState((state) => ({
-      ...state,
-      saveVariant: type,
-    }));
-  };
+  const onArticleSaveModeSelect = (type: "simple" | "full") =>
+    setSaveAlertState((state) => ({ ...state, saveVariant: type }));
 
   const onSave = ({
     articleId,
@@ -80,48 +63,16 @@ export const ArticleEditPage = () => {
     formData: ArticleFormData;
     saveVariant: "simple" | "full";
   }) => {
-    if (!articleId) {
-      throw new Error("Brakuje articleId");
-    }
+    if (!articleId) throw new Error("Brakuje articleId");
 
     const dto: ArticleCreateDto = {
       ...formData,
       tags: formData.tags.map((tag) => tag.value),
     };
 
-    if (saveVariant === "simple") {
-      return simpleArticleUpdateMutate(
-        { dto, articleId },
-        {
-          onSuccess: () => {
-            toast.success("Artykuł został zaktualizowany");
-            queryClient.invalidateQueries({ queryKey: ["article", articleId] });
-            onEditCancel();
-          },
-          onError: (error) => {
-            const { status } = error as AxiosError;
+    const mutation = saveVariant === "simple" ? simpleArticleUpdateMutate : mutate;
 
-            if (status === 409) {
-              toast.error(
-                <div>
-                  <strong style={{ fontWeight: 600, marginBottom: 4 }}>Tytuł artykułu jest już zajęty</strong>
-                  <span>Istnieje już artykuł o takim samym tytule...</span>
-                </div>,
-                { duration: 6200 }
-              );
-              return;
-            } else if (status === 403) {
-              toast.error("Brak wymaganych uprawnień do wykonania tej operacji.");
-              return;
-            } else {
-              toast.error("Wystąpił błąd, spróbuj ponownie");
-            }
-          },
-        }
-      );
-    }
-
-    mutate(
+    mutation(
       { dto, articleId },
       {
         onSuccess: () => {
@@ -131,7 +82,6 @@ export const ArticleEditPage = () => {
         },
         onError: (error) => {
           const { status } = error as AxiosError;
-
           if (status === 409) {
             toast.error(
               <div>
@@ -140,10 +90,8 @@ export const ArticleEditPage = () => {
               </div>,
               { duration: 6200 }
             );
-            return;
           } else if (status === 403) {
             toast.error("Brak wymaganych uprawnień do wykonania tej operacji.");
-            return;
           } else {
             toast.error("Wystąpił błąd, spróbuj ponownie");
           }
@@ -171,6 +119,7 @@ export const ArticleEditPage = () => {
       file: [],
     },
   });
+
   const { isDirty } = form.formState;
   const handleSubmit = form.handleSubmit(handleSave);
 
@@ -193,9 +142,7 @@ export const ArticleEditPage = () => {
   );
 
   useEffect(() => {
-    if (article?.product?._id) {
-      setSelectedProductId(article.product._id);
-    }
+    if (article?.product?._id) setSelectedProductId(article.product._id);
   }, [article]);
 
   if (loadingTags) {
@@ -209,45 +156,37 @@ export const ArticleEditPage = () => {
   return (
     tags && (
       <>
-        <header className="px-2.5 py-8 flex  space-x-6 bg-background justify-between">
-          <div className="flex gap-6 items-start">
-            <div className="rounded-lg p-3 bg-primary/90 text-primary-foreground">
-              <Edit3 className="w-5 h-5 " />
-            </div>
-            <div>
-              <h1 className="text-lg flex items-center font-bold leading-tight tracking-tight text-foreground mb-1">
-                Edycja artykułu <ChevronRight className="w-5 h-5 mx-2 text-primary animate-pulse" />
-                <span className="text-foreground  undercover font-medium">{article ? article.title : "Ładowanie"}</span>
-              </h1>
-              <p className="text-sm text-muted-foreground max-w-2xl">
-                Zaktualizuj szczegóły artykułu, przypisz go do produktu i dostosuj jego metadane.
-              </p>
-            </div>
-          </div>
-
-          {/* 🔽 PRZYCISKI */}
-          <div className="flex justify-end gap-3 mt-6 px-2">
-            <Button variant="outline" onClick={onEditCancel}>
-              Anuluj
-            </Button>
-            <Button
-              variant="default"
-              onClick={
-                article?.status === "rejected" || article?.status === "draft" ? handleSubmit : onOpenArticleAproveAlert
-              }
-              disabled={isUpdatedLoading || !isDirty}
-            >
-              {isUpdatedLoading ? (
-                <div className="flex items-center gap-2">
-                  <Loader className="animate-spin w-4 h-4" />
-                  Zapisuję...
-                </div>
-              ) : (
-                "Zapisz"
+        {/* --- HEADER --- */}
+        <header className="flex items-center gap-4 border-b border-border pb-4 mb-4 ">
+          <Button
+            variant="outline"
+            className=" w-16 h-16 hover:bg-muted/30 flex  items-center justify-center rounded-lg bg-background"
+            onClick={() => navigate(-1)}
+          >
+            <ArrowLeft className="w-8 h-8" />
+          </Button>
+          <div className="space-y-2">
+            <h1 className="text-xl font-semibold max-w-[740px] break-words text-foreground/95">Edycja artykułu</h1>
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <span className="truncate max-w-[520px]">{article?.title ?? "Ładowanie..."}</span>
+              {article?.product?.name && (
+                <>
+                  • <span>Produkt: {article.product.name}</span>
+                </>
               )}
-            </Button>
+            </div>
           </div>
         </header>
+
+        <ArticleEditBanner
+          isDirty={isDirty}
+          isLoading={isUpdatedLoading || isSimpleUpdatePending}
+          onCancel={onEditCancel}
+          onSave={
+            article?.status === "rejected" || article?.status === "draft" ? handleSubmit : onOpenArticleApproveAlert
+          }
+        />
+
         <FormProvider {...form}>
           <ArticleForm
             isLoading={isUpdatedLoading}
@@ -294,6 +233,7 @@ export const ArticleEditPage = () => {
                   </p>
                 </div>
               </button>
+
               {/* Prosta edycja */}
               <button
                 type="button"
@@ -320,3 +260,48 @@ export const ArticleEditPage = () => {
     )
   );
 };
+
+export const ArticleEditBanner = ({ isDirty, isLoading, onCancel, onSave }) => (
+  <div className="mb-6 flex items-center justify-between gap-4 rounded-lg bg-muted/30 px-5 py-3 shadow-sm">
+    <div className="flex items-center gap-4">
+      <div className="flex items-center justify-center w-9 h-9 rounded-md bg-background border shadow-sm">
+        <Edit3 className="w-4 h-4 text-primary/80" />
+      </div>
+      <div className="leading-tight">
+        <p className="text-sm font-medium text-foreground">Tryb edycji artykułu</p>
+        <p className="text-xs text-muted-foreground">
+          Wprowadzasz zmiany w artykule. Po kliknięciu „Zapisz” wybierz odpowiedni tryb edycji:
+        </p>
+        <ul className="text-xs text-muted-foreground list-disc ml-5 mt-1 space-y-1">
+          <li>
+            <strong>Prosta edycja:</strong> modyfikuje treść nie wpływając na status artykułu
+          </li>
+          <li>
+            <strong>Pełna edycja:</strong> modyfikuje treść i aktualizuje status artykułu
+          </li>
+        </ul>
+        {isDirty && (
+          <p className="text-xs text-yellow-600 mt-1">
+            Masz niezapisane zmiany – kliknij „Zapisz”, aby kontynuować i wybrać tryb edycji.
+          </p>
+        )}
+      </div>
+    </div>
+
+    <div className="flex gap-2">
+      <Button onClick={onCancel} size="sm" variant="outline">
+        Anuluj
+      </Button>
+      <Button onClick={onSave} size="sm" disabled={isLoading || !isDirty}>
+        {isLoading ? (
+          <div className="flex items-center gap-2">
+            <Loader className="animate-spin w-4 h-4" />
+            Zapisuję...
+          </div>
+        ) : (
+          "Zapisz"
+        )}
+      </Button>
+    </div>
+  </div>
+);

@@ -30,11 +30,12 @@ import {
 } from "../../hooks/articles/use-articles";
 import { cn } from "../../lib/utils";
 import { generateMockHistory } from "../../utils/article-event";
-import { EditArticlePage } from "../edit-article/EditArticlePage";
+
 import ArticleAttachmentsTab from "./components/ArticleAttachmentsTab";
 import ArticleHistoryTab from "./components/ArticleHistoryTab";
 import { ArticleVerificationBanner } from "./components/ArticleVerificationBanner";
 
+import { EditArticlePage } from "../edit-article/EditArticlePage";
 import { ArticlePageSkeleton } from "./skeleton/ArticlePageSkeleton";
 
 const getFileIcon = (type: string) => {
