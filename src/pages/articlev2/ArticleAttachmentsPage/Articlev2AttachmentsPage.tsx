@@ -16,35 +16,35 @@ import { useState } from "react";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
-import { ArticleAttachmentModal } from "../../components/article-attachment/article-attachment-modal";
-import { AttachmentDescriptionModal } from "../../components/attachment-description/attachment-description-modal";
-import { Alert } from "../../components/shared/alert-modal";
-import { NoDataFound } from "../../components/shared/NoDataFound";
-import { Button } from "../../components/ui/button";
-import { Card } from "../../components/ui/card";
+import { ArticleAttachmentModal } from "../../../components/article-attachment/article-attachment-modal";
+import { AttachmentDescriptionModal } from "../../../components/attachment-description/attachment-description-modal";
+import { Alert } from "../../../components/shared/alert-modal";
+import { NoDataFound } from "../../../components/shared/NoDataFound";
+import { Button } from "../../../components/ui/button";
+import { Card } from "../../../components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../../components/ui/dropdown-menu";
-import queryClient from "../../config/query.client";
-import { ERROR_MESSAGES } from "../../constants/error-messages";
+} from "../../../components/ui/dropdown-menu";
+import queryClient from "../../../config/query.client";
+import { ERROR_MESSAGES } from "../../../constants/error-messages";
 import {
   useDeleteArticleAttachmentMutation,
   useFindArticleAttachmentsQuery,
-} from "../../hooks/attachments/use-article-attachments";
-import type { AttachmentListItem } from "../../types/attachment";
-import { assertDefined } from "../../utils/asserts";
+} from "../../../hooks/attachments/use-article-attachments";
+import type { AttachmentListItem } from "../../../types/attachment";
+import { assertDefined } from "../../../utils/asserts";
 import {
   copyAttachmnentUrl,
   formatFileSize,
   getAttachmentUrl,
   mapMimeTypeToFileType,
   type FileType,
-} from "../../utils/fileHelpers";
-import { formatDate } from "../../utils/format-date";
-import type { ArticleOutletContext } from "../article/ArticleMainPage";
+} from "../../../utils/fileHelpers";
+import { formatDate } from "../../../utils/format-date";
+import type { ArticleOutletContext } from "../../article/ArticleMainPage";
 
 /* ---------------- helpers ---------------- */
 

@@ -1,27 +1,29 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { AxiosError } from "axios";
-import { ArrowLeft, CheckCircle, Edit3, Loader, RefreshCw } from "lucide-react";
+import { CheckCircle, RefreshCw } from "lucide-react";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import ArticleForm from "../../components/article/article-form";
-import { Alert } from "../../components/shared/alert-modal";
-import { Button } from "../../components/ui/button";
-import queryClient from "../../config/query.client";
+import ArticleForm from "../../../components/article/article-form";
+import { Alert } from "../../../components/shared/alert-modal";
+import queryClient from "../../../config/query.client";
 import {
   useFindArticleQuery,
   useSimpleUpdateArticleMutation,
   useUpdateArticleMutation,
-} from "../../hooks/articles/use-articles";
-import { useFindCategoriesByProductQuery } from "../../hooks/product-categories/use-product-categories";
-import { useFindProductsQuery } from "../../hooks/products/use-products";
-import { useFindTagsQuery } from "../../hooks/tags/use-tags";
-import type { IProduct } from "../../types/product";
-import type { ProductCategory } from "../../types/product-category";
-import type { Tag } from "../../types/tags";
-import { mapToSelectOptions } from "../../utils/form-mappers";
-import { articleSchema, type ArticleCreateDto, type ArticleFormData } from "../../validation/article.schema";
+} from "../../../hooks/articles/use-articles";
+import { useFindCategoriesByProductQuery } from "../../../hooks/product-categories/use-product-categories";
+import { useFindProductsQuery } from "../../../hooks/products/use-products";
+import { useFindTagsQuery } from "../../../hooks/tags/use-tags";
+import type { IProduct } from "../../../types/product";
+import type { ProductCategory } from "../../../types/product-category";
+import type { Tag } from "../../../types/tags";
+import { mapToSelectOptions } from "../../../utils/form-mappers";
+import { articleSchema, type ArticleCreateDto, type ArticleFormData } from "../../../validation/article.schema";
+import { ArticleEditBanner } from "./components/ArticleEditBanner";
+import { ArticleEditHeader } from "./components/ArticleEditHeader";
+import { ArticleEditPageSkeleton } from "./components/ArticleEditPageSkeleton";
 
 export type SelectOption = {
   label: string;
@@ -30,7 +32,7 @@ export type SelectOption = {
 
 export const ArticleEditPage = () => {
   const { id: articleId } = useParams();
-  const { data: article } = useFindArticleQuery(articleId!);
+  const { data: article, isLoading: isArticleLoading } = useFindArticleQuery(articleId!);
   const navigate = useNavigate();
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [saveAlertState, setSaveAlertState] = useState<{
@@ -145,38 +147,15 @@ export const ArticleEditPage = () => {
     if (article?.product?._id) setSelectedProductId(article.product._id);
   }, [article]);
 
-  if (loadingTags) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="loader">Ładowanie...</div>
-      </div>
-    );
+  if (isArticleLoading || loadingTags) {
+    return <ArticleEditPageSkeleton />;
   }
 
   return (
-    tags && (
+    tags &&
+    article && (
       <>
-        {/* --- HEADER --- */}
-        <header className="flex items-center gap-4 border-b border-border pb-4 mb-4 ">
-          <Button
-            variant="outline"
-            className=" w-16 h-16 hover:bg-muted/30 flex  items-center justify-center rounded-lg bg-background"
-            onClick={() => navigate(-1)}
-          >
-            <ArrowLeft className="w-8 h-8" />
-          </Button>
-          <div className="space-y-2">
-            <h1 className="text-xl font-semibold max-w-[740px] break-words text-foreground/95">Edycja artykułu</h1>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <span className="truncate max-w-[520px]">{article?.title ?? "Ładowanie..."}</span>
-              {article?.product?.name && (
-                <>
-                  • <span>Produkt: {article.product.name}</span>
-                </>
-              )}
-            </div>
-          </div>
-        </header>
+        <ArticleEditHeader article={article} />
 
         <ArticleEditBanner
           isDirty={isDirty}
@@ -260,48 +239,3 @@ export const ArticleEditPage = () => {
     )
   );
 };
-
-export const ArticleEditBanner = ({ isDirty, isLoading, onCancel, onSave }) => (
-  <div className="mb-6 flex items-center justify-between gap-4 rounded-lg bg-muted/30 px-5 py-3 shadow-sm">
-    <div className="flex items-center gap-4">
-      <div className="flex items-center justify-center w-9 h-9 rounded-md bg-background border shadow-sm">
-        <Edit3 className="w-4 h-4 text-primary/80" />
-      </div>
-      <div className="leading-tight">
-        <p className="text-sm font-medium text-foreground">Tryb edycji artykułu</p>
-        <p className="text-xs text-muted-foreground">
-          Wprowadzasz zmiany w artykule. Po kliknięciu „Zapisz” wybierz odpowiedni tryb edycji:
-        </p>
-        <ul className="text-xs text-muted-foreground list-disc ml-5 mt-1 space-y-1">
-          <li>
-            <strong>Prosta edycja:</strong> modyfikuje treść nie wpływając na status artykułu
-          </li>
-          <li>
-            <strong>Pełna edycja:</strong> modyfikuje treść i aktualizuje status artykułu
-          </li>
-        </ul>
-        {isDirty && (
-          <p className="text-xs text-yellow-600 mt-1">
-            Masz niezapisane zmiany – kliknij „Zapisz”, aby kontynuować i wybrać tryb edycji.
-          </p>
-        )}
-      </div>
-    </div>
-
-    <div className="flex gap-2">
-      <Button onClick={onCancel} size="sm" variant="outline">
-        Anuluj
-      </Button>
-      <Button onClick={onSave} size="sm" disabled={isLoading || !isDirty}>
-        {isLoading ? (
-          <div className="flex items-center gap-2">
-            <Loader className="animate-spin w-4 h-4" />
-            Zapisuję...
-          </div>
-        ) : (
-          "Zapisz"
-        )}
-      </Button>
-    </div>
-  </div>
-);
