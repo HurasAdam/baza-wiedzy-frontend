@@ -1,5 +1,5 @@
 import type { AxiosError } from "axios";
-import { Loader } from "lucide-react";
+import { Edit3, Loader } from "lucide-react";
 import { toast } from "sonner";
 import type { z } from "zod";
 import queryClient from "../../config/query.client";
@@ -82,19 +82,35 @@ export const EditFaqItemModal = ({
     <Dialog open={isEditingFaqItem} onOpenChange={setIsEditingFaqItem} modal={true}>
       <DialogContent
         {...(!closeOnOutsideClick ? { onInteractOutside: (e) => e.preventDefault() } : {})}
-        className="max-h-[80vh]  overflow-y-auto min-w-[33vw] "
+        className="
+          w-[95vw] min-w-5xl
+          min-h-[84vh]
+          max-h-[84vh]
+          p-6 sm:p-8
+          rounded-xl
+          shadow-xl
+          bg-background/95
+          backdrop-blur-sm
+          border 
+          overflow-y-auto
+          scrollbar-custom
+        "
       >
-        <DialogHeader>
-          <DialogTitle>
-            {" "}
-            {isProductLoading ? (
-              <div className="h-5  ">Edytuj pytanie: </div>
-            ) : (
-              <div className="flex flex-col gap-1.5">
-                <span>Edytuj pytanie:</span> <span className="text-sm">{faqItem?.question}</span>{" "}
-              </div>
-            )}
-          </DialogTitle>
+        <DialogHeader className="border-b border-muted/20 flex flex-col gap-2">
+          <div className="flex items-center gap-4">
+            {/* Ikona po lewej */}
+            <div className="flex h-13 w-13 items-center justify-center rounded-md border bg-background text-foreground">
+              <Edit3 className="h-8 w-8" />
+            </div>
+
+            {/* Tekst headera */}
+            <div className="flex flex-col justify-center">
+              <DialogTitle className="text-xl font-semibold text-foreground/90 tracking-tight">
+                Edytuj pytanie FAQ
+              </DialogTitle>
+              <p className="text-[13px] text-muted-foreground">Edytuj treść pytania lub odpowiedzi.</p>
+            </div>
+          </div>
         </DialogHeader>
 
         {isProductLoading ? (

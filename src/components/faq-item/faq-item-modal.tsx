@@ -1,4 +1,5 @@
 import type { AxiosError } from "axios";
+import { PlusCircle } from "lucide-react";
 import { toast } from "sonner";
 import type { z } from "zod";
 import queryClient from "../../config/query.client";
@@ -89,10 +90,37 @@ export const FaqItemModal = ({
     <Dialog open={isCreatingFaqItem} onOpenChange={setIsCreatingFaqItem} modal={true}>
       <DialogContent
         {...(!closeOnOutsideClick ? { onInteractOutside: (e) => e.preventDefault() } : {})}
-        className="max-h-[80vh] overflow-y-auto"
+        className="
+          w-[95vw] min-w-5xl
+          min-h-[84vh]
+          max-h-[84vh]
+          p-6 sm:p-8
+          rounded-xl
+          shadow-xl
+          bg-background/95
+          backdrop-blur-sm
+          border 
+          overflow-y-auto
+          scrollbar-custom
+        "
       >
-        <DialogHeader>
-          <DialogTitle>Dodaj nowe pytanie</DialogTitle>
+        <DialogHeader className="border-b border-muted/20 flex flex-col gap-2">
+          <div className="flex items-center gap-4">
+            {/* Ikona po lewej */}
+            <div className="flex h-13 w-13 items-center justify-center rounded-md border bg-background text-foreground">
+              <PlusCircle className="h-8 w-8" />
+            </div>
+
+            {/* Tytuł i opis */}
+            <div className="flex flex-col justify-center">
+              <DialogTitle className="text-xl font-semibold text-foreground/90 tracking-tight">
+                Dodaj nowe pytanie do FAQ
+              </DialogTitle>
+              <p className="text-[13px] text-muted-foreground">
+                Wybierz FAQ oraz wprowadź treść pytania oraz odpowiedzi.
+              </p>
+            </div>
+          </div>
         </DialogHeader>
 
         <FaqItemForm
