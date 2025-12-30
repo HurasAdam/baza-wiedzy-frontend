@@ -94,7 +94,11 @@ export const FaqItemForm = ({
               <FormItem>
                 <FormLabel>Odpowiedź</FormLabel>
                 <FormControl>
-                  <Textarea {...field} placeholder="Uzupełnij odpowiedź" />
+                  <Textarea
+                    className="min-h-[400px] max-h-[400px] scrollbar-custom"
+                    {...field}
+                    placeholder="Uzupełnij odpowiedź"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
