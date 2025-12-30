@@ -49,7 +49,7 @@ export const StatisticsPage = () => {
   };
 
   return (
-    <div className="space-y-6 pb-10 max-w-[1440px] mx-auto py-4 ">
+    <div className="space-y-6 pb-10 max-w-[1400px] mx-auto py-4 ">
       <StatisticsHeader
         startDate={startDate}
         endDate={endDate}

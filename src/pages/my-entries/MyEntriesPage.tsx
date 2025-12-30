@@ -50,15 +50,15 @@ export const MyEntriesPage = () => {
   };
 
   return (
-    <div className="mx-auto pb-10 max-w-[1440px] mx-auto">
+    <div className="mx-auto pb-10 max-w-[1400px]">
       <h1 className="text-xl font-bold mb-6.5 tracking-wide text-foreground">Moje artykuły</h1>
 
       <StatusBar currentStatus={currentStatus} setCurrentStatus={setCurrentStatus} statuses={statuses} />
 
-      <Tabs value={currentStatus} className="w-full">
+      <Tabs value={currentStatus} className="w-full rounded">
         {statuses.map(({ key }) => (
           <TabsContent key={key} value={key} className="p-0" style={{ backgroundColor: "var(--color-card)" }}>
-            <div className=" border border-border  bg-card divide-y divide-border">
+            <div className=" border border-border  divide-y divide-border rounded-lg">
               {isLoading && (
                 <div className="flex items-center justify-center p-6 text-gray-500 dark:text-gray-400">
                   <Loader className="animate-spin" />
