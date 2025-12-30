@@ -26,11 +26,12 @@ export const ArticleResponseVariants = ({ responseVariants }: Props) => {
                 <button
                   key={index}
                   onClick={() => setActiveVariantIndex(index)}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 max-w-[170px] truncate ${
                     activeVariantIndex === index
                       ? "bg-card/70 border border-border text-foreground shadow-sm"
                       : "text-foreground/70 hover:bg-muted/80"
                   }`}
+                  title={variant.variantName || `Wariant ${index + 1}`}
                 >
                   {variant.variantName || `Wariant ${index + 1}`}
                 </button>
