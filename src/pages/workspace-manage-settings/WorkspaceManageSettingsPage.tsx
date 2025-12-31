@@ -1,13 +1,16 @@
-import { Settings } from "lucide-react";
-import { useOutletContext } from "react-router-dom";
+import { MoreVertical, Settings, Trash2 } from "lucide-react";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { Separator } from "../../components/ui/separator";
 import WorkspaceForm, { colorOptions } from "../../components/workspace/workspace-form";
 import queryClient from "../../config/query.client";
-import { useUpdateWorkspaceMutation } from "../../hooks/workspace/use-workspace";
+import { useDeleteWorkspaceMutation, useUpdateWorkspaceMutation } from "../../hooks/workspace/use-workspace";
 
 export const WorkspaceManageSettingsPage = () => {
+  const navigate = useNavigate();
   const { mutate, isPending } = useUpdateWorkspaceMutation();
+  const { mutate: deleteWorkspaceMutate } = useDeleteWorkspaceMutation();
   const { workspace, permissions } = useOutletContext();
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const onSubmit = (data) => {
     mutate(
@@ -24,6 +27,23 @@ export const WorkspaceManageSettingsPage = () => {
     );
   };
 
+  const onDelete = () => {
+    setIsDeleteOpen(true);
+  };
+
+  const onDeleteWorkspaceConfirm = () => {
+    deleteWorkspaceMutate(workspace._id, {
+      onSuccess: () => {
+        toast.success("Zmiany zostały zapisane", {
+          position: "bottom-right",
+          description: "Kolekcja oraz wszystkie jej zasoby zostały usunięte",
+        });
+        setIsDeleteOpen(false);
+        navigate("/");
+      },
+    });
+  };
+
   return (
     <div className="max-w-6xl mx-auto py-8  ">
       <header className="flex items-center justify-between mb-8">
@@ -34,6 +54,23 @@ export const WorkspaceManageSettingsPage = () => {
           </div>
           <p className="text-muted-foreground text-sm mt-1">Zarządzaj ustawieniami kolekcji.</p>
         </div>
+
+        {permissions?.isOwner && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+                <MoreVertical className="w-5 h-5" />
+              </Button>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuItem onClick={onDelete} className="text-foreground text-sm ">
+                <Trash2 className="mr-2 h-3 w-3" />
+                Usuń kolekcję
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </header>
       <Separator />
       {!workspace ? (
@@ -43,11 +80,38 @@ export const WorkspaceManageSettingsPage = () => {
       ) : (
         <div>Workspace nie istnieje</div>
       )}
+
+      <Alert
+        isOpen={isDeleteOpen}
+        type="warning"
+        title="Usunąć kolekcję?"
+        isLoading={false}
+        requireConfirmation
+        isConfirmEnabled
+        onCancel={() => setIsDeleteOpen(false)}
+        onConfirm={onDeleteWorkspaceConfirm}
+      >
+        <p className="text-sm text-muted-foreground mb-3">Czy jesteś pewien że chcesz usunąć te kolekcję ?</p>
+
+        <p className="text-sm text-muted-foreground mt-2">
+          Wszystkie foldery oraz artykuły przypisane do tej kolekcji zostaną trwale usunięte - operacja ta jest
+          <span className="font-medium mx-1.5 text-destructive">nieodwracalna</span>!
+        </p>
+      </Alert>
     </div>
   );
 };
 
+import { useState } from "react";
 import { toast } from "sonner";
+import { Alert } from "../../components/shared/alert-modal";
+import { Button } from "../../components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../../components/ui/dropdown-menu";
 import { cn } from "../../lib/utils";
 
 export const WorkspaceFormSkeleton = () => {

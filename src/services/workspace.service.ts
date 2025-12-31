@@ -31,6 +31,10 @@ const joinWorkspaceByInviteCode = (inviteCode: WorkspaceInviteFormData) => {
   return api.post(`${baseUrl}/join`, inviteCode);
 };
 
+const deleteWorkspace = (workspaceId: string) => {
+  return api.delete(`${baseUrl}/${workspaceId}`);
+};
+
 export const workspaceService = {
   createWorkspace,
   updateWorkspace,
@@ -39,4 +43,5 @@ export const workspaceService = {
   findMembers,
   removeMember,
   joinWorkspaceByInviteCode,
+  deleteWorkspace,
 };

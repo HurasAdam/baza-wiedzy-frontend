@@ -57,3 +57,11 @@ export const useRemoveWorkspaceMemberMutation = () => {
     },
   });
 };
+
+export const useDeleteWorkspaceMutation = () => {
+  return useMutation({
+    mutationFn: (workspaceId: string) => {
+      return workspaceService.deleteWorkspace(workspaceId);
+    },
+  });
+};
