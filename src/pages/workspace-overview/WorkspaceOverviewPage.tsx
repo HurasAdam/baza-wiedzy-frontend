@@ -34,9 +34,9 @@ export function WorkspaceOverviewPage() {
       {folders.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-[60vh] text-muted-foreground">
           <FolderKanban className="w-20 h-20 mb-4 text-muted-foreground/50" />
-          <p className="text-lg font-medium">Brak folderów w tym workspace</p>
+          <p className="text-lg font-medium"> Dodaj folder, aby rozpocząć.</p>
           <p className="text-sm text-muted-foreground mt-1">
-            Utwórz nowy folder, aby rozpocząć organizację swoich materiałów.
+            Dodaj pierwszy folder i zacznij porządkować swoje materiały.
           </p>
           {permissions.addFolder && (
             <Button onClick={handleAddFolder} className="mt-6 gap-2 shadow-md hover:shadow-lg transition-all">
