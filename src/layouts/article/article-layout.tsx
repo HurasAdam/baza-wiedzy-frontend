@@ -1,17 +1,18 @@
-import { Outlet, useMatch, useParams } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 import { useFindArticleQuery } from "../../hooks/articles/use-articles";
 import { useAuthQuery } from "../../hooks/auth/use-auth";
 import { ArticlePageHeader } from "../../pages/article/components/ArticlePageHeader";
 
 export default function ArticleLayout() {
   const { id } = useParams<{ id: string }>();
-  const { data: article, isLoading, refetch, isRefetching } = useFindArticleQuery(id!);
+  const { data: article, isLoading, error, refetch, isRefetching } = useFindArticleQuery(id);
   const { data: user } = useAuthQuery();
 
   const userPermissions = user?.role?.permissions || [];
 
-  const matchHistoryDetail = useMatch("/articles/:id/history/:historyId");
-  const showHeader = !matchHistoryDetail; // nagłówek NIE pokaże się w szczegółach historii
+  if (error) {
+    return <div>BŁAD</div>;
+  }
 
   if (isLoading) {
     return (

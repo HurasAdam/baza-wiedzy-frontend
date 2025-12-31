@@ -37,6 +37,11 @@ export function AppRoutes() {
 
         {/* Chronione ścieżki dostępne TYLKO dla zalogowanych */}
         <Route element={<ProtectedRoute />}>
+          <Route path="/not-found" element={<PAGES.GlobalNotFoundPage />} />
+
+          <Route path="/bad-request" element={<PAGES.GlobalBadRequestPage />} />
+          <Route path="/server-error" element={<PAGES.GlobalServerErrorPage />} />
+
           <Route element={<AppLayout />}>
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
             {protectedRoutePaths.map(({ path, element }) => (

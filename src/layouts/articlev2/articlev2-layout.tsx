@@ -1,19 +1,40 @@
-import { Outlet, useMatch, useParams } from "react-router-dom";
+import type { AxiosError } from "axios";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { useFindOneArticleUserFlagQuery } from "../../hooks/article-user-flag/use-article-user-flag";
 import { useFindArticleQuery } from "../../hooks/articles/use-articles";
 import { useAuthQuery } from "../../hooks/auth/use-auth";
 
 export default function Articlev2Layout() {
   const { id } = useParams<{ id: string }>();
-  const { data: article, isLoading, refetch, isRefetching } = useFindArticleQuery(id!);
+  const { data: article, isLoading, error, refetch, isRefetching } = useFindArticleQuery(id!);
   const { data: articleUserFlag } = useFindOneArticleUserFlagQuery(id || null);
   const { data: user } = useAuthQuery();
-
+  const navigate = useNavigate();
   const userPermissions = user?.role?.permissions || [];
 
-  const matchHistoryDetail = useMatch("/articles/:id/history/:historyId");
-  const showHeader = !matchHistoryDetail; // nagłówek NIE pokaże się w szczegółach historii
+  // --- ERROR HANDLING ---
+  if (error) {
+    const status = (error as AxiosError).status;
 
+    if (status === 400) {
+      navigate("/bad-request", { replace: true });
+      return null;
+    }
+
+    if (status === 404) {
+      navigate("/not-found", { replace: true });
+      return null;
+    }
+
+    if (status >= 500) {
+      navigate("/server-error", { replace: true });
+      return null;
+    }
+
+    // inne błędy
+    navigate("/bad-request", { replace: true });
+    return null;
+  }
   if (isLoading) {
     return (
       <div className="space-y-4 animate-pulse">
