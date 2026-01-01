@@ -280,7 +280,7 @@
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.21 0.006 285.885);
+  --sidebar: oklch(0.274 0.006 286.033 / 0.3);
 
   --sidebar-foreground: oklch(0.76.5 0.015 285.903);
   --sidebar-primary: oklch(0.406 0.125 262.881);

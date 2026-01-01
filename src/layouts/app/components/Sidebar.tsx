@@ -10,13 +10,14 @@ import {
   Clipboard,
   FolderSearch,
   HeartIcon,
-  Info,
+  HelpCircle,
   LandPlot,
   Layers,
   Layers2,
   LayoutDashboard,
   Loader,
   MailQuestionMark,
+  MoreHorizontal,
   Origami,
   Plus,
   RectangleEllipsis,
@@ -34,6 +35,7 @@ import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -41,6 +43,7 @@ import {
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu";
 
+import { Separator } from "../../../components/ui/separator";
 import { WORKSPACE_ICONS } from "../../../components/workspace/workspace-form";
 import { useFindUserWorkspacesQuery } from "../../../hooks/workspace/use-workspace";
 import { SidebarMyNav, type MySectionNavItem } from "./Sidebar-my-nav";
@@ -94,12 +97,6 @@ export const myNavItems: MySectionNavItem[] = [
     title: "Etykiety",
     href: "/my-flags",
     icon: LandPlot,
-    requiredPermission: "ADD_ARTICLE",
-  },
-  {
-    title: "Zgłoszenia",
-    href: "/reports",
-    icon: MailQuestionMark,
     requiredPermission: "ADD_ARTICLE",
   },
 ];
@@ -220,7 +217,7 @@ export const Sidebar = ({
         <SidebarMyNav items={myNavItems} isCollapsed={isCollapsed} />
       </ScrollArea>
 
-      <div className="flex flex-col items-center py-4 mt-auto text-xs text-muted-foreground">
+      {/* <div className="flex flex-col items-center py-4 mt-auto text-xs text-muted-foreground">
         <span className="flex items-center gap-1">
           <Info onClick={onOpenChangeLogModal} className="w-4 h-4 cursor-help text-sidebar-logo-secondary" />
           {!isCollapsed && (
@@ -232,7 +229,51 @@ export const Sidebar = ({
             </span>
           )}
         </span>
-      </div>
+      </div> */}
+
+      {isCollapsed ? (
+        <DropdownMenu>
+          <DropdownMenuTrigger className=" mx-auto" asChild>
+            <MoreHorizontal className="w-7 h-7 mb-3" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-52" side="right" align="end">
+            <DropdownMenuGroup className="space-y-2">
+              <DropdownMenuItem className="cursor-pointer" onClick={onOpenChangeLogModal}>
+                <HelpCircle />
+                Informacje
+              </DropdownMenuItem>
+              <Separator />
+              <DropdownMenuItem className="cursor-pointer" onClick={() => navigate("/reports")}>
+                <MailQuestionMark />
+                Zgłoszenia
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ) : (
+        <div className="flex items-center pb-1 pt-2 mt-auto text-xs text-muted-foreground border-t justify-evenly gap-2.5">
+          <Button
+            onClick={onOpenChangeLogModal}
+            size="sm"
+            variant="ghost"
+            className="flex flex-1 hover:bg-transparent text-xs font-medium "
+          >
+            <HelpCircle />
+            Info.
+          </Button>
+          <Separator orientation="vertical" />
+
+          <Button
+            onClick={() => navigate("/reports")}
+            size="sm"
+            variant="ghost"
+            className="flex flex-1 hover:bg-transparent text-sm font-medium"
+          >
+            <MailQuestionMark />
+            zgłosz.
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
