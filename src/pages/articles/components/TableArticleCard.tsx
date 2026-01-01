@@ -1,6 +1,6 @@
 import { FileText, HeartIcon, List, Loader, Star } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../../../components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../../components/ui/tooltip";
 import { cn } from "../../../lib/utils";
@@ -81,6 +81,7 @@ const TableArticleCard = ({
   onMouseLeave,
 }: TableArticleCardProps) => {
   const [selectedFlag, setSelectedFlag] = useState<string | undefined>();
+  const navigate = useNavigate();
 
   const handleFlagSelect = (flagId: string) => {
     setSelectedFlag(flagId);
@@ -92,6 +93,7 @@ const TableArticleCard = ({
       onMouseEnter={() => onMouseEnter?.()}
       onMouseLeave={() => onMouseLeave?.()}
       key={article._id}
+      onClick={() => navigate(`/articles/v2/${article._id}`, { state: { from: location.pathname + location.search } })}
       className={cn(
         "flex justify-between items-center px-3.5 py-3 text-sm hover:bg-muted/45 transition-colors bg-card/60 ",
         "border-b last:border-0 first:rounded-t-xl last:rounded-b-lg"
@@ -99,7 +101,7 @@ const TableArticleCard = ({
       title={`Autor: ${article.createdBy.name}`}
     >
       {/* LEFT SIDE: FileText / Status Icon + Title + Product */}
-      <Link
+      <div
         to={`/articles/v2/${article._id}`}
         state={{ from: location.pathname + location.search }}
         className="flex items-center gap-3 min-w-0 overflow-hidden flex-grow"
@@ -132,7 +134,7 @@ const TableArticleCard = ({
             {article.product.name}
           </span>
         </div>
-      </Link>
+      </div>
 
       {/* RIGHT SIDE: Response Variants, Meta Data, Favourite */}
       <div className="flex items-center gap-4">
