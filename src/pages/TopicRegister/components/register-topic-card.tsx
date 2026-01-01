@@ -9,7 +9,7 @@ interface RegisterTopicCardProps {
 
 const RegisterTopicCard = ({ topic }: RegisterTopicCardProps) => {
   return (
-    <Card className="w-full hover:shadow-md transition-shadow rounded-lg border border-muted/80 py-1 relative overflow-visible bg-card/70">
+    <Card className="w-full hover:shadow-md shadow-xs transition-shadow rounded-lg border  py-1 relative overflow-visible bg-card/70">
       <CardContent className="flex items-center justify-between px-4 py-1 gap-3 w-full min-h-[50px]">
         <div className="flex items-center gap-3 min-w-0">
           <div
