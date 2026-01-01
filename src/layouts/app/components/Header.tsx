@@ -1,7 +1,8 @@
-import { Bell, ChevronDown, Layers, Layers2, LogOut, Plus, PlusCircle, Settings, User } from "lucide-react";
+import { Bell, Bug, ChevronDown, Layers, Layers2, LogOut, Plus, PlusCircle, Settings, User } from "lucide-react";
 
 import { Dropdown } from "@/components/Dropdown";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,16 +13,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import queryClient from "@/config/query.client";
 import { useAuthQuery, useLogoutMutation } from "@/hooks/auth/use-auth";
+import { useFindMyNotificationsQuery } from "@/hooks/notifications/use-notifications";
+import { useSound } from "@/providers/sound-provider";
 import { getAvatarFallbackText } from "@/utils/avatar";
 import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../../../components/ui/tooltip";
-import { useFindMyNotificationsQuery } from "../../../hooks/notifications/use-notifications";
-import { useSound } from "../../../providers/sound-provider";
+
 const backendBase = import.meta.env.VITE_BACKEND_BASE_URL ?? "http://localhost:5000";
+
 interface HeaderProps {
   onCreateWorkspace: () => void;
   onOpenCreateIssueReport: () => void;
@@ -32,6 +35,7 @@ interface HeaderProps {
 }
 
 const workspaces = [];
+
 const Header = ({
   onOpenSettingsModal,
   onCreateWorkspace,
@@ -46,50 +50,37 @@ const Header = ({
   const { soundEnabled } = useSound();
   const initials = getAvatarFallbackText(user?.name);
   const navigate = useNavigate();
-
   const userPermissions = user?.role?.permissions || [];
 
   const avatarUrl = user.profilePicture?.path
     ? `${backendBase}${user.profilePicture.path.replace(/^\/app/, "")}`
     : null;
-  console.log("UR", avatarUrl);
-  const { mutate, isPending } = useLogoutMutation();
+
+  const { mutate } = useLogoutMutation();
 
   const onLogout = () => {
     mutate(undefined, {
       onSuccess: () => {
         queryClient.clear();
         navigate("/auth/login", { replace: true });
-        if (soundEnabled) {
-          const audio = new Audio("/logout-sound.m4a");
-          audio.play().catch(() => {
-            console.log("Nie udało się odtworzyć dźwięku");
-          });
-        }
-
+        if (soundEnabled) new Audio("/logout-sound.m4a").play().catch(() => {});
         toast.success("Zostałeś pomyślnie wylogowany", { position: "bottom-right" });
       },
-      onError: (err) => {
-        toast.error("Wystąpił błąd. Spróbuj ponownie");
-      },
+      onError: () => toast.error("Wystąpił błąd. Spróbuj ponownie"),
     });
   };
 
   const profileMenuOptions = [
     {
       label: (
-        <div className="">
-          <div className="flex items-center mr-4 pb-2">
-            {/* Avatar */}
-            <Avatar className="h-9 w-9 ">
-              <AvatarImage className="object-cover" src={avatarUrl} alt="Avatar" crossOrigin="anonymous" />
-              <AvatarFallback className="text-base font-sembibold bg-primary text-primary-foreground">
-                {initials}
-              </AvatarFallback>
+        <div>
+          <div className="flex items-center gap-3 pb-2">
+            <Avatar>
+              <AvatarImage src={avatarUrl} alt="Avatar" crossOrigin="anonymous" />
+              <AvatarFallback>{initials}</AvatarFallback>
             </Avatar>
-            {/* User Data */}
-            <div className="ml-3 text-left">
-              <p className="font-medium text-foreground">{user?.name}</p>
+            <div className="text-left">
+              <p className="font-medium">{user?.name}</p>
               <p className="text-xs text-muted-foreground">{user?.email}</p>
             </div>
           </div>
@@ -98,38 +89,37 @@ const Header = ({
       ),
       icon: <></>,
       actionHandler: () => {},
-      requiredPermission: null,
+      requiredPermissions: null,
     },
-
     {
       label: "Moje zgłoszenia",
-      icon: <User className="hover:text-primary-foreground" />,
+      icon: <User />,
       requiredPermissions: ["SEND_REPORT"],
-      actionHandler: () => onOpenIssueReportsModal(),
+      actionHandler: onOpenIssueReportsModal,
     },
     {
       label: "Panel Admina",
-      icon: <User className="hover:text-primary-foreground" />,
-      actionHandler: () => navigate("/admin"),
+      icon: <User />,
       requiredPermissions: ["ACCESS_ADMIN_PANEL"],
+      actionHandler: () => navigate("/admin"),
     },
     {
       label: "Ustawienia",
-      icon: <Settings className="hover:text-primary-foreground" />,
-      actionHandler: () => onOpenSettingsModal(),
-      requiredPermission: null,
+      icon: <Settings />,
+      requiredPermissions: null,
+      actionHandler: onOpenSettingsModal,
     },
     {
       label: "Dołącz do kolekcji",
-      icon: <PlusCircle className="hover:text-primary-foreground" />,
-      requiredPermission: null, // każdy użytkownik może dołączyć
-      actionHandler: () => onOpenWorkspaceInviteModal(), // funkcja otwierająca modal z inputem na invite code
+      icon: <PlusCircle />,
+      requiredPermissions: null,
+      actionHandler: onOpenWorkspaceInviteModal,
     },
     {
       label: "Wyloguj się",
-      icon: <LogOut className="hover:text-primary-foreground" />,
-      actionHandler: () => onLogout(),
-      requiredPermission: null,
+      icon: <LogOut />,
+      requiredPermissions: null,
+      actionHandler: onLogout,
     },
   ];
 
@@ -139,105 +129,103 @@ const Header = ({
   });
 
   return (
-    <div className="bg-background sticky top-0 z-40 border-b ">
-      <div className="flex h-14 items-center justify-between px-4 sm:px-6 lg:px-16 py-4 ">
-        <div className="flex items-center gap-4">
-          {/* Primary Actions */}
-          <div className="flex items-center gap-2">
-            {userPermissions.includes("ADD_ARTICLE") && (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    onClick={() => navigate("articles/new")}
-                    size="icon"
-                    variant="ghost"
-                    className="w-9 h-9 flex items-center justify-center bg-primary/10 text-primary rounded-full shadow-sm hover:bg-primary/20 transition-transform duration-150 hover:scale-105"
-                  >
-                    <Plus className="w-6 h-6 stroke-[2]" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent className="bg-muted text-sm rounded-md px-2 py-1 shadow-md">
-                  Dodaj artykuł
-                </TooltipContent>
-              </Tooltip>
-            )}
+    <div className="bg-muted/30 backdrop-blur-sm  sticky top-0 z-50 ">
+      <div className="flex h-14 items-center justify-between px-4 sm:px-6 lg:px-16">
+        {/* Left: Only Problem Report */}
+        <div className="flex items-center gap-3">
+          {userPermissions.includes("SEND_REPORT") && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-background/10 bg-background/20 group"
+                  onClick={onOpenCreateIssueReport}
+                >
+                  <Bug className="w-5 h-5 text-muted-foreground group-hover:text-destructive/60" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent className="text-sm rounded-md px-2 py-1 shadow-md bg-muted">Zgłoś problem</TooltipContent>
+            </Tooltip>
+          )}
+        </div>
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+        {/* Right: Primary Actions + Notifications + Profile */}
+        <div className="flex items-center gap-3">
+          {userPermissions.includes("ADD_ARTICLE") && (
+            <Tooltip>
+              <TooltipTrigger asChild>
                 <Button
                   size="icon"
-                  variant="ghost"
-                  className="w-9 h-9 flex items-center justify-center bg-primary/10 text-primary rounded-full shadow-sm hover:bg-primary/20 transition-transform duration-150 hover:scale-105"
+                  variant="secondary"
+                  onClick={() => navigate("articles/new")}
+                  className="transition-transform hover:scale-105"
                 >
-                  <Layers className="w-6 h-6" />
+                  <Plus className="w-5 h-5" />
                 </Button>
-              </DropdownMenuTrigger>
-
-              <DropdownMenuContent>
-                <DropdownMenuLabel>Kolekcje</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  {workspaces.map((ws) => (
-                    <DropdownMenuItem key={ws._id}>
-                      {ws.color && <div className="w-3 h-3 rounded-full" style={{ backgroundColor: ws.color }} />}
-                      <span className="ml-2">{ws.name}</span>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuGroup>
-                <DropdownMenuItem onClick={onCreateWorkspace}>
-                  <PlusCircle className="w-4 h-4 mr-2" />
-                  Dodaj kolekcję
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          {/* FEEDBACK BUTTON */}
-          {userPermissions.includes("SEND_REPORT") && (
-            <Button onClick={onOpenCreateIssueReport} variant="outline" size="sm" className="relative mr-4">
-              🐞 Zgłoś problem
-              <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-[10px] px-1 py-0.5 rounded">
-                Beta
-              </span>
-            </Button>
+              </TooltipTrigger>
+              <TooltipContent>Dodaj artykuł</TooltipContent>
+            </Tooltip>
           )}
 
-          <Button className="cursor-pointer" variant="ghost" size="icon">
-            <Layers2 />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button size="icon" variant="secondary" className="transition-transform hover:scale-105">
+                <Layers className="w-5 h-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="shadow-lg rounded-xl">
+              <DropdownMenuLabel>Kolekcje</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                {workspaces.map((ws) => (
+                  <DropdownMenuItem key={ws._id}>
+                    {ws.color && <div className="w-3 h-3 rounded-full" style={{ backgroundColor: ws.color }} />}
+                    <span className="ml-2">{ws.name}</span>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuGroup>
+              <DropdownMenuItem onClick={onCreateWorkspace}>
+                <PlusCircle className="w-4 h-4 mr-2" />
+                Dodaj kolekcję
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <Button size="icon" variant="ghost" className="transition-transform hover:scale-105">
+            <Layers2 className="w-5 h-5" />
           </Button>
 
           <Button
-            onClick={() => onOpenNotificationsPanel()}
-            className="relative cursor-pointer"
-            variant="ghost"
             size="icon"
+            variant="ghost"
+            onClick={onOpenNotificationsPanel}
+            className="relative transition-transform hover:scale-105"
           >
-            <Bell className="w-5 h-5 " />
+            <Bell className="w-5 h-5" />
             {unreadCount > 0 && (
-              <span className="absolute -top-1 -right-1 flex items-center justify-center min-w-[18px] h-4 px-1 text-[10px] font-semibold text-white bg-red-600 rounded-full shadow-md animate-pulse">
+              <Badge
+                variant="destructive"
+                size="sm"
+                className="absolute -top-1 -right-1 animate-pulse bg-gradient-to-tr from-red-500 to-pink-500 text-white shadow-lg"
+              >
                 {unreadCount}
-              </span>
+              </Badge>
             )}
           </Button>
 
           <Dropdown
-            position={{
-              align: "end",
-              side: "bottom",
-              sideOffset: 7,
-              alignOffset: 0,
-            }}
+            position={{ align: "end", side: "bottom", sideOffset: 7 }}
             options={filteredProfileOptions}
             triggerBtn={
-              <div className="rounded-full flex items-center gap-0.5 cursor-pointer bg-muted/90 py-1 px-1.5 hover:bg-muted ml-0.5 ">
-                <Avatar className="size-7.5 ">
-                  <AvatarImage className="object-cover" src={avatarUrl} alt={user?.name} crossOrigin="anonymous" />
+              <div className="flex items-center gap-2 rounded-full px-2 py-1 bg-muted/90 hover:bg-muted cursor-pointer">
+                <Avatar className="h-8.5 w-8.5">
+                  <AvatarImage src={avatarUrl ?? undefined} alt={user?.name ?? "Avatar"} crossOrigin="anonymous" />
                   <AvatarFallback className="text-base font-sembibold bg-primary text-primary-foreground">
                     {initials}
                   </AvatarFallback>
                 </Avatar>
-                <ChevronDown className="chevron-icon h-3.5 w-3.5" />
+                <ChevronDown className="w-4 h-4 text-muted-foreground" />
               </div>
             }
           />

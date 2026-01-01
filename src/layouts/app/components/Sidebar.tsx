@@ -131,14 +131,13 @@ export const Sidebar = ({
       style={{
         background: "var(--sidebar)",
         boxShadow: "var(--sidebar-shadow)",
-        borderColor: "var(--sidebar-border)",
       }}
       className={cn(
-        "flex flex-col border-r bg-sidebar transition-all duration-300",
-        isCollapsed ? "w-18 md:w[80px]" : "w-16 md:w-[240px] "
+        "flex flex-col border-r  transition-all duration-300",
+        isCollapsed ? "w-18 md:w[80px]" : "w-16 md:w-[240px] border-sidebar-border"
       )}
     >
-      <div className="flex h-14 items-center border-b px-4 mb-4 gap-2">
+      <div className="flex h-14 items-center border-b px-4 mb-1.5 gap-2 ">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button
