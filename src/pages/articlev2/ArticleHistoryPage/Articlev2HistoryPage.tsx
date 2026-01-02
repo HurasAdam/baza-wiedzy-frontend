@@ -4,6 +4,7 @@ import { useFindArticleHistoryQuery } from "@/hooks/articles-history/use-article
 import {
   ArrowLeft,
   CheckCircle,
+  Clock,
   Edit3,
   Eye,
   Loader,
@@ -15,7 +16,7 @@ import {
 } from "lucide-react";
 import { useMemo } from "react";
 import { Link, useNavigate, useOutletContext, useParams } from "react-router-dom";
-import type { ArticleOutletContext } from "../article/ArticleMainPage";
+import type { ArticleOutletContext } from "../../article/ArticleMainPage";
 
 export function Articlev2HistoryPage() {
   const { id } = useParams();
@@ -94,7 +95,6 @@ export function Articlev2HistoryPage() {
                 </div>
               </div>
 
-              {/* Przycisk szczegóły */}
               <Link to={`/articles/${id}/history/${item._id}`} className="flex-shrink-0">
                 <Button size="sm" variant="outline" className="flex items-center gap-2">
                   <Eye className="w-4 h-4" /> Szczegóły
@@ -141,6 +141,7 @@ function eventConfig(eventType: string | undefined) {
     restored: { label: "Przywrócono artykuł", Icon: RotateCcw, bgClass: "bg-amber-500" },
     verified: { label: "Weryfikacja artykułu", Icon: CheckCircle, bgClass: "bg-emerald-700" },
     unverified: { label: "Odwołano weryfikację", Icon: XCircle, bgClass: "bg-red-600" },
+    expired: { label: "Wymaga ponownej weryfikacji", Icon: Clock, bgClass: "bg-amber-500/65" },
   };
   return map[eventType ?? ""] ?? { label: "Zmiana", Icon: Edit3, bgClass: "bg-primary" };
 }

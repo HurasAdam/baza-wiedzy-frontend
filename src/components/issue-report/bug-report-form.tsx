@@ -78,7 +78,6 @@ const BugReportForm = ({ onSend, isLoading }: Props) => {
   const [files, setFiles] = useState<File[] | null>(null);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
     try {
       onSend({ formData: values });
     } catch (error) {
