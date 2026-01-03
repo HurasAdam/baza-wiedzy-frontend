@@ -131,7 +131,7 @@ export const Sidebar = ({
       }}
       className={cn(
         "flex flex-col border-r  transition-all duration-300",
-        isCollapsed ? "w-18 md:w[80px]" : "w-16 md:w-[240px] border-sidebar-border"
+        isCollapsed ? "w-22 md:w[80px]" : "w-16 md:w-[240px] border-sidebar-border"
       )}
     >
       <div className="flex h-14 items-center border-b px-4 mb-1.5 gap-2 ">
