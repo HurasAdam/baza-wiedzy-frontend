@@ -20,9 +20,9 @@ const JstProjectsHeader = ({ onCreateJstProject, onCreateJstSchool }: JstProject
   );
 
   return (
-    <div className="flex justify-between mb-6">
-      <h1 className="text-xl font-semibold text-foreground flex items-center gap-1.5">
-        <School className="w-6 h-6" /> Szkoły projektowe
+    <div className="flex justify-between mb-10">
+      <h1 className="text-2xl font-semibold text-foreground flex items-center justify-center gap-1.5">
+        <School className="w-6 h-6" /> Szkoły <span className="text-muted-foreground text-sm">(JST)</span>
       </h1>
       <Dropdown triggerBtn={triggerBtn} options={dropdownOptions} position={{ align: "end" }} />
     </div>

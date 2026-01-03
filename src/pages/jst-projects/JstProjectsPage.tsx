@@ -39,7 +39,7 @@ export const JstProjectsPage = () => {
   const onCreateJstProject = () => setIsCreatingJstProject(true);
 
   return (
-    <div className="flex w-full max-w-7xl mx-auto">
+    <div className="flex w-full py-2 max-w-7xl mx-auto">
       <div className="w-full">
         <JstProjectsHeader onCreateJstProject={onCreateJstProject} onCreateJstSchool={onCreateJstSchool} />
 

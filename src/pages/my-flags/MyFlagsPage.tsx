@@ -92,11 +92,11 @@ export const MyFlagsPage = () => {
   }
 
   return (
-    <div className="flex flex-col h-full w-full py-6 px-8 lg:px-12 bg-gradient-to-br from-background via-background/90 to-background/60 backdrop-blur-md max-w-7xl mx-auto">
+    <div className="flex flex-col h-full w-full py-3 px-8 lg:px-12 bg-gradient-to-br from-background via-background/90 to-background/60 backdrop-blur-md max-w-7xl mx-auto">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-semibold text-foreground">Moje etykiety</h1>
+          <h1 className="text-2xl font-semibold text-foreground">Moje etykiety</h1>
           <p className="text-muted-foreground text-sm mt-1">Zarządzaj dodanymi etykietami</p>
         </div>
         <Button onClick={handleCreateFlag} size="sm" className="gap-2 shadow-md hover:shadow-lg transition-all">
