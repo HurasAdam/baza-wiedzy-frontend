@@ -8,7 +8,7 @@ import { useDeleteWorkspaceMutation, useUpdateWorkspaceMutation } from "../../ho
 export const WorkspaceManageSettingsPage = () => {
   const navigate = useNavigate();
   const { mutate, isPending } = useUpdateWorkspaceMutation();
-  const { mutate: deleteWorkspaceMutate } = useDeleteWorkspaceMutation();
+  const { mutate: deleteWorkspaceMutate, isPending: isDeleteWorkspacePending } = useDeleteWorkspaceMutation();
   const { workspace, permissions } = useOutletContext();
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
@@ -85,7 +85,7 @@ export const WorkspaceManageSettingsPage = () => {
         isOpen={isDeleteOpen}
         type="warning"
         title="Usunąć kolekcję?"
-        isLoading={false}
+        isLoading={isDeleteWorkspacePending}
         requireConfirmation
         isConfirmEnabled
         onCancel={() => setIsDeleteOpen(false)}
