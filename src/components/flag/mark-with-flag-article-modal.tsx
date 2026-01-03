@@ -29,7 +29,7 @@ export const MarkWithFlagArticleModal = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen} modal>
-      <DialogContent className="w-[460px] min-w-lg max-w-[95vw] min-h-[74vh] max-h-[74vh] p-0 bg-background/95 backdrop-blur-xl rounded-2xl shadow-xl border border-border/30  flex flex-col">
+      <DialogContent className="lg:w-[460px] min-w-lg max-w-[95vw] min-h-[74vh] max-h-[74vh] p-0 bg-background/95 backdrop-blur-xl rounded-2xl shadow-xl border border-border/30  flex flex-col">
         <DialogHeader className="px-6 pt-6 pb-3 border-b border-border/20 bg-gradient-to-r from-background/80 to-muted/40 flex items-center gap-2">
           <DialogTitle className="text-lg font-semibold text-foreground flex items-center gap-2">
             <Flag className="w-5 h-5 text-primary" />
