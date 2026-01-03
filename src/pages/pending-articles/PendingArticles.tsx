@@ -153,7 +153,7 @@ export const PendingArticles: React.FC = () => {
   };
 
   return (
-    <div className=" pb-10 max-w-[1440px] mx-auto">
+    <div className=" pb-10 max-w-[1400px] mx-auto">
       <PendingArticlesHeader
         currentStatus={currentStatus}
         setCurrentStatus={setCurrentStatus}
