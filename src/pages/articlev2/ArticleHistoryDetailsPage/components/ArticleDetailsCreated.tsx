@@ -4,13 +4,13 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { formatDate } from "../../../utils/format-date";
+import { formatDate } from "../../../../utils/format-date";
 
-interface ArticleHistoryDetailsCreatedProps {
+interface Props {
   snapshot: any;
 }
 
-export const ArticleHistoryDetailsCreated = ({ snapshot }: ArticleHistoryDetailsCreatedProps) => {
+export const ArticeDetailsCreated = ({ snapshot }: Props) => {
   const statusLabels: Record<string, string> = {
     approved: "Zatwierdzony",
     pending: "Wymaga weryfikacji",
@@ -19,8 +19,7 @@ export const ArticleHistoryDetailsCreated = ({ snapshot }: ArticleHistoryDetails
   };
 
   return (
-    <div className="p-6 space-y-6 ">
-      {/* Nagłówek */}
+    <div className="space-y-6 ">
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
@@ -45,7 +44,6 @@ export const ArticleHistoryDetailsCreated = ({ snapshot }: ArticleHistoryDetails
         </CardHeader>
       </Card>
 
-      {/* Szczegóły */}
       <div className="grid md:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
@@ -79,7 +77,6 @@ export const ArticleHistoryDetailsCreated = ({ snapshot }: ArticleHistoryDetails
         </Card>
       </div>
 
-      {/* Warianty */}
       <Card>
         <CardHeader>
           <CardTitle>Warianty odpowiedzi</CardTitle>
@@ -111,7 +108,6 @@ export const ArticleHistoryDetailsCreated = ({ snapshot }: ArticleHistoryDetails
         </CardContent>
       </Card>
 
-      {/* Metadata */}
       <Card>
         <CardHeader>
           <CardTitle>Metadane</CardTitle>

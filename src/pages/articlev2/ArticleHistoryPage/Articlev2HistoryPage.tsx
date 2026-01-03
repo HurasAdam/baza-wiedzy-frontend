@@ -95,7 +95,7 @@ export function Articlev2HistoryPage() {
                 </div>
               </div>
 
-              <Link to={`/articles/${id}/history/${item._id}`} className="flex-shrink-0">
+              <Link to={`/articles/v2/${id}/history/${item._id}`} className="flex-shrink-0">
                 <Button size="sm" variant="outline" className="flex items-center gap-2">
                   <Eye className="w-4 h-4" /> Szczegóły
                 </Button>

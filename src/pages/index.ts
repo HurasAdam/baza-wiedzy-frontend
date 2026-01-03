@@ -20,6 +20,7 @@ import { ArticleMainPage } from "./article/ArticleMainPage";
 import { ArticlesPage } from "./articles/ArticlesPage";
 import { Articlev2AttachmentsPage } from "./articlev2/ArticleAttachmentsPage/Articlev2AttachmentsPage";
 import { ArticleEditPage } from "./articlev2/ArticleEditPage/ArticleEditPage";
+import { Articlev2HistoryDetailPage } from "./articlev2/ArticleHistoryDetailsPage/ArticleHistoryDetailsPage";
 import { Articlev2HistoryPage } from "./articlev2/ArticleHistoryPage/Articlev2HistoryPage";
 import { Articlev2MainPage } from "./articlev2/ArticleMainPage/Articlev2MainPage";
 import { ForgotPasswordPage } from "./auth/forgot-password/ForgotPasswordPage";
@@ -109,4 +110,5 @@ export const PAGES = {
   GlobalNotFoundPage,
   GlobalServerErrorPage,
   GlobalBadRequestPage,
+  Articlev2HistoryDetailPage,
 };

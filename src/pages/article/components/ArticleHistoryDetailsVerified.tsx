@@ -29,7 +29,7 @@ export const ArticleHistoryDetailsVerified = ({ changes, verifiedBy, verifiedAt 
   const statusField = changes.find((c) => c.field === "status");
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 ">
       <Card>
         <CardHeader>
           <CardTitle>Artykuł został zweryfikowany</CardTitle>
