@@ -98,7 +98,7 @@ export const FlaggedArticlesPage: React.FC = () => {
   );
 
   return (
-    <div className="flex flex-col gap-2 max-w-[1440px] mx-auto">
+    <div className="flex flex-col gap-2 max-w-[1400px] mx-auto">
       <FlaggedArticlesHeader
         isLoading={isFlagsLoading}
         userFlags={userFlags}
