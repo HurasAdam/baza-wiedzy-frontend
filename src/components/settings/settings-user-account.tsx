@@ -98,22 +98,6 @@ const SettingsAccountTab = () => {
         />
 
         <Field
-          icon={CheckCircle}
-          label="Zweryfikowane"
-          description="Czy Twój email został zweryfikowany"
-          value={
-            <div
-              className="px-2 py-1"
-              style={{
-                color: user.verified ? "#10B981" : "#EF4444",
-              }}
-            >
-              {user.verified ? "Tak" : "Nie"}
-            </div>
-          }
-        />
-
-        <Field
           icon={CalendarCheck}
           label="Utworzono"
           description="Data utworzenia konta"
