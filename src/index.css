@@ -282,7 +282,7 @@
   --chart-5: oklch(0.645 0.246 16.439);
   --sidebar: oklch(0.274 0.006 286.033 / 0.3);
 
-  --sidebar-foreground: oklch(0.76.5 0.015 285.903);
+  --sidebar-foreground: oklch(0.755 0.015 286.067);
   --sidebar-primary: oklch(0.406 0.125 262.881);
   --sidebar-primary-foreground: oklch(0.98 0.016 73.684);
   --sidebar-accent: oklch(0.406 0.125 262.881);
@@ -802,11 +802,10 @@
 }
 
 :root[data-sidebar="sidebar-style-3"][class*="light"] {
-  /* bardziej matowy, ciemny wariant z subtelnym primary */
-  --sidebar: color-mix(in srgb, var(--primary) 10%, #121212 90%); /* primary ledwo widoczny, ciemny dominujący */
-  --sidebar-foreground: #d0d0d0; /* delikatny jasny tekst */
-  --sidebar-accent: color-mix(in srgb, var(--primary) 20%, #121212 80%); /* przyciski/hover subtelnie primary */
-  --sidebar-border: #1f1f1f; /* stonowana granica */
+  --sidebar: color-mix(in srgb, var(--primary) 10%, #121212 90%);
+  --sidebar-foreground: #d0d0d0;
+  --sidebar-accent: color-mix(in srgb, var(--primary) 20%, #121212 80%);
+  --sidebar-border: #1f1f1f;
 }
 
 /*  DARK THEME SIDEBAR VARIANTS */
@@ -821,7 +820,7 @@
   /* baza ciemna */
   --sidebar-base: var(--card);
 
-  /* delikatna tekstura pasków / siatki */
+  /*  tekstura   siatki */
   --sidebar: repeating-linear-gradient(
     45deg,
     color-mix(in srgb, var(--sidebar-base) 95%, var(--primary) 5%) 0px,
@@ -834,7 +833,7 @@
   --sidebar-border: color-mix(in srgb, var(--primary) 4%, rgba(255, 255, 255, 0.02));
 
   /* tekst i akcenty */
-  --sidebar-foreground: var(--card-foreground);
+  --sidebar-foreground: oklch(0.76 0.015 286.067);
   --sidebar-accent: color-mix(in srgb, var(--primary) 12%, transparent);
 }
 
@@ -887,6 +886,7 @@
   --sidebar-border: rgba(255, 255, 255, 0.05);
   --sidebar-logo: rgba(32, 32, 38, 0.9);
   --sidebar-shadow: inset 0 0 12px rgba(0, 0, 0, 0.25);
+  --sidebar-foreground: oklch(0.717 0.015 286.067);
 }
 
 /* DEEP THEME SIDEBAR VARIANTS */
