@@ -28,7 +28,11 @@ export const TableFlaggedArticleCard = ({ article, openFlagModal, onUnflag }: Ta
   return (
     <div
       key={article._id}
-      className="flex items-center justify-between px-5 py-3 text-sm hover:bg-muted/70 transition-colors rounded-lg"
+      className="flex items-center justify-between px-5 py-3 text-sm
+        hover:bg-muted/70 transition-colors
+        first:rounded-t-xl first:border-t
+        last:rounded-b-xl last:border-b
+      "
       title={`Autor: ${article.createdBy.name}`}
     >
       <div className="flex items-center flex-1 min-w-0">
@@ -46,7 +50,7 @@ export const TableFlaggedArticleCard = ({ article, openFlagModal, onUnflag }: Ta
         )}
 
         <Link
-          to={`/articles/${article._id}`}
+          to={`/articles/v2/${article._id}`}
           state={{ from: location.pathname + location.search }}
           className="flex flex-col overflow-hidden flex-grow ml-3"
         >
