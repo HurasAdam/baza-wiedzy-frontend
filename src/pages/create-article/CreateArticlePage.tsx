@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { AxiosError } from "axios";
-import { Loader, Plus } from "lucide-react";
+import { Loader } from "lucide-react";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +16,8 @@ import type { ProductCategory } from "../../types/product-category";
 import type { Tag } from "../../types/tags";
 import { mapToSelectOptions } from "../../utils/form-mappers";
 import { articleSchema, type ArticleCreateDto, type ArticleFormData } from "../../validation/article.schema";
+import { Banner } from "./components/Banner";
+import { Header } from "./components/Header";
 
 export type SelectOption = {
   label: string;
@@ -97,6 +99,7 @@ export const CreateArticlePage = () => {
   });
 
   const handleSubmit = form.handleSubmit(onSave);
+  const { isDirty } = form.formState;
 
   const formattedProducts: SelectOption[] = mapToSelectOptions<IProduct>(
     products,
@@ -120,7 +123,6 @@ export const CreateArticlePage = () => {
     return (
       <div className="flex justify-center items-center h-screen">
         <div className="loader">Ładowanie...</div>
-        {/* Możesz podmienić na swój spinner lub ikonę */}
       </div>
     );
   }
@@ -128,38 +130,10 @@ export const CreateArticlePage = () => {
   return (
     tags && (
       <div className="pb-12 mx-auto ">
-        <header className="py-1 flex  space-x-6 bg-background justify-between">
-          <div className="flex gap-6 items-start">
-            <div className="rounded-lg p-3 bg-primary/90 text-primary-foreground">
-              <Plus className="w-5 h-5 " />
-            </div>
-            <div>
-              <h1 className="text-lg flex items-center font-bold leading-tight tracking-tight text-foreground mb-1">
-                Dodaj nowy artykuł
-              </h1>
-              <p className="text-sm text-muted-foreground max-w-2xl">
-                Zaktualizuj szczegóły artykułu, przypisz go do produktu i dostosuj jego metadane.
-              </p>
-            </div>
-          </div>
+        <Header onBack={() => navigate(-1)} />
 
-          {/*  PRZYCISKI */}
-          <div className="flex justify-end gap-3 mt-6 px-2">
-            <Button variant="outline" onClick={() => navigate(-1)}>
-              Anuluj
-            </Button>
-            <Button variant="default" onClick={handleSubmit} disabled={isCreateLoading}>
-              {isCreateLoading ? (
-                <div className="flex items-center gap-2">
-                  <Loader className="animate-spin w-4 h-4" />
-                  Zapisuję...
-                </div>
-              ) : (
-                "Zapisz"
-              )}
-            </Button>
-          </div>
-        </header>
+        <Banner isDirty={isDirty} isLoading={isCreateLoading} onSave={handleSubmit} onCancel={() => navigate(-1)} />
+
         <FormProvider {...form}>
           <ArticleForm
             products={formattedProducts}
@@ -169,7 +143,7 @@ export const CreateArticlePage = () => {
             loadingCategories={loadingCategories}
           />
         </FormProvider>
-        {/*  PRZYCISKI */}
+
         <div className="flex justify-end gap-3 mt-6 px-2">
           <Button variant="outline" onClick={() => navigate(-1)}>
             Anuluj
