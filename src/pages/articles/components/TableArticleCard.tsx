@@ -1,7 +1,6 @@
-import { FileText, HeartIcon, List, Loader, Star } from "lucide-react";
+import { FileText, List, Star } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "../../../components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../../components/ui/tooltip";
 import { cn } from "../../../lib/utils";
 
@@ -157,27 +156,7 @@ const TableArticleCard = ({
           </div>
         )}
 
-        {/* Favourite */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="ml-6"
-          onClick={(e) => {
-            e.stopPropagation();
-            toggleFavourite(article._id);
-          }}
-        >
-          {toggleFavouriteLoading ? (
-            <Loader className="animate-spin w-5 h-5" />
-          ) : (
-            <HeartIcon
-              className={cn(
-                "w-5 h-5",
-                article.isFavourite ? "text-primary/65 fill-primary/65" : "text-muted-foreground"
-              )}
-            />
-          )}
-        </Button>
+        <div className="w-16" />
       </div>
     </div>
   );
