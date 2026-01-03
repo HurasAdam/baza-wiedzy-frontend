@@ -64,7 +64,7 @@ const navItems: NavItem[] = [
   // { title: "Moje wpisy", href: `/my-entries`, icon: UserRoundPen, requiredPermission: "ADD_ARTICLE" },
   { title: "FAQ", href: "/faq", icon: BookOpen },
   { title: "Statystyki", href: `/statistics`, icon: ChartColumnDecreasing },
-  { title: "Szkoły projektowe", href: `/jst-projects`, icon: School },
+  { title: "Szkoły JST", href: `/jst-projects`, icon: School },
   { title: "Działy i kontakty", href: `/achieved`, icon: BookUser },
 
   {
