@@ -1,4 +1,4 @@
-import { Bell, Bug, ChevronDown, Layers, Layers2, LogOut, Plus, PlusCircle, Settings, User } from "lucide-react";
+import { Bell, Bug, ChevronDown, Layers, LogOut, Plus, PlusCircle, Settings, Shield, User } from "lucide-react";
 
 import { Dropdown } from "@/components/Dropdown";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -92,16 +92,10 @@ const Header = ({
       requiredPermissions: null,
     },
     {
-      label: "Moje zgłoszenia",
-      icon: <User />,
-      requiredPermissions: ["SEND_REPORT"],
-      actionHandler: onOpenIssueReportsModal,
-    },
-    {
-      label: "Panel Admina",
-      icon: <User />,
-      requiredPermissions: ["ACCESS_ADMIN_PANEL"],
-      actionHandler: () => navigate("/admin"),
+      label: "Dołącz do kolekcji",
+      icon: <PlusCircle />,
+      requiredPermissions: null,
+      actionHandler: onOpenWorkspaceInviteModal,
     },
     {
       label: "Ustawienia",
@@ -110,11 +104,12 @@ const Header = ({
       actionHandler: onOpenSettingsModal,
     },
     {
-      label: "Dołącz do kolekcji",
-      icon: <PlusCircle />,
-      requiredPermissions: null,
-      actionHandler: onOpenWorkspaceInviteModal,
+      label: "Panel admina",
+      icon: <User />,
+      requiredPermissions: ["ACCESS_ADMIN_PANEL"],
+      actionHandler: () => navigate("/admin"),
     },
+
     {
       label: "Wyloguj się",
       icon: <LogOut />,
@@ -164,7 +159,7 @@ const Header = ({
                   <Plus className="w-5 h-5" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>Dodaj artykuł</TooltipContent>
+              <TooltipContent className="bg-muted">Dodaj artykuł</TooltipContent>
             </Tooltip>
           )}
 
@@ -192,10 +187,25 @@ const Header = ({
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Button size="icon" variant="ghost" className="transition-transform hover:scale-105">
-            <Layers2 className="w-5 h-5" />
-          </Button>
+          {userPermissions.includes("ACCESS_ADMIN_PANEL") && (
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={() => navigate("/admin")}
+              className=" transition-transform hover:scale-105"
+            >
+              <Shield className="w-5 h-5" />
+            </Button>
+          )}
 
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={onOpenSettingsModal}
+            className=" transition-transform hover:scale-105"
+          >
+            <Settings className="w-5 h-5" />
+          </Button>
           <Button
             size="icon"
             variant="ghost"
