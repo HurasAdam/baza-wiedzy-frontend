@@ -18,5 +18,6 @@ export const PROTECTED_ROUTES = {
   CREATE_FAQ: "faq/create",
   MY_FLAGS: "my-flags",
   REPORTS: "reports",
+  REPORTS_ID: "reports/:id",
   MY_WORKSPACES: "my-workspaces",
 };

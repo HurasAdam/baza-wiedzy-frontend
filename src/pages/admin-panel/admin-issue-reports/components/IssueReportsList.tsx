@@ -116,7 +116,7 @@ const IssueReportsList = ({ isLoading, isError, error, reports, navigate }: Issu
                     {
                       label: "Szczegóły",
                       icon: <Bug className="w-4 h-4" />,
-                      actionHandler: () => navigate(`/admin/manage-reports/${report._id}`),
+                      actionHandler: () => navigate(`/reports/${report._id}`),
                     },
                     {
                       label: "Usuń",

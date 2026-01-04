@@ -45,6 +45,7 @@ import { MyWorkspaces } from "./my-workspaces/MyWorkspaces";
 import { NotFoundPage } from "./notFound/NotFoungPage";
 import { OnboardingPage } from "./onboarding/OnboardingPage";
 import { PendingArticles } from "./pending-articles/PendingArticles";
+import { ReportDetailsPage } from "./report/ReportDetailsPage";
 import { ReportsPage } from "./reports/ReportsPage";
 import { StatisticsPage } from "./statistics/StatisticsPage";
 import { TopicRegisterPage } from "./TopicRegister/TopicRegisterPage";
@@ -111,4 +112,5 @@ export const PAGES = {
   GlobalServerErrorPage,
   GlobalBadRequestPage,
   Articlev2HistoryDetailPage,
+  ReportDetailsPage,
 };
