@@ -11,7 +11,7 @@ export function MetaSection({ report }: Props) {
   const status = statusConfig[report.status];
 
   return (
-    <div className="lg:w-85 lg:sticky lg:top-6 h-max space-y-4 mt-6 lg:mt-0">
+    <div className="lg:w-88 lg:sticky lg:top-6 h-max space-y-4 mt-6 lg:mt-0">
       <Card className="p-6 shadow-lg w-full bg-background/95">
         <h3 className="text-md font-semibold mb-4 border-b border-border pb-2">Szczegóły zgłoszenia</h3>
         <div className="flex flex-col divide-y divide-border">
@@ -35,7 +35,7 @@ export function MetaSection({ report }: Props) {
           <MetaRow
             icon={<Fingerprint className="w-5 h-5 text-muted-foreground" />}
             label="ID zgłoszenia"
-            value={`#${report.issueNumber ?? report._id.slice(0, 6)}`}
+            value={`${report.ticketNumber}`}
           />
           <MetaRow
             icon={<CircleDot className="w-5 h-5 text-muted-foreground" />}
