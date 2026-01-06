@@ -1,11 +1,9 @@
 import { issueReportsService } from "@/services/issue-report.service";
-import type { IssueReportFormData } from "@/types/issue-report";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useSendIssueReportMutation = () => {
   return useMutation({
-    mutationFn: (data: IssueReportFormData) =>
-      issueReportsService.sendIssueReport(data),
+    mutationFn: (payload) => issueReportsService.sendIssueReport(payload),
   });
 };
 

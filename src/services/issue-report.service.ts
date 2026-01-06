@@ -1,15 +1,13 @@
 import api from "@/config/api.client";
 
-import type { IssueReport, IssueReportFormData } from "@/types/issue-report";
+import type { IssueReport } from "@/types/issue-report";
+import type { BugReportFormValues } from "../components/issue-report/bug-report-form";
 
 const BASE_URL = "/issue-report";
 
-const sendIssueReport = async ({
-  formData,
-}: {
-  formData: IssueReportFormData;
-}) => {
-  return api.post(BASE_URL, { ...formData });
+const sendIssueReport = async (payload: BugReportFormValues) => {
+  console.log("FORM DATA WYYSLANE TO :", payload);
+  return api.post(BASE_URL, payload);
 };
 
 const find = async (params?: URLSearchParams): Promise<IssueReport[]> => {

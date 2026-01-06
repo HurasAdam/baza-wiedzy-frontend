@@ -11,7 +11,7 @@ interface IssueReportAuthor {
   email: string;
 }
 
-interface Report {
+export interface Report {
   _id: string;
   title: string;
   description: string;
