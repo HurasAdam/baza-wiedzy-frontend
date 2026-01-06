@@ -1,108 +1,125 @@
-import type { z } from "zod";
-import { Button } from "../ui/button";
-import { Dialog, DialogContent } from "../ui/dialog";
+import { useSendIssueReportMutation } from "@/hooks/issue-report/use-issue-report";
 import type { AxiosError } from "axios";
-import { ArrowBigLeftIcon } from "lucide-react";
+import { ArrowLeft, Bug, Lightbulb } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
+import type { z } from "zod";
 import queryClient from "../../config/query.client";
 import { jstProjectSchema } from "../../validation/jst-project.schema";
-import IssueReportSelector from "./issue-report-selector";
-import { useState } from "react";
-import ProposalReportForm from "./proposal-report-form";
+import { Button } from "../ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import BugReportForm from "./bug-report-form";
-import { useSendIssueReportMutation } from "@/hooks/issue-report/use-issue-report";
+import IssueReportSelector from "./issue-report-selector";
+import ProposalReportForm from "./proposal-report-form";
 
-interface CreateWorkspaceProps {
+interface Props {
   closeOnOutsideClick?: boolean;
   isCreatingIssueReport: boolean;
-  setIsCreatingIssueReport: (isCreatingIssueReport: boolean) => void;
+  setIsCreatingIssueReport: (v: boolean) => void;
 }
 
 export type JstProjectForm = z.infer<typeof jstProjectSchema>;
+
+const MODE_CONFIG = {
+  bug: {
+    title: "Zgłoś błąd aplikacji",
+    description: "Opisz problem, który wystąpił podczas korzystania z aplikacji",
+    icon: Bug,
+    iconClass: "text-red-500",
+  },
+  proposal: {
+    title: "Zaproponuj usprawnienie",
+    description: "Podziel się pomysłem na nową funkcję lub ulepszenie",
+    icon: Lightbulb,
+    iconClass: "text-amber-500",
+  },
+};
 
 export const SendIssueReportModal = ({
   closeOnOutsideClick = false,
   isCreatingIssueReport,
   setIsCreatingIssueReport,
-}: CreateWorkspaceProps) => {
+}: Props) => {
   const [mode, setMode] = useState<"bug" | "proposal" | null>(null);
   const { mutate, isPending } = useSendIssueReportMutation();
-  const onSubmit = (data: JstProjectForm) => {
+
+  const onSubmit = (data) => {
+    console.log(data);
     mutate(data, {
       onSuccess: () => {
         setIsCreatingIssueReport(false);
-        toast.success("Zgłoszenie zostało przesłane pomyślnie.", {
-          description: "Dziękujemy za przesłanie informacji.",
-          duration: 5000,
+        toast.success("Zgłoszenie zostało wysłane", {
+          description: "Dziękujemy za Twoją informację 🙌",
         });
         queryClient.invalidateQueries({ queryKey: ["issue-reports"] });
       },
       onError: (error) => {
         const { status } = error as AxiosError;
         if (status === 409) {
-          toast.error(
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "12px",
-                fontFamily: "Inter, sans-serif",
-                color: "#991b1b",
-                fontSize: "14px",
-              }}
-            >
-              <div>
-                <div style={{ fontWeight: 600, marginBottom: 2 }}>
-                  Błąd: Duplikat nazwy projektu
-                </div>
-                <div style={{ opacity: 0.8 }}>
-                  Projekt o podanej nazwie już istnieje. Wybierz inną nazwę.
-                </div>
-              </div>
-            </div>,
-            { duration: 7000 }
-          );
+          toast.error("Takie zgłoszenie już istnieje");
           return;
         }
-
-        toast.error("Wystapił błąd, spróbuj ponownie");
+        toast.error("Wystąpił błąd, spróbuj ponownie");
       },
     });
   };
 
+  const modeConfig = mode ? MODE_CONFIG[mode] : null;
+  const Icon = modeConfig?.icon;
+
   return (
-    <Dialog
-      open={isCreatingIssueReport}
-      onOpenChange={setIsCreatingIssueReport}
-      modal={true}
-    >
+    <Dialog open={isCreatingIssueReport} onOpenChange={setIsCreatingIssueReport}>
       <DialogContent
+        {...(!closeOnOutsideClick ? { onInteractOutside: (e) => e.preventDefault() } : {})}
+        className="
+        min-w-xl
+        md:min-w-3xl
+        xl:min-w-5xl
+          w-[95vw] 
+          min-h-[86vh]
+          max-h-[86vh]
+      p-0
+      flex flex-col
+      rounded-xl shadow-xl bg-background/95 backdrop-blur-sm border 
+    "
         onAnimationEnd={(e) => {
           if (e.currentTarget.getAttribute("data-state") === "closed") {
             setMode(null);
           }
         }}
-        {...(!closeOnOutsideClick
-          ? { onInteractOutside: (e) => e.preventDefault() }
-          : {})}
-        className="min-h-[84vh] max-h-[84vh] overflow-y-auto scrollbar-custom  min-w-5xl w-full"
       >
-        {mode === null ? (
-          <IssueReportSelector onSelect={setMode} />
-        ) : (
-          <div className="space-y-3 bg-background h-full">
-            <div className="flex justify-between items-center">
-              <Button variant="ghost" onClick={() => setMode(null)}>
-                <ArrowBigLeftIcon size={19} />
-              </Button>
+        {/* HEADER */}
+        {mode && modeConfig && (
+          <DialogHeader className="rounded-t-xl border-b px-6 py-4 flex items-start gap-4">
+            <Button variant="ghost" size="icon" onClick={() => setMode(null)}>
+              <ArrowLeft />
+            </Button>
+
+            <div className="flex items-start gap-3">
+              {Icon && (
+                <div className="mt-0.5 flex h-10 w-10 items-center justify-center rounded-md border bg-muted">
+                  <Icon className={`h-5 w-5 ${modeConfig.iconClass}`} />
+                </div>
+              )}
+
+              <div>
+                <DialogTitle className="text-lg font-semibold">{modeConfig.title}</DialogTitle>
+                <p className="text-sm text-muted-foreground">{modeConfig.description}</p>
+              </div>
             </div>
-            {mode === "bug" ? (
-              <BugReportForm onSend={onSubmit} isLoading={isPending} />
-            ) : (
-              <ProposalReportForm onSend={onSubmit} />
-            )}
-          </div>
+          </DialogHeader>
         )}
+
+        {/* SCROLLABLE CONTENT */}
+        <div className="flex-1 overflow-y-auto px-6 py-6 scrollbar-custom">
+          {mode === null ? (
+            <IssueReportSelector onSelect={setMode} />
+          ) : mode === "bug" ? (
+            <BugReportForm onSend={onSubmit} isLoading={isPending} />
+          ) : (
+            <ProposalReportForm onSend={onSubmit} isLoading={isPending} />
+          )}
+        </div>
       </DialogContent>
     </Dialog>
   );
