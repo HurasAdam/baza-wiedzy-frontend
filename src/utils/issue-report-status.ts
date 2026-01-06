@@ -1,7 +1,7 @@
 export const statusConfig = {
   open: {
     label: "Otwarte",
-    badge: "bg-sky-600/90 text-blue-50",
+    badge: "bg-sky-600/70 text-blue-50",
   },
   resolved: {
     label: "Ukończone",

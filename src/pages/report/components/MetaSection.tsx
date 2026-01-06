@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { statusConfig } from "@/utils/issue-report-status";
+import { statusConfig, type ReportStatus } from "@/utils/issue-report-status";
 import { BugIcon, Calendar, CircleDot, Fingerprint, LightbulbIcon, Shapes, Users } from "lucide-react";
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
 }
 
 export function MetaSection({ report }: Props) {
-  const status = statusConfig[report.status];
+  const status = statusConfig[report.status as ReportStatus];
 
   return (
     <div className="lg:w-88 lg:sticky lg:top-6 h-max space-y-4 mt-6 lg:mt-0">
