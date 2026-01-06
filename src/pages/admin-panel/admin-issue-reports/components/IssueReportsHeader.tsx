@@ -31,45 +31,45 @@ const IssueReportsHeader = ({
       <header className="flex flex-col gap-1">
         <div className="flex items-center gap-2">
           <MessageSquareWarning className="w-5 h-5 text-muted-foreground" />
-          <h1 className="text-2xl font-semibold tracking-tight">Zgłoszenia użytkowników</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Zgłoszenia</h1>
         </div>
-        <p className="text-sm text-muted-foreground max-w-2xl">
-          Błędy i propozycje zgłaszane przez użytkowników aplikacji beta.
-        </p>
+        <p className="text-sm text-muted-foreground max-w-2xl">Lista zgłoszonych błędów i propozycji.</p>
       </header>
 
       {/* Active filters – meta state */}
-      <div
-        className={`
-          min-h-[32px]
-          flex items-center gap-2 flex-wrap text-sm
-          transition-opacity duration-200
-          ${hasActiveFilters ? "opacity-100" : "opacity-0 pointer-events-none"}
-        `}
-      >
-        <span className="text-muted-foreground mr-1">Aktywne filtry:</span>
+      <div className="flex items-center gap-2 flex-wrap text-sm min-h-[32px]">
+        {hasActiveFilters ? (
+          <>
+            <span className="text-muted-foreground mr-1">Aktywne filtry:</span>
 
-        {filterType && (
-          <Badge variant="secondary" className="gap-1">
-            Typ: <strong>{filterType === "bug" ? "Błąd" : "Propozycja"}</strong>
-            <button onClick={() => setFilterType("")}>
-              <X className="w-3 h-3" />
-            </button>
-          </Badge>
-        )}
+            {filterType && (
+              <Badge variant="secondary" className="gap-1">
+                Typ: <strong>{filterType === "bug" ? "Błąd" : "Propozycja"}</strong>
+                <button onClick={() => setFilterType("")}>
+                  <X className="w-3 h-3" />
+                </button>
+              </Badge>
+            )}
 
-        {filterStatus && (
-          <Badge variant="secondary" className="gap-1">
-            Status:
-            <strong>
-              {filterStatus === "pending" && "Oczekujące"}
-              {filterStatus === "in-progress" && "W trakcie"}
-              {filterStatus === "resolved" && "Rozwiązane"}
-              {filterStatus === "rejected" && "Odrzucone"}
-            </strong>
-            <button onClick={() => setFilterStatus("")}>
-              <X className="w-3 h-3" />
-            </button>
+            {filterStatus && (
+              <Badge variant="secondary" className="gap-1">
+                Status:
+                <strong>
+                  {filterStatus === "pending" && "Oczekujące"}
+                  {filterStatus === "in-progress" && "W trakcie"}
+                  {filterStatus === "resolved" && "Rozwiązane"}
+                  {filterStatus === "rejected" && "Odrzucone"}
+                </strong>
+                <button onClick={() => setFilterStatus("")}>
+                  <X className="w-3 h-3" />
+                </button>
+              </Badge>
+            )}
+          </>
+        ) : (
+          <Badge variant="outline" className="text-muted-foreground gap-1">
+            <MessageSquareWarning className="w-4 h-4" />
+            Wszystkie zgłoszenia
           </Badge>
         )}
       </div>
