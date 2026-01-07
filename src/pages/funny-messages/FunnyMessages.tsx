@@ -75,7 +75,7 @@ export const FunnyMessages = () => {
   const showFilterBar = usersData && (hasMessages || hasFilters);
 
   return (
-    <div className="flex w-full pb-12 max-w-7xl mx-auto">
+    <div className="flex w-full pb-12 max-w-[1400px] mx-auto">
       <div className="w-full">
         <FunnyMessagesHeader onCreateFunnyMessage={onCreateFunnyMessage} userPermissions={userPermissions} />
 

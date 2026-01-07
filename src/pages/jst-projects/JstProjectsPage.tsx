@@ -39,7 +39,7 @@ export const JstProjectsPage = () => {
   const onCreateJstProject = () => setIsCreatingJstProject(true);
 
   return (
-    <div className="flex w-full py-2 max-w-7xl mx-auto">
+    <div className="flex w-full py-2 max-w-[1400px] mx-auto">
       <div className="w-full">
         <JstProjectsHeader onCreateJstProject={onCreateJstProject} onCreateJstSchool={onCreateJstSchool} />
 
@@ -57,7 +57,7 @@ export const JstProjectsPage = () => {
           setFilterQuery={setFilterQuery}
         />
 
-        <JstSchoolsList schools={schools} isLoading={isLoading} />
+        <JstSchoolsList schools={schools} isLoading={!selectedProjectId || isSchoolsLoading} />
       </div>
 
       <JstSchoolModal

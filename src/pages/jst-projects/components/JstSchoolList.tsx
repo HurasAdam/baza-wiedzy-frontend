@@ -1,4 +1,5 @@
 import EmptyState from "../../../components/shared/EmptyState";
+import type { IJstSchool } from "../../../types";
 import SchoolCard from "./jst-school/SchoolCard";
 import SchoolSkeletonCards from "./jst-school/SchoolSkeletonCards";
 
@@ -9,7 +10,8 @@ type JstSchoolsListProps = {
 
 const JstSchoolsList = ({ schools, isLoading }: JstSchoolsListProps) => {
   if (isLoading) return <SchoolSkeletonCards itemsCount={6} />;
-  if (!schools?.length)
+
+  if (!isLoading && (!schools || schools.length === 0))
     return (
       <EmptyState
         resetLabel="Dodaj szkołę"
