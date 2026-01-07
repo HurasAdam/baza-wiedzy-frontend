@@ -5,7 +5,7 @@ import IssueReportsHeader from "./components/IssueReportsHeader";
 import IssueReportsList from "./components/IssueReportsList";
 
 export type IssueType = "" | "bug" | "proposal";
-export type IssueStatus = "" | "pending" | "in-progress" | "resolved" | "rejected";
+export type IssueStatus = "" | "open" | "resolved" | "closed";
 
 export const AdminUserReportsPage = () => {
   const navigate = useNavigate();

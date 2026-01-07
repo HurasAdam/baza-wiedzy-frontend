@@ -56,10 +56,9 @@ const IssueReportsFilters = ({
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">Wszystkie</SelectItem>
-          <SelectItem value="pending">Oczekujące</SelectItem>
-          <SelectItem value="in-progress">W trakcie</SelectItem>
-          <SelectItem value="resolved">Rozwiązane</SelectItem>
-          <SelectItem value="rejected">Odrzucone</SelectItem>
+          <SelectItem value="open">Otwarte</SelectItem>
+          <SelectItem value="resolved">Zrealizowane</SelectItem>
+          <SelectItem value="closed">Zamknięte</SelectItem>
         </SelectContent>
       </Select>
       {/* --- Reset Filters Button ----*/}

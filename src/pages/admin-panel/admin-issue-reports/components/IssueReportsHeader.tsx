@@ -55,10 +55,10 @@ const IssueReportsHeader = ({
               <Badge variant="secondary" className="gap-1">
                 Status:
                 <strong>
-                  {filterStatus === "pending" && "Oczekujące"}
-                  {filterStatus === "in-progress" && "W trakcie"}
-                  {filterStatus === "resolved" && "Rozwiązane"}
-                  {filterStatus === "rejected" && "Odrzucone"}
+                  {filterStatus === "open" && "Otwarte"}
+
+                  {filterStatus === "resolved" && "Zrealizowane"}
+                  {filterStatus === "closed" && "zamkniete"}
                 </strong>
                 <button onClick={() => setFilterStatus("")}>
                   <X className="w-3 h-3" />
