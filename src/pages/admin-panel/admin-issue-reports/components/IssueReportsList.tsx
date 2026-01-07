@@ -102,7 +102,7 @@ const IssueReportsList = ({ isLoading, isError, error, reports, navigate }: Issu
 
                 <div className="flex items-center gap-4">
                   <div className="flex items-center space-x-2">
-                    <Badge className={`${status.badge} border-none px-2 py-1`}>{status.label}</Badge>
+                    <Badge className={`${status.badge}  px-2 py-1`}>{status.label}</Badge>
                     <div className="w-28" />
                     <span className="text-xs text-muted-foreground whitespace-nowrap">
                       • {new Date(report.createdAt).toLocaleDateString("pl-PL")}
