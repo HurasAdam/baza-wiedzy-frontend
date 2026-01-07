@@ -7,6 +7,13 @@ export const useSendIssueReportMutation = () => {
   });
 };
 
+export const useUpdateReportStatusMutation = () => {
+  return useMutation({
+    mutationFn: ({ reportId, payload }: { reportId: string; payload: string }) =>
+      issueReportsService.updateStatus({ reportId, payload }),
+  });
+};
+
 export const useFindIssueReportsQuery = (params?: URLSearchParams) => {
   return useQuery({
     queryKey: ["issue-reports", params?.toString()],

@@ -1,15 +1,15 @@
 export const statusConfig = {
   open: {
     label: "Otwarte",
-    badge: "bg-sky-600/70 text-blue-50",
+    badge: "bg-sky-600/70 text-blue-100 w-[90px]",
   },
   resolved: {
-    label: "Ukończone",
-    badge: "bg-green-600/90 text-green-700",
+    label: "Zrealizowane",
+    badge: "bg-green-600/85 text-green-100 w-[90px]",
   },
-  rejected: {
+  closed: {
     label: "Zamknięte",
-    badge: "bg-red-100 text-red-700",
+    badge: "bg-gray-300 text-gray-800 w-[90px]",
   },
 } as const;
 

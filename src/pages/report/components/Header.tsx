@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Calendar, MoreVertical } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { Button } from "../../../components/ui/button";
 import {
   DropdownMenu,
@@ -8,6 +9,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu";
+import queryClient from "../../../config/query.client";
+import { useUpdateReportStatusMutation } from "../../../hooks/issue-report/use-issue-report";
 import { cn } from "../../../lib/utils";
 import type { Report } from "../../admin-panel/admin-issue-reports/components/IssueReportsList";
 
@@ -26,12 +29,12 @@ const statusConfig: Record<
   open: {
     label: "Otwarte",
     dotColor: "bg-sky-600/90",
-    badgeColor: "bg-green-100 text-green-800",
+    badgeColor: "bg-sky-600/70  text-blue-100",
   },
   resolved: {
-    label: "Ukończone",
+    label: "Zrealizowane",
     dotColor: "bg-green-600/90",
-    badgeColor: "bg-blue-100 text-blue-800",
+    badgeColor: "bg-green-600/85 text-green-100",
   },
   closed: {
     label: "Zamknięte",
@@ -43,6 +46,23 @@ const statusConfig: Record<
 export const Header = ({ report }: Props) => {
   const navigate = useNavigate();
   const formattedDate = new Date(report.createdAt).toLocaleString("pl-PL");
+  const { mutate: updateReportStatusMutate } = useUpdateReportStatusMutation();
+
+  const onStatusChange = (reportId: string, status: string) => {
+    console.log(status);
+    updateReportStatusMutate(
+      { reportId, payload: status },
+      {
+        onSuccess: () => {
+          toast.success("Zmiany zostały zapisane", {
+            position: "bottom-right",
+            description: "Status zgłoszenia został zmieniony",
+          });
+          queryClient.invalidateQueries({ queryKey: ["issue-report", reportId] });
+        },
+      }
+    );
+  };
 
   return (
     <header className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-border pb-4 mb-6 gap-4">
@@ -82,7 +102,7 @@ export const Header = ({ report }: Props) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             {Object.entries(statusConfig).map(([status, config]) => (
-              <DropdownMenuItem key={status}>
+              <DropdownMenuItem onSelect={() => onStatusChange(report._id, status)} key={status}>
                 <div className="flex items-center gap-2">
                   <div className={`w-2 h-2 rounded-full ${config.dotColor}`} />
                   {config.label}

@@ -18,8 +18,13 @@ const findOne = async (issueReportId: string): Promise<IssueReport> => {
   return api.get(`${BASE_URL}/${issueReportId}`);
 };
 
+const updateStatus = ({ reportId, payload }: { reportId: string; payload: string }): Promise<void> => {
+  return api.patch(`${BASE_URL}/${reportId}/status`, { status: payload });
+};
+
 export const issueReportsService = {
   sendIssueReport,
   find,
   findOne,
+  updateStatus,
 };
