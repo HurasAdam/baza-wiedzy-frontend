@@ -1,11 +1,11 @@
 import { useFindIssueReportsQuery } from "@/hooks/issue-report/use-issue-report";
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import IssueReportsHeader from "../admin-panel/admin-issue-reports/components/IssueReportsHeader";
 import IssueReportsList from "../admin-panel/admin-issue-reports/components/IssueReportsList";
 
 export type IssueType = "" | "bug" | "proposal";
-export type IssueStatus = "" | "pending" | "in-progress" | "resolved" | "rejected";
+export type IssueStatus = "" | "open" | "resolved" | "closed";
 
 export const ReportsPage = () => {
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ export const ReportsPage = () => {
   }, [filterStatus, filterType, searchTerm]);
 
   const { data: reports = [], isLoading, isError, error } = useFindIssueReportsQuery(params);
-
+  const { onOpenCreateIssueReport } = useOutletContext<{ onOpenCreateIssueReport: () => void }>();
   return (
     <div className="mx-auto pb-6 max-w-[1400px] flex flex-col bg-gradient-to-br from-background via-background/90 to-background/60 backdrop-blur-md">
       <IssueReportsHeader
@@ -33,6 +33,7 @@ export const ReportsPage = () => {
         filterStatus={filterStatus}
         setFilterStatus={setFilterStatus}
         foundReportsCount={reports.length}
+        openSendIssueReportModal={onOpenCreateIssueReport}
       />
 
       <IssueReportsList reports={reports} isLoading={isLoading} isError={isError} error={error} navigate={navigate} />

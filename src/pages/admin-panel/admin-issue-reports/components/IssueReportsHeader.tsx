@@ -1,6 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { MessageSquareWarning, X } from "lucide-react";
 import { Badge } from "../../../../components/ui/badge";
+import { Button } from "../../../../components/ui/button";
 import type { IssueStatus, IssueType } from "../admin-issue-reports";
 import IssueReportsFilters from "./IssueReportsFilters";
 
@@ -12,6 +13,7 @@ interface IssueReportsHeaderProps {
   setFilterType: (value: IssueType) => void;
   setFilterStatus: (value: IssueStatus) => void;
   foundReportsCount: number;
+  openSendIssueReportModal: () => void;
 }
 
 const IssueReportsHeader = ({
@@ -22,18 +24,22 @@ const IssueReportsHeader = ({
   searchTerm,
   setSearchTerm,
   foundReportsCount,
+  openSendIssueReportModal,
 }: IssueReportsHeaderProps) => {
   const hasActiveFilters = !!filterType || !!filterStatus;
 
   return (
     <div className="mb-6 space-y-4">
       {/* Context */}
-      <header className="flex flex-col gap-1">
-        <div className="flex items-center gap-2">
-          <MessageSquareWarning className="w-5 h-5 text-muted-foreground" />
-          <h1 className="text-2xl font-semibold tracking-tight">Zgłoszenia</h1>
+      <header className="flex justify-between items-center">
+        <div className="flex flex-col ">
+          <div className="flex items-center gap-2">
+            <MessageSquareWarning className="w-5 h-5 text-muted-foreground" />
+            <h1 className="text-2xl font-semibold tracking-tight">Zgłoszenia</h1>
+          </div>
+          <p className="text-sm text-muted-foreground max-w-2xl">Lista zgłoszonych błędów i propozycji.</p>
         </div>
-        <p className="text-sm text-muted-foreground max-w-2xl">Lista zgłoszonych błędów i propozycji.</p>
+        <Button onClick={openSendIssueReportModal}>Nowe zgłoszenie</Button>
       </header>
 
       {/* Active filters – meta state */}
