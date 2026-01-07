@@ -22,8 +22,8 @@ export function CommentListSection({ comments, onEditComment, onDeleteComment }:
   const { data: user } = useAuthQuery();
   console.log(user);
   return (
-    <section className="mt-6">
-      <h3 className="text-base font-semibold mb-4 text-muted-foreground">Komentarze</h3>
+    <section className="mt-6 pb-16 px-2">
+      <h3 className="text-base font-semibold mb-4 text-muted-foreground ">Komentarze</h3>
 
       {comments.length === 0 ? (
         <p className="text-sm text-muted-foreground">Brak komentarzy.</p>

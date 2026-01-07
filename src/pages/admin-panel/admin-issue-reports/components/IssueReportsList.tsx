@@ -58,6 +58,7 @@ const IssueReportsList = ({ isLoading, isError, error, reports, navigate }: Issu
             const status = statusConfig[report.status as ReportStatus];
             return (
               <li
+                onClick={() => navigate(`/reports/${report._id}`)}
                 key={report._id}
                 className="flex items-center justify-between px-4 py-3 group hover:bg-muted/30 transition-all
              bg-gradient-to-br from-card/70 to-card/40 backdrop-blur-sm border-b last:border-b-0 rounded-none"
