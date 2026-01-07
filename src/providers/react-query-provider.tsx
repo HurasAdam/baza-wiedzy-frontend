@@ -12,7 +12,7 @@ const ReactQueryProvider = ({ children }: { children: React.ReactNode }) => {
     <QueryClientProvider client={queryClient}>
       <SoundProvider>
         <SocketProvider>
-          <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+          <ThemeProvider defaultTheme="dark-violet" storageKey="vite-ui-theme">
             <TooltipProvider delayDuration={300}>
               <Toaster position="top-center" richColors={true} />
 
