@@ -23,7 +23,6 @@ interface CreateWorkspaceProps {
 export type JstSchoolForm = z.infer<typeof jstSchoolSchema>;
 
 export const JstSchoolModal = ({ projects, isCreatingJstSchool, setIsCreatingJstSchool }: CreateWorkspaceProps) => {
-  // --- use form ----//
   const form = useForm<JstSchoolForm>({
     resolver: zodResolver(jstSchoolSchema),
     defaultValues: {
@@ -31,6 +30,7 @@ export const JstSchoolModal = ({ projects, isCreatingJstSchool, setIsCreatingJst
       adres: "",
       email: "",
       szId: "",
+      libId: "",
       phone: "",
       jstProjectId: "",
     },
@@ -147,7 +147,20 @@ export const JstSchoolModal = ({ projects, isCreatingJstSchool, setIsCreatingJst
                   </FormItem>
                 )}
               />
-
+              {/* --------- libnetId ------- */}
+              <FormField
+                control={form.control}
+                name="libId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Libnet Id</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Wprowadź LibnetId przypisane do szkoły" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               {/* --------- adres ------- */}
               <FormField
                 control={form.control}
