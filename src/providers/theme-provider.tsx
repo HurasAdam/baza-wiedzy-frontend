@@ -16,28 +16,20 @@ type Theme =
   | "corporate-default"
   | "corporate-gray";
 
-type SidebarTheme = "default" | "gradient" | "glass";
-
 type ThemeProviderProps = {
   children: React.ReactNode;
   defaultTheme?: Theme;
-  defaultSidebarTheme?: SidebarTheme;
   storageKey?: string;
-  sidebarStorageKey?: string;
 };
 
 type ThemeProviderState = {
   theme: Theme;
   setTheme: (theme: Theme) => void;
-  sidebarTheme: SidebarTheme;
-  setSidebarTheme: (theme: SidebarTheme) => void;
 };
 
 const initialState: ThemeProviderState = {
   theme: "system" as Theme,
   setTheme: () => null,
-  sidebarTheme: "default",
-  setSidebarTheme: () => null,
 };
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
@@ -45,16 +37,11 @@ const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 export function ThemeProvider({
   children,
   defaultTheme = "dark-violet",
-  defaultSidebarTheme = "default",
   storageKey = "vite-ui-theme",
-  sidebarStorageKey = "vite-ui-sidebar",
+
   ...props
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(() => (localStorage.getItem(storageKey) as Theme) || defaultTheme);
-
-  const [sidebarTheme, setSidebarTheme] = useState<SidebarTheme>(
-    () => (localStorage.getItem(sidebarStorageKey) as SidebarTheme) || defaultSidebarTheme
-  );
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -86,19 +73,14 @@ export function ThemeProvider({
     }
 
     // dodaj atrybut sidebarTheme
-    root.setAttribute("data-sidebar", sidebarTheme);
-  }, [theme, sidebarTheme]);
+    // root.setAttribute("data-sidebar", sidebarTheme);
+  }, [theme]);
 
   const value: ThemeProviderState = {
     theme,
     setTheme: (theme: Theme) => {
       localStorage.setItem(storageKey, theme);
       setTheme(theme);
-    },
-    sidebarTheme,
-    setSidebarTheme: (theme: SidebarTheme) => {
-      localStorage.setItem(sidebarStorageKey, theme);
-      setSidebarTheme(theme);
     },
   };
 
