@@ -114,6 +114,7 @@ const SettingsUserProfile = () => {
           <div className="relative">
             <Icon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <Input
+              disabled={true}
               {...field}
               placeholder={placeholder}
               className="pl-10 h-10 border-ring bg-input/30 text-muted-foreground"
@@ -177,7 +178,7 @@ const SettingsUserProfile = () => {
               control={control}
               render={({ field }) => (
                 <div className="relative">
-                  <PenTool className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                  <PenTool className="w-4 h-4 absolute left-3 top-4.5 -translate-y-1/2 text-muted-foreground" />
                   <Textarea
                     {...field}
                     placeholder="Krótki opis"

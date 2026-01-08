@@ -25,7 +25,6 @@ import {
   Smile,
   UserRoundPen,
 } from "lucide-react";
-import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -46,6 +45,7 @@ import {
 import { Separator } from "../../../components/ui/separator";
 import { WORKSPACE_ICONS } from "../../../components/workspace/workspace-form";
 import { useFindUserWorkspacesQuery } from "../../../hooks/workspace/use-workspace";
+import { useSidebar } from "../../../providers/sidebar-provider";
 import { SidebarMyNav, type MySectionNavItem } from "./Sidebar-my-nav";
 import { SidebarNav } from "./Sidebar-nav";
 
@@ -111,7 +111,7 @@ export const Sidebar = ({
   currentWorkspace?: Workspace | null;
   onOpenChangeLogModal: () => void;
 }) => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const { variant: sidebarVariant, setVariant } = useSidebar();
   const navigate = useNavigate();
   const { data: workspaces = [], isPending } = useFindUserWorkspacesQuery();
 
@@ -123,6 +123,11 @@ export const Sidebar = ({
     return userPermissions.includes(item.requiredPermission);
   });
 
+  const toggleVariant = () => {
+    const newVariant = sidebarVariant === "compact" ? "full" : "compact";
+    setVariant(newVariant);
+  };
+
   return (
     <div
       style={{
@@ -131,7 +136,7 @@ export const Sidebar = ({
       }}
       className={cn(
         "flex flex-col border-r  transition-all duration-300",
-        isCollapsed ? "w-22 md:w[80px]" : "w-16 md:w-[240px] border-sidebar-border"
+        sidebarVariant === "compact" ? "w-22 md:w[80px]" : "w-16 md:w-[240px] border-sidebar-border"
       )}
     >
       <div className="flex h-14 items-center border-b px-4 mb-1.5 gap-2 ">
@@ -193,7 +198,7 @@ export const Sidebar = ({
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {!isCollapsed && (
+        {sidebarVariant !== "compact" && (
           <span className="font-semibold text-lg hidden md:block text-sidebar-foreground">Baza wiedzy</span>
         )}
 
@@ -201,20 +206,20 @@ export const Sidebar = ({
           variant="ghost"
           size="icon"
           className="ml-auto hidden md:block hover:bg-transparent"
-          onClick={() => setIsCollapsed(!isCollapsed)}
+          onClick={toggleVariant}
         >
-          {isCollapsed ? <ChevronsRight className="size-4" /> : <ChevronsLeft className="size-4" />}
+          {sidebarVariant === "compact" ? <ChevronsRight className="size-4" /> : <ChevronsLeft className="size-4" />}
         </Button>
       </div>
 
       <ScrollArea className="flex-1 py-2 ">
         <SidebarNav
           items={filteredNavItems}
-          isCollapsed={isCollapsed}
-          className={cn(isCollapsed && "items-center space-y-2 ")}
+          isCollapsed={sidebarVariant === "compact"}
+          className={cn(sidebarVariant === "compact" && "items-center space-y-2 ")}
           currentWorkspace={currentWorkspace}
         />
-        <SidebarMyNav items={myNavItems} isCollapsed={isCollapsed} />
+        <SidebarMyNav items={myNavItems} isCollapsed={sidebarVariant === "compact"} />
       </ScrollArea>
 
       {/* <div className="flex flex-col items-center py-4 mt-auto text-xs text-muted-foreground">
@@ -231,7 +236,7 @@ export const Sidebar = ({
         </span>
       </div> */}
 
-      {isCollapsed ? (
+      {sidebarVariant === "compact" ? (
         <DropdownMenu>
           <DropdownMenuTrigger className=" mx-auto" asChild>
             <MoreHorizontal className="w-7 h-7 mb-3" />

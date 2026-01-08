@@ -3,6 +3,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import { Toaster } from "sonner";
 import { TooltipProvider } from "../components/ui/tooltip";
+import { SidebarProvider } from "./sidebar-provider";
 import { SocketProvider } from "./socket-provider";
 import { SoundProvider } from "./sound-provider";
 import { ThemeProvider } from "./theme-provider";
@@ -13,11 +14,13 @@ const ReactQueryProvider = ({ children }: { children: React.ReactNode }) => {
       <SoundProvider>
         <SocketProvider>
           <ThemeProvider defaultTheme="dark-violet" storageKey="vite-ui-theme">
-            <TooltipProvider delayDuration={300}>
-              <Toaster position="top-center" richColors={true} />
+            <SidebarProvider>
+              <TooltipProvider delayDuration={300}>
+                <Toaster position="top-center" richColors={true} />
 
-              {children}
-            </TooltipProvider>
+                {children}
+              </TooltipProvider>
+            </SidebarProvider>
           </ThemeProvider>
         </SocketProvider>
       </SoundProvider>

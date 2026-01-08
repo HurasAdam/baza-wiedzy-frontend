@@ -3,6 +3,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useTheme } from "@/providers/theme-provider";
 import { Droplet, LayoutDashboard, Palette, Sun } from "lucide-react";
 import { useState } from "react";
+import { useSidebar, type SidebarTheme } from "../../providers/sidebar-provider";
 
 const themeGroups = {
   light: [
@@ -53,7 +54,8 @@ const Field = ({
 );
 
 const SettingsThemePanelTab = () => {
-  const { theme, setTheme, sidebarTheme, setSidebarTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
+  const { sidebarTheme, setSidebarTheme, variant: sidebarVariant, setVariant } = useSidebar();
 
   const currentGroup = Object.keys(themeGroups).find((group) =>
     themeGroups[group as keyof typeof themeGroups].some((t) => t.key === theme)
@@ -136,7 +138,7 @@ const SettingsThemePanelTab = () => {
             <Select
               value={sidebarTheme}
               onValueChange={(value) => {
-                setSidebarTheme(value as string);
+                setSidebarTheme(value as SidebarTheme);
               }}
             >
               <SelectTrigger className="w-48 border-ring text-foreground">
