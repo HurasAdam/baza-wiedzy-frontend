@@ -57,11 +57,13 @@ export const WorkspaceMemberCard = ({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>Ustaw jako właściciela</DropdownMenuItem>
+            {!member.isOwner && <DropdownMenuItem>Ustaw jako właściciela</DropdownMenuItem>}
             <DropdownMenuItem onClick={() => onRequestEdit(member)}>Uprawnienia</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onRequestRemove(member)} className="text-destructive">
-              Usuń z kolekcji
-            </DropdownMenuItem>
+            {!member.isOwner && (
+              <DropdownMenuItem onClick={() => onRequestRemove(member)} className="text-destructive">
+                Usuń z kolekcji
+              </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
