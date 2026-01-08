@@ -7,6 +7,7 @@ export interface IJstSchool {
   email: string;
   project: string;
   szId: string;
+  libId: string;
   phone: string;
   createdAt: string;
   updatedAt: string;
