@@ -7,6 +7,7 @@ interface WorkspaceMembersListProps {
   workspaceMembers: WorkspaceMember[];
   workspaceId: string;
   onRequestRemove: (member: WorkspaceMember) => void;
+  onRequestPromote: (member: WorkspaceMember) => void;
   onRequestEdit: (member: WorkspaceMember) => void;
   permissions: Record<string, boolean>;
 }
@@ -16,6 +17,7 @@ export const WorkspaceMembersList = ({
   isLoading,
   workspaceId,
   onRequestRemove,
+  onRequestPromote,
   onRequestEdit,
   permissions,
 }: WorkspaceMembersListProps) => {
@@ -31,6 +33,7 @@ export const WorkspaceMembersList = ({
           member={member}
           workspaceId={workspaceId}
           onRequestRemove={onRequestRemove}
+          onRequestPromote={onRequestPromote}
           onRequestEdit={onRequestEdit}
           permissions={permissions}
         />

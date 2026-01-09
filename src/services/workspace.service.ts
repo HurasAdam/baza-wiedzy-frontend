@@ -35,6 +35,10 @@ const deleteWorkspace = (workspaceId: string) => {
   return api.delete(`${baseUrl}/${workspaceId}`);
 };
 
+const changeOwner = (workspaceId: string, memberId: string): Promise<void> => {
+  return api.patch(`${baseUrl}/${workspaceId}/owner`, { memberId });
+};
+
 export const workspaceService = {
   createWorkspace,
   updateWorkspace,
@@ -44,4 +48,5 @@ export const workspaceService = {
   removeMember,
   joinWorkspaceByInviteCode,
   deleteWorkspace,
+  changeOwner,
 };

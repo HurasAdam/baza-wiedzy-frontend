@@ -13,6 +13,7 @@ interface WorkspaceMemberCardProps {
   member: WorkspaceMember;
   workspaceId: string;
   onRequestRemove: (member: WorkspaceMember) => void;
+  onRequestPromote: (member: WorkspaceMember) => void;
   onRequestEdit: (member: WorkspaceMember) => void;
   permissions: Record<string, boolean>;
 }
@@ -21,6 +22,7 @@ export const WorkspaceMemberCard = ({
   member,
   workspaceId,
   onRequestRemove,
+  onRequestPromote,
   onRequestEdit,
   permissions,
 }: WorkspaceMemberCardProps) => {
@@ -57,7 +59,9 @@ export const WorkspaceMemberCard = ({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            {!member.isOwner && <DropdownMenuItem>Ustaw jako właściciela</DropdownMenuItem>}
+            {!member.isOwner && (
+              <DropdownMenuItem onClick={() => onRequestPromote(member)}>Ustaw jako właściciela</DropdownMenuItem>
+            )}
             <DropdownMenuItem onClick={() => onRequestEdit(member)}>Uprawnienia</DropdownMenuItem>
             {!member.isOwner && (
               <DropdownMenuItem onClick={() => onRequestRemove(member)} className="text-destructive">

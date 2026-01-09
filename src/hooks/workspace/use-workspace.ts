@@ -65,3 +65,11 @@ export const useDeleteWorkspaceMutation = () => {
     },
   });
 };
+
+export const useChangeWorkspaceOwnerMutation = () => {
+  return useMutation({
+    mutationFn: ({ workspaceId, memberId }: { workspaceId: string; memberId: string }) => {
+      return workspaceService.changeOwner(workspaceId, memberId);
+    },
+  });
+};

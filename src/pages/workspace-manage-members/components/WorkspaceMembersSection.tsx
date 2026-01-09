@@ -3,7 +3,10 @@ import { toast } from "sonner";
 import { Alert } from "../../../components/shared/alert-modal";
 import { WorkspaceUserPermissionsModal } from "../../../components/workspace-user-permissions/WorkspaceUserPermissionsModal";
 import queryClient from "../../../config/query.client";
-import { useRemoveWorkspaceMemberMutation } from "../../../hooks/workspace/use-workspace";
+import {
+  useChangeWorkspaceOwnerMutation,
+  useRemoveWorkspaceMemberMutation,
+} from "../../../hooks/workspace/use-workspace";
 import { WorkspaceMembersList } from "./WorkspaceMembersList";
 
 export interface WorkspaceMember {
@@ -29,8 +32,10 @@ const WorkspaceMembersSection = ({
   permissions,
 }: WorkspaceMembersSectionProps) => {
   const [memberToRemove, setMemberToRemove] = useState<WorkspaceMember | null>(null);
+  const [memberToPromote, setMemberToPromote] = useState<WorkspaceMember | null>(null);
   const [selectedMember, setSelectedMember] = useState<WorkspaceMember | null>(null);
   const { mutate: removeMember, isPending: isRemoving } = useRemoveWorkspaceMemberMutation();
+  const { mutate: changeOwner } = useChangeWorkspaceOwnerMutation();
 
   const handleConfirmRemove = () => {
     if (!memberToRemove) return;
@@ -50,8 +55,29 @@ const WorkspaceMembersSection = ({
     );
   };
 
+  const handleConfirmPromote = () => {
+    if (!memberToPromote) return;
+    changeOwner(
+      {
+        workspaceId,
+        memberId: memberToPromote._id,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Zmiany zostały zapisane", {
+            position: "bottom-right",
+            description: "Ustawiono nowego właściciela kolekcji",
+          });
+          queryClient.invalidateQueries({ queryKey: ["workspace-members", workspaceId] });
+          setMemberToPromote(null);
+        },
+      }
+    );
+  };
+
   const handleCancelRemove = () => setMemberToRemove(null);
   const handleCancelEdit = () => setSelectedMember(null);
+  const handleCancelPromote = () => setMemberToPromote(null);
   return (
     <section>
       <h2 className="text-sm font-medium text-muted-foreground mb-3">Lista użytkowników</h2>
@@ -61,6 +87,7 @@ const WorkspaceMembersSection = ({
         isLoading={isLoading}
         workspaceId={workspaceId}
         onRequestRemove={setMemberToRemove}
+        onRequestPromote={setMemberToPromote}
         onRequestEdit={setSelectedMember}
         permissions={permissions}
       />
@@ -72,6 +99,8 @@ const WorkspaceMembersSection = ({
         isLoading={isRemoving}
         title="Potwierdzenie usunięcia użytkownika"
         type="warning"
+        requireConfirmation
+        isConfirmEnabled
       >
         <p>
           Czy na pewno chcesz usunąć{" "}
@@ -82,6 +111,28 @@ const WorkspaceMembersSection = ({
         </p>
         <p className="mt-2 text-sm text-muted-foreground">
           Po usunięciu użytkownik straci dostęp do zasobów tej kolekcji.
+        </p>
+      </Alert>
+
+      <Alert
+        isOpen={!!memberToPromote}
+        onCancel={handleCancelPromote}
+        onConfirm={handleConfirmPromote}
+        isLoading={false}
+        title="Potwierdzenie zmiany właściciela"
+        type="warning"
+        requireConfirmation
+        isConfirmEnabled
+      >
+        <p>
+          Czy na pewno chcesz ustawić{" "}
+          <strong>
+            {memberToPromote?.name} {memberToPromote?.surname}
+          </strong>{" "}
+          jako nowego właściciela kolekcji?
+        </p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Po zatwierdzeniu obecny właściciel straci pełne uprawnienia do tej kolekcji.
         </p>
       </Alert>
 
