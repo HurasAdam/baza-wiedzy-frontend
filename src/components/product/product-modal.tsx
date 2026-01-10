@@ -35,6 +35,15 @@ export const ProductModal = ({
       onError: (error) => {
         const { status } = error as AxiosError;
 
+        if (status === 403) {
+          toast.error("Brak uprawnień", {
+            description: "Nie posiadasz wymaganych uprawnień do wykonania tej operacji.",
+            position: "bottom-right",
+            duration: 7000,
+          });
+          return;
+        }
+
         if (status === 409) {
           toast.error("Niepowodzenie", {
             description: "Produkt o tej nazwie już istnieje. Nazwa produktu musi być unikalna.",
@@ -44,7 +53,9 @@ export const ProductModal = ({
           return;
         }
 
-        toast.error("Wystąpił błąd serwera");
+        toast.error("Wystąpił błąd serwera", {
+          position: "bottom-right",
+        });
       },
     });
   };
