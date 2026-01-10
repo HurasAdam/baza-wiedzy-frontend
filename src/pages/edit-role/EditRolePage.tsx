@@ -6,11 +6,7 @@ import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import {
-  useFindPermissions,
-  useFindRole,
-  useUpdateRoleMutation,
-} from "../../hooks/users/use-users";
+import { useFindPermissions, useFindRole, useUpdateRoleMutation } from "../../hooks/users/use-users";
 import { assertDefined } from "../../utils/asserts";
 import RoleForm from "../create-role/components/role-form";
 
@@ -46,8 +42,7 @@ export const EditRolePage = () => {
   console.log(form.getValues());
 
   const { mutate, isPending } = useUpdateRoleMutation();
-  const { data: permissions, isLoading: isPermissionsLoading } =
-    useFindPermissions();
+  const { data: permissions, isLoading: isPermissionsLoading } = useFindPermissions();
 
   const onSubmit = form.handleSubmit((data) => {
     assertDefined(id, "Missing roleId, roleId is required");
@@ -73,13 +68,8 @@ export const EditRolePage = () => {
                 }}
               >
                 <div>
-                  <div style={{ fontWeight: 600, marginBottom: 2 }}>
-                    Błąd: Duplikat Roli
-                  </div>
-                  <div style={{ opacity: 0.8 }}>
-                    Rola o podanej nazwie już istnieje. Nazwa roli musi być
-                    unikalna
-                  </div>
+                  <div style={{ fontWeight: 600, marginBottom: 2 }}>Błąd: Duplikat Roli</div>
+                  <div style={{ opacity: 0.8 }}>Rola o podanej nazwie już istnieje. Nazwa roli musi być unikalna</div>
                 </div>
               </div>,
               { duration: 7000 }
@@ -101,36 +91,18 @@ export const EditRolePage = () => {
             <div
               className="rounded-md p-2"
               style={{
-                backgroundColor:
-                  "color-mix(in srgb, var(--color-primary) 12%, transparent)",
+                backgroundColor: "color-mix(in srgb, var(--color-primary) 12%, transparent)",
                 color: "var(--color-primary)",
               }}
             >
               <Pencil className="w-7 h-7" />
             </div>
             <div>
-              <h1 className="text-2xl font-semibold text-foreground">
-                Edytuj rolę
-              </h1>
-              <p className="text-sm text-muted-foreground">
-                Edytuj wybraną role oraz zarządzej jej uprawnienami
-              </p>
+              <h1 className="text-2xl font-semibold text-foreground">Edytuj rolę</h1>
+              <p className="text-sm text-muted-foreground">Edytuj wybraną role oraz zarządzej jej uprawnienami</p>
             </div>
           </div>
           <div className="space-x-3">
-            <Button
-              size="default"
-              className="gap-2 whitespace-nowrap"
-              onClick={onSubmit}
-              disabled={!isDirty || isPending}
-            >
-              {isPending ? (
-                <Loader className="w-5 h-5 animate-spin" />
-              ) : (
-                <Check className="w-5 h-5" />
-              )}
-              Zapisz
-            </Button>
             <Button
               size="default"
               variant="outline"
@@ -141,16 +113,22 @@ export const EditRolePage = () => {
               <X className="w-5 h-5" />
               Anuluj
             </Button>
+            <Button
+              size="default"
+              className="gap-2 whitespace-nowrap"
+              onClick={onSubmit}
+              disabled={!isDirty || isPending}
+            >
+              {isPending ? <Loader className="w-5 h-5 animate-spin" /> : <Check className="w-5 h-5" />}
+              Zapisz
+            </Button>
           </div>
         </CardHeader>
 
         <CardContent>
           {role ? (
             <FormProvider {...form}>
-              <RoleForm
-                isPermissionsLoading={isPermissionsLoading}
-                permissions={permissions ?? []}
-              />
+              <RoleForm isPermissionsLoading={isPermissionsLoading} permissions={permissions ?? []} />
             </FormProvider>
           ) : (
             <div>Ładowanie...</div>

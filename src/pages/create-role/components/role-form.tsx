@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
-import { Check, ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { iconOptions } from "../../../constants/role-icons";
@@ -159,7 +159,7 @@ const RoleForm = ({ permissions = [], isPermissionsLoading }: RoleFormProps) => 
       </div>
 
       {/* Permissions */}
-      <div className="space-y-4">
+      <div className="space-y-6">
         <div className="flex items-center justify-between">
           <p className="text-sm font-medium text-muted-foreground">Uprawnienia</p>
           <p className="text-sm text-muted-foreground">Wybierz uprawnienia dla roli</p>
@@ -171,99 +171,82 @@ const RoleForm = ({ permissions = [], isPermissionsLoading }: RoleFormProps) => 
           <>
             <input type="hidden" {...register("permissions")} />
 
-            <div className="space-y-4">
+            <div className="space-y-6">
               {Object.entries(groupedPermissions).map(([category, perms]) => {
-                const counts = categoryCounts[category] || {
-                  total: perms.length,
-                  selected: 0,
-                };
-                const allSelected = counts.selected === counts.total && counts.total > 0;
+                const counts = categoryCounts[category] || { total: perms.length, selected: 0 };
                 const isCollapsed = !!collapsed[category];
 
                 return (
                   <section
                     key={category}
-                    className="mb-4 rounded-lg border p-4 shadow-sm transition"
-                    style={{
-                      borderColor: "var(--color-border)",
-                      backgroundColor: "var(--color-card)",
-                      color: "var(--color-card-foreground)",
-                      borderLeft: "4px solid var(--color-ring)",
-                    }}
+                    className="rounded-2xl border border-border shadow-sm bg-card p-5.5 transition hover:shadow-md"
                     aria-labelledby={`cat-${category}`}
                   >
-                    <div className="flex items-start justify-between gap-4">
+                    {/* Nagłówek kategorii */}
+                    <div className="flex justify-between items-center mb-5">
                       <div className="flex items-center gap-3">
-                        <div className="flex flex-col">
-                          <h3 id={`cat-${category}`} className="text-base font-semibold text-foreground">
-                            {category}
-                          </h3>
-                          <span className="text-xs text-muted-foreground">
-                            {counts.selected}/{counts.total} selected
-                          </span>
-                        </div>
+                        <h3 id={`cat-${category}`} className="text-lg font-semibold text-foreground">
+                          {category}
+                        </h3>
+                        <span className="text-sm text-muted-foreground">
+                          {counts.selected}/{counts.total} zaznaczone
+                        </span>
                       </div>
-
-                      <div className="flex items-center gap-2">
+                      <div className="flex gap-2 items-center">
                         <button
                           type="button"
                           onClick={() => toggleAllInCategory(category)}
-                          className="text-sm px-2 py-1 rounded-md border border-border bg-transparent text-muted-foreground hover:bg-muted transition"
-                          aria-pressed={allSelected}
-                          title={allSelected ? "Unselect all" : "Select all"}
+                          className="text-sm px-3 py-1 rounded-md border border-border bg-background hover:bg-muted transition"
+                          aria-pressed={counts.selected === counts.total}
+                          title={counts.selected === counts.total ? "Odznacz wszystkie" : "Zaznacz wszystkie"}
                         >
-                          {allSelected ? "Odznacz wszystkie" : "Zaznacz wszystkie"}
+                          {counts.selected === counts.total ? "Odznacz wszystkie" : "Zaznacz wszystkie"}
                         </button>
-
                         <button
                           type="button"
-                          onClick={() =>
-                            setCollapsed((s) => ({
-                              ...s,
-                              [category]: !s[category],
-                            }))
-                          }
+                          onClick={() => setCollapsed((s) => ({ ...s, [category]: !s[category] }))}
                           aria-expanded={!isCollapsed}
-                          className="p-1 rounded hover:bg-muted transition"
-                          title={isCollapsed ? "Expand" : "Collapse"}
+                          className="p-2 rounded-full hover:bg-muted transition"
+                          title={isCollapsed ? "Rozwiń" : "Zwiń"}
                         >
                           {isCollapsed ? (
-                            <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                            <ChevronDown className="w-5 h-5 text-muted-foreground" />
                           ) : (
-                            <ChevronUp className="w-4 h-4 text-muted-foreground" />
+                            <ChevronUp className="w-5 h-5 text-muted-foreground" />
                           )}
                         </button>
                       </div>
                     </div>
 
+                    {/* Lista permisji */}
                     {!isCollapsed && (
-                      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {perms.map(({ key, label }) => {
+                      <div className="flex flex-col divide-y divide-border rounded-lg">
+                        {perms.map(({ key, label, description }) => {
                           const checked = selectedPermissions.includes(key);
                           return (
-                            <label
+                            <div
                               key={key}
-                              className="flex items-center justify-between gap-3 rounded-md border border-border p-3 hover:bg-muted transition"
-                              style={{
-                                backgroundColor: "transparent",
-                                borderColor: "var(--color-border)",
-                              }}
+                              className="flex justify-between items-center py-4 px-5 transition hover:bg-muted"
                             >
-                              <div className="flex items-center gap-3">
-                                <div className="min-w-0">
-                                  <div className="text-sm font-medium text-foreground">{label}</div>
-                                </div>
+                              <div className="flex flex-col gap-1">
+                                <span className="text-sm font-medium text-foreground">{label}</span>
+                                {description && <span className="text-xs text-muted-foreground">{description}</span>}
                               </div>
 
-                              <div className="flex items-center gap-2">
-                                {checked && <Check className="w-4 h-4 text-muted-foreground" aria-hidden />}
-                                <Switch
-                                  checked={checked}
-                                  onCheckedChange={() => togglePermission(key)}
-                                  aria-label={`Permission ${key}`}
+                              <Switch
+                                checked={checked}
+                                onCheckedChange={() => togglePermission(key)}
+                                className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors ${
+                                  checked ? "bg-primary" : "bg-muted"
+                                }`}
+                              >
+                                <span
+                                  className={`inline-block h-4 w-4 transform rounded-full bg-background transition-transform ${
+                                    checked ? "translate-x-5" : "translate-x-1"
+                                  }`}
                                 />
-                              </div>
-                            </label>
+                              </Switch>
+                            </div>
                           );
                         })}
                       </div>
