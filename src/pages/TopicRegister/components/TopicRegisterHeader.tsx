@@ -14,6 +14,7 @@ interface TopicRegisterHeaderProps {
   onCreateProduct: () => void;
   onCreateTopic: () => void;
   onResetAllFilters: () => void;
+  userPermissions: string[];
 }
 
 const TopicRegisterHeader = ({
@@ -26,6 +27,7 @@ const TopicRegisterHeader = ({
   onCreateProduct,
   onCreateTopic,
   onResetAllFilters,
+  userPermissions,
 }: TopicRegisterHeaderProps) => {
   const hasFilters = Boolean(product || title);
 
@@ -36,21 +38,27 @@ const TopicRegisterHeader = ({
   );
 
   const dropdownOptions = [
-    {
-      label: "Dodaj produkt",
-      icon: <Plus className="w-4 h-4" />,
-      actionHandler: () => {
-        onCreateProduct();
-      },
-    },
-    {
-      label: "Dodaj temat",
-      icon: <Plus className="w-4 h-4" />,
-      actionHandler: () => {
-        onCreateTopic();
-      },
-    },
+    ...(userPermissions.includes("ADD_PRODUCT")
+      ? [
+          {
+            label: "Dodaj produkt",
+            icon: <Plus className="w-4 h-4" />,
+            actionHandler: () => onCreateProduct(),
+          },
+        ]
+      : []),
+    ...(userPermissions.includes("ADD_TOPIC")
+      ? [
+          {
+            label: "Dodaj temat",
+            icon: <Plus className="w-4 h-4" />,
+            actionHandler: () => onCreateTopic(),
+          },
+        ]
+      : []),
   ];
+
+  const hasDropdownOptions = dropdownOptions.length > 0;
 
   return (
     <>
@@ -59,8 +67,9 @@ const TopicRegisterHeader = ({
           <ClipboardList className="w-6 h-6" /> Rejestr tematów
         </h1>
 
-        <Dropdown triggerBtn={triggerBtn} options={dropdownOptions} position={{ align: "end" }} />
-        {/* Tabs */}
+        {hasDropdownOptions && (
+          <Dropdown triggerBtn={triggerBtn} options={dropdownOptions} position={{ align: "end" }} />
+        )}
       </div>
 
       <TopicRegisterFilters
