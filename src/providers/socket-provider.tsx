@@ -50,6 +50,8 @@ export const SocketProvider: FC<SocketProviderProps> = ({ children }) => {
       try {
         queryClient.invalidateQueries({ queryKey: ["my-notifications"] });
 
+        queryClient.invalidateQueries({ queryKey: ["my-summary-notifications"] });
+
         if (soundEnabled) {
           const audio = new Audio("/notification-sound.mp3");
           audio.play().catch(() => console.log("Nie udało się odtworzyć dźwięku"));

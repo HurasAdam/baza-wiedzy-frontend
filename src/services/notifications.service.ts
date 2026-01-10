@@ -9,6 +9,10 @@ const BASE_URL = "/notifications";
 const findMyNotifications = (params?: URLSearchParams) => {
   return api.get(BASE_URL, { params });
 };
+const findMySummaryNotifications = (params?: URLSearchParams) => {
+  return api.get(`${BASE_URL}/summary`, { params });
+};
+
 const markAsRead = (notificationId: string) => {
   return api.patch(`${BASE_URL}/${notificationId}/read`);
 };
@@ -22,6 +26,7 @@ const deleteNotification = (notificationId: string) => {
 
 export const notificationsService = {
   findMyNotifications,
+  findMySummaryNotifications,
   markAsRead,
   markAllAsRead,
   deleteNotification,

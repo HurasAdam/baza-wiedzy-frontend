@@ -51,11 +51,13 @@ const AppLayout = () => {
       {isSettingsModalOpen && (
         <SettingsModal isSettingsModalOpen={isSettingsModalOpen} setIsSettingsModalOpen={setIsSettingsModalOpen} />
       )}
-      <NotificationsPanel
-        isOpen={isNotificationsPanelOpen}
-        onOpenChange={setIsNotificationsPanelOpen}
-        onMarkAsRead={(id) => console.log("Oznaczono jako przeczytane:", id)}
-      />
+      {isNotificationsPanelOpen && (
+        <NotificationsPanel
+          isOpen={isNotificationsPanelOpen}
+          onOpenChange={setIsNotificationsPanelOpen}
+          onMarkAsRead={(id) => console.log("Oznaczono jako przeczytane:", id)}
+        />
+      )}
       {isIssueReportsModalOpen && (
         <IssueReportsModal
           isIssueReportsModalOpen={isIssueReportsModalOpen}

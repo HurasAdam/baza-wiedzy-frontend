@@ -16,7 +16,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import queryClient from "@/config/query.client";
 import { useAuthQuery, useLogoutMutation } from "@/hooks/auth/use-auth";
-import { useFindMyNotificationsQuery } from "@/hooks/notifications/use-notifications";
+import { useFindMySummaryNotificationsQuery } from "@/hooks/notifications/use-notifications";
 import { useSound } from "@/providers/sound-provider";
 import { getAvatarFallbackText } from "@/utils/avatar";
 import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu";
@@ -44,8 +44,8 @@ const Header = ({
   onOpenNotificationsPanel,
   onOpenWorkspaceInviteModal,
 }: HeaderProps) => {
-  const { data: notificationsData } = useFindMyNotificationsQuery();
-  const unreadCount = notificationsData?.unreadCount || 0;
+  const { data: summaryNotificationsData } = useFindMySummaryNotificationsQuery();
+  const unreadCount = summaryNotificationsData?.unreadCount || 0;
   const { data: user } = useAuthQuery();
   const { soundEnabled } = useSound();
   const initials = getAvatarFallbackText(user?.name);

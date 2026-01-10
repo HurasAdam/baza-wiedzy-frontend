@@ -15,6 +15,20 @@ export const useFindMyNotificationsQuery = () => {
   });
 };
 
+export const useFindMySummaryNotificationsQuery = () => {
+  return useQuery({
+    queryKey: ["my-summary-notifications"],
+
+    queryFn: () => {
+      return notificationsService.findMySummaryNotifications();
+    },
+
+    refetchOnWindowFocus: false,
+    staleTime: 0,
+    retry: false,
+  });
+};
+
 export const useMarkNotificationAsreadMutation = () => {
   return useMutation({
     mutationFn: (notificationId: string) => notificationsService.markAsRead(notificationId),

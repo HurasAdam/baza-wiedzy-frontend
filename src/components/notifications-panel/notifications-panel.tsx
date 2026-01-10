@@ -27,7 +27,7 @@ interface NotificationsPanelProps {
 }
 
 export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, onOpenChange }) => {
-  const { data: notifications } = useFindMyNotificationsQuery();
+  const { data: notifications, isLoading } = useFindMyNotificationsQuery();
   const { mutate: markAsReadMutate } = useMarkNotificationAsreadMutation();
   const { mutate: markAllAsReadMutate } = useMarkAllNotificationsAsreadMutation();
   const { mutate: deleteNotificationMutate } = useDeleteNotificationMutation();
@@ -41,6 +41,7 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, 
     markAsReadMutate(id, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["my-notifications"] });
+        queryClient.invalidateQueries({ queryKey: ["my-summary-notifications"] });
         setLoadingIds((prev) => {
           const newSet = new Set(prev);
           newSet.delete(id);
@@ -59,7 +60,10 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, 
 
   const markAllAsRead = () => {
     markAllAsReadMutate(undefined, {
-      onSuccess: () => queryClient.invalidateQueries({ queryKey: ["my-notifications"] }),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["my-notifications"] });
+        queryClient.invalidateQueries({ queryKey: ["my-summary-notifications"] });
+      },
     });
   };
   const deleteNotification = (id: string) => {
@@ -68,6 +72,7 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, 
     deleteNotificationMutate(id, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["my-notifications"] });
+        queryClient.invalidateQueries({ queryKey: ["my-summary-notifications"] });
         setDeletingIds((prev) => {
           const newSet = new Set(prev);
           newSet.delete(id);
@@ -117,6 +122,14 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, 
         </SheetHeader>
 
         <div className="mt-6 flex flex-col gap-2.5 overflow-y-auto max-h-[70vh] scrollbar-custom">
+          {isLoading && (
+            <>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <NotificationSkeleton key={i} />
+              ))}
+            </>
+          )}
+
           {notifications?.data?.length === 0 && (
             <p className="text-sm text-muted-foreground text-center py-8">Brak powiadomień</p>
           )}
@@ -195,3 +208,14 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, 
     </Sheet>
   );
 };
+
+const NotificationSkeleton: React.FC = () => (
+  <div className="flex items-start gap-3 rounded-lg border border-border/70 px-3.5 py-3.5 animate-pulse bg-muted/30">
+    <div className="w-6 h-6 rounded-lg bg-background border border-border/60" />
+    <div className="flex-1 flex flex-col gap-2">
+      <div className="h-3 w-1/2 bg-background rounded" />
+      <div className="h-3 w-full bg-background rounded" />
+      <div className="h-3 w-2/3 bg-background rounded" />
+    </div>
+  </div>
+);
