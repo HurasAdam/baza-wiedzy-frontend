@@ -10,6 +10,7 @@ interface Props {
   isFollowPending: boolean;
   isUnfollowPending: boolean;
   actions: ContentActions;
+  userPermissions: string[];
 }
 
 export const ArticleUserActions = ({
@@ -17,6 +18,7 @@ export const ArticleUserActions = ({
   articleUserFlag,
   isFollowPending,
   isUnfollowPending,
+  userPermissions,
   actions,
 }: Props) => {
   const {
@@ -74,17 +76,19 @@ export const ArticleUserActions = ({
           <Plus className="w-4 h-4" /> Dodaj etykietę
         </Button>
 
-        <Button
-          size="sm"
-          variant={article.isImportant ? "destructive" : "secondary"}
-          className="w-full flex items-center justify-center gap-2"
-          onClick={() =>
-            article.isImportant ? handleUnmarkAsImportant(article._id) : handleMarkAsImportant(article._id)
-          }
-        >
-          {article.isImportant ? <StarOff className="w-4 h-4" /> : <Star className="w-4 h-4" />}{" "}
-          {article.isImportant ? "Usuń priorytet" : "Oznacz priorytet"}
-        </Button>
+        {userPermissions.includes("SET_ARTICLE_PRIORITY") && (
+          <Button
+            size="sm"
+            variant={article.isImportant ? "destructive" : "secondary"}
+            className="w-full flex items-center justify-center gap-2"
+            onClick={() =>
+              article.isImportant ? handleUnmarkAsImportant(article._id) : handleMarkAsImportant(article._id)
+            }
+          >
+            {article.isImportant ? <StarOff className="w-4 h-4" /> : <Star className="w-4 h-4" />}{" "}
+            {article.isImportant ? "Usuń priorytet" : "Oznacz priorytet"}
+          </Button>
+        )}
       </CardContent>
     </Card>
   );

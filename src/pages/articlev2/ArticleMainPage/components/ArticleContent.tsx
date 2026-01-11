@@ -19,9 +19,17 @@ interface Props {
   isFollowPending: boolean;
   isUnfollowPending: boolean;
   actions: ContentActions;
+  userPermissions: string[];
 }
 
-export const ArticleContent = ({ article, articleUserFlag, actions, isFollowPending, isUnfollowPending }: Props) => {
+export const ArticleContent = ({
+  article,
+  articleUserFlag,
+  actions,
+  isFollowPending,
+  isUnfollowPending,
+  userPermissions,
+}: Props) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start pb-10">
       {/* Lewa kolumna: Opis zgłoszenia */}
@@ -45,6 +53,7 @@ export const ArticleContent = ({ article, articleUserFlag, actions, isFollowPend
           articleUserFlag={articleUserFlag}
           isFollowPending={isFollowPending}
           isUnfollowPending={isUnfollowPending}
+          userPermissions={userPermissions}
           actions={actions}
         />
       </div>

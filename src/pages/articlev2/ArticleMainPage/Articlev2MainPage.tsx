@@ -239,6 +239,7 @@ export const Articlev2MainPage = () => {
         articleUserFlag={articleUserFlag}
         isFollowPending={isFollowPending}
         isUnfollowPending={isUnfollowPending}
+        userPermissions={userPermissions}
         actions={{
           handleFollowToggle,
           onHandleUnflag,
