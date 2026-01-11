@@ -1,4 +1,17 @@
-import { Bell, Bug, ChevronDown, Layers, LogOut, Plus, PlusCircle, Settings, Shield, User } from "lucide-react";
+import {
+  Bell,
+  Bug,
+  ChevronDown,
+  FolderPlus,
+  Link,
+  LogOut,
+  Plus,
+  PlusCircle,
+  Settings,
+  Shield,
+  SquarePlus,
+  User,
+} from "lucide-react";
 
 import { Dropdown } from "@/components/Dropdown";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -19,7 +32,6 @@ import { useAuthQuery, useLogoutMutation } from "@/hooks/auth/use-auth";
 import { useFindMySummaryNotificationsQuery } from "@/hooks/notifications/use-notifications";
 import { useSound } from "@/providers/sound-provider";
 import { getAvatarFallbackText } from "@/utils/avatar";
-import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -94,7 +106,7 @@ const Header = ({
     {
       label: "Dołącz do kolekcji",
       icon: <PlusCircle />,
-      requiredPermissions: null,
+      requiredPermissions: ["JOIN_COLLECTION"],
       actionHandler: onOpenWorkspaceInviteModal,
     },
     {
@@ -163,29 +175,33 @@ const Header = ({
             </Tooltip>
           )}
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button size="icon" variant="secondary" className="transition-transform hover:scale-105">
-                <Layers className="w-5 h-5" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="shadow-lg rounded-xl">
-              <DropdownMenuLabel>Kolekcje</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                {workspaces.map((ws) => (
-                  <DropdownMenuItem key={ws._id}>
-                    {ws.color && <div className="w-3 h-3 rounded-full" style={{ backgroundColor: ws.color }} />}
-                    <span className="ml-2">{ws.name}</span>
+          {(userPermissions.includes("ADD_COLLECTION") || userPermissions.includes("JOIN_COLLECTION")) && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button size="icon" variant="secondary" className="transition-transform hover:scale-105">
+                  <FolderPlus className="w-5 h-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="shadow-lg rounded-xl">
+                <DropdownMenuLabel>Kolekcje</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+
+                {userPermissions.includes("ADD_COLLECTION") && (
+                  <DropdownMenuItem onClick={onCreateWorkspace}>
+                    <SquarePlus className="w-4 h-4 mr-2" />
+                    Dodaj kolekcję
                   </DropdownMenuItem>
-                ))}
-              </DropdownMenuGroup>
-              <DropdownMenuItem onClick={onCreateWorkspace}>
-                <PlusCircle className="w-4 h-4 mr-2" />
-                Dodaj kolekcję
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                )}
+
+                {userPermissions.includes("JOIN_COLLECTION") && (
+                  <DropdownMenuItem onClick={onOpenWorkspaceInviteModal}>
+                    <Link className="w-4 h-4 mr-2" />
+                    Dołącz do kolekcji
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
 
           {userPermissions.includes("ACCESS_ADMIN_PANEL") && (
             <Button
