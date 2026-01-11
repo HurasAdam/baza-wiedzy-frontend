@@ -56,10 +56,20 @@ export const SendIssueReportModal = ({
       onError: (error) => {
         const { status } = error as AxiosError;
         if (status === 409) {
-          toast.error("Takie zgłoszenie już istnieje");
+          toast.error("Zgłoszenie o tej nazwie już istnieje - nazwa zgłoszenia musi być unikalna");
           return;
         }
-        toast.error("Wystąpił błąd, spróbuj ponownie");
+
+        if (status === 403) {
+          toast.error("Brak uprawnień", {
+            description: "Nie posiadasz wymaganych uprawnień do wykonania tej operacji.",
+            position: "bottom-right",
+            duration: 7000,
+          });
+          return;
+        }
+
+        toast.error("Wystapił błąd, spróbuj ponownie");
       },
     });
   };
