@@ -28,7 +28,10 @@ export const JstProjectModal = ({
     mutate(data, {
       onSuccess: () => {
         setIsCreatingJstProject(false);
-        toast.success("Projekt został dodany");
+        toast.success("Zmiany zostały zapisane", {
+          position: "bottom-right",
+          description: "Projekt JST został dodany",
+        });
         queryClient.invalidateQueries({ queryKey: ["jst-projects"] });
       },
       onError: (error) => {
@@ -47,10 +50,12 @@ export const JstProjectModal = ({
             >
               <div>
                 <div style={{ fontWeight: 600, marginBottom: 2 }}>Błąd: Duplikat nazwy projektu</div>
-                <div style={{ opacity: 0.8 }}>Projekt o podanej nazwie już istnieje. Wybierz inną nazwę.</div>
+                <div style={{ opacity: 0.8 }}>
+                  Projekt o podanej nazwie już istnieje - nazwa musi być unikalna. Wybierz inną nazwę i spróbuj ponownie
+                </div>
               </div>
             </div>,
-            { duration: 7000 }
+            { duration: 7000, position: "bottom-right" }
           );
           return;
         }
