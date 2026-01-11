@@ -5,11 +5,17 @@ import { Layers, Plus } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CreateWorkspaceModal } from "../../components/workspace/CreateWorkspaceModal";
+import { useAuthQuery } from "../../hooks/auth/use-auth";
 
 export const MyWorkspaces = () => {
   const navigate = useNavigate();
+  const { data: user } = useAuthQuery();
   const { data: workspaces = [], isPending } = useFindUserWorkspacesQuery();
   const [isCreatingWorkspace, setIsCreatingWorkspace] = useState<boolean>(false);
+
+  const userPermissions = user?.role?.permissions || [];
+
+  console.log("U", userPermissions);
 
   const handleOpenWorkspace = (id: string) => {
     navigate(`/workspace/${id}`);
@@ -35,11 +41,12 @@ export const MyWorkspaces = () => {
           <h1 className="text-2xl font-semibold text-foreground">Moje kolekcje</h1>
           <p className="text-muted-foreground text-sm mt-1">Zarządzaj swoimi kolekcjami.</p>
         </div>
-
-        <Button onClick={onCreateWorkspace} size="sm" className="gap-2 shadow-md hover:shadow-lg transition-all">
-          <Plus className="w-4 h-4" />
-          Nowa kolekcja
-        </Button>
+        {userPermissions.includes("ADD_COLLECTION") && (
+          <Button onClick={onCreateWorkspace} size="sm" className="gap-2 shadow-md hover:shadow-lg transition-all">
+            <Plus className="w-4 h-4" />
+            Nowa kolekcja
+          </Button>
+        )}
       </div>
 
       {/* Empty state */}
@@ -48,10 +55,12 @@ export const MyWorkspaces = () => {
           <Layers className="w-20 h-20 mb-4 text-muted-foreground/50" />
           <p className="text-lg font-medium">Nie masz jeszcze żadnej kolekcji</p>
           <p className="text-sm text-muted-foreground mt-1">Utwórz workspace, aby zacząć organizować wiedzę.</p>
-          <Button onClick={onCreateWorkspace} className="mt-6 gap-2 shadow-md hover:shadow-lg transition-all">
-            <Plus className="w-4 h-4" />
-            Dodaj kolekcję
-          </Button>
+          {userPermissions.includes("ADD_COLLECTION") && (
+            <Button onClick={onCreateWorkspace} className="mt-6 gap-2 shadow-md hover:shadow-lg transition-all">
+              <Plus className="w-4 h-4" />
+              Dodaj kolekcję
+            </Button>
+          )}
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
