@@ -34,7 +34,6 @@ const colorClassMap: Record<string, string> = {
   teal: "bg-teal-800 border-teal-700",
 };
 
-// external pure function - ok to keep outside (stable reference)
 function groupPermissionsByCategory(permissions: IPermission[]) {
   return permissions.reduce<Record<string, IPermission[]>>((acc, perm) => {
     if (!acc[perm.category]) acc[perm.category] = [];
@@ -44,7 +43,7 @@ function groupPermissionsByCategory(permissions: IPermission[]) {
 }
 
 interface RoleFormProps {
-  permissions: IPermission[]; // <- poprawiony typ
+  permissions: IPermission[];
   isPermissionsLoading: boolean;
 }
 
@@ -159,7 +158,8 @@ const RoleForm = ({ permissions = [], isPermissionsLoading }: RoleFormProps) => 
       </div>
 
       {/* Permissions */}
-      <div className="space-y-6">
+      {/* Uprawnienia */}
+      <div className="space-y-10">
         <div className="flex items-center justify-between">
           <p className="text-sm font-medium text-muted-foreground">Uprawnienia</p>
           <p className="text-sm text-muted-foreground">Wybierz uprawnienia dla roli</p>
@@ -171,87 +171,89 @@ const RoleForm = ({ permissions = [], isPermissionsLoading }: RoleFormProps) => 
           <>
             <input type="hidden" {...register("permissions")} />
 
-            <div className="space-y-6">
+            <div className="space-y-12">
               {Object.entries(groupedPermissions).map(([category, perms]) => {
-                const counts = categoryCounts[category] || { total: perms.length, selected: 0 };
+                const counts = categoryCounts[category] || {
+                  total: perms.length,
+                  selected: 0,
+                };
                 const isCollapsed = !!collapsed[category];
+                const allSelected = counts.selected === counts.total && counts.total > 0;
 
                 return (
-                  <section
-                    key={category}
-                    className="rounded-2xl border border-border shadow-sm bg-card p-5.5 transition hover:shadow-md"
-                    aria-labelledby={`cat-${category}`}
-                  >
+                  <div key={category} className="space-y-4">
                     {/* Nagłówek kategorii */}
-                    <div className="flex justify-between items-center mb-5">
-                      <div className="flex items-center gap-3">
-                        <h3 id={`cat-${category}`} className="text-lg font-semibold text-foreground">
+                    <div className="flex items-end justify-between border-b border-border pb-3">
+                      <div className="space-y-1">
+                        <h3 id={`cat-${category}`} className="text-base font-semibold text-foreground">
                           {category}
                         </h3>
-                        <span className="text-sm text-muted-foreground">
-                          {counts.selected}/{counts.total} zaznaczone
+                        <span className="text-xs text-muted-foreground">
+                          wybrano: {counts.selected}/{counts.total}
                         </span>
                       </div>
-                      <div className="flex gap-2 items-center">
+
+                      <div className="flex items-center gap-2">
                         <button
                           type="button"
                           onClick={() => toggleAllInCategory(category)}
-                          className="text-sm px-3 py-1 rounded-md border border-border bg-background hover:bg-muted transition"
-                          aria-pressed={counts.selected === counts.total}
-                          title={counts.selected === counts.total ? "Odznacz wszystkie" : "Zaznacz wszystkie"}
+                          className="text-xs px-3 py-1.5 rounded-md border border-border bg-background hover:bg-muted transition"
+                          aria-pressed={allSelected}
                         >
-                          {counts.selected === counts.total ? "Odznacz wszystkie" : "Zaznacz wszystkie"}
+                          {allSelected ? "Odznacz wszystkie" : "Zaznacz wszystkie"}
                         </button>
+
                         <button
                           type="button"
-                          onClick={() => setCollapsed((s) => ({ ...s, [category]: !s[category] }))}
+                          onClick={() =>
+                            setCollapsed((s) => ({
+                              ...s,
+                              [category]: !s[category],
+                            }))
+                          }
                           aria-expanded={!isCollapsed}
-                          className="p-2 rounded-full hover:bg-muted transition"
-                          title={isCollapsed ? "Rozwiń" : "Zwiń"}
+                          className="p-2 rounded-md hover:bg-muted transition"
                         >
                           {isCollapsed ? (
-                            <ChevronDown className="w-5 h-5 text-muted-foreground" />
+                            <ChevronDown className="w-4 h-4 text-muted-foreground" />
                           ) : (
-                            <ChevronUp className="w-5 h-5 text-muted-foreground" />
+                            <ChevronUp className="w-4 h-4 text-muted-foreground" />
                           )}
                         </button>
                       </div>
                     </div>
 
-                    {/* Lista permisji */}
+                    {/* Karta z uprawnieniami */}
                     {!isCollapsed && (
-                      <div className="flex flex-col divide-y divide-border rounded-lg">
-                        {perms.map(({ key, label, description }) => {
-                          const checked = selectedPermissions.includes(key);
-                          return (
-                            <div
-                              key={key}
-                              className="flex justify-between items-center py-4 px-5 transition hover:bg-muted"
-                            >
-                              <div className="flex flex-col gap-1">
-                                <span className="text-sm font-medium text-foreground">{label}</span>
-                                {description && <span className="text-xs text-muted-foreground">{description}</span>}
-                              </div>
+                      <section className="rounded-xl border border-border bg-card shadow-sm">
+                        <div className="divide-y divide-border">
+                          {perms.map(({ key, label, description }) => {
+                            const checked = selectedPermissions.includes(key);
 
-                              <Switch
-                                checked={checked}
-                                onCheckedChange={() => togglePermission(key)}
-                                className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors ${
-                                  checked ? "bg-primary" : "bg-muted"
-                                }`}
+                            return (
+                              <div
+                                key={key}
+                                className="flex items-center justify-between gap-4 px-6 py-4 hover:bg-muted/50 transition"
                               >
-                                <span
-                                  className={`inline-block h-4 w-4 transform rounded-full bg-background transition-transform ${
-                                    checked ? "translate-x-5" : "translate-x-1"
-                                  }`}
+                                <div className="flex flex-col gap-0.5 min-w-0">
+                                  <span className="text-sm font-medium text-foreground">{label}</span>
+                                  {description && (
+                                    <span className="text-xs text-muted-foreground leading-snug">{description}</span>
+                                  )}
+                                </div>
+
+                                <Switch
+                                  checked={checked}
+                                  onCheckedChange={() => togglePermission(key)}
+                                  aria-label={`Uprawnienie ${label}`}
                                 />
-                              </Switch>
-                            </div>
-                          );
-                        })}
-                      </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </section>
                     )}
-                  </section>
+                  </div>
                 );
               })}
             </div>
