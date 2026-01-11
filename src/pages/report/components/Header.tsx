@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import type { AxiosError } from "axios";
 import { ArrowLeft, Calendar, MoreVertical } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -16,6 +17,7 @@ import type { Report } from "../../admin-panel/admin-issue-reports/components/Is
 
 interface Props {
   report: Report;
+  canManageReportStatus: boolean;
 }
 
 const statusConfig: Record<
@@ -43,7 +45,7 @@ const statusConfig: Record<
   },
 };
 
-export const Header = ({ report }: Props) => {
+export const Header = ({ report, canManageReportStatus }: Props) => {
   const navigate = useNavigate();
   const formattedDate = new Date(report.createdAt).toLocaleString("pl-PL");
   const { mutate: updateReportStatusMutate } = useUpdateReportStatusMutation();
@@ -59,6 +61,20 @@ export const Header = ({ report }: Props) => {
             description: "Status zgłoszenia został zmieniony",
           });
           queryClient.invalidateQueries({ queryKey: ["issue-report", reportId] });
+        },
+        onError: (error) => {
+          const { status } = error as AxiosError;
+
+          if (status === 403) {
+            toast.error("Brak uprawnień", {
+              description: "Nie posiadasz wymaganych uprawnień do wykonania tej operacji.",
+              position: "bottom-right",
+              duration: 7000,
+            });
+            return;
+          }
+
+          toast.error("Wystapił błąd, spróbuj ponownie");
         },
       }
     );
@@ -94,23 +110,25 @@ export const Header = ({ report }: Props) => {
       </div>
 
       <div className="flex items-center gap-2 w-full md:w-auto">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="flex items-center gap-2">
-              <Badge className={statusConfig[report.status]?.badgeColor}>{statusConfig[report.status]?.label}</Badge>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {Object.entries(statusConfig).map(([status, config]) => (
-              <DropdownMenuItem onSelect={() => onStatusChange(report._id, status)} key={status}>
-                <div className="flex items-center gap-2">
-                  <div className={`w-2 h-2 rounded-full ${config.dotColor}`} />
-                  {config.label}
-                </div>
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {canManageReportStatus && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="flex items-center gap-2">
+                <Badge className={statusConfig[report.status]?.badgeColor}>{statusConfig[report.status]?.label}</Badge>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {Object.entries(statusConfig).map(([status, config]) => (
+                <DropdownMenuItem onSelect={() => onStatusChange(report._id, status)} key={status}>
+                  <div className="flex items-center gap-2">
+                    <div className={`w-2 h-2 rounded-full ${config.dotColor}`} />
+                    {config.label}
+                  </div>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

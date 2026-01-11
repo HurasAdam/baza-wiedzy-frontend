@@ -14,6 +14,7 @@ interface IssueReportsHeaderProps {
   setFilterStatus: (value: IssueStatus) => void;
   foundReportsCount: number;
   openSendIssueReportModal: () => void;
+  userPermissions: string[];
 }
 
 const IssueReportsHeader = ({
@@ -25,6 +26,7 @@ const IssueReportsHeader = ({
   setSearchTerm,
   foundReportsCount,
   openSendIssueReportModal,
+  userPermissions,
 }: IssueReportsHeaderProps) => {
   const hasActiveFilters = !!filterType || !!filterStatus;
 
@@ -39,7 +41,7 @@ const IssueReportsHeader = ({
           </div>
           <p className="text-sm text-muted-foreground max-w-2xl">Lista zgłoszonych błędów i propozycji.</p>
         </div>
-        <Button onClick={openSendIssueReportModal}>Nowe zgłoszenie</Button>
+        {userPermissions.includes("SEND_REPORT") && <Button onClick={openSendIssueReportModal}>Nowe zgłoszenie</Button>}
       </header>
 
       {/* Active filters – meta state */}

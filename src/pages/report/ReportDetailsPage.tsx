@@ -12,6 +12,8 @@ import queryClient from "../../config/query.client";
 import { CommentFormSection } from "./components/CommentFormSection";
 import { CommentListSection } from "./components/CommentListSection";
 
+import type { AxiosError } from "axios";
+import { useAuthQuery } from "../../hooks/auth/use-auth";
 import { DetailsSection } from "./components/DetailsSection";
 import { Header } from "./components/Header";
 
@@ -19,6 +21,9 @@ export function ReportDetailsPage() {
   const { id } = useParams();
   const { data: report, isLoading } = useFindIssueReportQuery(id!);
   const { data: comments = [] } = useFindReportCommentsQuery(id!);
+  const { data: user } = useAuthQuery();
+
+  const userPermissions = user?.role?.permissions || [];
 
   const [comment, setComment] = useState("");
   const { mutate: sendCommentMutate, isPending: isSubmitting } = useSendIssueReportCommentMutation();
@@ -45,17 +50,37 @@ export function ReportDetailsPage() {
           setComment("");
           toast.info("Dodano komentarz", { position: "bottom-right" });
         },
+        onError: (error) => {
+          const { status } = error as AxiosError;
+
+          if (status === 403) {
+            toast.error("Brak uprawnień", {
+              description: "Nie posiadasz wymaganych uprawnień do wykonania tej operacji.",
+              position: "bottom-right",
+              duration: 7000,
+            });
+            return;
+          }
+
+          toast.error("Wystapił błąd, spróbuj ponownie");
+        },
       }
     );
   };
 
   return (
     <div className="mx-auto max-w-[1400px] h-full">
-      <Header report={report} />
+      <Header report={report} canManageReportStatus={userPermissions.includes("MANAGE_REPORT_STATUS")} />
 
       <DetailsSection report={report} />
 
-      <CommentFormSection value={comment} onChange={setComment} onSubmit={handleSubmitComment} loading={isSubmitting} />
+      <CommentFormSection
+        value={comment}
+        onChange={setComment}
+        onSubmit={handleSubmitComment}
+        loading={isSubmitting}
+        canAddComment={userPermissions.includes("ADD_REPORT_COMMENT")}
+      />
 
       <CommentListSection comments={comments} onDeleteComment={() => {}} onEditComment={() => {}} />
     </div>

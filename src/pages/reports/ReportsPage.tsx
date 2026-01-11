@@ -1,6 +1,7 @@
 import { useFindIssueReportsQuery } from "@/hooks/issue-report/use-issue-report";
 import { useMemo, useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
+import { useAuthQuery } from "../../hooks/auth/use-auth";
 import IssueReportsHeader from "../admin-panel/admin-issue-reports/components/IssueReportsHeader";
 import IssueReportsList from "../admin-panel/admin-issue-reports/components/IssueReportsList";
 
@@ -12,6 +13,10 @@ export const ReportsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState<IssueType>("");
   const [filterStatus, setFilterStatus] = useState<IssueStatus>("");
+
+  const { data: user } = useAuthQuery();
+
+  const userPermissions = user?.role?.permissions || [];
 
   const params = useMemo(() => {
     const searchParams = new URLSearchParams();
@@ -34,6 +39,7 @@ export const ReportsPage = () => {
         setFilterStatus={setFilterStatus}
         foundReportsCount={reports.length}
         openSendIssueReportModal={onOpenCreateIssueReport}
+        userPermissions={userPermissions}
       />
 
       <IssueReportsList reports={reports} isLoading={isLoading} isError={isError} error={error} navigate={navigate} />

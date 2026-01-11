@@ -7,9 +7,10 @@ interface Props {
   onChange: (v: string) => void;
   onSubmit: () => void;
   loading?: boolean;
+  canAddComment: boolean;
 }
 
-export function CommentFormSection({ value, onChange, onSubmit, loading }: Props) {
+export function CommentFormSection({ value, onChange, onSubmit, loading, canAddComment }: Props) {
   return (
     <Card className="mt-6 shadow-sm border bg-card/70">
       <CardContent>
@@ -18,9 +19,11 @@ export function CommentFormSection({ value, onChange, onSubmit, loading }: Props
         <Textarea
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          placeholder="Wpisz komentarz do zgłoszenia..."
+          placeholder={
+            canAddComment ? "Wpisz komentarz do zgłoszenia..." : "Nie masz uprawnień do dodawania komentarzy"
+          }
           className="resize-none min-h-[100px]"
-          disabled={loading}
+          disabled={loading || !canAddComment}
           onKeyDown={(e) => {
             if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
               onSubmit();
@@ -29,10 +32,14 @@ export function CommentFormSection({ value, onChange, onSubmit, loading }: Props
         />
 
         <div className="flex justify-end mt-3">
-          <Button size="sm" onClick={onSubmit} disabled={loading || !value.trim()}>
+          <Button size="sm" onClick={onSubmit} disabled={loading || !canAddComment || !value.trim()}>
             Dodaj komentarz
           </Button>
         </div>
+        {/* ⬇️ TU */}
+        {!canAddComment && (
+          <p className="mt-2 text-xs text-muted-foreground">Nie posiadasz uprawnień do dodawania komentarzy.</p>
+        )}
       </CardContent>
     </Card>
   );
