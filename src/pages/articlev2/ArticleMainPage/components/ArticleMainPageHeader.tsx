@@ -26,10 +26,20 @@ export const ArticleMainPageHeader = ({ article, userPermissions, actions }) => 
   const { handleFollowToggle, openExtraInfoModal, handleUnmarkAsImportant, handleMarkAsImportant, refetch } = actions;
 
   const views = [
-    { label: "Dane", path: "", icon: Info },
-    { label: "Załączniki", path: "attachments", icon: Archive },
-    userPermissions.includes("VIEW_ARTICLE_HISTORY") && { label: "Historia", path: "history", icon: History },
+    { label: "Dane", path: "", icon: Info, always: true },
+    userPermissions.includes("ADD_ARTICLE_ATTACHMENT") && {
+      label: "Załączniki",
+      path: "attachments",
+      icon: Archive,
+    },
+    userPermissions.includes("VIEW_ARTICLE_HISTORY") && {
+      label: "Historia",
+      path: "history",
+      icon: History,
+    },
   ].filter(Boolean);
+
+  const shouldShowTabs = views.length > 1;
 
   const navigate = useNavigate();
   return (
@@ -57,27 +67,30 @@ export const ArticleMainPageHeader = ({ article, userPermissions, actions }) => 
       </div>
 
       <div className="flex items-center gap-2">
-        <div className="flex items-center gap-1 rounded-lg border border-border bg-muted/40 p-1">
-          {views.map((view) => {
-            const Icon = view.icon;
-            return (
-              <NavLink
-                key={view.path}
-                to={view.path}
-                end={view.path === ""}
-                className={({ isActive }) =>
-                  cn(
-                    "flex items-center gap-1.5 px-3 py-2 rounded-md text-xs font-medium transition-all",
-                    "text-muted-foreground hover:text-foreground",
-                    isActive ? "bg-background text-foreground shadow-sm" : "hover:bg-background/50"
-                  )
-                }
-              >
-                <Icon className="w-3.5 h-3.5" /> <span className="hidden sm:inline">{view.label}</span>
-              </NavLink>
-            );
-          })}
-        </div>
+        {shouldShowTabs && (
+          <div className="flex items-center gap-1 rounded-lg border border-border bg-muted/40 p-1">
+            {views.map((view) => {
+              const Icon = view.icon;
+              return (
+                <NavLink
+                  key={view.path}
+                  to={view.path}
+                  end={view.path === ""}
+                  className={({ isActive }) =>
+                    cn(
+                      "flex items-center gap-1.5 px-3 py-2 rounded-md text-xs font-medium transition-all",
+                      "text-muted-foreground hover:text-foreground",
+                      isActive ? "bg-background text-foreground shadow-sm" : "hover:bg-background/50"
+                    )
+                  }
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">{view.label}</span>
+                </NavLink>
+              );
+            })}
+          </div>
+        )}
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
