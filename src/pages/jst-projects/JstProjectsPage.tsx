@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { JstProjectModal } from "../../components/jst-project/jst-project-modal";
 import { JstSchoolModal } from "../../components/jst-school/jst-school-modal";
+import { useAuthQuery } from "../../hooks/auth/use-auth";
 import { useFindJstProjectsQuery } from "../../hooks/jst-projects/use-jst-projects";
 import { useFindJstSchoolsQuery } from "../../hooks/jst-schools/use-jst-schools";
 import JstProjectsHeader from "./components/JstProjectsHeader";
@@ -17,6 +18,10 @@ export const JstProjectsPage = () => {
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [filterField, setFilterField] = useState<FilterField>("name");
   const [filterQuery, setFilterQuery] = useState("");
+
+  const { data: user } = useAuthQuery();
+
+  const userPermissions = user?.role?.permissions || [];
 
   const params = useMemo(() => {
     const searchParams = new URLSearchParams();
@@ -41,7 +46,11 @@ export const JstProjectsPage = () => {
   return (
     <div className="flex w-full py-2 max-w-[1400px] mx-auto">
       <div className="w-full">
-        <JstProjectsHeader onCreateJstProject={onCreateJstProject} onCreateJstSchool={onCreateJstSchool} />
+        <JstProjectsHeader
+          onCreateJstProject={onCreateJstProject}
+          onCreateJstSchool={onCreateJstSchool}
+          userPermissions={userPermissions}
+        />
 
         <JstProjectsTabs
           projects={projects}
