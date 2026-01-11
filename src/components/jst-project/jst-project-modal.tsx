@@ -55,7 +55,11 @@ export const JstProjectModal = ({
           return;
         }
         if (status === 403) {
-          toast.error("Brak wymaganych uprawnień do wykonania tej operacji.");
+          toast.error("Brak uprawnień", {
+            description: "Nie posiadasz wymaganych uprawnień do wykonania tej operacji.",
+            position: "bottom-right",
+            duration: 7000,
+          });
           return;
         }
 
