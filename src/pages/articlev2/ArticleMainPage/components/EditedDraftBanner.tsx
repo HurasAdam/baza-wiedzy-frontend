@@ -41,15 +41,18 @@ export const EditedDraftBanner = ({ userPermissions, actions }: Props) => (
     </div>
 
     {/* Akcje */}
-    {userPermissions.includes("APPROVE_ARTICLE") && (
-      <div className="flex gap-2">
+
+    <div className="flex gap-2">
+      {userPermissions.includes("APPROVE_ARTICLE") && (
         <Button onClick={() => actions.APPROVE_ARTICLE()} size="sm">
           Zatwierdź zmiany
         </Button>
+      )}
+      {userPermissions.includes("REJECT_ARTICLE") && (
         <Button onClick={() => actions.REJECT_ARTICLE()} size="sm" variant="outline">
           Zgłoś uwagi
         </Button>
-      </div>
-    )}
+      )}
+    </div>
   </div>
 );
