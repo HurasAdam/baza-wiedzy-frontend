@@ -1,4 +1,5 @@
 import api from "@/config/api.client";
+import type { NotificationsResponse } from "../types/notification";
 
 const BASE_URL = "/notifications";
 
@@ -6,8 +7,8 @@ const BASE_URL = "/notifications";
 //   return api.post(BASE_URL, formData);
 // };
 
-const findMyNotifications = (params?: URLSearchParams) => {
-  return api.get(BASE_URL, { params });
+const findMyNotifications = (page = 1, limit = 20): Promise<NotificationsResponse> => {
+  return api.get(BASE_URL, { params: { page, limit } });
 };
 const findMySummaryNotifications = (params?: URLSearchParams) => {
   return api.get(`${BASE_URL}/summary`, { params });

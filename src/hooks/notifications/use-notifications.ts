@@ -1,14 +1,15 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { notificationsService } from "../../services/notifications.service";
 
-export const useFindMyNotificationsQuery = () => {
-  return useQuery({
+export const useFindMyNotificationsQuery = (limit = 15) => {
+  return useInfiniteQuery({
     queryKey: ["my-notifications"],
-
-    queryFn: () => {
-      return notificationsService.findMyNotifications();
+    queryFn: ({ pageParam = 1 }) => notificationsService.findMyNotifications(pageParam, limit),
+    getNextPageParam: (lastPage) => {
+      if (!lastPage?.pagination) return undefined;
+      return lastPage.pagination.page < lastPage.pagination.pages ? lastPage.pagination.page + 1 : undefined;
     },
-
+    initialPageParam: 1,
     refetchOnWindowFocus: false,
     staleTime: 0,
     retry: false,

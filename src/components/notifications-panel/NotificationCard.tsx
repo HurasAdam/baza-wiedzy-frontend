@@ -1,16 +1,7 @@
 import { AlertTriangle, BellRing, Check, Loader, UserPlus, X } from "lucide-react";
 import { Link } from "react-router-dom";
+import type { Notification } from "../../types/notification";
 import { Button } from "../ui/button";
-
-export interface Notification {
-  _id: string;
-  title: string;
-  message: string;
-  type: "info" | "invite" | "warning" | "reminder";
-  read: boolean;
-  createdAt?: string;
-  link?: string;
-}
 
 interface Props {
   notification: Notification;
