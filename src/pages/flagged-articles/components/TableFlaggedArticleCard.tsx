@@ -50,7 +50,7 @@ export const TableFlaggedArticleCard = ({ article, openFlagModal, onUnflag }: Ta
         )}
 
         <Link
-          to={`/articles/v2/${article._id}`}
+          to={`/articles/${article._id}`}
           state={{ from: location.pathname + location.search }}
           className="flex flex-col overflow-hidden flex-grow ml-3"
         >

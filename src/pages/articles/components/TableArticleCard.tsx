@@ -92,7 +92,7 @@ const TableArticleCard = ({
       onMouseEnter={() => onMouseEnter?.()}
       onMouseLeave={() => onMouseLeave?.()}
       key={article._id}
-      onClick={() => navigate(`/articles/v2/${article._id}`, { state: { from: location.pathname + location.search } })}
+      onClick={() => navigate(`/articles/${article._id}`, { state: { from: location.pathname + location.search } })}
       className={cn(
         "flex justify-between items-center px-3.5 py-3 text-sm hover:bg-muted/45 transition-colors bg-card/60 ",
         "border-b last:border-0 first:rounded-t-xl last:rounded-b-lg"
@@ -101,7 +101,7 @@ const TableArticleCard = ({
     >
       {/* LEFT SIDE: FileText / Status Icon + Title + Product */}
       <div
-        to={`/articles/v2/${article._id}`}
+        to={`/articles/${article._id}`}
         state={{ from: location.pathname + location.search }}
         className="flex items-center gap-3 min-w-0 overflow-hidden flex-grow"
       >

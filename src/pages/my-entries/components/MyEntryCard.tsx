@@ -58,7 +58,7 @@ interface MyEntryCardProps {
 
 const MyEntryCard = ({ article, label }: MyEntryCardProps) => {
   const navigate = useNavigate();
-  const onPreview = () => navigate(`/articles/v2/${article._id}`);
+  const onPreview = () => navigate(`/articles/${article._id}`);
 
   const renderStatus = () => {
     const baseClasses = "text-xs font-medium px-2 py-0.5 rounded";

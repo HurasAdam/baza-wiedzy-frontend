@@ -108,7 +108,7 @@ export const ArticleMainPageHeader = ({ article, userPermissions, actions }) => 
             </DropdownMenuItem>
             {userPermissions.includes("EDIT_ARTICLE") && (
               <DropdownMenuItem asChild>
-                <NavLink to={`/articles/v2/${article._id}/edit`}>
+                <NavLink to={`/articles/${article._id}/edit`}>
                   <div className="flex items-center gap-2">
                     <SquarePen className="w-4 h-4 mr-1.5" /> Edytuj
                   </div>
