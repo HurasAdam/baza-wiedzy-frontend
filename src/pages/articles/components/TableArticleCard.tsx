@@ -94,7 +94,7 @@ const TableArticleCard = ({
       key={article._id}
       onClick={() => navigate(`/articles/${article._id}`, { state: { from: location.pathname + location.search } })}
       className={cn(
-        "flex justify-between items-center px-3.5 py-3 text-sm hover:bg-muted/45 transition-colors bg-card/60 ",
+        "flex justify-between items-center px-3.5 py-3 text-sm hover:bg-muted/45 transition-colors bg-card ",
         "border-b last:border-0 first:rounded-t-xl last:rounded-b-lg"
       )}
       title={`Autor: ${article.createdBy.name}`}
@@ -119,7 +119,7 @@ const TableArticleCard = ({
         </div>
 
         <div className="flex flex-col overflow-hidden">
-          <span className="font-semibold text-foreground/95  break-words">{article.title}</span>
+          <span className="font-semibold text-card-foreground  break-words">{article.title}</span>
 
           <span
             className="inline-flex items-center px-2 py-[1px] mt-1 rounded-full text-[9px] font-medium uppercase tracking-wide w-fit"
