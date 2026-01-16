@@ -72,7 +72,6 @@ export function AppRoutes() {
           <Route path="settings" element={<PAGES.WorkspaceManageSettingsPage />} />
         </Route>
 
-        {/* Ochrona admin panelu */}
         <Route element={<AdminProtectedRoute />}>
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<Navigate to="dashboard" replace />} />
@@ -83,9 +82,8 @@ export function AppRoutes() {
             <Route path="manage-products/:id" element={<PAGES.AdminProductDetailsPage />} />
             <Route path="manage-tags" element={<PAGES.TagsPage />} />
             <Route path="manage-jstprojects" element={<PAGES.JstAdminProjectsPage />} />
-            <Route path="manage-reports" element={<PAGES.AdminUserReportsPage />} />
+
             <Route path="logs" element={<PAGES.AdminLogsPage />} />
-            <Route path="manage-reports/:id" element={<PAGES.AdminIssueReportDetailsPage />} />
 
             <Route path="manage-registertopics" element={<PAGES.AdminTopicsPage />} />
 

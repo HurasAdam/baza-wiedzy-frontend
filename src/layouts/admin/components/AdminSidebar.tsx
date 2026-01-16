@@ -9,7 +9,6 @@ import {
   LayoutDashboard,
   ListChecks,
   LucideArrowBigLeft,
-  MessageSquareWarning,
   ShieldCheck,
   SquareTerminal,
   UserCog,
@@ -45,11 +44,7 @@ const adminLinks = [
     href: "/admin/manage-faqs",
     icon: BookOpen,
   },
-  {
-    title: "Zgłoszenia",
-    href: "/admin/manage-reports",
-    icon: MessageSquareWarning,
-  },
+
   {
     title: "Logi",
     href: "/admin/logs",
@@ -65,7 +60,7 @@ export const AdminSidebar = ({ isCollapsed }: SidebarProps) => {
     <aside
       className={cn(
         "h-screen bg-admin-sidebar border-r flex flex-col justify-between px-2 pt-2 pb-4 ",
-        isCollapsed ? "w-16 md:w-[80px]" : "w-16 md:w-[240px]"
+        isCollapsed ? "w-16 md:w-[80px]" : "w-16 md:w-[240px]",
       )}
     >
       <div className="px-3 pb-4 mb-4 border-b border-border text-center">
@@ -101,7 +96,7 @@ export const AdminSidebar = ({ isCollapsed }: SidebarProps) => {
                       "w-full px-3 py-2 text-admin-sidebar-foreground transition border-transparent rounded-none hover:bg-transparent hover:border-l hover:border-admin-sidebar-primary",
                       isCollapsed ? "justify-center" : "justify-start",
                       isActive &&
-                        "bg-admin-sidebar-primary hover:bg-admin-sidebar-primary rounded-md  text-admin-sidebar-primary-foreground font-medium border-l-4  border-transparent"
+                        "bg-admin-sidebar-primary hover:bg-admin-sidebar-primary rounded-md  text-admin-sidebar-primary-foreground font-medium border-l-4  border-transparent",
                     )}
                   >
                     <Icon className={cn("w-5 h-5", !isCollapsed && "mr-2")} />
