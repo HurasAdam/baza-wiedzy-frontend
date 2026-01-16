@@ -1,4 +1,4 @@
-import { Bell, BellOff, Flag, Plus, Star, StarOff } from "lucide-react";
+import { Bell, BellOff, Flag, Loader, Plus, Star, StarOff } from "lucide-react";
 import { Button } from "../../../../components/ui/button";
 import { Card, CardContent } from "../../../../components/ui/card";
 import type { Article } from "../../../../types/article";
@@ -11,6 +11,7 @@ interface Props {
   isUnfollowPending: boolean;
   actions: ContentActions;
   userPermissions: string[];
+  isMarkAsImportantLoading: boolean;
 }
 
 export const ArticleUserActions = ({
@@ -19,6 +20,7 @@ export const ArticleUserActions = ({
   isFollowPending,
   isUnfollowPending,
   userPermissions,
+  isMarkAsImportantLoading,
   actions,
 }: Props) => {
   const {
@@ -84,9 +86,19 @@ export const ArticleUserActions = ({
             onClick={() =>
               article.isImportant ? handleUnmarkAsImportant(article._id) : handleMarkAsImportant(article._id)
             }
+            disabled={isMarkAsImportantLoading}
           >
-            {article.isImportant ? <StarOff className="w-4 h-4" /> : <Star className="w-4 h-4" />}{" "}
-            {article.isImportant ? "Usuń priorytet" : "Oznacz priorytet"}
+            {isMarkAsImportantLoading ? (
+              <>
+                <Loader className="w-4 h-4 animate-spin" />
+                Przetwarzanie...
+              </>
+            ) : (
+              <>
+                {article.isImportant ? <StarOff className="w-4 h-4" /> : <Star className="w-4 h-4" />}
+                {article.isImportant ? "Usuń priorytet" : "Oznacz priorytet"}
+              </>
+            )}
           </Button>
         )}
       </CardContent>

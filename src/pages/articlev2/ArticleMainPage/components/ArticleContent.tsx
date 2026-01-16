@@ -20,6 +20,7 @@ interface Props {
   isUnfollowPending: boolean;
   actions: ContentActions;
   userPermissions: string[];
+  isMarkAsImportantLoading: boolean;
 }
 
 export const ArticleContent = ({
@@ -29,6 +30,7 @@ export const ArticleContent = ({
   isFollowPending,
   isUnfollowPending,
   userPermissions,
+  isMarkAsImportantLoading,
 }: Props) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start pb-10">
@@ -55,6 +57,7 @@ export const ArticleContent = ({
           isUnfollowPending={isUnfollowPending}
           userPermissions={userPermissions}
           actions={actions}
+          isMarkAsImportantLoading={isMarkAsImportantLoading}
         />
       </div>
     </div>

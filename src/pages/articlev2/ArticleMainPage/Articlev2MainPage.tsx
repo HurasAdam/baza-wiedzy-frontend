@@ -43,8 +43,8 @@ export const Articlev2MainPage = () => {
   const { mutate: unflagMutate } = useUnflagArticleUserFlagMutation();
   const { mutate: followArticleMutate, isPending: isFollowPending } = useFollowArticleMutation();
   const { mutate: unfollowArticleMutate, isPending: isUnfollowPending } = useUnfollowArticleMutation();
-  const { mutate: markAsImportantMutate } = useMarkAsImportantMutation();
-  const { mutate: unmarkAsImportantMutate } = useUnmarkAsImportantMutation();
+  const { mutate: markAsImportantMutate, isPending: isMarkAsImportantLoading } = useMarkAsImportantMutation();
+  const { mutate: unmarkAsImportantMutate, isPending: isUnmarkAsImportantLoading } = useUnmarkAsImportantMutation();
   const { mutate: approveMutate, isPending: isApproveLoading } = useAproveArticleMutation();
   const { mutate: rejectionMutate, isPending: isRejectionLoading } = useRejectArticleMutation();
   const { mutate: requestReviewMutate, isPending: isRequestReviewLoading } = useRequestReviewArticleMutation();
@@ -240,6 +240,7 @@ export const Articlev2MainPage = () => {
         isFollowPending={isFollowPending}
         isUnfollowPending={isUnfollowPending}
         userPermissions={userPermissions}
+        isMarkAsImportantLoading={isMarkAsImportantLoading || isUnmarkAsImportantLoading}
         actions={{
           handleFollowToggle,
           onHandleUnflag,
