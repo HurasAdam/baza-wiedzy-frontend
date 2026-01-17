@@ -8,6 +8,8 @@ import AdminLayout from "../layouts/admin/admin.layout";
 import Articlev2Layout from "../layouts/articlev2/articlev2-layout";
 import WorkspaceLayout from "../layouts/workspace/workspace.layout";
 import AdminDashboard from "../pages/admin-panel/admin-dashboard";
+import { SchoolsPage } from "../pages/admin-panel/admin-jstProject-details/components/SchoolsPage";
+import { JstProjectDetailsLayout } from "../pages/admin-panel/admin-jstProject-details/JstProjectDetailsLayout";
 import { AccountOnboardingRoute } from "./account.onboarding.route";
 import AdminProtectedRoute from "./admin.protected.route";
 import { AuthRoute } from "./auth.route";
@@ -80,8 +82,12 @@ export function AppRoutes() {
             <Route path="manage-users/:id" element={<PAGES.AdminUserDetailsPage />} />
             <Route path="manage-products" element={<PAGES.ProductsPage />} />
             <Route path="manage-products/:id" element={<PAGES.AdminProductDetailsPage />} />
-            <Route path="manage-tags" element={<PAGES.TagsPage />} />
             <Route path="manage-jstprojects" element={<PAGES.JstAdminProjectsPage />} />
+            <Route path="manage-jstprojects/:id" element={<JstProjectDetailsLayout />}>
+              <Route index element={<PAGES.JstDetailsPage />} />
+              <Route path="schools" element={<SchoolsPage />} />
+            </Route>
+            <Route path="manage-tags" element={<PAGES.TagsPage />} />
 
             <Route path="logs" element={<PAGES.AdminLogsPage />} />
 

@@ -1,4 +1,5 @@
 import { Loader } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import JstProjectCard, { type Project } from "./JstProjectCard";
 
 interface JstProjectsListProps {
@@ -10,6 +11,8 @@ interface JstProjectsListProps {
 }
 
 const JstProjectsList = ({ isLoading, isError, error, jstprojects, onEditJstProject }: JstProjectsListProps) => {
+  const navigate = useNavigate();
+
   return (
     <div className="bg-card border rounded-xl overflow-hidden">
       {isLoading && (
@@ -31,7 +34,12 @@ const JstProjectsList = ({ isLoading, isError, error, jstprojects, onEditJstProj
       {!isLoading && !isError && jstprojects.length > 0 && (
         <ul className="divide-y divide-border">
           {jstprojects.map((project: Project) => (
-            <JstProjectCard key={project._id} project={project} onEditJstProject={onEditJstProject} />
+            <JstProjectCard
+              key={project._id}
+              project={project}
+              onEditJstProject={onEditJstProject}
+              navigate={navigate}
+            />
           ))}
         </ul>
       )}

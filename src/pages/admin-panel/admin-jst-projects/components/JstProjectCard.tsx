@@ -1,4 +1,5 @@
-import { Ellipsis, FileIcon, LandPlot, XCircleIcon } from "lucide-react";
+import { Edit3, Ellipsis, Eye, LandPlot, XCircleIcon } from "lucide-react";
+import type { NavigateFunction } from "react-router-dom";
 import { toast } from "sonner";
 import { Dropdown } from "../../../../components/Dropdown";
 import { Button } from "../../../../components/ui/button";
@@ -16,9 +17,10 @@ export interface Project {
 interface JstProjectCardProps {
   project: Project;
   onEditJstProject: (productId: string) => void;
+  navigate: NavigateFunction;
 }
 
-const JstProjectCard = ({ project, onEditJstProject }: JstProjectCardProps) => {
+const JstProjectCard = ({ project, onEditJstProject, navigate }: JstProjectCardProps) => {
   return (
     <li key={project._id} className="flex items-center justify-between px-4 py-3 hover:bg-muted/40 transition group">
       <div className="flex items-center gap-3">
@@ -41,8 +43,13 @@ const JstProjectCard = ({ project, onEditJstProject }: JstProjectCardProps) => {
         }
         options={[
           {
+            label: "Wyświetl szczególy",
+            icon: <Eye className="w-4 h-4" />,
+            actionHandler: () => navigate(`/admin/manage-jstprojects/${project._id}`),
+          },
+          {
             label: "Edytuj",
-            icon: <FileIcon className="w-4 h-4" />,
+            icon: <Edit3 className="w-4 h-4" />,
             actionHandler: () => onEditJstProject(project._id),
           },
           {
