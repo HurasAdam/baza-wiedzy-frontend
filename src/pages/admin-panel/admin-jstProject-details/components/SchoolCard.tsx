@@ -1,19 +1,12 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { IdCard, Mail, Pencil, Phone, Trash2 } from "lucide-react";
+import type { IJstSchool } from "../../../../types";
 
 interface SchoolCardProps {
-  school: {
-    _id: string;
-    name: string;
-    adres: string;
-    email?: string;
-    phone?: string;
-    szId?: string;
-    libId?: string;
-  };
+  school: IJstSchool;
   onEdit: (id: string) => void;
-  onDelete: (id: string) => void;
+  onDelete: (school: IJstSchool) => void;
 }
 
 export function SchoolCard({ school, onEdit, onDelete }: SchoolCardProps) {
@@ -68,7 +61,7 @@ export function SchoolCard({ school, onEdit, onDelete }: SchoolCardProps) {
           variant="ghost"
           className="text-destructive"
           title="Usuń szkołę"
-          onClick={() => onDelete(school._id)}
+          onClick={() => onDelete(school)}
         >
           <Trash2 className="w-4 h-4" />
         </Button>
