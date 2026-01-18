@@ -5,20 +5,20 @@ import type { JstSchoolCreateData } from "../../types";
 
 export const useCreateJstSchoolMutation = () => {
   return useMutation({
-    mutationFn: ({
-      projectId,
-      data,
-    }: {
-      projectId: string;
-      data: JstSchoolCreateData;
-    }) => jstSchoolsService.create(projectId, data),
+    mutationFn: ({ projectId, data }: { projectId: string; data: JstSchoolCreateData }) =>
+      jstSchoolsService.create(projectId, data),
   });
 };
 
-export const useFindJstSchoolsQuery = (
-  projectId: string | null,
-  params: Record<string, string>
-) => {
+export const useDeleteJstSchoolMutation = () => {
+  return useMutation({
+    mutationFn: ({ projectId, schoolId }: { projectId: string; schoolId: string }) => {
+      return jstSchoolsService.deleteOne({ projectId, schoolId });
+    },
+  });
+};
+
+export const useFindJstSchoolsQuery = (projectId: string | null, params: Record<string, string>) => {
   return useQuery({
     queryKey: ["jst-schools", projectId, params],
     queryFn: () => {
