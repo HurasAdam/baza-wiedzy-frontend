@@ -135,8 +135,8 @@ export const Sidebar = ({
         boxShadow: "var(--sidebar-shadow)",
       }}
       className={cn(
-        "flex flex-col border-r  transition-all duration-300",
-        sidebarVariant === "compact" ? "w-22 md:w[80px]" : "w-16 md:w-[240px] border-sidebar-border"
+        "flex flex-col border-r border-r-sidebar-border transition-all duration-300",
+        sidebarVariant === "compact" ? "w-22 md:w[80px]" : "w-16 md:w-[240px] border-sidebar-border",
       )}
     >
       <div className="flex h-14 items-center border-b px-4 mb-1.5 gap-2 ">

@@ -1,5 +1,5 @@
 import { Separator } from "@/components/ui/separator";
-import { MessageSquareWarning, X } from "lucide-react";
+import { MessageSquareWarning, Plus, X } from "lucide-react";
 import { Badge } from "../../../../components/ui/badge";
 import { Button } from "../../../../components/ui/button";
 import type { IssueStatus, IssueType } from "../admin-issue-reports";
@@ -41,7 +41,11 @@ const IssueReportsHeader = ({
           </div>
           <p className="text-sm text-muted-foreground max-w-2xl">Lista zgłoszonych błędów i propozycji.</p>
         </div>
-        {userPermissions.includes("SEND_REPORT") && <Button onClick={openSendIssueReportModal}>Nowe zgłoszenie</Button>}
+        {userPermissions.includes("SEND_REPORT") && (
+          <Button size="sm" onClick={openSendIssueReportModal}>
+            <Plus className="text-card" /> Nowe zgłoszenie
+          </Button>
+        )}
       </header>
 
       {/* Active filters – meta state */}

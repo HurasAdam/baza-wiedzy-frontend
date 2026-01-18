@@ -79,7 +79,11 @@ export const ArticleMetadata = ({ article }: Props) => {
             <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">Tagi</h3>
             <div className="flex flex-wrap gap-2">
               {article.tags.map((tag) => (
-                <Badge key={tag._id} variant="secondary" className="rounded-md px-2.5 py-1 text-xs bg-muted/60">
+                <Badge
+                  key={tag._id}
+                  variant="secondary"
+                  className="rounded-md px-2.5 py-1 text-muted-foreground text-xs bg-muted/60"
+                >
                   #{tag.name}
                 </Badge>
               ))}

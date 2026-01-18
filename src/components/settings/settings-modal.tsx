@@ -47,7 +47,7 @@ export const SettingsModal = ({
           <Card className="flex flex-grow flex-col w-full overflow-hidden border-none rounded-none p-0 bg-background">
             <CardContent className="flex flex-grow h-full p-0 overflow-hidden">
               {/* SIDEBAR */}
-              <aside className="w-[23%] h-full border-r bg-ring/30 px-3 py-4 space-y-2">
+              <aside className="w-[23%] h-full border-r bg-sidebar px-3 py-4 space-y-2">
                 {tabs.map(({ key, label, icon: Icon }) => {
                   const isActive = activeTab === key;
                   return (
@@ -56,7 +56,7 @@ export const SettingsModal = ({
                       onClick={() => setActiveTab(key)}
                       className={clsx(
                         "flex items-center w-full px-3 py-2 rounded-md text-sm font-medium transition-colors",
-                        isActive ? "bg-primary text-accent-foreground shadow-sm" : "hover:bg-muted text-foreground"
+                        isActive ? "bg-primary text-accent-foreground shadow-sm" : "hover:bg-muted text-foreground",
                       )}
                     >
                       <Icon className="w-4 h-4 mr-2" />

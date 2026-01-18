@@ -28,7 +28,7 @@ const IssueReportsFilters = ({
       {/* Wyszukiwanie */}
       <Input
         placeholder="Wyszukaj zgłoszenie"
-        className="w-48 border-ring"
+        className="w-48 border-input"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
@@ -37,7 +37,7 @@ const IssueReportsFilters = ({
         value={filterType === "" ? "all" : filterType}
         onValueChange={(value) => setFilterType(value === "all" ? "" : (value as IssueType))}
       >
-        <SelectTrigger className="w-40 border-ring">
+        <SelectTrigger className="w-40 border-input">
           <SelectValue placeholder="Typ zgłoszenia" />
         </SelectTrigger>
         <SelectContent>
@@ -51,7 +51,7 @@ const IssueReportsFilters = ({
         value={filterStatus === "" ? "all" : filterStatus}
         onValueChange={(value) => setFilterStatus(value === "all" ? "" : (value as IssueStatus))}
       >
-        <SelectTrigger className="w-40 border-ring">
+        <SelectTrigger className="w-40 border-input">
           <SelectValue placeholder="Status" />
         </SelectTrigger>
         <SelectContent>

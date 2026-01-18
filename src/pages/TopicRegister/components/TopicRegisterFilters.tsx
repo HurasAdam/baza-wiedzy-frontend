@@ -29,17 +29,12 @@ const TopicRegisterFilters = ({
     <div className="bg-background z-10 flex flex-col gap-4 mb-4">
       {/* Filters */}
       <div className="flex border-b  px-3 py-2 gap-3 items-center flex-wrap">
-        <Input
-          placeholder="Wyszukaj temat..."
-          className="w-64 border-ring"
-          value={title}
-          onChange={(e) => titleHandler(e)}
-        />
+        <Input placeholder="Wyszukaj temat..." className="w-64" value={title} onChange={(e) => titleHandler(e)} />
         <Select
           value={product === "" ? "all" : product}
           onValueChange={(value) => productHandler(value === "all" ? "" : value)}
         >
-          <SelectTrigger className="w-40 border-ring">
+          <SelectTrigger className="w-40">
             <SelectValue placeholder="Produkt" />
           </SelectTrigger>
           <SelectContent className="max-h-[66vh] overflow-auto scrollbar-custom">

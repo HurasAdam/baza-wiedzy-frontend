@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useFindChangelogQuery } from "../../hooks/changelog/use-changelog";
 import { Card, CardContent, CardTitle } from "../ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 
-// Typy changeloga
 interface ChangeLogEntry {
   version: string;
   date: string;
@@ -14,23 +14,28 @@ interface ChangeLogModalProps {
   setIsChangeLogModalOpen: (isOpen: boolean) => void;
 }
 
-const changelogMockData: ChangeLogEntry[] = [
-  {
-    version: "1.2.0",
-    date: "2025-09-04",
-    changes: ["Dodano eksport do Excela", "Poprawiono błąd z logowaniem", "UI: nowy widok szczegółów użytkownika"],
-  },
-  {
-    version: "1.1.0",
-    date: "2025-08-20",
-    changes: ["Dodano ciemny motyw", "Ulepszono wyszukiwanie"],
-  },
-];
-
 export const ChangeLogModal = ({ isChangeLogModalOpen, setIsChangeLogModalOpen }: ChangeLogModalProps) => {
-  const [activeVersion, setActiveVersion] = useState(changelogMockData[0].version);
+  const { data: changelog, isLoading } = useFindChangelogQuery();
+  const [activeVersion, setActiveVersion] = useState<string | null>(null);
 
-  const activeEntry = changelogMockData.find((e) => e.version === activeVersion);
+  // ustawiamy pierwszą wersję jako aktywną po załadowaniu danych
+  useEffect(() => {
+    if (changelog && changelog.length > 0) {
+      setActiveVersion(changelog[0].version);
+    }
+  }, [changelog]);
+
+  if (isLoading || !changelog) {
+    return (
+      <Dialog open={isChangeLogModalOpen} onOpenChange={setIsChangeLogModalOpen} modal>
+        <DialogContent className="max-h-[83vh] min-h-[83vh] min-w-[88vw] md:min-w-[75vw] xl:min-w-[62vw] flex flex-col p-0 gap-0">
+          <p>Ładowanie historii zmian...</p>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  const activeEntry = changelog.find((e) => e.version === activeVersion);
 
   return (
     <Dialog open={isChangeLogModalOpen} onOpenChange={setIsChangeLogModalOpen} modal>
@@ -45,8 +50,8 @@ export const ChangeLogModal = ({ isChangeLogModalOpen, setIsChangeLogModalOpen }
           <Card className="flex flex-grow flex-col w-full overflow-hidden border-none rounded-none p-0 bg-background">
             <CardContent className="flex flex-grow h-full p-0 overflow-hidden">
               {/* SIDEBAR (wersje) */}
-              <aside className="w-[23%] h-full border-r bg-ring/30 px-3 py-4 space-y-2 overflow-y-auto scrollbar-custom">
-                {changelogMockData.map(({ version, date }) => {
+              <aside className="w-[23%] h-full border-r bg-sidebar px-3 py-4 space-y-2 overflow-y-auto scrollbar-custom">
+                {changelog.map(({ version, date }) => {
                   const isActive = activeVersion === version;
                   return (
                     <button

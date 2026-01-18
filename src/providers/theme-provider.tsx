@@ -1,20 +1,36 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 type Theme =
+  | "light"
+  | "dark-claude "
+  | "light-amber"
+  | "dark-amber"
+  | "light-catppuccin"
+  | "dark-catppuccin"
+  | "light-darkmatter"
+  | "dark-darkmatter"
+  | "light-supabase"
+  | "dark-supabase"
+  | "light-cosmic"
+  | "dark-cosmic"
+  | "light-sage"
+  | "dark-sage"
+  | "light-luxury"
+  | "dark-luxury"
   | "dark-aqua"
   | "dark-aqua-gradient"
   | "dark-halloween"
   | "dark-halloween-gradient"
-  | "light"
   | "dark-violet"
   | "dark-amber"
   | "light-violet"
   | "aqua"
-  | "light-halloween"
   | "deep-forest"
   | "deep-aqua"
   | "corporate-default"
-  | "corporate-gray";
+  | "corporate-gray"
+  | "night-green"
+  | "night-violet";
 
 type ThemeProviderProps = {
   children: React.ReactNode;
@@ -49,7 +65,21 @@ export function ThemeProvider({
     // usuń stare klasy theme
     root.classList.remove(
       "light",
-      "light-halloween",
+      "dark-claude",
+      "light-amber",
+      "dark-amber",
+      "light-catppuccin",
+      "dark-catppuccin",
+      "light-darkmatter",
+      "dark-darkmatter",
+      "light-supabase",
+      "dark-supabase",
+      "light-cosmic",
+      "dark-cosmic",
+      "light-sage",
+      "dark-sage",
+      "light-luxury",
+      "dark-luxury",
       "dark-aqua",
       "dark-aqua-gradient",
       "dark-violet",
@@ -62,7 +92,9 @@ export function ThemeProvider({
       "deep-forest",
       "deep-aqua",
       "corporate-default",
-      "corporate-gray"
+      "corporate-gray",
+      "night-green",
+      "night-violet",
     );
 
     if (theme === "system") {

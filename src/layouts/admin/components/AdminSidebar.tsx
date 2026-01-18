@@ -111,11 +111,11 @@ export const AdminSidebar = ({ isCollapsed }: SidebarProps) => {
       </nav>
 
       {/* -------- FOOTER -------- */}
-      <div className="border-t border-ring pt-4 mt-6">
+      <div className="border-t  pt-4 mt-6">
         <Button
           onClick={() => navigate("/dashboard")}
-          variant="ghost"
-          className="cursor-pointer w-full justify-start text-primary-foreground  "
+          variant="outline"
+          className="cursor-pointer w-full justify-start text-foreground  "
         >
           <LucideArrowBigLeft className="w-5 h-5 mr-0 md:mr-2" />
           {!isCollapsed && <span>Powrót do BW</span>}

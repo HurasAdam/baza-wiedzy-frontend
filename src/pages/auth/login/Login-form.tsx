@@ -47,7 +47,7 @@ const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
                   <FormItem>
                     <FormLabel className="text-foreground">Email</FormLabel>
                     <FormControl>
-                      <Input className="border-ring" {...field} placeholder="jan.nowak@librus.pl" type="email" />
+                      <Input className="border-input" {...field} placeholder="jan.nowak@librus.pl" type="email" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -71,7 +71,7 @@ const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
                     </div>
                     <FormControl>
                       <Input
-                        className="text-foreground border-ring"
+                        className="text-foreground border-input"
                         {...field}
                         placeholder="********"
                         type="password"

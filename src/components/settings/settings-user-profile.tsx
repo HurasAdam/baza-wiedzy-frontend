@@ -75,7 +75,7 @@ const SettingsUserProfile = () => {
           setPreviewUrl(null);
         },
         onError: (err) => console.error("Avatar upload failed", err),
-      }
+      },
     );
   };
 
@@ -88,7 +88,7 @@ const SettingsUserProfile = () => {
           toast.success("Zmiany zostały zapisane");
           reset(data);
         },
-      }
+      },
     );
   };
 
@@ -117,7 +117,7 @@ const SettingsUserProfile = () => {
               disabled={true}
               {...field}
               placeholder={placeholder}
-              className="pl-10 h-10 border-ring bg-input/30 text-muted-foreground"
+              className="pl-10 h-10 border-input bg-input/30 text-muted-foreground"
             />
           </div>
         )}
@@ -182,7 +182,7 @@ const SettingsUserProfile = () => {
                   <Textarea
                     {...field}
                     placeholder="Krótki opis"
-                    className="pl-10 resize-none h-24 border-ring bg-input/30"
+                    className="pl-10 resize-none h-24 border-input bg-input/30"
                   />
                 </div>
               )}

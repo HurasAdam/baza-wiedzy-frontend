@@ -90,7 +90,7 @@ export const SendIssueReportModal = ({
           max-h-[86vh]
       p-0
       flex flex-col
-      rounded-xl shadow-xl bg-background/95 backdrop-blur-sm border 
+      rounded-xl shadow-xl 5 backdrop-blur-sm border 
     "
         onAnimationEnd={(e) => {
           if (e.currentTarget.getAttribute("data-state") === "closed") {

@@ -69,7 +69,11 @@ const ArticleForm = ({ article, tags, products, categories, onProductChange, loa
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <Textarea placeholder="Wprowadź uwagi dla pracownika..." {...field} className="min-h-[175px]" />
+                        <Textarea
+                          placeholder="Wprowadź uwagi dla pracownika..."
+                          {...field}
+                          className="min-h-[175px] border-input"
+                        />
                       </FormControl>
                       <FormDescription className="text-[13px]">
                         Wewnętrzne uwagi widoczne tylko dla pracowników

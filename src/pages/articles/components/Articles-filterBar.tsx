@@ -102,14 +102,19 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
       {/* ---- Filters ---- */}
       <div className="flex px-3 py-2 gap-3 items-between  flex-wrap">
         {/* Search */}
-        <Input value={selectedTitle} onChange={onTitleChange} placeholder="Szukaj artykułów..." className="w-52" />
+        <Input
+          value={selectedTitle}
+          onChange={onTitleChange}
+          placeholder="Szukaj artykułów..."
+          className="w-52 border-input"
+        />
 
         {/* Product */}
         <Select
           onValueChange={(value) => onProductChange(value === "all" ? "__clear__" : value)}
           value={selectedProduct || "all"}
         >
-          <SelectTrigger className="w-48 border border-input ">
+          <SelectTrigger className="w-48">
             <SelectValue placeholder="Produkt" />
           </SelectTrigger>
           <SelectContent className="max-h-[66vh] overflow-auto scrollbar-custom">
@@ -130,7 +135,7 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
           value={selectedCategory || "all"}
           disabled={!selectedProduct}
         >
-          <SelectTrigger className="w-48 border-ring">
+          <SelectTrigger className="w-48">
             <SelectValue placeholder="Kategoria" />
           </SelectTrigger>
           <SelectContent className="max-h-[66vh] overflow-auto scrollbar-custom">

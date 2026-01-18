@@ -1,168 +1,163 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useTheme } from "@/providers/theme-provider";
-import { Droplet, LayoutDashboard, Palette, Sun } from "lucide-react";
-import { useState } from "react";
-import { useSidebar, type SidebarTheme } from "../../providers/sidebar-provider";
+import { Palette } from "lucide-react";
 
-const themeGroups = {
-  light: [
-    { key: "light", label: "Aqua", accent: "bg-indigo-500" },
-    { key: "light-halloween", label: "Halloween", accent: "bg-orange-600" },
-    { key: "light-violet", label: "Violet", accent: "bg-purple-500" },
-    { key: "light-amber", label: "Amber", accent: "bg-amber-400" },
-  ],
-  dark: [
-    { key: "dark-aqua", label: "Aqua", accent: "bg-indigo-500" },
-    // { key: "dark-aqua-gradient", label: "Aqua-Gradient", accent: "bg-indigo-400" },
-    { key: "dark-halloween", label: "Halloween", accent: "bg-orange-600" },
-    // { key: "dark-halloween-gradient", label: "Halloween-Gradient", accent: "bg-orange-400" },
-    { key: "dark-violet", label: "Violet", accent: "bg-purple-500" },
-    { key: "dark-amber", label: "Amber", accent: "bg-amber-400" },
-  ],
-  deep: [
-    { key: "deep-forest", label: "Forest", accent: "bg-green-600" },
-    { key: "deep-aqua", label: "Aqua", accent: "bg-blue-600" },
-  ],
-  // corporate: [
-  //   { key: "corporate-default", label: "Gray", accent: "bg-neutral-400/80" },
-  //   { key: "corporate-gray", label: "Gray", accent: "bg-neutral-400/80" },
-  // ],
-};
+const THEMES = [
+  // CLAUDE
+  {
+    key: "light",
+    label: "Light · Claude",
+    colors: ["#c96442", "#e9e6dc", "#dad9d4", "#b4b2a7"],
+  },
+  {
+    key: "dark-claude",
+    label: "Dark · Claude",
+    colors: ["#d97757", "#1b1b19", "#faf9f5", "#363636"],
+  },
 
-const Field = ({
-  icon: Icon,
-  label,
-  description,
-  children,
-}: {
-  icon?: React.ElementType;
-  label: string;
-  description?: string;
-  children: React.ReactNode;
-}) => (
-  <div className="flex items-center justify-between p-4 rounded-lg border hover:shadow-sm transition bg-input/30">
-    <div className="flex items-center gap-3">
-      {Icon && <Icon className="w-5 h-5 text-muted-foreground" />}
-      <div className="flex flex-col gap-1">
-        <span className="text-sm font-medium text-muted-foreground">{label}</span>
-        {description && <span className="text-xs text-muted-foreground">{description}</span>}
-      </div>
-    </div>
-    <div className="ml-4">{children}</div>
-  </div>
-);
+  // AMBER
+  {
+    key: "light-amber",
+    label: "Light · Amber",
+    colors: ["#f59e0b", "#fffbeb", "#f3f4f6", "#e5e7eb"],
+  },
+  {
+    key: "dark-amber",
+    label: "Dark · Amber",
+    colors: ["#f59e0b", "#92400e", "#262626", "#434343"],
+  },
+
+  // CATPPUCCIN
+  {
+    key: "light-catppuccin",
+    label: "Light · Catppuccin",
+    colors: ["#8839ef", "#04a5e5", "#ccd0da", "#bcc0cc"],
+  },
+  {
+    key: "dark-catppuccin",
+    label: "Dark · Catppuccin",
+    colors: ["#cba6f7", "#89dceb", "#585b70", "#292c3c"],
+  },
+
+  // DARKMATTER
+  {
+    key: "light-darkmatter",
+    label: "Light · Darkmatter",
+    colors: ["#d87943", "#eeeeee", "#527575", "#e5e7eb"],
+  },
+  {
+    key: "dark-darkmatter",
+    label: "Dark · Darkmatter",
+    colors: ["#e78a53", "#222222", "#5f8787", "#434343"],
+  },
+
+  // SUPABASE
+  {
+    key: "light-supabase",
+    label: "Light · Supabase",
+    colors: ["#72e3ad", "#ededed", "#fdfdfd", "#dfdfdf"],
+  },
+  {
+    key: "dark-supabase",
+    label: "Dark · Supabase",
+    colors: ["#006239", "#313131", "#242424", "#292929"],
+  },
+
+  // COSMIC
+  {
+    key: "light-cosmic",
+    label: "Light · Cosmic",
+    colors: ["#6e56cf", "#d8e6ff", "#e4dfff", "#e0e0f0"],
+  },
+  {
+    key: "dark-cosmic",
+    label: "Dark · Cosmic",
+    colors: ["#a48fff", "#2d2b55", "#303060", "#222244"],
+  },
+
+  // SAGE
+  {
+    key: "light-sage",
+    label: "Light · Sage",
+    colors: ["#7c9082", "#ced4bf", "#bfc9bb", "#e8e6e1"],
+  },
+  {
+    key: "dark-sage",
+    label: "Dark · Sage",
+    colors: ["#7c9082", "#36443a", "#1a1a1a", "#2a2a2a"],
+  },
+
+  // LUXURY
+  {
+    key: "light-luxury",
+    label: "Light · Luxury",
+    colors: ["#9b2c2c", "#fef3c7", "#f5e8d2", "#f0ebe8"],
+  },
+  {
+    key: "dark-luxury",
+    label: "Dark · Luxury",
+    colors: ["#b91c1c", "#b45309", "#92400e", "#44403c"],
+  },
+
+  // DARK VIOLET / AQUA / HALLOWEEN
+  {
+    key: "dark-violet",
+    label: "Dark · Violet",
+    colors: ["#6e56cf", "#313131", "#242424", "#292929"],
+  },
+  {
+    key: "dark-aqua",
+    label: "Dark · Aqua",
+    colors: ["#3b82f6", "#313131", "#242424", "#292929"],
+  },
+  {
+    key: "dark-halloween",
+    label: "Dark · Halloween",
+    colors: ["#cb4b16", "#313131", "#242424", "#292929"],
+  },
+] as const;
 
 const SettingsThemePanelTab = () => {
   const { theme, setTheme } = useTheme();
-  const { sidebarTheme, setSidebarTheme, variant: sidebarVariant, setVariant } = useSidebar();
-
-  const currentGroup = Object.keys(themeGroups).find((group) =>
-    themeGroups[group as keyof typeof themeGroups].some((t) => t.key === theme)
-  ) as keyof typeof themeGroups;
-
-  const [selectedGroup, setSelectedGroup] = useState<"light" | "dark" | "deep" | "corporate">(currentGroup || "light");
-  const [selectedAccent, setSelectedAccent] = useState<string>(theme);
 
   return (
-    <div className="">
-      {/* Wybór trybu */}
+    <div>
       <Card className="border-none shadow-none bg-transparent py-1">
         <CardHeader>
           <CardTitle className="text-lg font-semibold flex items-center gap-2 text-header-foreground">
             <Palette className="w-5 h-5 text-muted-foreground" />
             Wygląd
           </CardTitle>
-          <p className="text-sm text-muted-foreground">Wybierz motyw i wariant akcentu dla aplikacji</p>
+          <p className="text-sm text-muted-foreground">Wybierz motyw interfejsu</p>
         </CardHeader>
-        <CardContent className="space-y-3">
-          <Field icon={Sun} label="Motyw" description="Wybierz jasny lub ciemny tryb">
-            <Select
-              value={selectedGroup}
-              onValueChange={(value) => {
-                const group = value as "light" | "dark" | "deep" | "corporate";
-                setSelectedGroup(group);
-                const defaultTheme = themeGroups[group][0].key;
-                setTheme(defaultTheme);
-                setSelectedAccent(defaultTheme);
-              }}
-            >
-              <SelectTrigger className="w-48 border-ring text-foreground">
-                <SelectValue placeholder="Wybierz tryb" />
-              </SelectTrigger>
-              <SelectContent>
-                {(["light", "dark", "deep"] as const).map((g) => (
-                  <SelectItem key={g} value={g}>
-                    {g === "light" ? "Jasny" : g === "dark" ? "Ciemny" : g === "deep" ? "Deep" : "Corporate"}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </Field>
-        </CardContent>
-      </Card>
 
-      {/* Wybór akcentu */}
-      <Card className="border-none shadow-none bg-transparent py-2">
-        <CardContent className="space-y-3">
-          <Field icon={Droplet} label="Akcent" description="Wybierz kolor akcentu">
-            <Select
-              value={selectedAccent}
-              onValueChange={(value) => {
-                setSelectedAccent(value);
-                setTheme(value);
-              }}
-            >
-              <SelectTrigger className="w-48 border-ring text-foreground">
-                <SelectValue placeholder="Wybierz akcent" />
+        <CardContent>
+          <div className="flex items-center justify-between p-4 rounded-lg border bg-input/30">
+            <span className="text-sm font-medium text-muted-foreground">Motyw</span>
+
+            <Select value={theme} onValueChange={(v) => setTheme(v as any)}>
+              <SelectTrigger className="w-64 bg-background">
+                <SelectValue placeholder="Wybierz motyw" />
               </SelectTrigger>
-              <SelectContent>
-                {themeGroups[selectedGroup].map((t) => (
+
+              <SelectContent className="max-h-[54vh] overflow-auto scrollbar-custom">
+                {THEMES.map((t) => (
                   <SelectItem key={t.key} value={t.key}>
                     <div className="flex items-center gap-2">
-                      <span className={`w-4 h-4 rounded-full ${t.accent}`} />
+                      {/* mini paleta kolorów */}
+                      <div className="flex gap-1">
+                        {t.colors.map((c, i) => (
+                          <span key={i} className="w-3 h-3 rounded-[4px]" style={{ backgroundColor: c }} />
+                        ))}
+                      </div>
                       <span>{t.label}</span>
                     </div>
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
-          </Field>
-        </CardContent>
-      </Card>
-
-      {/* Wybór sidebaru */}
-      <Card className="border-none shadow-none bg-transparent py-2">
-        <CardContent className="space-y-3">
-          <Field icon={LayoutDashboard} label="Sidebar" description="Wybierz wygląd paska bocznego">
-            <Select
-              value={sidebarTheme}
-              onValueChange={(value) => {
-                setSidebarTheme(value as SidebarTheme);
-              }}
-            >
-              <SelectTrigger className="w-48 border-ring text-foreground">
-                <SelectValue placeholder="Wybierz sidebar" />
-              </SelectTrigger>
-              <SelectContent>
-                {selectedGroup === "light" ? (
-                  <>
-                    <SelectItem value="sidebar-default">Base</SelectItem>
-                    <SelectItem value="sidebar-style-1">Gradient-One</SelectItem>
-                    <SelectItem value="sidebar-style-2">Gradient-Two</SelectItem>
-                    <SelectItem value="sidebar-style-3">Gradient-Three</SelectItem>
-                  </>
-                ) : (
-                  <>
-                    <SelectItem value="sidebar-default">Base</SelectItem>
-                    <SelectItem value="sidebar-style-1">Carbon</SelectItem>
-                    <SelectItem value="sidebar-style-2">Gradient</SelectItem>
-                    <SelectItem value="sidebar-style-3">CentOS</SelectItem>
-                  </>
-                )}
-              </SelectContent>
-            </Select>
-          </Field>
+          </div>
         </CardContent>
       </Card>
     </div>
