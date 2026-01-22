@@ -603,9 +603,9 @@
 
 .light-supabase {
   --background: oklch(0.9911 0 0);
-  --foreground: oklch(0.2046 0 0);
+  --foreground: oklch(0.28 0 0);
   --card: oklch(0.9911 0 0);
-  --card-foreground: oklch(0.2046 0 0);
+  --card-foreground: oklch(0.28 0 0);
   --popover: oklch(0.9911 0 0);
   --popover-foreground: oklch(0.4386 0 0);
   --primary: oklch(0.8348 0.1302 160.908);
@@ -669,9 +669,9 @@
 
 .dark-supabase {
   --background: oklch(0.1822 0 0);
-  --foreground: oklch(0.9288 0.0126 255.5078);
+  --foreground: oklch(0.895 0.0055 255);
   --card: oklch(0.2046 0 0);
-  --card-foreground: oklch(0.9288 0.0126 255.5078);
+  --card-foreground: oklch(0.84 0.006 255);
   --popover: oklch(0.2603 0 0);
   --popover-foreground: oklch(0.7348 0 0);
   --primary: oklch(0.4365 0.1044 156.7556);
@@ -799,9 +799,9 @@
 
 .dark-cosmic {
   --background: oklch(0.1743 0.0227 283.7998);
-  --foreground: oklch(0.9185 0.0257 285.8834);
+  --foreground: oklch(0.88 0.015 285);
   --card: oklch(0.2284 0.0384 282.9324);
-  --card-foreground: oklch(0.9185 0.0257 285.8834);
+  --card-foreground: oklch(0.88 0.015 285);
   --popover: oklch(0.2284 0.0384 282.9324);
   --popover-foreground: oklch(0.9185 0.0257 285.8834);
   --primary: oklch(0.7162 0.1597 290.3962);
@@ -929,9 +929,9 @@
 
 .dark-sage {
   --background: oklch(0.1448 0 0);
-  --foreground: oklch(0.9702 0 0);
+  --foreground: oklch(0.85 0.005 0);
   --card: oklch(0.1822 0 0);
-  --card-foreground: oklch(0.9702 0 0);
+  --card-foreground: oklch(0.85 0.005 0);
   --popover: oklch(0.1822 0 0);
   --popover-foreground: oklch(0.9702 0 0);
   --primary: oklch(0.6333 0.0309 154.9039);
@@ -1059,7 +1059,7 @@
 
 .dark-luxury {
   --background: oklch(0.2161 0.0061 56.0434);
-  --foreground: oklch(0.9699 0.0013 106.4238);
+  --foreground: oklch(0.88 0.0035 38);
   --card: oklch(0.2685 0.0063 34.2976);
   --card-foreground: oklch(0.9699 0.0013 106.4238);
   --popover: oklch(0.2685 0.0063 34.2976);
@@ -1620,6 +1620,7 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    font-family: var(--font-sans);
   }
   body {
     @apply bg-background text-foreground overflow-y-hidden;

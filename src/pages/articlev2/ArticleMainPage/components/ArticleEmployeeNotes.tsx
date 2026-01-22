@@ -18,7 +18,7 @@ export const ArticleEmployeeNotes = ({ employeeDescription }: Props) => {
             Opis i wskazówki <span className="text-xs text-muted-foreground">(dla pracownika)</span>
           </span>
         </h2>
-        <p className="text-[15.5px] whitespace-pre-wrap break-words text-foreground/90">{employeeDescription}</p>
+        <p className="text-[15.5px] whitespace-pre-wrap break-words text-foreground">{employeeDescription}</p>
       </CardContent>
     </Card>
   );

@@ -95,7 +95,7 @@ const TableArticleCard = ({
       onClick={() => navigate(`/articles/${article._id}`, { state: { from: location.pathname + location.search } })}
       className={cn(
         "flex justify-between items-center px-3.5 py-3 text-sm hover:bg-muted/45 transition-colors bg-card ",
-        "border-b last:border-0 first:rounded-t-xl last:rounded-b-lg"
+        "border-b last:border-0 first:rounded-t-xl last:rounded-b-lg",
       )}
       title={`Autor: ${article.createdBy.name}`}
     >

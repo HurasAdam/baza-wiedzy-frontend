@@ -64,7 +64,7 @@ export const ArticleResponseVariants = ({ responseVariants }: Props) => {
           </div>
 
           {/* Treść wariantu */}
-          <p className="text-[15.5px] whitespace-pre-wrap break-words text-foreground/90">
+          <p className="text-[15.5px] whitespace-pre-wrap break-words text-foreground">
             {responseVariants[activeVariantIndex].variantContent}
           </p>
         </div>
