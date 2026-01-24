@@ -23,11 +23,17 @@ interface StatisticsSectionProps {
   isLoading: boolean;
   data: UserData[] | [];
   backendBase: "string";
-
+  canViewStatsDetails?: boolean;
   setUserStatisticsModal: (variant: ModalVariant, selectedUser: SelectedUser) => void;
 }
 
-const StatisticsSection = ({ isLoading, data = [], backendBase, setUserStatisticsModal }: StatisticsSectionProps) => {
+const StatisticsSection = ({
+  isLoading,
+  data = [],
+  backendBase,
+  setUserStatisticsModal,
+  canViewStatsDetails,
+}: StatisticsSectionProps) => {
   if (isLoading)
     return (
       <div className="flex items-center justify-center py-20">
@@ -54,6 +60,7 @@ const StatisticsSection = ({ isLoading, data = [], backendBase, setUserStatistic
         context={UserStatsContext.ARTICLES_ADDED}
         setUserStatisticsModal={setUserStatisticsModal}
         backendBase={backendBase}
+        canViewStatsDetails={canViewStatsDetails}
       />
 
       <StatisticsTable
@@ -63,6 +70,7 @@ const StatisticsSection = ({ isLoading, data = [], backendBase, setUserStatistic
         context={UserStatsContext.ARTICLES_EDITED}
         setUserStatisticsModal={setUserStatisticsModal}
         backendBase={backendBase}
+        canViewStatsDetails={canViewStatsDetails}
       />
 
       <StatisticsTable
@@ -72,6 +80,7 @@ const StatisticsSection = ({ isLoading, data = [], backendBase, setUserStatistic
         context={UserStatsContext.CONVERSATION_TOPICS}
         setUserStatisticsModal={setUserStatisticsModal}
         backendBase={backendBase}
+        canViewStatsDetails={canViewStatsDetails}
       />
     </div>
   );

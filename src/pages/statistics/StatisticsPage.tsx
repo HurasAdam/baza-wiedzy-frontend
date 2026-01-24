@@ -2,6 +2,7 @@ import { useState } from "react";
 import { UserStatisticsAddedArticlesModal } from "../../components/user-statistics-added-articles-details/user-statistics-added-articles.modal";
 import { UserStatisticsAddedConversationReportsModal } from "../../components/user-statistics-added-coversation-reports-details/user-statistics-added-conersation-reports.modal";
 import { UserStatisticsEditedArticlesModal } from "../../components/user-statistics-edited-articles-details/user-statistics-edited-articles.modal";
+import { useAuthQuery } from "../../hooks/auth/use-auth";
 import { useExportUsersStatistics, useFindAllUsersStatistics } from "../../hooks/user-statistics/user-user-statistics";
 import StatisticsHeader from "./components/StatisticsHeader";
 import StatisticsSection from "./components/StatisticsSection";
@@ -22,6 +23,7 @@ export interface SelectedUser {
 export type ModalVariant = "ADDED_ARTICLES" | "EDITED_ARTICLES" | "ADDED_CONVERSATION_REPORTS" | "";
 
 export const StatisticsPage = () => {
+  const { data: user } = useAuthQuery();
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
   const [userStatisticsModal, setUserStatisticsModal] = useState<{
@@ -33,6 +35,9 @@ export const StatisticsPage = () => {
     isOpen: false,
     selectedUser: null,
   });
+
+  const canViewStatsDetails = user?.role?.permissions?.includes("VIEW_USER_STATS_DETAILS");
+
   const backendBase = import.meta.env.VITE_BACKEND_BASE_URL ?? "http://localhost:5000";
   const hasFilters = startDate && endDate;
   const params = hasFilters ? { startDate, endDate } : undefined;
@@ -64,6 +69,7 @@ export const StatisticsPage = () => {
         data={data}
         backendBase={backendBase}
         setUserStatisticsModal={openUserStatisticsModal}
+        canViewStatsDetails={canViewStatsDetails}
       />
 
       {userStatisticsModal.isOpen &&

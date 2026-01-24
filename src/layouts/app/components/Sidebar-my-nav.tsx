@@ -7,7 +7,7 @@ export interface MySectionNavItem {
   title: string;
   href: string;
   icon: LucideIcon;
-  requiredPermission?: string;
+  requiredPermission?: string[];
 }
 
 interface MySectionNavProps extends React.HtmlHTMLAttributes<HTMLElement> {
@@ -41,7 +41,7 @@ export const SidebarMyNav = ({ items, isCollapsed, ...props }: MySectionNavProps
                   "justify-start text-sidebar-foreground border-transparent hover:text-sidebar-accent-foreground hover:bg-sidebar-hover rounded-md transition-colors duration-200",
                   isActive &&
                     "bg-sidebar-primary hover:bg-sidebar-primary border-sidebar-border text-sidebar-primary-foreground font-semibold",
-                  isCollapsed && "w-10 justify-center"
+                  isCollapsed && "w-10 justify-center",
                 )}
                 onClick={handleClick}
                 title={isCollapsed ? el.title : undefined}
@@ -81,7 +81,7 @@ export const SidebarMyNav = ({ items, isCollapsed, ...props }: MySectionNavProps
                 "justify-start text-sidebar-foreground border-transparent hover:text-sidebar-accent-foreground hover:bg-sidebar-hover rounded-md transition-colors duration-200",
                 isActive &&
                   "bg-sidebar-primary hover:bg-sidebar-primary border-sidebar-border text-sidebar-primary-foreground font-semibold",
-                isCollapsed && "w-10 justify-center"
+                isCollapsed && "w-10 justify-center",
               )}
               onClick={handleClick}
               title={isCollapsed ? el.title : undefined}

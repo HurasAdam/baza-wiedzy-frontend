@@ -13,6 +13,7 @@ interface StatisticsTableProps {
   context: UserStatsContextEnum;
   setUserStatisticsModal: (variant: ModalVariant, selectedUser: SelectedUser) => void;
   backendBase: string;
+  canViewStatsDetails?: boolean;
 }
 
 export const StatisticsTable = ({
@@ -22,6 +23,7 @@ export const StatisticsTable = ({
   context,
   setUserStatisticsModal,
   backendBase,
+  canViewStatsDetails,
 }: StatisticsTableProps) => {
   const openModal = (selectedUser: SelectedUser) => {
     let variant: ModalVariant;
@@ -72,7 +74,13 @@ export const StatisticsTable = ({
                   </td>
                   <td className="py-2">{u.stats[context]}</td>
                   <td className="py-2 text-center">
-                    <ActionsCell selectedUser={u} context={context} count={u.stats[context]} onOpenModal={openModal} />
+                    <ActionsCell
+                      canViewStatsDetails={canViewStatsDetails}
+                      selectedUser={u}
+                      context={context}
+                      count={u.stats[context]}
+                      onOpenModal={openModal}
+                    />
                   </td>
                 </tr>
               ))}

@@ -13,6 +13,7 @@ import { JstProjectDetailsLayout } from "../pages/admin-panel/admin-jstProject-d
 import { AccountOnboardingRoute } from "./account.onboarding.route";
 import AdminProtectedRoute from "./admin.protected.route";
 import { AuthRoute } from "./auth.route";
+import PermissionGuard from "./PermissionGuard";
 import ProtectedRoute from "./protected.route";
 import { protectedRoutePaths } from "./routes";
 
@@ -45,9 +46,20 @@ export function AppRoutes() {
 
           <Route element={<AppLayout />}>
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
-            {protectedRoutePaths.map(({ path, element }) => (
-              <Route key={path} path={path} element={element} />
-            ))}
+            {protectedRoutePaths.map(({ path, element, permissions }) => {
+              if (permissions?.length) {
+                return (
+                  <Route
+                    key={path}
+                    path={path}
+                    element={<PermissionGuard permissions={permissions}>{element}</PermissionGuard>}
+                  />
+                );
+              }
+
+              return <Route key={path} path={path} element={element} />;
+            })}
+
             {/*  404 dla zalogowanych na nieznane ścieżki */}
             <Route path="*" element={<PAGES.NotFoundPage />} />
 

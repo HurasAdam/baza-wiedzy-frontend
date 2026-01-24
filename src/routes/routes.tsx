@@ -12,28 +12,30 @@ export const protectedRoutePaths = [
   {
     path: PROTECTED_ROUTES.PENDING_ARTICLES,
     element: <PAGES.PendingArticles />,
+    permissions: ["ACCESS_PENDING_ARTICLES_PANEL"],
   },
+  { path: PROTECTED_ROUTES.FAVORITES_ARTICLES, element: <PAGES.FavoritesArticlesPage /> },
+  { path: PROTECTED_ROUTES.REGISTER_TOPIC, element: <PAGES.TopicRegisterPage /> },
+
   {
-    path: PROTECTED_ROUTES.FAVORITES_ARTICLES,
-    element: <PAGES.FavoritesArticlesPage />,
+    path: PROTECTED_ROUTES.STATISTICS,
+    element: <PAGES.StatisticsPage />,
+    permissions: ["VIEW_USER_STATS"],
   },
+
+  // Kolekcje
   {
-    path: PROTECTED_ROUTES.REGISTER_TOPIC,
-    element: <PAGES.TopicRegisterPage />,
+    path: PROTECTED_ROUTES.MY_WORKSPACES,
+    element: <PAGES.MyWorkspaces />,
+    permissions: ["ADD_COLLECTION", "JOIN_COLLECTION"],
   },
-  { path: PROTECTED_ROUTES.STATISTICS, element: <PAGES.StatisticsPage /> },
+
   { path: PROTECTED_ROUTES.MY_ENTRIES, element: <PAGES.MyEntriesPage /> },
-  { path: PROTECTED_ROUTES.MY_WORKSPACES, element: <PAGES.MyWorkspaces /> },
   { path: PROTECTED_ROUTES.MY_FLAGS, element: <PAGES.MyFlagsPage /> },
   { path: PROTECTED_ROUTES.REPORTS, element: <PAGES.ReportsPage /> },
   { path: PROTECTED_ROUTES.REPORTS_ID, element: <PAGES.ReportDetailsPage /> },
   { path: PROTECTED_ROUTES.FUNNY_MESSAGES, element: <PAGES.FunnyMessages /> },
-  {
-    path: PROTECTED_ROUTES.CREATE_ARTICLE,
-    element: <PAGES.CreateArticlePage />,
-  },
-  {
-    path: PROTECTED_ROUTES.CREATE_FAQ,
-    element: <PAGES.CreateFaqPage />,
-  },
+
+  { path: PROTECTED_ROUTES.CREATE_ARTICLE, element: <PAGES.CreateArticlePage />, permissions: ["ADD_ARTICLE"] },
+  { path: PROTECTED_ROUTES.CREATE_FAQ, element: <PAGES.CreateFaqPage />, permissions: ["ADD_FAQ"] },
 ];

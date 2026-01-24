@@ -24,6 +24,7 @@ import {
   School,
   Smile,
   UserRoundPen,
+  type LucideIcon,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -52,7 +53,7 @@ import { SidebarNav } from "./Sidebar-nav";
 type NavItem = {
   title: string;
   href: string;
-  icon: React.ComponentType<any>;
+  icon: LucideIcon;
   requiredPermission?: string;
 };
 
@@ -63,7 +64,12 @@ const navItems: NavItem[] = [
   { title: "Rejestr tematów", href: "/register-topic", icon: Clipboard },
   // { title: "Moje wpisy", href: `/my-entries`, icon: UserRoundPen, requiredPermission: "ADD_ARTICLE" },
   { title: "FAQ", href: "/faq", icon: BookOpen },
-  { title: "Statystyki", href: `/statistics`, icon: ChartColumnDecreasing },
+  {
+    title: "Statystyki",
+    href: `/statistics`,
+    icon: ChartColumnDecreasing,
+    requiredPermission: "VIEW_USER_STATS",
+  },
   { title: "Szkoły JST", href: `/jst-projects`, icon: School },
   { title: "Działy i kontakty", href: `/achieved`, icon: BookUser },
 
@@ -81,6 +87,7 @@ export const myNavItems: MySectionNavItem[] = [
     title: "Kolekcje",
     href: "/my-workspaces",
     icon: Layers2,
+    requiredPermission: ["ADD_COLLECTION", "JOIN_COLLECTION"], // teraz tablica permisji
   },
   {
     title: "Ulubione",
@@ -91,18 +98,16 @@ export const myNavItems: MySectionNavItem[] = [
     title: "Wpisy",
     href: "/my-entries",
     icon: UserRoundPen,
-    requiredPermission: "ADD_ARTICLE",
+    requiredPermission: ["ADD_ARTICLE"],
   },
   {
     title: "Etykiety",
     href: "/my-flags",
     icon: LandPlot,
-    requiredPermission: "ADD_ARTICLE",
   },
 ];
 
 const APP_VERSION = import.meta.env.VITE_APP_VERSION;
-const isBeta = APP_VERSION?.toLowerCase().includes("beta");
 
 export const Sidebar = ({
   currentWorkspace,
@@ -120,6 +125,16 @@ export const Sidebar = ({
 
   const filteredNavItems = navItems.filter((item) => {
     if (!item.requiredPermission) return true;
+    return userPermissions.includes(item.requiredPermission);
+  });
+
+  const filteredMyNavItems = myNavItems.filter((item) => {
+    if (!item.requiredPermission) return true;
+
+    if (Array.isArray(item.requiredPermission)) {
+      return item.requiredPermission.some((perm) => userPermissions.includes(perm));
+    }
+
     return userPermissions.includes(item.requiredPermission);
   });
 
@@ -219,22 +234,8 @@ export const Sidebar = ({
           className={cn(sidebarVariant === "compact" && "items-center space-y-2 ")}
           currentWorkspace={currentWorkspace}
         />
-        <SidebarMyNav items={myNavItems} isCollapsed={sidebarVariant === "compact"} />
+        <SidebarMyNav items={filteredMyNavItems} isCollapsed={sidebarVariant === "compact"} />
       </ScrollArea>
-
-      {/* <div className="flex flex-col items-center py-4 mt-auto text-xs text-muted-foreground">
-        <span className="flex items-center gap-1">
-          <Info onClick={onOpenChangeLogModal} className="w-4 h-4 cursor-help text-sidebar-logo-secondary" />
-          {!isCollapsed && (
-            <span className="flex items-center gap-1 text-sidebar-foreground">
-              v{APP_VERSION}
-              {isBeta && (
-                <span className="bg-yellow-400 text-black text-[10px] px-1 py-0.5 rounded font-medium">Beta</span>
-              )}
-            </span>
-          )}
-        </span>
-      </div> */}
 
       {sidebarVariant === "compact" ? (
         <DropdownMenu>

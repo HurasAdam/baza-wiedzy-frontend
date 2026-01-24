@@ -9,15 +9,17 @@ interface ActionsCellProps {
   context: UserStatsContextEnum;
   count?: number;
   onOpenModal: (selectedUser: SelectedUser, context: string) => void;
+  canViewStatsDetails?: boolean;
 }
 
-const ActionsCell = ({ selectedUser, context, count = 0, onOpenModal }: ActionsCellProps) => {
-  if (count === 0)
+const ActionsCell = ({ selectedUser, context, count = 0, onOpenModal, canViewStatsDetails }: ActionsCellProps) => {
+  if (!canViewStatsDetails || count === 0) {
     return (
-      <Button variant="ghost" disabled={true} className="">
-        <MoreHorizontal className="h-4 w-4" />
+      <Button variant="ghost" disabled>
+        <MoreHorizontal className="h-4 w-4 opacity-40" />
       </Button>
     );
+  }
 
   return (
     <Popover>
