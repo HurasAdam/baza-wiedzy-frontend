@@ -1,11 +1,12 @@
 import { FORBIDDEN, UNAUTHORIZED } from "@/constants/http.mjs";
-import axios from "axios";
+import axios, { type CreateAxiosDefaults } from "axios";
 
-import { redirect } from "react-router-dom";
-
-const options = {
+const options: CreateAxiosDefaults<unknown> = {
   baseURL: import.meta.env.VITE_BACKEND_BASE_URL,
   withCredentials: true, // to ensure cookies like refreshToken are sent
+  headers: {
+    "Access-Control-Allow-Origin": import.meta.env.VITE_BACKEND_BASE_URL,
+  },
 };
 
 // create a separate client for refreshing the access token
@@ -57,7 +58,7 @@ API.interceptors.response.use(
     }
 
     return Promise.reject({ status, ...data });
-  }
+  },
 );
 
 export default API;
