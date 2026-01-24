@@ -45,7 +45,7 @@ function ArticleHeader({
 
       {/* Title + More Icon */}
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-foreground/90">{title}</h1>
+        <h1 className="text-2xl font-bold text-foreground/90 max-w-[960px]">{title}</h1>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
