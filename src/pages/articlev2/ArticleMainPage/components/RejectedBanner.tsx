@@ -51,11 +51,9 @@ export const RejectedBanner = ({ userPermissions, actions, articleData }: Props)
       </div>
 
       <div className="flex gap-2 mt-2 sm:mt-0">
-        {userPermissions.includes("APPROVE_ARTICLE") && (
-          <Button onClick={() => actions.REQUEST_ARTICLE_REVIEW()} size="sm">
-            Wyślij do ponownej weryfikacji
-          </Button>
-        )}
+        <Button onClick={() => actions.REQUEST_ARTICLE_REVIEW()} size="sm">
+          Wyślij do ponownej weryfikacji
+        </Button>
       </div>
 
       <ArticleRejectionReasonModal
