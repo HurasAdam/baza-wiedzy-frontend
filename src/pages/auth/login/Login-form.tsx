@@ -47,7 +47,7 @@ const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
                   <FormItem>
                     <FormLabel className="text-foreground">Email</FormLabel>
                     <FormControl>
-                      <Input className="border-input" {...field} placeholder="jan.nowak@librus.pl" type="email" />
+                      <Input {...field} placeholder="jan.nowak@librus.pl" type="email" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -62,20 +62,9 @@ const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
                   <FormItem>
                     <div className="flex justify-between items-center">
                       <FormLabel className="text-foreground">Hasło</FormLabel>
-                      {/* <Link
-                        to="/auth/forgot-password"
-                        className="text-xs text-muted-foreground hover:text-secondary-foreground"
-                      >
-                        Przypomnij hasło
-                      </Link> */}
                     </div>
                     <FormControl>
-                      <Input
-                        className="text-foreground border-input"
-                        {...field}
-                        placeholder="********"
-                        type="password"
-                      />
+                      <Input className="text-foreground" {...field} placeholder="********" type="password" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
