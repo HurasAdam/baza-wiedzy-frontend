@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 
 import { CreateWorkspaceFolderModal } from "../../components/workspace-folder/CreateWorkspaceFolderModal";
+import { CreateWorkspaceModal } from "../../components/workspace/CreateWorkspaceModal";
 import { useFindWorkspaceFoldersQuery } from "../../hooks/workspace-folders/use-workspace-folder";
 import { useFindCurrentWorkspaceMemberQuery } from "../../hooks/workspace-members/use-workspace-member";
 import { useFindUserWorkspacesQuery, useFindWorkspaceQuery } from "../../hooks/workspace/use-workspace";
@@ -17,6 +18,7 @@ export default function WorkspaceLayout() {
   const { data: workspace, isLoading: isWorkspaceLoading, error } = useFindWorkspaceQuery(workspaceId);
   const { data: folders, isLoading: isFoldersLoading } = useFindWorkspaceFoldersQuery(workspaceId);
   const [isCreatingWorkspaceFolder, setIsCreatingWorkspaceFolder] = useState(false);
+  const [isCreatingWorkspace, setIsCreatingWorkspace] = useState(false);
 
   useEffect(() => {
     if (!workspaceId && workspaces.length > 0) {
@@ -25,6 +27,7 @@ export default function WorkspaceLayout() {
   }, [workspaceId, workspaces]);
 
   const handleAddFolder = () => setIsCreatingWorkspaceFolder(true);
+  const handleAddWorkspace = () => setIsCreatingWorkspace(true);
   const handleNewArticle = () => {
     navigate(`/workspace/${workspaceId}/new-article`);
   };
@@ -52,6 +55,7 @@ export default function WorkspaceLayout() {
         onOpenNewArticle={handleNewArticle}
         isLoading={isFoldersLoading}
         permissions={currentWorkspaceMember?.permissions}
+        onCreateWorkspace={handleAddWorkspace}
       />
 
       <div className="flex flex-col flex-1">
@@ -75,6 +79,12 @@ export default function WorkspaceLayout() {
         isCreatingWorkspaceFolder={isCreatingWorkspaceFolder}
         setIsCreatingWorkspaceFolder={setIsCreatingWorkspaceFolder}
         workspaceId={workspace?._id}
+      />
+
+      <CreateWorkspaceModal
+        isCreatingWorkspace={isCreatingWorkspace}
+        setIsCreatingWorkspace={setIsCreatingWorkspace}
+        onClose={() => setIsCreatingWorkspace(false)}
       />
     </div>
   );

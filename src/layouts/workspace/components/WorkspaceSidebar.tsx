@@ -39,6 +39,7 @@ interface WorkspaceSidebarProps {
   }[];
   onAddFolder: () => void;
   onOpenNewArticle: () => void;
+  onCreateWorkspace: () => void;
 }
 
 export const WorkspaceSidebar = ({
@@ -50,13 +51,13 @@ export const WorkspaceSidebar = ({
   permissions,
   onAddFolder,
   onOpenNewArticle,
+  onCreateWorkspace,
 }: WorkspaceSidebarProps) => {
   const navigate = useNavigate();
 
   return (
     <aside className="w-64 border-r  flex flex-col bg-gradient-to-b from-background/80 via-background/60 to-background/30 backdrop-blur-xl shadow-inner">
       <div className="border-b flex flex-col px-2 pt-2 pb-2">
-        {/* Workspace switcher w miejscu nagłówka */}
         <DropdownMenu>
           <DropdownMenuTrigger className="flex items-center hover:bg-muted/15 gap-3 p-3 mb-3 rounded-xl bg-gradient-to-r from-background/20 via-background/10 to-background/20 shadow-sm w-full justify-between">
             <div className="flex items-center gap-3">
@@ -75,8 +76,8 @@ export const WorkspaceSidebar = ({
           </DropdownMenuTrigger>
 
           <DropdownMenuContent
-            side="right" // dropdown rozwija się w górę
-            align="start" // wyrównanie do początku triggera (left)
+            side="right"
+            align="start"
             className="w-full px-2 bg-background rounded-xl shadow-lg border border-border"
           >
             {workspaces.map((ws) => {
@@ -95,9 +96,9 @@ export const WorkspaceSidebar = ({
 
             <DropdownMenuItem
               className="text-primary font-medium mt-1 border-t border-border"
-              onClick={() => navigate("/workspace/new")}
+              onClick={onCreateWorkspace}
             >
-              + Utwórz nowy workspace
+              + Nowa kolekcja
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
