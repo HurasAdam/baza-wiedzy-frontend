@@ -100,7 +100,7 @@ const WorkspaceArticleCard = ({
         "flex justify-between items-center px-4 py-2 text-sm hover:bg-muted transition-colors bg-muted/15",
         "border-b last:border-0",
         "first:rounded-t-xl",
-        "last:rounded-b-lg"
+        "last:rounded-b-lg",
       )}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
@@ -169,7 +169,7 @@ const WorkspaceArticleCard = ({
             <HeartIcon
               className={cn(
                 "h-4 w-4",
-                article.isFavourite ? "text-primary/65 fill-primary/65" : "text-muted-foreground"
+                article.isFavourite ? "text-primary/65 fill-primary/65" : "text-muted-foreground",
               )}
             />
           )}

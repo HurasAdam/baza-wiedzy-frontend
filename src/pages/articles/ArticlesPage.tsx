@@ -98,7 +98,6 @@ export const ArticlesPage: React.FC = () => {
       if (e.key.toLowerCase() === "v") {
         const currentHoveredId = hoveredArticleIdRef.current;
         if (!isDrawerOpen && currentHoveredId) {
-          // Otwórz drawer jeśli najechano na artykuł
           openArticleDrawer(currentHoveredId);
         } else if (isDrawerOpen) {
           setIsDrawerOpen(false);

@@ -1,5 +1,4 @@
 import { FileText, List, Star } from "lucide-react";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../../components/ui/tooltip";
 import { cn } from "../../../lib/utils";
@@ -69,23 +68,8 @@ interface TableArticleCardProps {
   onMouseLeave?: () => void;
 }
 
-const TableArticleCard = ({
-  article,
-  flags,
-  onFlagChange,
-  toggleFavourite,
-  toggleFavouriteLoading,
-  openArticleDrawer,
-  onMouseEnter,
-  onMouseLeave,
-}: TableArticleCardProps) => {
-  const [selectedFlag, setSelectedFlag] = useState<string | undefined>();
+const TableArticleCard = ({ article, openArticleDrawer, onMouseEnter, onMouseLeave }: TableArticleCardProps) => {
   const navigate = useNavigate();
-
-  const handleFlagSelect = (flagId: string) => {
-    setSelectedFlag(flagId);
-    onFlagChange(article._id, flagId);
-  };
 
   return (
     <div
@@ -94,32 +78,41 @@ const TableArticleCard = ({
       key={article._id}
       onClick={() => navigate(`/articles/${article._id}`, { state: { from: location.pathname + location.search } })}
       className={cn(
-        "flex justify-between items-center px-3.5 py-3 text-sm hover:bg-muted/45 transition-colors bg-card ",
+        "flex justify-between items-center px-3.5 py-3 text-sm group transition-colors hover:bg-muted/40 bg-transparent",
         "border-b last:border-0 first:rounded-t-xl last:rounded-b-lg",
       )}
       title={`Autor: ${article.createdBy.name}`}
     >
-      {/* LEFT SIDE: FileText / Status Icon + Title + Product */}
-      <div
-        to={`/articles/${article._id}`}
-        state={{ from: location.pathname + location.search }}
-        className="flex items-center gap-3 min-w-0 overflow-hidden flex-grow"
-      >
-        <div className="relative  flex-shrink-0 w-7.5 h-7.5 flex items-center justify-center  rounded-md border border-muted/40 bg-muted/70">
+      <div className="flex items-center gap-3 min-w-0 overflow-hidden flex-grow">
+        <div
+          className="
+          relative
+  flex-shrink-0
+  w-8.5 h-8.5
+  flex items-center justify-center
+  rounded-lg
+  border border-muted/40
+  bg-muted/60 "
+        >
           {article.isImportant ? (
             <Tooltip>
               <TooltipTrigger asChild>
-                <Star className="w-4 h-4 text-yellow-600/90 " />
+                <Star className="w-4.5 h-4.5 text-yellow-600/90 " />
               </TooltipTrigger>
               <TooltipContent className="bg-muted p-2 rounded-md text-xs">Wymaga weryfikacji</TooltipContent>
             </Tooltip>
           ) : (
-            <FileText className="w-4 h-4 text-muted-foreground" />
+            <FileText className="w-4.5 h-4.5 text-muted-foreground" />
           )}
         </div>
 
         <div className="flex flex-col overflow-hidden">
-          <span className="font-semibold text-card-foreground  break-words">{article.title}</span>
+          <span
+            className="font-semibold text-card-foreground/90 group-hover:text-primary/95   transition-colors
+  duration-200 break-words"
+          >
+            {article.title}
+          </span>
 
           <span
             className="inline-flex items-center px-2 py-[1px] mt-1 rounded-full text-[9px] font-medium uppercase tracking-wide w-fit"
@@ -135,9 +128,7 @@ const TableArticleCard = ({
         </div>
       </div>
 
-      {/* RIGHT SIDE: Response Variants, Meta Data, Favourite */}
       <div className="flex items-center gap-4">
-        {/* Liczba wariantów */}
         {article.responseVariantsCount > 1 ? (
           <Tooltip>
             <TooltipTrigger asChild>
