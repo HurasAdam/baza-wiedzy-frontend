@@ -67,7 +67,7 @@ interface ExportParams {
 export const useExportUsersStatistics = () => {
   return useMutation({
     mutationFn: async ({ startDate, endDate }: ExportParams) => {
-      const backendUrl = "http://localhost:5000/statistics/export/users";
+      const backendUrl = `${import.meta.env.VITE_BACKEND_BASE_URL}/statistics/export/users`;
       const url = new URL(backendUrl);
 
       if (startDate) url.searchParams.append("startDate", startDate.toISOString());
