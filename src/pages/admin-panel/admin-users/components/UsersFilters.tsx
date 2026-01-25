@@ -23,14 +23,14 @@ export const UsersFilters = ({ roles, usersCount, role, status, search, onChange
       {/* Keyword Filter */}
       <Input
         placeholder="Szukaj użytkownika..."
-        className="w-48 border-ring"
+        className="w-48"
         value={search}
         onChange={(e) => onChange({ role, status, search: e.target.value })}
       />
 
       {/* Role Filter */}
       <Select value={role ?? "all"} onValueChange={(v) => onChange({ role: v === "all" ? null : v, status, search })}>
-        <SelectTrigger className="w-40 border-ring">
+        <SelectTrigger className="w-40">
           <SelectValue placeholder="Filtruj rolę" />
         </SelectTrigger>
         <SelectContent>
@@ -56,7 +56,7 @@ export const UsersFilters = ({ roles, usersCount, role, status, search, onChange
 
       {/* Status Filter */}
       <Select value={status ?? "all"} onValueChange={(v) => onChange({ role, status: v === "all" ? null : v, search })}>
-        <SelectTrigger className="w-40 border-ring">
+        <SelectTrigger className="w-40">
           <SelectValue placeholder="Status" />
         </SelectTrigger>
         <SelectContent>
