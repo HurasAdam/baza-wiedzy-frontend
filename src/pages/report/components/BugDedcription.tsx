@@ -13,7 +13,7 @@ export const BugDedcription = ({ report }) => {
       </DescriptionCard>
 
       {report.reproductionSteps && report.reproductionSteps.length > 0 && (
-        <DescriptionCard title="Kroki reprodukcji" icon="🔁">
+        <DescriptionCard title="Kroki wymagane do odtworzenia" icon="🔁">
           {report.reproductionSteps.join("\n")}
         </DescriptionCard>
       )}
