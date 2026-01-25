@@ -15,7 +15,6 @@ import { useCreateFaqMutaton } from "../../hooks/faq/use-faq";
 type QuestionItem = { question: string; answer: string };
 type FaqFormValues = {
   title: string;
-  slug?: string;
   description?: string;
   iconKey: string;
   labelColor: string;
@@ -29,7 +28,6 @@ export function CreateFaqPage() {
   const methods = useForm<FaqFormValues>({
     defaultValues: {
       title: "",
-      slug: "",
       description: "",
       iconKey: "TableOfContents",
       labelColor: "blue",
@@ -107,12 +105,8 @@ export function CreateFaqPage() {
                   />
                 </div>
 
-                {/* Slug + Description */}
+                {/*  Description */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm font-medium text-muted-foreground">Slug (opcjonalny)</label>
-                    <Input {...methods.register("slug")} placeholder="product-billing" className="mt-2 border-ring" />
-                  </div>
                   <div>
                     <label className="text-sm font-medium text-muted-foreground">Description</label>
                     <Textarea
@@ -171,7 +165,7 @@ export function CreateFaqPage() {
                     <div className="flex items-center justify-between mb-2">
                       <div>
                         <label className="text-sm font-medium text-muted-foreground">Kolor</label>
-                        <p className="text-xs text-muted-foreground mt-1">Kolor pobierany z motywu (CSS vars)</p>
+                        <p className="text-xs text-muted-foreground mt-1">Wybierz kolor etykiety reprezentującej FAQ</p>
                       </div>
                     </div>
 
