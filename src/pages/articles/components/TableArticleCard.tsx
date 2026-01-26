@@ -78,7 +78,7 @@ const TableArticleCard = ({ article, openArticleDrawer, onMouseEnter, onMouseLea
       key={article._id}
       onClick={() => navigate(`/articles/${article._id}`, { state: { from: location.pathname + location.search } })}
       className={cn(
-        "flex justify-between items-center px-3.5 py-3 text-sm group transition-colors hover:bg-muted/40 bg-transparent",
+        "flex justify-between items-center px-3.5 py-3 text-sm group transition-colors  bg-transparent",
         "border-b last:border-0 first:rounded-t-xl last:rounded-b-lg",
       )}
       title={`Autor: ${article.createdBy.name}`}
@@ -108,7 +108,7 @@ const TableArticleCard = ({ article, openArticleDrawer, onMouseEnter, onMouseLea
 
         <div className="flex flex-col overflow-hidden">
           <span
-            className="font-semibold text-card-foreground/90 group-hover:text-primary/95   transition-colors
+            className="font-base text-card-foreground/90 group-hover:text-primary/95  transition-colors
   duration-200 break-words"
           >
             {article.title}
