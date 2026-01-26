@@ -4,12 +4,12 @@ interface SkeletonArticleCardProps {
   withSpinner?: boolean;
 }
 const SkeletonArticleCard = ({ withSpinner = false }: SkeletonArticleCardProps) => (
-  <li className="relative flex items-center justify-between px-4 py-4 animate-pulse bg-muted/15 rounded-md">
+  <li className="relative flex items-center justify-between px-6 py-4 animate-pulse bg-muted/15 rounded-md">
     <div className="flex items-center gap-3 min-w-0">
-      <div className="w-5 h-5 bg-muted/30 rounded-full" />
+      <div className="w-8 h-8 bg-muted/60 rounded-md" />
       <div className="flex flex-col min-w-0 gap-1">
-        <div className="h-3 bg-muted/30 rounded w-32" />
-        <div className="h-2 bg-muted/20 rounded w-24" />
+        <div className="h-3 bg-muted/60 rounded w-44" />
+        <div className="h-2 bg-muted/60 rounded w-24" />
       </div>
     </div>
     <div className="flex gap-4">
