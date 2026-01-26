@@ -39,7 +39,16 @@ const AdminRolesList = ({ roles, isLoading, isError, error, navigate }: AdminRol
               >
                 {/* Left */}
                 <div className="flex items-center gap-3">
-                  <Icon className="w-5 h-5 text-muted-foreground" />
+                  <div
+                    className="  flex-shrink-0
+  w-8.5 h-8.5
+  flex items-center justify-center
+  rounded-lg
+  border border-muted/40
+  bg-muted/90"
+                  >
+                    <Icon className="w-5 h-5 text-muted-foreground" />
+                  </div>
 
                   <span className="text-sm font-medium text-foreground">{role.name}</span>
                 </div>

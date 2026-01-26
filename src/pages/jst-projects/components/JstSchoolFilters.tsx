@@ -31,7 +31,7 @@ const JstSchoolFilters = ({ filterField, setFilterField, filterQuery, setFilterQ
           <Filter className="w-4 h-4" /> Wyszukaj szkołę
         </div>
         <Select value={filterField} onValueChange={setFilterField}>
-          <SelectTrigger className="w-36 border-ring">
+          <SelectTrigger className="w-36">
             <SelectValue placeholder="Kryterium" />
           </SelectTrigger>
           <SelectContent className="bg-card">
@@ -46,7 +46,7 @@ const JstSchoolFilters = ({ filterField, setFilterField, filterQuery, setFilterQ
           </SelectContent>
         </Select>
         <Input
-          className="flex-1 outline-none border-ring"
+          className="flex-1 outline-none"
           placeholder={placeholderMap[filterField]}
           value={filterQuery}
           onChange={(e) => setFilterQuery(e.target.value)}

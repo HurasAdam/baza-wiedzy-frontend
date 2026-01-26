@@ -11,7 +11,9 @@ const UserInfoRoleBadge = ({ user }: UserInfoRoleBadgeProps) => {
   return (
     <div className="flex flex-col   gap-2 min-w-[160px] ">
       <div
-        className="flex items-center justify-center w-16 h-16 rounded-lg border bg-background"
+        className="flex items-center justify-center w-16 h-16 rounded-lg
+  border 
+  bg-muted/90"
         style={{ backgroundColor: `${user?.role?.labelColor}20`, color: user?.role?.labelColor }}
       >
         {RoleIcon && <RoleIcon className="w-8 h-8" />}
