@@ -49,7 +49,7 @@ export function WorkspaceArticlePage() {
   };
 
   return (
-    <div className="mx-auto px-6 py-1 space-y-6">
+    <div className="mx-auto max-w-[1380px]  py-1 space-y-6">
       <ArticleHeader
         title={article.title}
         folderName={article.folder.name}

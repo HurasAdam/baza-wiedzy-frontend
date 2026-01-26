@@ -1,7 +1,6 @@
-import { FileText, HeartIcon, List, Loader } from "lucide-react";
+import { FileText, List } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Button } from "../../../components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../../components/ui/tooltip";
 import { cn } from "../../../lib/utils";
 
@@ -152,28 +151,6 @@ const WorkspaceArticleCard = ({
             </TooltipContent>
           </Tooltip>
         )}
-
-        {/* Ulubione */}
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            toggleFavourite(article._id);
-          }}
-        >
-          {toggleFavouriteLoading ? (
-            <Loader className="animate-spin" />
-          ) : (
-            <HeartIcon
-              className={cn(
-                "h-4 w-4",
-                article.isFavourite ? "text-primary/65 fill-primary/65" : "text-muted-foreground",
-              )}
-            />
-          )}
-        </Button>
       </div>
     </Link>
   );
