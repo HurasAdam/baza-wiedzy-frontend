@@ -67,7 +67,7 @@ export const CreateArticlePage = () => {
                 Istnieje już artykuł o takim samym tytule. Wprowadź inny, unikalny tytuł i spróbuj ponownie.
               </span>
             </div>,
-            { duration: 6200 }
+            { duration: 6200 },
           );
           return;
         } else if (status === 403) {
@@ -104,19 +104,19 @@ export const CreateArticlePage = () => {
   const formattedProducts: SelectOption[] = mapToSelectOptions<IProduct>(
     products,
     (p) => p.name,
-    (p) => p._id
+    (p) => p._id,
   );
 
   const formattedCategoriesBySelectedProduct: SelectOption[] = mapToSelectOptions<ProductCategory>(
     categories,
     (c) => c.name,
-    (c) => c._id
+    (c) => c._id,
   );
 
   const formattedTags: SelectOption[] = mapToSelectOptions<Tag>(
     tags?.tags ?? [],
     (t) => t.name,
-    (t) => t._id
+    (t) => t._id,
   );
 
   if (loadingTags) {
@@ -129,7 +129,7 @@ export const CreateArticlePage = () => {
 
   return (
     tags && (
-      <div className="pb-12 mx-auto ">
+      <div className="pb-5 max-w-[1400px] mx-auto ">
         <Header onBack={() => navigate(-1)} />
 
         <Banner isDirty={isDirty} isLoading={isCreateLoading} onSave={handleSubmit} onCancel={() => navigate(-1)} />

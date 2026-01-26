@@ -50,7 +50,7 @@ export const MyEntriesPage = () => {
   };
 
   return (
-    <div className="mx-auto pb-10 max-w-[1400px]">
+    <div className="mx-auto pb-5 max-w-[1320px]">
       <h1 className="text-xl font-bold mb-6.5 tracking-wide text-foreground">Moje artykuły</h1>
 
       <StatusBar currentStatus={currentStatus} setCurrentStatus={setCurrentStatus} statuses={statuses} />

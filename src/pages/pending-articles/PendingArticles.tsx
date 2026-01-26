@@ -140,7 +140,7 @@ export const PendingArticles: React.FC = () => {
             toast.success("Artykuł został odrzucony, uwagi wysłane do autora.");
           },
           onSettled: () => setPendingId(null),
-        }
+        },
       );
     }
     setIsCreatingArticleRejection(false);
@@ -153,7 +153,7 @@ export const PendingArticles: React.FC = () => {
   };
 
   return (
-    <div className=" pb-10 max-w-[1400px] mx-auto">
+    <div className="pb-5 max-w-[1320px] mx-auto">
       <PendingArticlesHeader
         currentStatus={currentStatus}
         setCurrentStatus={setCurrentStatus}
