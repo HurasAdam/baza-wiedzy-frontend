@@ -110,7 +110,7 @@ export const ArticlesPage: React.FC = () => {
   }, [isDrawerOpen]);
 
   return (
-    <div className="flex flex-col gap-1.5 pb-5 max-w-[1400px] mx-auto">
+    <div className="flex flex-col gap-1.5 pb-5 max-w-[1320px] mx-auto">
       <ArticlesFilterBar
         selectedTitle={titleParam}
         selectedProduct={selectedProduct}
