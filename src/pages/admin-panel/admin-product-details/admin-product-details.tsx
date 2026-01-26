@@ -12,16 +12,11 @@ export const AdminProductDetailsPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { data: product, isLoading: isProductLoading } = useFindProductQuery(
-    id!,
-    {
-      enabled: true,
-    }
-  );
+  const { data: product, isLoading: isProductLoading } = useFindProductQuery(id!, {
+    enabled: true,
+  });
 
-  const [activeTab, setActiveTab] = useState<
-    "details" | "categories" | "topics"
-  >("details");
+  const [activeTab, setActiveTab] = useState<"details" | "categories" | "topics">("details");
 
   const tabs: { key: "details" | "categories" | "topics"; label: string }[] = [
     { key: "details", label: "Szczegóły" },
@@ -46,7 +41,7 @@ export const AdminProductDetailsPage = () => {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-1 space-y-6 pb-10">
       <div className="sticky top-0 z-20 bg-background border-b">
         {/* Back button */}
         <div className="px-2 pt-0">
@@ -93,9 +88,7 @@ export const AdminProductDetailsPage = () => {
       {/* Tab content */}
       <div className="flex-1 py-6 min-h-[400px]">
         {activeTab === "details" && <ProductDetailsTab product={product} />}
-        {activeTab === "categories" && (
-          <ProductCategoriesTab productId={product._id} />
-        )}
+        {activeTab === "categories" && <ProductCategoriesTab productId={product._id} />}
         {activeTab === "topics" && <ProductTopicsTab productId={product._id} />}
       </div>
     </div>

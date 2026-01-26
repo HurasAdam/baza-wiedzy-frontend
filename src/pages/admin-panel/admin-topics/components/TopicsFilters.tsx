@@ -28,7 +28,7 @@ const TopicsFilters = ({
     <div className="flex px-3 py-2 gap-3 items-center flex-wrap">
       <Input
         placeholder="Wyszukaj temat..."
-        className="w-64 border-ring"
+        className="w-64"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
@@ -36,7 +36,7 @@ const TopicsFilters = ({
         value={productFilter === "" ? "all" : productFilter}
         onValueChange={(value) => setProductFilter(value === "all" ? "" : (value as string))}
       >
-        <SelectTrigger className="w-40 border-ring">
+        <SelectTrigger className="w-40">
           <SelectValue placeholder="Produkt" />
         </SelectTrigger>
         <SelectContent>

@@ -92,14 +92,14 @@ export const FaqDetailtsTab = ({ faq }: ProductDetailsTabProps) => {
                   </div>
                 </div>
               </div>,
-              { duration: 7000 }
+              { duration: 7000 },
             );
             return;
           }
 
           toast.error("Wystąpił błąd serwera");
         },
-      }
+      },
     );
   };
 
@@ -172,10 +172,9 @@ export const FaqDetailtsTab = ({ faq }: ProductDetailsTabProps) => {
               </div>
             </>
           )}
-
           <Separator />
-
           {/* --- Author Section --- */}
+          <p className="text-muted-foreground block text-sm font-medium mb-1">Dodano przez:</p>
           <div className="flex items-center gap-3  py-2 bg-muted/10 rounded-lg">
             {/* Initials Circle */}
             <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-lg font-bold text-primary">
@@ -191,11 +190,11 @@ export const FaqDetailtsTab = ({ faq }: ProductDetailsTabProps) => {
             </div>
 
             {/* Author Info */}
+
             <div className="flex flex-col">
               <span className="font-semibold text-foreground text-sm">
                 {faq?.createdBy?.name || ""} {faq?.createdBy?.surname || ""}
               </span>
-
               {/* Created At Section */}
               <span className="flex items-center gap-1 text-xs text-muted-foreground mt-0.5">
                 <CalendarDays className="w-3 h-3" />

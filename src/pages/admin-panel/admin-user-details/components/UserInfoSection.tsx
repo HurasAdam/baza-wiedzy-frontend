@@ -16,28 +16,18 @@ const UserInfoSection = ({ user, onEditUser }: UserInfoSectionProps) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="flex flex-col text-sm">
             <span className="text-xs text-muted-foreground uppercase mb-1">Imię</span>
-            <Input
-              className="border-ring text-foreground disabled:opacity-80 bg-input/30"
-              disabled={true}
-              value={user.name}
-              readOnly
-            />
+            <Input className="text-foreground disabled:opacity-80" disabled={true} value={user.name} readOnly />
           </div>
           <div className="flex flex-col text-sm">
             <span className="text-xs text-muted-foreground uppercase mb-1">Nazwisko</span>
-            <Input
-              className="border-ring text-foreground disabled:opacity-80 bg-input/30"
-              disabled={true}
-              value={user.surname}
-              readOnly
-            />
+            <Input className="text-foreground disabled:opacity-80 " disabled={true} value={user.surname} readOnly />
           </div>
         </div>
 
         <div className="flex flex-col text-sm">
           <span className="text-xs text-muted-foreground uppercase mb-1">Bio</span>
           <Textarea
-            className="border-ring text-foreground disabled:opacity-80 bg-input/30"
+            className="text-foreground disabled:opacity-80 input"
             disabled={true}
             value={user.bio || ""}
             readOnly

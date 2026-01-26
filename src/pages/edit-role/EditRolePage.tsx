@@ -72,19 +72,19 @@ export const EditRolePage = () => {
                   <div style={{ opacity: 0.8 }}>Rola o podanej nazwie już istnieje. Nazwa roli musi być unikalna</div>
                 </div>
               </div>,
-              { duration: 7000 }
+              { duration: 7000 },
             );
             return;
           }
 
           toast.error("Wystapił błąd, spróbuj ponownie");
         },
-      }
+      },
     );
   });
 
   return (
-    <div className="mx-auto  ">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-1 space-y-6 pb-10">
       <Card className="shadow-sm border border-border bg-card">
         <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 pb-6 border-b border-border">
           <div className="flex items-center gap-3">

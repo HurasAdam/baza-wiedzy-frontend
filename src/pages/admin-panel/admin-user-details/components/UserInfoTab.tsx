@@ -1,7 +1,6 @@
-import { CircleCheckBig, CircleX, EllipsisVertical, KeyRound, UserCog } from "lucide-react";
+import { EllipsisVertical } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Dropdown } from "../../../../components/Dropdown";
 import { Alert } from "../../../../components/shared/alert-modal";
 import { Button } from "../../../../components/ui/button";
 import { Card } from "../../../../components/ui/card";
@@ -81,7 +80,7 @@ export function UserInfoTab({ user }: { user: UserShape; onSave?: (payload: unkn
       fn(user._id, {
         onSuccess: () =>
           toast.success(
-            `Konto użytkownika ${user.name} ${user.surname} zostało ${user.isActive ? "wyłączone" : "włączone"}`
+            `Konto użytkownika ${user.name} ${user.surname} zostało ${user.isActive ? "wyłączone" : "włączone"}`,
           ),
         onError: () => toast.error("Podczas zmiany statusu konta wystąpił błąd, spróbuj ponownie."),
         onSettled: () => {
@@ -123,38 +122,7 @@ export function UserInfoTab({ user }: { user: UserShape; onSave?: (payload: unkn
               {user.lastLogin ? formatDate(user.lastLogin) : "Brak logowania"}
             </span>
           </div>
-
-          <Dropdown
-            triggerBtn={triggerBtn}
-            options={[
-              {
-                label: "Zmień role",
-                icon: <UserCog className="w-4 h-4" />,
-                actionHandler: () => {
-                  onRequestRoleChange(user);
-                },
-              },
-              {
-                label: "Zresetuj hasło",
-                icon: <KeyRound className="w-4 h-4" />,
-                actionHandler: () => {
-                  onRequestReset(user);
-                },
-              },
-              {
-                label: user.isActive ? "Wyłącz konto" : "Włącz konto",
-                icon: user.isActive ? (
-                  <CircleX className="w-4 h-4 text-destructive" />
-                ) : (
-                  <CircleCheckBig className="w-4 h-4 text-green-600" />
-                ),
-                actionHandler: () => {
-                  onRequestToggle(user);
-                },
-              },
-            ]}
-            position={{ align: "end" }}
-          />
+          <div />
         </div>
       </Card>
 
@@ -198,8 +166,8 @@ export function UserInfoTab({ user }: { user: UserShape; onSave?: (payload: unkn
             pendingAction?.type === "RESET_PASSWORD"
               ? "Resetowanie hasła użytkownika"
               : pendingAction.user.isActive
-              ? "Dezaktywacja konta użytkownika"
-              : "Aktywacja konta użytkownika"
+                ? "Dezaktywacja konta użytkownika"
+                : "Aktywacja konta użytkownika"
           }
           onCancel={() => setPendingAction(null)}
           onConfirm={onConfirm}

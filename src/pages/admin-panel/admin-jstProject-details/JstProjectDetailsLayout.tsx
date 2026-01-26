@@ -12,7 +12,7 @@ export function JstProjectDetailsLayout() {
   const activeTab = pathname.endsWith("/schools") ? "schools" : "details";
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1 space-y-6">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-1 space-y-6">
       <JstProjectHeader project={project} isLoading={isLoading} />
 
       <Tabs value={activeTab} className="w-full">

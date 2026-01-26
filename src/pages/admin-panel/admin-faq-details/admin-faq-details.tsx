@@ -38,7 +38,7 @@ export const AdminFaqDetailsPage = () => {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-1 space-y-6 pb-10">
       <div className="sticky top-0 z-20 bg-background border-b">
         {/* Back button */}
         <div className="px-2 pt-0">

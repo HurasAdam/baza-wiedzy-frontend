@@ -84,7 +84,7 @@ export const AdminAccountsPage = () => {
       fn(user._id, {
         onSuccess: () =>
           toast.success(
-            `Konto użytkownika ${user.name} ${user.surname} zostało ${user.isActive ? "wyłączone" : "włączone"}`
+            `Konto użytkownika ${user.name} ${user.surname} zostało ${user.isActive ? "wyłączone" : "włączone"}`,
           ),
         onError: () => toast.error("Podczas zmiany statusu konta wystąpił błąd, spróbuj ponownie."),
         onSettled: () => {
@@ -100,7 +100,7 @@ export const AdminAccountsPage = () => {
   const onRequestToggle = (user: IUser) => setPendingAction({ type: "TOGGLE_ACCOUNT", user });
 
   return (
-    <div className="mx-auto pb-6">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-1 space-y-6 pb-10">
       <div className="bg-background z-10 flex flex-col gap-4 mb-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-6">
@@ -149,7 +149,7 @@ export const AdminAccountsPage = () => {
         {/* --- Keyword Filter ---*/}
         <Input
           placeholder="Szukaj użytkownika..."
-          className="w-48 border-ring"
+          className="w-48"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -159,7 +159,7 @@ export const AdminAccountsPage = () => {
           value={selectedRole ?? "all"}
           onValueChange={(value) => setSelectedRole(value === "all" ? null : value)}
         >
-          <SelectTrigger className="w-40 border-ring">
+          <SelectTrigger className="w-40">
             <SelectValue placeholder="Filtruj rolę" />
           </SelectTrigger>
           <SelectContent>
@@ -175,7 +175,7 @@ export const AdminAccountsPage = () => {
           value={selectedStatus ?? "all"}
           onValueChange={(value) => setSelectedStatus(value === "all" ? null : value)}
         >
-          <SelectTrigger className="w-40 border-ring">
+          <SelectTrigger className="w-40">
             <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent>
@@ -242,8 +242,8 @@ export const AdminAccountsPage = () => {
             pendingAction?.type === "RESET_PASSWORD"
               ? "Resetowanie hasła użytkownika"
               : pendingAction.user.isActive
-              ? "Dezaktywacja konta użytkownika"
-              : "Aktywacja konta użytkownika"
+                ? "Dezaktywacja konta użytkownika"
+                : "Aktywacja konta użytkownika"
           }
           onCancel={() => setPendingAction(null)}
           onConfirm={onConfirm}

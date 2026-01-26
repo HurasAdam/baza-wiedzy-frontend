@@ -83,7 +83,7 @@ export const AdminUserDetailsPage = () => {
       fn(user._id, {
         onSuccess: () =>
           toast.success(
-            `Konto użytkownika ${user.name} ${user.surname} zostało ${user.isActive ? "wyłączone" : "włączone"}`
+            `Konto użytkownika ${user.name} ${user.surname} zostało ${user.isActive ? "wyłączone" : "włączone"}`,
           ),
         onError: () => toast.error("Podczas zmiany statusu konta wystąpił błąd, spróbuj ponownie."),
         onSettled: () => {
@@ -124,7 +124,7 @@ export const AdminUserDetailsPage = () => {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-1 space-y-6 pb-10">
       <div className="sticky top-0 z-20 bg-background border-b">
         {/* Back button */}
         <div className="px-2 pt-0">
@@ -226,8 +226,8 @@ export const AdminUserDetailsPage = () => {
             pendingAction?.type === "RESET_PASSWORD"
               ? "Resetowanie hasła użytkownika"
               : pendingAction.user.isActive
-              ? "Dezaktywacja konta użytkownika"
-              : "Aktywacja konta użytkownika"
+                ? "Dezaktywacja konta użytkownika"
+                : "Aktywacja konta użytkownika"
           }
           onCancel={() => setPendingAction(null)}
           onConfirm={onConfirm}

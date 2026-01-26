@@ -29,7 +29,7 @@ export const AdminRolesPage = () => {
   ];
 
   return (
-    <div className="mx-auto pb-6">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-1 space-y-6 pb-10">
       {/* Header */}
       <div className="bg-background z-10 flex flex-col gap-4 mb-4">
         <AdminRolesHeader

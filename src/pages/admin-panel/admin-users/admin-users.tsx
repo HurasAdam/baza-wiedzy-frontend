@@ -71,7 +71,7 @@ export const UsersPage = () => {
       fn(user._id, {
         onSuccess: () =>
           toast.success(
-            `Konto użytkownika ${user.name} ${user.surname} zostało ${user.isActive ? "wyłączone" : "włączone"}`
+            `Konto użytkownika ${user.name} ${user.surname} zostało ${user.isActive ? "wyłączone" : "włączone"}`,
           ),
         onError: () => toast.error("Podczas zmiany statusu konta wystąpił błąd, spróbuj ponownie."),
         onSettled: () => {
@@ -91,7 +91,7 @@ export const UsersPage = () => {
   const onRequestToggle = (user: IUser) => setPendingAction({ type: "TOGGLE_ACCOUNT", user });
 
   return (
-    <div className="mx-auto pb-6">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-1 space-y-6 pb-10">
       <UsersHeader
         roles={roles}
         selectedRole={selectedRole}

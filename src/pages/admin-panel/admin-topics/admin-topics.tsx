@@ -41,7 +41,7 @@ export const AdminTopicsPage = () => {
   };
 
   return (
-    <div className="mx-auto pb-6">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-1 space-y-6 pb-10">
       <TopicsHeader
         products={products}
         searchTerm={searchTerm}

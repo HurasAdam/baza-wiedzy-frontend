@@ -13,7 +13,7 @@ const TagsFilters = ({ searchTerm, setSearchTerm, foundTagsCount }: TagsFiltersP
     <div className="flex px-3 py-2 gap-3 items-center flex-wrap">
       <Input
         placeholder="Wyszukaj tag..."
-        className="w-64 border-ring"
+        className="w-64"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
