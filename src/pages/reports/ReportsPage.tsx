@@ -29,7 +29,7 @@ export const ReportsPage = () => {
   const { data: reports = [], isLoading, isError, error } = useFindIssueReportsQuery(params);
   const { onOpenCreateIssueReport } = useOutletContext<{ onOpenCreateIssueReport: () => void }>();
   return (
-    <div className="mx-auto pb-6 max-w-[1400px] flex flex-col bg-gradient-to-br from-background via-background/90 to-background/60 backdrop-blur-md">
+    <div className="mx-auto pb-5 max-w-[1320px] flex flex-col bg-gradient-to-br from-background via-background/90 to-background/60 backdrop-blur-md">
       <IssueReportsHeader
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
