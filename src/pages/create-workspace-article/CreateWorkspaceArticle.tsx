@@ -1,4 +1,3 @@
-// pages/workspace-article/AddWorkspaceArticlePage.tsx
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
@@ -6,9 +5,9 @@ import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { Loader } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "../../components/ui/button";
-import { Separator } from "../../components/ui/separator";
 import { WorkspaceArticleForm } from "../../components/workspace-article/workspace-article-form";
 import { useCreateWorkspaceArticleMutation } from "../../hooks/workspace-articles/use-workspace-articles";
+import type { Workspace } from "../../layouts/workspace/components/WorkspaceSidebar";
 import { workspaceArticleSchema, type WorkspaceArticleFormData } from "../../validation/workspace-article.schema";
 import CreateArticleHeader from "./components/CreateArticleHeader";
 
@@ -18,7 +17,7 @@ type OutletContext = {
 };
 
 export const CreateWorkspaceArticlePage = () => {
-  const { workspaceId, folderId } = useParams();
+  const { workspaceId } = useParams();
   const navigate = useNavigate();
   const { mutate, isPending: isCreateLoading } = useCreateWorkspaceArticleMutation();
   const { folders } = useOutletContext<OutletContext>();
@@ -28,29 +27,21 @@ export const CreateWorkspaceArticlePage = () => {
     defaultValues: {
       folderId: "",
       title: "",
-      responseVariants: [{ version: 1, variantName: "", variantContent: "" }],
+      responseVariants: [
+        {
+          version: 1,
+          variantName: "Wersja 1",
+          variantContent: "",
+        },
+      ],
     },
   });
 
   const onSubmit = (data: WorkspaceArticleFormData) => {
-    // mutate(
-    //   { workspaceId: workspaceId!, folderId: folderId!, payload: data },
-    //   {
-    //     onSuccess: () => {
-    //       toast.success("Artykuł został dodany");
-    //       navigate(`/workspace/${workspaceId}/folders/${folderId}`);
-    //     },
-    //     onError: () => {
-    //       toast.error("Wystąpił błąd przy dodawaniu artykułu");
-    //     },
-    //   }
-    // );
-
     mutate(data, {
       onSuccess: () => {
-        toast.success("Zmiany zostały zapisane", {
+        toast.success("Artykuł został dodany", {
           position: "bottom-right",
-          description: "Artykuł został dodany",
         });
         navigate(`/workspace/${workspaceId}/folders/${data.folderId}`);
       },
@@ -60,16 +51,25 @@ export const CreateWorkspaceArticlePage = () => {
   const handleSubmit = form.handleSubmit(onSubmit);
 
   return (
-    <div className="  py-2 flex flex-col gap-6">
+    <div className="flex flex-col min-h-screen bg-background/50 pt-1.5">
+      {/* ===================================================== */}
+      {/* Header*/}
+      {/* ===================================================== */}
       <CreateArticleHeader />
 
-      <Separator className="my-4 " />
+      {/* ===================================================== */}
+      {/* Form*/}
+      {/* ===================================================== */}
+      <div className="flex-1 py-8 max-w-7xl mx-auto w-full space-y-8">
+        <FormProvider {...form}>
+          <WorkspaceArticleForm folders={folders} />
+        </FormProvider>
+      </div>
 
-      <FormProvider {...form}>
-        <WorkspaceArticleForm folders={folders} />
-      </FormProvider>
-
-      <div className="flex justify-end gap-3 max-w-5xl mx-auto w-full pb-10">
+      {/* ===================================================== */}
+      {/* Footer*/}
+      {/* ===================================================== */}
+      <div className="sticky bottom-0 bg-background/70 backdrop-blur-md border-t border-border py-4 px-6 flex justify-end gap-3 max-w-6xl mx-auto w-full z-10">
         <Button variant="outline" onClick={() => navigate(-1)}>
           Anuluj
         </Button>
@@ -77,7 +77,7 @@ export const CreateWorkspaceArticlePage = () => {
           {isCreateLoading ? (
             <div className="flex items-center gap-2">
               <Loader className="animate-spin w-4 h-4" />
-              Zapisuję...
+              Saving...
             </div>
           ) : (
             "Zapisz"

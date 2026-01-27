@@ -1,15 +1,22 @@
-import { Button } from "@/components/ui/button";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { FolderKanban, Plus, RectangleEllipsis, Trash2 } from "lucide-react";
+import { FolderCheck, FolderKanban, Plus, Type } from "lucide-react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
-import type { WorkspaceArticleFormData } from "../../validation/workspace-article.schema";
-import { Input } from "../ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { Textarea } from "../ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-export const WorkspaceArticleForm = ({ folders = [] }) => {
+import type { WorkspaceArticleFormData, WorkspaceFolder } from "../../validation/workspace-article.schema";
+import { VariantCard } from "./VariantCard";
+
+interface WorkspaceArticleFormProps {
+  folders: WorkspaceFolder[];
+}
+
+export const WorkspaceArticleForm = ({ folders = [] }: WorkspaceArticleFormProps) => {
   const form = useFormContext<WorkspaceArticleFormData>();
+
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "responseVariants",
@@ -17,24 +24,30 @@ export const WorkspaceArticleForm = ({ folders = [] }) => {
 
   return (
     <div className="flex flex-col gap-6 w-full max-w-6xl mx-auto">
-      {/* Wybór folderu */}
-      <div className="bg-muted/10 px-8 pt-8 pb-9 space-y-6 rounded-md">
+      {/* ===================================================== */}
+      {/* Folder docelowy */}
+      {/* ===================================================== */}
+      <Card className="bg-card/80 p-6 shadow-sm">
+        <div className="flex items-center gap-3 mb-1.5 pb-2 border-b border-border">
+          <FolderKanban className="w-5 h-5 text-primary" />
+          <h3 className="text-base font-semibold">Folder docelowy</h3>
+        </div>
+
         <FormField
           control={form.control}
           name="folderId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Folder docelowy</FormLabel>
               <FormControl>
                 <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger className="flex items-center border-ring">
-                    <SelectValue placeholder="Wybierz folder" className="flex items-center" />
+                  <SelectTrigger className="bg-muted/30 min-w-[260px]">
+                    <SelectValue placeholder="Wybierz folder" />
                   </SelectTrigger>
                   <SelectContent>
                     {folders.map((f) => (
-                      <SelectItem key={f._id} value={f._id} className="flex items-center gap-2">
+                      <SelectItem key={f._id} value={f._id}>
                         <div className="flex items-center gap-2">
-                          <FolderKanban className="h-4 w-4 text-primary" />
+                          <FolderCheck className="w-4 h-4 text-primary" />
                           <span>{f.name}</span>
                         </div>
                       </SelectItem>
@@ -42,92 +55,73 @@ export const WorkspaceArticleForm = ({ folders = [] }) => {
                   </SelectContent>
                 </Select>
               </FormControl>
-              <FormMessage className="text-red-500 text-sm" />
+              <FormMessage />
             </FormItem>
           )}
         />
+      </Card>
 
-        {/* Nazwa artykułu */}
+      {/* ===================================================== */}
+      {/* Nazwa artykułu */}
+      {/* ===================================================== */}
+      <Card className="bg-card/80 p-6 shadow-sm">
+        <div className="flex items-center gap-3 mb-1.5 pb-2 border-b border-border">
+          <Type className="w-5 h-5 text-primary" />
+
+          <h3 className="text-base font-semibold">Nazwa artykułu</h3>
+        </div>
+
         <FormField
           control={form.control}
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nazwa artykułu</FormLabel>
               <FormControl>
-                <Input className="border-ring" placeholder="Wprowadź nazwę artykułu" {...field} />
+                <Input {...field} placeholder="Wprowadź nazwę artykułu" className="bg-muted/30 text-base" />
               </FormControl>
-              <FormMessage className="text-red-500 text-sm" />
+              <FormMessage />
             </FormItem>
           )}
         />
-      </div>
-      {/* Wersje artykułu */}
-      <div className="flex flex-col gap-6  ">
-        {fields.map((item, index) => (
-          <div key={item.id} className=" p-4 flex flex-col gap-4 bg-muted/10 px-8 pt-8 pb-9 space-y-6 rounded-md">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-2 text-gray-700">
-                <RectangleEllipsis className="w-5 h-5 text-primary" />
-                <span className="text-sm text-gray-500">Wersja {index + 1}</span>
-              </div>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                onClick={() => remove(index)}
-                disabled={fields.length === 1}
-              >
-                <Trash2 />
-              </Button>
-            </div>
+      </Card>
 
-            <div className="grid grid-cols-1 md:grid-cols-2  gap-4">
-              <FormField
-                control={form.control}
-                name={`responseVariants.${index}.variantName`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nazwa wersji</FormLabel>
-                    <FormControl>
-                      <Input className="border-ring" placeholder="Nazwa wersji" {...field} />
-                    </FormControl>
-                    <FormMessage className="text-red-500 text-sm" />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name={`responseVariants.${index}.variantContent`}
-                render={({ field }) => (
-                  <FormItem className="col-span-1 md:col-span-2">
-                    <FormLabel>Treść wersji</FormLabel>
-                    <FormControl>
-                      <Textarea placeholder="Treść wersji" rows={4} {...field} className="min-h-[180px] border-ring" />
-                    </FormControl>
-                    <FormMessage className="text-red-500 text-sm" />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
+      {/* ===================================================== */}
+      {/* Wersje odpowiedzi */}
+      {/* ===================================================== */}
+      <div className="space-y-4">
+        {fields.map((field, index) => (
+          <VariantCard
+            key={field.id}
+            index={index}
+            onRemove={() => remove(index)}
+            disableRemove={fields.length === 1}
+          />
         ))}
       </div>
 
-      {/* Dodaj nową wersję */}
+      {/* ===================================================== */}
+      {/* Dodaj wersję */}
+      {/* ===================================================== */}
       <Button
         type="button"
         variant="outline"
-        className="flex items-center gap-2"
+        className="flex items-center gap-2 self-start"
         onClick={() => {
           const current = form.getValues("responseVariants") ?? [];
           const nextVersion = Math.max(...current.map((v) => v.version || 0), 0) + 1;
-          append({ version: nextVersion, variantName: "", variantContent: "" });
+
+          append({
+            version: nextVersion,
+            variantName: `Wersja ${nextVersion}`,
+            variantContent: "",
+          });
         }}
       >
-        <Plus /> Dodaj wersję
+        <Plus className="w-4 h-4" />
+        Dodaj wersję
       </Button>
     </div>
   );
 };
+
+///
