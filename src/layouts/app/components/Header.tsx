@@ -8,9 +8,8 @@ import {
   Plus,
   PlusCircle,
   Settings,
-  Shield,
+  ShieldUser,
   SquarePlus,
-  User,
 } from "lucide-react";
 
 import { Dropdown } from "@/components/Dropdown";
@@ -117,7 +116,7 @@ const Header = ({
     },
     {
       label: "Panel admina",
-      icon: <User />,
+      icon: <ShieldUser />,
       requiredPermissions: ["ACCESS_ADMIN_PANEL"],
       actionHandler: () => navigate("/admin"),
     },
@@ -210,7 +209,7 @@ const Header = ({
               onClick={() => navigate("/admin")}
               className=" transition-transform hover:scale-105"
             >
-              <Shield className="w-5 h-5" />
+              <ShieldUser className="w-5 h-5" />
             </Button>
           )}
 
