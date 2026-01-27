@@ -89,7 +89,7 @@ export const CreateArticlePage = () => {
       responseVariants: [
         {
           version: 1,
-          variantName: "",
+          variantName: "Wersja 1",
           variantContent: "",
         },
       ],
@@ -129,7 +129,7 @@ export const CreateArticlePage = () => {
 
   return (
     tags && (
-      <div className="pb-5 max-w-[1400px] mx-auto ">
+      <div className="pb-5 max-w-[1400px] mx-auto min-h-screen flex flex-col ">
         <Header onBack={() => navigate(-1)} />
 
         <Banner isDirty={isDirty} isLoading={isCreateLoading} onSave={handleSubmit} onCancel={() => navigate(-1)} />
@@ -144,7 +144,7 @@ export const CreateArticlePage = () => {
           />
         </FormProvider>
 
-        <div className="flex justify-end gap-3 mt-6 px-2">
+        <div className="border-t mt-3.5 py-4 px-6 flex justify-end gap-3 max-w-[1380px] mx-auto w-full z-10">
           <Button variant="outline" onClick={() => navigate(-1)}>
             Anuluj
           </Button>

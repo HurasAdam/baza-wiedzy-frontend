@@ -4,7 +4,7 @@ import { Button } from "../../../../components/ui/button";
 export const ArticleEditBanner = ({ isDirty, isLoading, onCancel, onSave }) => (
   <div className="mb-6 flex items-center justify-between gap-4 rounded-lg bg-muted/30 px-5 py-3 shadow-sm">
     <div className="flex items-center gap-4">
-      <div className="flex items-center justify-center w-9 h-9 rounded-md bg-background border shadow-sm">
+      <div className="flex items-center justify-center w-10 h-10 rounded-md bg-background border shadow-sm">
         <Edit3 className="w-4 h-4 text-primary/80" />
       </div>
       <div className="leading-tight">

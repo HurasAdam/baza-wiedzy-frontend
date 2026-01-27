@@ -1,5 +1,4 @@
-import { Box, Hash, Link, Loader, MessageCircle, Plus, RectangleEllipsis, Trash2, Type } from "lucide-react";
-import { useState } from "react";
+import { BoxIcon, Hash, Link, Loader, PersonStanding, Plus, Type } from "lucide-react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import type { SelectOption } from "../../pages/create-article/CreateArticlePage";
 import type { Article } from "../../types/article";
@@ -8,11 +7,12 @@ import MultipleSelector from "../shared/multiple-selector";
 import { RequiredLabel } from "../shared/required-label";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Textarea } from "../ui/textarea";
 import { TooltipProvider } from "../ui/tooltip";
+import ArticleResponseVariantCard from "./article-response-variant-card";
 
 interface ArticleFormProps {
   article?: Article;
@@ -23,20 +23,22 @@ interface ArticleFormProps {
   loadingCategories: boolean;
 }
 
-const ArticleForm = ({ article, tags, products, categories, onProductChange, loadingCategories }: ArticleFormProps) => {
+const ArticleForm = ({ tags, products, categories, onProductChange, loadingCategories }: ArticleFormProps) => {
   const form = useFormContext<ArticleFormData>();
   const { fields, append, remove } = useFieldArray({ control: form.control, name: "responseVariants" });
-  const [files] = useState<File[]>(article?.file ?? []);
 
   return (
     <Form {...form}>
       <TooltipProvider>
         <form className="grid grid-cols-1 xl:grid-cols-20 gap-8 ">
-          {/* LEWA KOLUMNA: 8/12 */}
-          <div className="xl:col-span-12 flex flex-col gap-6 max-h-[80vh] ">
-            <Card className="p-6  shadow-sm border bg-card/70">
+          <div className="xl:col-span-12 flex flex-col gap-6 ">
+            {/* ===================================================== */}
+            {/* Tytuł */}
+            {/* ===================================================== */}
+
+            <Card className="px-4 py-6 shadow-xs border bg-card/70">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-header-foreground">
+                <CardTitle className="flex items-center gap-2 text-header-foreground border-b pb-2.5">
                   <Type className="w-5 h-5 text-primary/90" />
                   <RequiredLabel>Tytuł artykułu</RequiredLabel>
                 </CardTitle>
@@ -57,10 +59,15 @@ const ArticleForm = ({ article, tags, products, categories, onProductChange, loa
               </CardContent>
             </Card>
 
-            <Card className="flex-[0_0_auto]  min-h-[180px] shadow-sm border bg-card/70">
-              <CardHeader className="flex items-center gap-2 px-6.5">
-                <RectangleEllipsis className="w-5 h-5 text-primary/90" />
-                <CardTitle>Uwagi dla pracownika</CardTitle>
+            {/* ===================================================== */}
+            {/* Uwagi dla pracownika */}
+            {/* ===================================================== */}
+            <Card className="flex-[0_0_auto] px-4 py-6  min-h-[180px] shadow-xs border bg-card/70">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-header-foreground border-b pb-2.5">
+                  <PersonStanding className="w-5 h-5 text-primary/90" />
+                  <RequiredLabel>Uwagi dla pracownika</RequiredLabel>
+                </CardTitle>
               </CardHeader>
               <CardContent className="px-7">
                 <FormField
@@ -85,79 +92,38 @@ const ArticleForm = ({ article, tags, products, categories, onProductChange, loa
               </CardContent>
             </Card>
 
-            {/* Warianty odpowiedzi */}
+            {/* ===================================================== */}
+            {/* wersje odpowiedzi */}
+            {/* ===================================================== */}
             {fields.map((item, index) => (
-              <Card key={item.id} className="p-6 space-y-4 relative  shadow-sm border bg-card/70">
-                <CardHeader className="flex items-center gap-2">
-                  <MessageCircle className="w-5 h-5 text-primary/90" />
-                  <CardTitle>Treść wersji {index + 1}</CardTitle>
-                </CardHeader>
-
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="absolute top-3 right-3"
-                  onClick={() => remove(index)}
-                  disabled={fields.length === 1}
-                >
-                  <Trash2 />
-                </Button>
-
-                <CardContent className="space-y-4">
-                  <FormField
-                    control={form.control}
-                    name={`responseVariants.${index}.variantName`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Nazwa wersji</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Wpisz nazwę wersji" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name={`responseVariants.${index}.variantContent`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Treść odpowiedzi</FormLabel>
-                        <FormControl>
-                          <Textarea placeholder="Treść odpowiedzi" {...field} className="min-h-[200px]" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </CardContent>
-              </Card>
+              <ArticleResponseVariantCard index={index} disableRemove={fields.length === 1} onRemove={remove} />
             ))}
 
             <Button
+              className="flex items-center gap-2 self-start"
               type="button"
               variant="outline"
+              disabled={fields.length === 4}
               onClick={() => {
                 const current = form.getValues("responseVariants") ?? [];
                 const nextVersion = Math.max(...current.map((v) => v.version || 0), 0) + 1;
-                append({ version: nextVersion, variantName: "", variantContent: "" });
+                append({ version: nextVersion, variantName: `Wersja ${nextVersion}`, variantContent: "" });
               }}
             >
-              <Plus className="w-4 h-4 mr-2" /> Dodaj wersję odpowiedzi
+              <Plus className="w-4 h-4 mr-2" />{" "}
+              {fields.length <= 3 ? "Dodaj kolejną wersję" : "Osięgnięto limit wersji"}
             </Button>
           </div>
 
-          {/* PRAWA KOLUMNA: 4/12 */}
           <div className="xl:col-span-8 flex flex-col gap-6 h-full">
-            {/* Uwagi dla pracownika (NA GÓRZE) */}
-
-            {/* NOW1 */}
-            <Card className="p-6 min-h-[190px] shadow-sm border bg-card/70">
+            {/* ===================================================== */}
+            {/* Produkt*/}
+            {/* ===================================================== */}
+            <Card className="p-6 min-h-[190px] shadow-xs border bg-card/70">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-header-foreground">
-                  <Box className="w-5 h-5 text-primary/90" />
-                  Produkt
+                <CardTitle className="flex items-center gap-2 text-header-foreground border-b pb-2.5">
+                  <BoxIcon className="w-5 h-5 text-primary/90" />
+                  <RequiredLabel>Produkt</RequiredLabel>
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -166,9 +132,6 @@ const ArticleForm = ({ article, tags, products, categories, onProductChange, loa
                   name="product"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
-                        <RequiredLabel>Produkt</RequiredLabel>
-                      </FormLabel>
                       <FormControl>
                         <Select
                           value={field.value}
@@ -199,12 +162,14 @@ const ArticleForm = ({ article, tags, products, categories, onProductChange, loa
               </CardContent>
             </Card>
 
-            {/* NOW2 */}
-            <Card className="p-6 min-h-[200px]  shadow-sm border bg-card/70">
+            {/* ===================================================== */}
+            {/* Kategoria*/}
+            {/* ===================================================== */}
+            <Card className="p-6 min-h-[200px]  shadow-xs border bg-card/70">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-header-foreground">
+                <CardTitle className="flex items-center gap-2 text-header-foreground border-b pb-2.5">
                   <Link className="w-5 h-5 text-primary/90" />
-                  Kategoria
+                  <RequiredLabel>Kategoria</RequiredLabel>
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -213,9 +178,6 @@ const ArticleForm = ({ article, tags, products, categories, onProductChange, loa
                   name="category"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
-                        <RequiredLabel>Kategoria</RequiredLabel>
-                      </FormLabel>
                       <FormControl>
                         <Select value={field.value} onValueChange={field.onChange} disabled={loadingCategories}>
                           <SelectTrigger className="w-full">
@@ -244,12 +206,14 @@ const ArticleForm = ({ article, tags, products, categories, onProductChange, loa
               </CardContent>
             </Card>
 
-            {/* TAGS */}
-            <Card className="p-6 min-h-[260px]  shadow-sm border bg-card/70">
+            {/* ===================================================== */}
+            {/* Tagi*/}
+            {/* ===================================================== */}
+            <Card className="p-6 min-h-[260px]  shadow-xs border bg-card/70">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-header-foreground">
+                <CardTitle className="flex items-center gap-2 text-header-foreground border-b pb-2.5">
                   <Hash className="w-5 h-5 text-primary/90" />
-                  Tagi
+                  <RequiredLabel>Tagi</RequiredLabel>
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -258,9 +222,6 @@ const ArticleForm = ({ article, tags, products, categories, onProductChange, loa
                   name="tags"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
-                        <RequiredLabel>Tagi</RequiredLabel>
-                      </FormLabel>
                       <FormControl>
                         <MultipleSelector
                           placeholder="Wybierz tagi"
