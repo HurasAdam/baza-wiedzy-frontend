@@ -40,15 +40,10 @@ const PendingArticlesFilterBar: React.FC<PendingArticlesFilterBarProps> = ({
     <div className="bg-background flex flex-col gap-2 mb-4 px-2">
       {/* ---- Filtry główne ---- */}
       <div className="flex gap-2.5 items-center flex-wrap">
-        <Input
-          value={selectedTitle}
-          onChange={onTitleChange}
-          placeholder="Szukaj artykułów..."
-          className="w-52 border-ring"
-        />
+        <Input value={selectedTitle} onChange={onTitleChange} placeholder="Szukaj artykułów..." className="w-52" />
 
         <Select value={selectedProduct || "all"} onValueChange={(v) => onProductChange(v === "all" ? "__clear__" : v)}>
-          <SelectTrigger className="w-48 border-ring">
+          <SelectTrigger className="w-48">
             <SelectValue placeholder="Produkt" />
           </SelectTrigger>
           <SelectContent className="max-h-[66vh] overflow-auto scrollbar-custom">
@@ -71,7 +66,7 @@ const PendingArticlesFilterBar: React.FC<PendingArticlesFilterBarProps> = ({
         </Select>
 
         <Select value={selectedAuthor || "all"} onValueChange={(v) => onAuthorChange(v === "all" ? "__clear__" : v)}>
-          <SelectTrigger className="w-50 border-ring">
+          <SelectTrigger className="w-50">
             <SelectValue placeholder="Autor" />
           </SelectTrigger>
           <SelectContent className="max-h-[66vh] overflow-auto scrollbar-custom">

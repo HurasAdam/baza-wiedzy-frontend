@@ -91,19 +91,14 @@ const FlaggedArticlesFilterBar: React.FC<FlaggedArticlesFilterBarProps> = ({
       {/* ---- Filters ---- */}
       <div className="flex px-3 py-2 gap-3 items-center flex-wrap">
         {/* Search */}
-        <Input
-          value={selectedTitle}
-          onChange={onTitleChange}
-          placeholder="Szukaj artykułów..."
-          className="w-52 border-ring"
-        />
+        <Input value={selectedTitle} onChange={onTitleChange} placeholder="Szukaj artykułów..." className="w-52" />
 
         {/* Product */}
         <Select
           onValueChange={(value) => onProductChange(value === "all" ? "__clear__" : value)}
           value={selectedProduct || "all"}
         >
-          <SelectTrigger className="w-48 border-ring">
+          <SelectTrigger className="w-48">
             <SelectValue placeholder="Produkt" />
           </SelectTrigger>
           <SelectContent>
@@ -124,7 +119,7 @@ const FlaggedArticlesFilterBar: React.FC<FlaggedArticlesFilterBarProps> = ({
           value={selectedCategory || "all"}
           disabled={!selectedProduct}
         >
-          <SelectTrigger className="w-48 border-ring">
+          <SelectTrigger className="w-48">
             <SelectValue placeholder="Kategoria" />
           </SelectTrigger>
           <SelectContent>
