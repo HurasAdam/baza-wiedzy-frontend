@@ -6,6 +6,8 @@ import type { ArticleOutletContext } from "../../article/ArticleMainPage";
 import { ArticleDetailsApproved } from "./components/ArticleDetailsApproved";
 import { ArticeDetailsCreated } from "./components/ArticleDetailsCreated";
 
+import { ArticleDetailsAttachmentAdded } from "./components/ArticleDetailsAttachmentAdded";
+import { ArticleDetailsAttachmentRemoved } from "./components/ArticleDetailsAttachmentRemoved";
 import { ArticleDetailsExpired } from "./components/ArticleDetailsExpired";
 import { ArticleDetailsUpdated } from "./components/ArticleDetailsUpdated";
 import { HistoryHeader } from "./components/HistoryHeader";
@@ -41,6 +43,12 @@ export const Articlev2HistoryDetailPage = () => {
 
           case "expired": {
             return <ArticleDetailsExpired item={item} />;
+          }
+          case "attachmentAdded": {
+            return <ArticleDetailsAttachmentAdded item={item} />;
+          }
+          case "attachmentRemoved": {
+            return <ArticleDetailsAttachmentRemoved item={item} />;
           }
           default: {
             return <div>Nieobsługiwany typ eventu: {item.eventType}</div>;
