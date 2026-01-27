@@ -5,8 +5,10 @@ import {
   ArrowLeft,
   CheckCircle,
   Clock,
+  CloudUpload,
   Edit3,
   Eye,
+  FolderX,
   Loader,
   PlusCircle,
   RefreshCw,
@@ -70,10 +72,8 @@ export function Articlev2HistoryPage() {
               className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 gap-4 hover:shadow-lg transition-all duration-200 rounded-lg bg-card/70 hover:bg-card border border-border"
             >
               <div className="flex items-start sm:items-center gap-4 w-full">
-                <div
-                  className={`flex items-center justify-center w-12 h-12 rounded-xl ${cfg.bgClass} text-white flex-shrink-0`}
-                >
-                  <Icon className="w-5 h-5" />
+                <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-background border border-border flex-shrink-0">
+                  <Icon className={`w-5 h-5 ${cfg.bgClass}`} />
                 </div>
                 <div className="flex flex-col flex-1 min-w-0">
                   <div className="text-sm font-semibold truncate">{cfg.label}</div>
@@ -135,13 +135,15 @@ const statusLabels: Record<string, string> = {
 
 function eventConfig(eventType: string | undefined) {
   const map: Record<string, { label: string; Icon: any; bgClass: string }> = {
-    created: { label: "Utworzenie artykułu", Icon: PlusCircle, bgClass: "bg-emerald-600" },
-    updated: { label: "Edycja artykułu", Icon: Edit3, bgClass: "bg-sky-600" },
-    trashed: { label: "Przeniesiono do kosza", Icon: Trash2, bgClass: "bg-neutral-700" },
-    restored: { label: "Przywrócono artykuł", Icon: RotateCcw, bgClass: "bg-amber-500" },
-    verified: { label: "Weryfikacja artykułu", Icon: CheckCircle, bgClass: "bg-emerald-700" },
-    unverified: { label: "Odwołano weryfikację", Icon: XCircle, bgClass: "bg-red-600" },
-    expired: { label: "Wymaga ponownej weryfikacji", Icon: Clock, bgClass: "bg-amber-500/65" },
+    created: { label: "Utworzenie artykułu", Icon: PlusCircle, bgClass: "text-emerald-600" },
+    updated: { label: "Edycja artykułu", Icon: Edit3, bgClass: "text-sky-600" },
+    trashed: { label: "Przeniesiono do kosza", Icon: Trash2, bgClass: "text-neutral-700" },
+    restored: { label: "Przywrócono artykuł", Icon: RotateCcw, bgClass: "text-amber-500" },
+    verified: { label: "Weryfikacja artykułu", Icon: CheckCircle, bgClass: "text-emerald-700" },
+    unverified: { label: "Odwołano weryfikację", Icon: XCircle, bgClass: "text-red-600" },
+    expired: { label: "Wymaga ponownej weryfikacji", Icon: Clock, bgClass: "text-amber-500/65" },
+    attachmentAdded: { label: "Dodano załącznik", Icon: CloudUpload, bgClass: "text-purple-500/70" },
+    attachmentRemoved: { label: "Usunięto załącznik", Icon: FolderX, bgClass: "text-rose-500/70" },
   };
-  return map[eventType ?? ""] ?? { label: "Zmiana", Icon: Edit3, bgClass: "bg-primary" };
+  return map[eventType ?? ""] ?? { label: "Zmiana", Icon: Edit3, bgClass: "text-primary" };
 }
