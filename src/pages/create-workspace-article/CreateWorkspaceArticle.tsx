@@ -1,8 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
-
-import { Loader } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "../../components/ui/button";
 import { WorkspaceArticleForm } from "../../components/workspace-article/workspace-article-form";
@@ -52,13 +51,10 @@ export const CreateWorkspaceArticlePage = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-background/50 pt-1.5">
-      {/* ===================================================== */}
-      {/* Header*/}
-      {/* ===================================================== */}
       <CreateArticleHeader />
 
       {/* ===================================================== */}
-      {/* Form*/}
+      {/* ================= Formularz================= */}
       {/* ===================================================== */}
       <div className="flex-1 py-8 max-w-7xl mx-auto w-full space-y-8">
         <FormProvider {...form}>
@@ -67,7 +63,7 @@ export const CreateWorkspaceArticlePage = () => {
       </div>
 
       {/* ===================================================== */}
-      {/* Footer*/}
+      {/* ================= Footer ================= */}
       {/* ===================================================== */}
       <div className="sticky bottom-0 bg-background/70 backdrop-blur-md border-t border-border py-4 px-6 flex justify-end gap-3 max-w-6xl mx-auto w-full z-10">
         <Button variant="outline" onClick={() => navigate(-1)}>
