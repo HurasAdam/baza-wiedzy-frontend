@@ -31,7 +31,9 @@ const FunnyMessagesFilterBar: React.FC<FunnyMessagesFilterBarProps> = ({
 
   return (
     <div className="bg-background flex flex-col mb-4">
-      {/* Active Filter Badges */}
+      {/* ===================================================== */}
+      {/* ================= Aktywne filtry================= */}
+      {/* ===================================================== */}
       <div className="flex gap-2 pt-2.5 flex-wrap px-2 h-6 mb-3">
         {selectedTitle && (
           <Badge
@@ -69,44 +71,44 @@ const FunnyMessagesFilterBar: React.FC<FunnyMessagesFilterBarProps> = ({
         )}
       </div>
 
-      {/* Filters */}
-      <div className="flex px-3 py-2 gap-3 items-center flex-wrap">
-        {/* Title Input */}
-        <Input
-          value={selectedTitle}
-          onChange={onTitleChange}
-          placeholder="Szukaj po tytule..."
-          className="w-52 border-ring"
-        />
+      {/* ===================================================== */}
+      {/* ================= Filtry================= */}
+      {/* ===================================================== */}
+      <div className="flex px-3 py-2  items-center justify-between flex-wrap">
+        <div className="flex gap-3 items-center ">
+          <Input value={selectedTitle} onChange={onTitleChange} placeholder="Szukaj po tytule..." className="w-52" />
 
-        {/* Author Select */}
-        <Select onValueChange={(value) => onAuthorChange(value === "all" ? "" : value)} value={selectedAuthor || "all"}>
-          <SelectTrigger className="w-52 border-ring">
-            <SelectValue placeholder="Wybierz autora" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value="all">Wszyscy</SelectItem>
-              {authors.map(({ _id, name, surname }) => (
-                <SelectItem key={_id} value={_id}>
-                  {name} {surname}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+          <Select
+            onValueChange={(value) => onAuthorChange(value === "all" ? "" : value)}
+            value={selectedAuthor || "all"}
+          >
+            <SelectTrigger className="w-52">
+              <SelectValue placeholder="Wybierz autora" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="all">Wszyscy</SelectItem>
+                {authors.map(({ _id, name, surname }) => (
+                  <SelectItem key={_id} value={_id}>
+                    {name} {surname}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
 
-        {/* Reset */}
-        <Button variant="outline" size="sm" disabled={!hasFilters} onClick={onResetAll} className="ml-auto">
-          Wyczyść filtry
-        </Button>
-
-        {/* Results Count */}
-        {typeof resultsCount === "number" && (
-          <Badge variant="outline" className="ml-2">
-            Znaleziono: {resultsCount}
-          </Badge>
-        )}
+          {/* Reset */}
+          <Button variant="outline" size="sm" disabled={!hasFilters} onClick={onResetAll} className="">
+            Wyczyść filtry
+          </Button>
+        </div>
+        <div>
+          {typeof resultsCount === "number" && (
+            <Badge variant="outline" className="ml-2">
+              Znaleziono: {resultsCount}
+            </Badge>
+          )}
+        </div>
       </div>
     </div>
   );
