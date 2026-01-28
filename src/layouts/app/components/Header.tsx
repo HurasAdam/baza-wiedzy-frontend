@@ -2,9 +2,14 @@ import {
   Bell,
   Bug,
   ChevronDown,
+  ChevronsLeft,
+  ChevronsRight,
   FolderPlus,
+  Layers,
   Link,
+  Loader,
   LogOut,
+  Origami,
   Plus,
   PlusCircle,
   Settings,
@@ -31,8 +36,12 @@ import { useAuthQuery, useLogoutMutation } from "@/hooks/auth/use-auth";
 import { useFindMySummaryNotificationsQuery } from "@/hooks/notifications/use-notifications";
 import { useSound } from "@/providers/sound-provider";
 import { getAvatarFallbackText } from "@/utils/avatar";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { WORKSPACE_ICONS } from "../../../components/workspace/workspace-form";
+import { useFindUserWorkspacesQuery } from "../../../hooks/workspace/use-workspace";
+import { useSidebar } from "../../../providers/sidebar-provider";
 
 const backendBase = import.meta.env.VITE_BACKEND_BASE_URL ?? "http://localhost:5000";
 
@@ -56,6 +65,8 @@ const Header = ({
   onOpenWorkspaceInviteModal,
 }: HeaderProps) => {
   const { data: summaryNotificationsData } = useFindMySummaryNotificationsQuery();
+  const { data: workspaces = [], isPending } = useFindUserWorkspacesQuery();
+  const { variant: sidebarVariant, setVariant } = useSidebar();
   const unreadCount = summaryNotificationsData?.unreadCount || 0;
   const { data: user } = useAuthQuery();
   const { soundEnabled } = useSound();
@@ -79,6 +90,11 @@ const Header = ({
       },
       onError: () => toast.error("Wystąpił błąd. Spróbuj ponownie"),
     });
+  };
+
+  const toggleVariant = () => {
+    const newVariant = sidebarVariant === "compact" ? "full" : "compact";
+    setVariant(newVariant);
   };
 
   const profileMenuOptions = [
@@ -135,25 +151,74 @@ const Header = ({
   });
 
   return (
-    <div className="bg-sidebar backdrop-blur-sm  sticky top-0 z-50">
-      <div className="flex h-14 items-center justify-between px-4 sm:px-6 lg:px-16">
-        {/* Left: Only Problem Report */}
-        <div className="flex items-center gap-3">
-          {userPermissions.includes("SEND_REPORT") && (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-background/10 bg-background/20 group"
-                  onClick={onOpenCreateIssueReport}
-                >
-                  <Bug className="w-5 h-5 text-muted-foreground group-hover:text-destructive/60" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent className="text-sm rounded-md px-2 py-1 shadow-md bg-muted">Zgłoś problem</TooltipContent>
-            </Tooltip>
+    <div className="bg-muted/30 backdrop-blur-sm  sticky top-0 z-50">
+      <div className="flex h-14 items-center justify-between px-4 sm:px-6 lg:pr-16">
+        <div className="flex h-14 items-center  mb-1.5 gap-3 ">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                className="flex items-center justify-center focus:outline-none focus:ring-0"
+                aria-label="Switch workspace"
+              >
+                <Origami className="size-6 text-sidebar-logo/65 hover:text-sidebar-primary transition-colors" />
+              </button>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent
+              className="w-56 rounded-lg shadow-md bg-background scrollbar-custom"
+              align="start"
+              sideOffset={4}
+            >
+              <DropdownMenuLabel className="text-xs text-muted-foreground">Twoje kolekcje</DropdownMenuLabel>
+
+              {isPending ? (
+                <div className="flex items-center justify-center py-2">
+                  <Loader className="w-4 h-4 animate-spin" />
+                </div>
+              ) : (
+                workspaces?.map((ws) => (
+                  <DropdownMenuItem
+                    key={ws._id}
+                    onClick={() => navigate(`/workspace/${ws._id}`)}
+                    className="gap-2 p-2 cursor-pointer"
+                  >
+                    <div className="flex size-6 items-center justify-center rounded-md border bg-background">
+                      {React.createElement(WORKSPACE_ICONS[ws.icon] || Layers, {
+                        className: "w-5 h-5",
+                        style: { color: ws.labelColor },
+                      })}
+                    </div>
+                    {ws.name}
+                  </DropdownMenuItem>
+                ))
+              )}
+
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem
+                onClick={() => console.log("TODO: create workspace modal")}
+                className="gap-2 p-2 cursor-pointer"
+              >
+                <div className="flex size-6 items-center justify-center rounded-md border bg-background">
+                  <Plus className="w-4 h-4" />
+                </div>
+                Dodaj kolekcję
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {sidebarVariant !== "compact" && (
+            <span className="font-semibold text-lg hidden md:block text-sidebar-foreground">Baza wiedzy</span>
           )}
+
+          <Button
+            variant="ghost"
+            size="icon"
+            className="ml-auto hidden md:block hover:bg-transparent"
+            onClick={toggleVariant}
+          >
+            {sidebarVariant === "compact" ? <ChevronsRight className="size-4" /> : <ChevronsLeft className="size-4" />}
+          </Button>
         </div>
 
         {/* Right: Primary Actions + Notifications + Profile */}
@@ -202,6 +267,16 @@ const Header = ({
             </DropdownMenu>
           )}
 
+          {userPermissions.includes("SEND_REPORT") && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="secondary" size="icon" className="" onClick={onOpenCreateIssueReport}>
+                  <Bug className="w-5 h-5 text-muted-foreground group-hover:text-destructive/60" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent className="text-sm rounded-md px-2 py-1 shadow-md bg-muted">Zgłoś problem</TooltipContent>
+            </Tooltip>
+          )}
           {userPermissions.includes("ACCESS_ADMIN_PANEL") && (
             <Button
               size="icon"

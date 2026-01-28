@@ -4,22 +4,15 @@ import {
   BookOpen,
   BookUser,
   ChartColumnDecreasing,
-  Check,
-  ChevronsLeft,
-  ChevronsRight,
   Clipboard,
   FolderSearch,
   HeartIcon,
   HelpCircle,
   LandPlot,
-  Layers,
   Layers2,
   LayoutDashboard,
-  Loader,
   MailQuestionMark,
   MoreHorizontal,
-  Origami,
-  Plus,
   RectangleEllipsis,
   School,
   Smile,
@@ -30,21 +23,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAuthQuery } from "@/hooks/auth/use-auth";
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu";
 
 import { Separator } from "../../../components/ui/separator";
-import { WORKSPACE_ICONS } from "../../../components/workspace/workspace-form";
 import { useFindUserWorkspacesQuery } from "../../../hooks/workspace/use-workspace";
 import { useSidebar } from "../../../providers/sidebar-provider";
 import { SidebarMyNav, type MySectionNavItem } from "./Sidebar-my-nav";
@@ -150,11 +138,11 @@ export const Sidebar = ({
         boxShadow: "var(--sidebar-shadow)",
       }}
       className={cn(
-        "flex flex-col border-r border-r-sidebar-border transition-all duration-300",
+        "flex flex-col  border-r-sidebar-border transition-all duration-300",
         sidebarVariant === "compact" ? "w-22 md:w[80px]" : "w-16 md:w-[240px] border-sidebar-border",
       )}
     >
-      <div className="flex h-14 items-center border-b px-4 mb-1.5 gap-2 ">
+      {/* <div className="flex h-14 items-center border-b px-4 mb-1.5 gap-2 ">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button
@@ -225,7 +213,7 @@ export const Sidebar = ({
         >
           {sidebarVariant === "compact" ? <ChevronsRight className="size-4" /> : <ChevronsLeft className="size-4" />}
         </Button>
-      </div>
+      </div> */}
 
       <ScrollArea className="flex-1 py-2 ">
         <SidebarNav

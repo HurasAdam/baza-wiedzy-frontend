@@ -26,28 +26,29 @@ const AppLayout = () => {
   const [isNotificationsPanelOpen, setIsNotificationsPanelOpen] = useState(false);
 
   return (
-    <div className="flex h-screen w-full">
-      <Sidebar onOpenChangeLogModal={() => setIsChangeLogModalOpen(true)} />
+    <div className="flex flex-col h-screen w-full">
+      <Header
+        onCreateWorkspace={() => setIsCreatingWorkspace(true)}
+        onOpenSettingsModal={() => setIsSettingsModalOpen(true)}
+        onOpenIssueReportsModal={() => setIsIssueReportsModalOpen(true)}
+        onOpenCreateIssueReport={() => setIsCreatingIssueReport(true)}
+        onOpenNotificationsPanel={() => {
+          setIsNotificationsPanelOpen(true);
+        }}
+        onOpenWorkspaceInviteModal={() => setIsWorkspaceInviteModalOpen(true)}
+      />
 
-      <div className="flex flex-1 flex-col h-full">
-        <Header
-          onCreateWorkspace={() => setIsCreatingWorkspace(true)}
-          onOpenSettingsModal={() => setIsSettingsModalOpen(true)}
-          onOpenIssueReportsModal={() => setIsIssueReportsModalOpen(true)}
-          onOpenCreateIssueReport={() => setIsCreatingIssueReport(true)}
-          onOpenNotificationsPanel={() => {
-            setIsNotificationsPanelOpen(true);
-          }}
-          onOpenWorkspaceInviteModal={() => setIsWorkspaceInviteModalOpen(true)}
-        />
+      <main className="flex w-full flex-1 min-h-0 bg-sidebar  ">
+        <Sidebar onOpenChangeLogModal={() => setIsChangeLogModalOpen(true)} />
 
-        <main className="flex-1 overflow-y-auto h-full w-full bg-background scrollbar-custom">
-          <div className="mx-auto container px-2 sm:px-6 lg:px-6 py-0 md:py-8 w-full h-full">
+        <div className="flex-1 min-h-0 overflow-y-auto rounded-l-2xl scrollbar-custom bg-background border border-border/65">
+          <div className="container mx-auto px-2 sm:px-6 lg:px-6 py-0 md:py-7.5 w-full h-full">
             <Outlet context={{ onOpenCreateIssueReport: () => setIsCreatingIssueReport(true) }} />
           </div>
-        </main>
-      </div>
+        </div>
+      </main>
 
+      {/* flex-1 overflow-y-auto h-full w-full bg-background scrollbar-custom */}
       {isSettingsModalOpen && (
         <SettingsModal isSettingsModalOpen={isSettingsModalOpen} setIsSettingsModalOpen={setIsSettingsModalOpen} />
       )}
