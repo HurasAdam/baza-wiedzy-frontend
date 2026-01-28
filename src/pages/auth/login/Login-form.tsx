@@ -71,7 +71,7 @@ const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
                 )}
               />
 
-              <Button type="submit" className="w-full cursor-pointer">
+              <Button disabled={isLoading} type="submit" className="w-full cursor-pointer">
                 {isLoading ? (
                   <span className="flex items-center gap-2">
                     Logowanie

@@ -271,7 +271,7 @@ const Header = ({
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button variant="secondary" size="icon" className="" onClick={onOpenCreateIssueReport}>
-                  <Bug className="w-5 h-5 text-muted-foreground group-hover:text-destructive/60" />
+                  <Bug className="w-5 h-5 text-foreground group-hover:text-destructive/60" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent className="text-sm rounded-md px-2 py-1 shadow-md bg-muted">Zgłoś problem</TooltipContent>
