@@ -13,7 +13,6 @@ import queryClient from "../../../config/query.client";
 import { UserActionDialog } from "./components/UserActionDialog";
 import { type IUser } from "./components/userList-item-card";
 import { UsersFilters } from "./components/UsersFilters";
-import { UsersHeader } from "./components/UsersHeader";
 import { UsersList } from "./components/UsersList";
 
 export type ActionType = "RESET_PASSWORD" | "TOGGLE_ACCOUNT";
@@ -92,22 +91,14 @@ export const UsersPage = () => {
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-1 space-y-6 pb-10">
-      <UsersHeader
-        roles={roles}
-        selectedRole={selectedRole}
-        selectedStatus={selectedStatus}
-        setSelectedRole={setSelectedRole}
-        setSelectedStatus={setSelectedStatus}
-        onAddUser={onCreateUserAccountRequest}
-        onManageRoles={() => navigate("/admin/manage-roles")}
-      />
-
       <UsersFilters
         roles={roles}
         usersCount={users.length}
         role={selectedRole}
         status={selectedStatus}
         search={searchTerm}
+        onAddUser={onCreateUserAccountRequest}
+        onManageRoles={() => navigate("/admin/manage-roles")}
         onChange={({ role, status, search }) => {
           setSelectedRole(role);
           setSelectedStatus(status);
@@ -115,13 +106,15 @@ export const UsersPage = () => {
         }}
       />
 
-      <UsersList
-        isLoading={isLoading}
-        isError={isError}
-        users={users}
-        onRequestReset={onRequestReset}
-        onRequestToggle={onRequestToggle}
-      />
+      <div className="px-1">
+        <UsersList
+          isLoading={isLoading}
+          isError={isError}
+          users={users}
+          onRequestReset={onRequestReset}
+          onRequestToggle={onRequestToggle}
+        />
+      </div>
 
       {pendingAction && (
         <UserActionDialog

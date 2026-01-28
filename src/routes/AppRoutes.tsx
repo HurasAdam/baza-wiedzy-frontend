@@ -7,6 +7,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import AdminLayout from "../layouts/admin/admin.layout";
 import Articlev2Layout from "../layouts/articlev2/articlev2-layout";
 import WorkspaceLayout from "../layouts/workspace/workspace.layout";
+import ArchivedArticleLayout from "../pages/admin-panel/admin-archived-article-details/archived-article-layout";
 import AdminDashboard from "../pages/admin-panel/admin-dashboard";
 import { SchoolsPage } from "../pages/admin-panel/admin-jstProject-details/components/SchoolsPage";
 import { JstProjectDetailsLayout } from "../pages/admin-panel/admin-jstProject-details/JstProjectDetailsLayout";
@@ -101,7 +102,14 @@ export function AppRoutes() {
             </Route>
             <Route path="manage-tags" element={<PAGES.TagsPage />} />
 
-            <Route path="logs" element={<PAGES.AdminLogsPage />} />
+            <Route path="articles/archived" element={<PAGES.AdminArchivedArticlesPage />} />
+            <Route path="articles/archived/:id" element={<ArchivedArticleLayout />}>
+              <Route index element={<PAGES.ArchivedArticleMainPage />} />
+              <Route path="attachments" element={<PAGES.Articlev2AttachmentsPage />} />
+              <Route path="history" element={<PAGES.ArchivedArticleHistoryPage />} />
+              <Route path="edit" element={<PAGES.ArchivedArticleEditPage />} />
+              <Route path="history/:historyId" element={<PAGES.Articlev2HistoryDetailPage />} />
+            </Route>
 
             <Route path="manage-registertopics" element={<PAGES.AdminTopicsPage />} />
 

@@ -1,12 +1,15 @@
 import { ArticlePage } from "../pages/article/ArticlePage";
 import { AdminAccountsPage } from "./admin-panel/admin-admin-accounts/admin-admin-accounts";
+import { ArchivedArticleEditPage } from "./admin-panel/admin-archived-article-details/subpages/ArchivedArticleEditPage/ArchivedArticleEditPage";
+import { ArchivedArticleHistoryPage } from "./admin-panel/admin-archived-article-details/subpages/ArchivedArticleHistoryPage/ArchivedArticleHistoryPage";
+import { ArchivedArticleMainPage } from "./admin-panel/admin-archived-article-details/subpages/ArchivedArticleMainPage/ArchivedArticleMainPage";
+import { AdminArchivedArticlesPage } from "./admin-panel/admin-archived-articles/AdminArchivedArticles";
 import { AdminFaqDetailsPage } from "./admin-panel/admin-faq-details/admin-faq-details";
 import { AdminFaqsListPage } from "./admin-panel/admin-faqs/admin-faqs";
 import { AdminIssueReportDetailsPage } from "./admin-panel/admin-issue-reports/admin-issue-report-detailsPage";
 import { AdminUserReportsPage } from "./admin-panel/admin-issue-reports/admin-issue-reports";
 import { JstAdminProjectsPage } from "./admin-panel/admin-jst-projects/admin-jst-projects";
 import { JstDetailsPage } from "./admin-panel/admin-jstProject-details/components/JstDetailsPage";
-import { AdminLogsPage } from "./admin-panel/admin-logs/admin-logs-page";
 import { AdminProductDetailsPage } from "./admin-panel/admin-product-details/admin-product-details";
 import { ProductsPage } from "./admin-panel/admin-products/admin-products";
 import { AdminRolesPage } from "./admin-panel/admin-roles/admin-roles";
@@ -72,6 +75,7 @@ export const PAGES = {
   NotFoundPage,
   JstProjectsPage,
   StatisticsPage,
+  ArchivedArticleEditPage,
   MyEntriesPage,
   FunnyMessages,
   CreateArticlePage,
@@ -95,7 +99,7 @@ export const PAGES = {
   CreateFaqPage,
   AdminFaqDetailsPage,
   AdminUserDetailsPage,
-  AdminLogsPage,
+  AdminArchivedArticlesPage,
   WorkspaceFolderPage,
   CreateWorkspaceArticlePage,
   WorkspaceManageFoldersPage,
@@ -115,4 +119,6 @@ export const PAGES = {
   Articlev2HistoryDetailPage,
   ReportDetailsPage,
   JstDetailsPage,
+  ArchivedArticleMainPage,
+  ArchivedArticleHistoryPage,
 };

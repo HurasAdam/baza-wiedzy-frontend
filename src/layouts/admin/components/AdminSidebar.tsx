@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
+  Archive,
   BookOpen,
   Box,
   Crown,
@@ -10,7 +11,6 @@ import {
   ListChecks,
   LucideArrowBigLeft,
   ShieldCheck,
-  SquareTerminal,
   UserCog,
   Users,
 } from "lucide-react";
@@ -46,9 +46,9 @@ const adminLinks = [
   },
 
   {
-    title: "Logi",
-    href: "/admin/logs",
-    icon: SquareTerminal,
+    title: "Archiwum art.",
+    href: "/admin/articles/archived",
+    icon: Archive,
   },
 ];
 

@@ -27,6 +27,10 @@ export const getPopularArticles = (params: URLSearchParams) => {
 export const findTrashed = (params: URLSearchParams) => {
   return api.get(buildUrl(baseUrl, "trashed"), { params });
 };
+export const findOneTrashed = (articleId: string) => {
+  return api.get(buildUrl(baseUrl, `trashed`, articleId));
+};
+
 const findByUser = async (userId, params) => {
   // startDate, endDate, limit, page params
   return api.get(`${baseUrl}/by-user/${userId}`, { params });
@@ -96,12 +100,12 @@ export const deleteArticle = ({ id }) => {
   return api.delete(buildUrl(baseUrl, id));
 };
 
-export const trashArticle = ({ id }) => {
-  return api.put(buildUrl(baseUrl, id, "trash"));
+export const trashArticle = (articleId: string) => {
+  return api.put(buildUrl(baseUrl, articleId, "trash"));
 };
 
-export const restoreArticle = ({ id }) => {
-  return api.put(buildUrl(baseUrl, id, "restore"));
+export const restoreArticle = (articleId: string) => {
+  return api.put(buildUrl(baseUrl, articleId, "restore"));
 };
 
 export const getUsersArticleStats = (params: URLSearchParams) => {
@@ -145,6 +149,7 @@ export const articlesService = {
   simpleUpdateArticle,
   trashArticle,
   findTrashed,
+  findOneTrashed,
   getArticleHistory,
   restoreArticle,
   getUsersArticleStats,

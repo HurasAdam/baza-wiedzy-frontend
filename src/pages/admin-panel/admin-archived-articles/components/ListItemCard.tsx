@@ -1,0 +1,158 @@
+import { FileText, List, Star } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../../../../components/ui/tooltip";
+import { cn } from "../../../../lib/utils";
+
+const statusLabels: Record<string, string> = {
+  approved: "Zatwierdzony",
+  pending: "Oczekujący",
+  rejected: "Odrzucony",
+};
+
+export interface Article {
+  _id: string;
+  title: string;
+  tags: Tag[];
+  isVerified: boolean;
+  isImportant: boolean;
+  status: "approved" | "rejected" | "pending";
+  rejectionReason: string | null;
+  rejectedBy: string | null;
+  createdBy: Author;
+  viewsCounter: number;
+  responseVariantsCount: number;
+  isTrashed: boolean;
+  product: Product;
+  category: Category;
+  createdAt: string; // ISO date string
+  isFavourite: boolean;
+}
+
+interface Tag {
+  _id: string;
+  name: string;
+}
+
+interface Author {
+  _id: string;
+  name: string;
+  surname: string;
+}
+
+interface Product {
+  _id: string;
+  name: string;
+  labelColor: string;
+  banner: string;
+}
+
+interface Category {
+  _id: string;
+  name: string;
+}
+
+interface Flag {
+  _id: string;
+  name: string;
+  labelColor: string;
+}
+
+interface Props {
+  article: Article;
+  flags: Flag[];
+  onFlagChange: (articleId: string, flagId: string) => void;
+  toggleFavourite: (id: string) => void;
+  toggleFavouriteLoading: boolean;
+  openArticleDrawer: (articleId: string) => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+}
+
+const ListItemCard = ({ article, openArticleDrawer, onMouseEnter, onMouseLeave }: Props) => {
+  const navigate = useNavigate();
+
+  return (
+    <div
+      onMouseEnter={() => onMouseEnter?.()}
+      onMouseLeave={() => onMouseLeave?.()}
+      key={article._id}
+      onClick={() =>
+        navigate(`/admin/articles/archived/${article._id}`, { state: { from: location.pathname + location.search } })
+      }
+      className={cn(
+        "flex justify-between items-center px-3.5 py-3 text-sm group transition-colors  bg-transparent",
+        "border-b last:border-0 first:rounded-t-xl last:rounded-b-lg",
+      )}
+      title={`Autor: ${article.createdBy.name}`}
+    >
+      <div className="flex items-center gap-3 min-w-0 overflow-hidden flex-grow">
+        <div
+          className="
+          relative
+  flex-shrink-0
+  w-8.5 h-8.5
+  flex items-center justify-center
+  rounded-lg
+  border border-muted/40
+  bg-muted/60 "
+        >
+          {article.isImportant ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Star className="w-4.5 h-4.5 text-yellow-600/90 " />
+              </TooltipTrigger>
+              <TooltipContent className="bg-muted p-2 rounded-md text-xs">Wymaga weryfikacji</TooltipContent>
+            </Tooltip>
+          ) : (
+            <FileText className="w-4.5 h-4.5 text-muted-foreground" />
+          )}
+        </div>
+
+        <div className="flex flex-col overflow-hidden">
+          <span
+            className="font-base text-card-foreground/90 group-hover:text-primary/95  transition-colors
+  duration-200 break-words"
+          >
+            {article.title}
+          </span>
+
+          <span
+            className="inline-flex items-center px-2 py-[1px] mt-1 rounded-full text-[9px] font-medium uppercase tracking-wide w-fit"
+            style={{
+              backgroundColor: `${article.product.labelColor}1A`,
+              color: article.product.labelColor,
+              border: `1px solid ${article.product.labelColor}33`,
+              opacity: 0.85,
+            }}
+          >
+            {article.product.name}
+          </span>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-4">
+        {article.responseVariantsCount > 1 ? (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-muted/10 border border-muted/30 shadow-sm">
+                <List className="w-3 h-3" />
+                {article.responseVariantsCount}
+              </div>
+            </TooltipTrigger>
+            <TooltipContent className="bg-muted p-2 rounded-md text-xs" side="top">
+              ilość wariantów
+            </TooltipContent>
+          </Tooltip>
+        ) : (
+          <div className="opacity-0 pointer-events-none px-2 py-1 text-xs">
+            <List className="w-3 h-3" />
+          </div>
+        )}
+
+        <div className="w-16" />
+      </div>
+    </div>
+  );
+};
+
+export default ListItemCard;
