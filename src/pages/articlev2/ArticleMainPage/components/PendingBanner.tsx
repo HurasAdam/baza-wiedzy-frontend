@@ -19,25 +19,33 @@ interface Props {
   actions: PendingActions;
 }
 
-export const PendingBanner = ({ userPermissions, actions }: Props) => (
-  <div className="mb-6 flex items-center justify-between gap-4 rounded-lg bg-muted/30 px-5 py-3 shadow-sm">
-    <div className="flex items-center gap-4">
-      <div className="flex items-center justify-center w-9 h-9 rounded-md bg-background border shadow-sm">
-        <AlertCircle className="w-4 h-4 text-orange-600/75" />
-      </div>
+export const PendingBanner = ({ userPermissions, actions }: Props) => {
+  return (
+    <div className="mb-6 relative overflow-hidden rounded-xl border border-border bg-background px-6 py-4 shadow-sm">
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-muted-foreground/30 via-muted-foreground/10 to-transparent" />
 
-      <div className="leading-tight">
-        <p className="text-sm font-medium text-foreground">Artykuł zweryfikowany ponad 12 miesięcy temu</p>
-        <p className="text-xs text-muted-foreground">Treść może być nieaktualna i wymaga ponownej weryfikacji.</p>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+        <div className="flex items-center gap-4">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl border bg-muted/40">
+            <AlertCircle className="h-5 w-5 text-orange-600/75" />
+          </div>
+
+          <div className="flex flex-col leading-tight space-y-1">
+            <p className="text-sm font-semibold text-foreground">Artykuł zweryfikowany ponad 12 miesięcy temu</p>
+            <p className="text-xs text-muted-foreground">
+              Treść artykułu może nie być aktualna - wpis wymaga ponownej weryfikacji.
+            </p>
+          </div>
+        </div>
+
+        {userPermissions.includes("APPROVE_ARTICLE") && (
+          <div className="flex gap-2 mt-2 sm:mt-0">
+            <Button size="sm" className="h-8 px-3 text-xs font-medium" onClick={actions.APPROVE_ARTICLE}>
+              Zweryfikuj ponownie
+            </Button>
+          </div>
+        )}
       </div>
     </div>
-
-    {userPermissions.includes("APPROVE_ARTICLE") && (
-      <div className="flex gap-2">
-        <Button onClick={() => actions.APPROVE_ARTICLE()} size="sm">
-          Zweryfikuj ponownie
-        </Button>
-      </div>
-    )}
-  </div>
-);
+  );
+};

@@ -23,36 +23,42 @@ interface Props {
   actions: EditedActions;
 }
 
-export const EditedDraftBanner = ({ userPermissions, actions }: Props) => (
-  <div className="mb-6 flex items-center justify-between gap-4 rounded-lg bg-muted/30 px-5 py-3 shadow-sm">
-    <div className="flex items-center gap-4">
-      {/* Ikona statusu */}
-      <div className="flex items-center justify-center w-9 h-9 rounded-md bg-background border shadow-sm">
-        <Hourglass className="w-4 h-4 text-yellow-600/85" />
-      </div>
+export const EditedDraftBanner = ({ userPermissions, actions }: Props) => {
+  if (!userPermissions.includes("APPROVE_ARTICLE")) return null;
 
-      {/* Tekst */}
-      <div className="leading-tight">
-        <p className="text-sm font-medium text-foreground">Wprowadzono zmiany w artykule</p>
-        <p className="text-xs text-muted-foreground">
-          Treść artykułu mogła ulec modyfikacji i wymagane ponownej weryfikacji
-        </p>
+  return (
+    <div className="mb-6 relative overflow-hidden rounded-xl border border-border bg-background px-6 py-4 shadow-sm">
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-muted-foreground/30 via-muted-foreground/10 to-transparent" />
+
+      <div className="flex items-center justify-between gap-6">
+        <div className="flex items-center gap-4">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl border bg-muted/40">
+            <Hourglass className="h-5 w-5 text-yellow-600/85" />
+          </div>
+
+          <div className="space-y-0.5">
+            <p className="text-sm font-semibold text-foreground">Wprowadzono zmiany w artykule</p>
+            <p className="text-xs text-muted-foreground max-w-md">
+              Treść artykułu została zaktualizowana i wymaga ponownej weryfikacji.
+            </p>
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center gap-2">
+          <Button size="sm" className="h-8 px-3 text-xs font-medium" onClick={actions.APPROVE_ARTICLE}>
+            Zatwierdź zmiany
+          </Button>
+          <Button
+            size="sm"
+            variant="secondary"
+            className="h-8 px-3 text-xs font-medium"
+            onClick={actions.REJECT_ARTICLE}
+          >
+            Zgłoś uwagi
+          </Button>
+        </div>
       </div>
     </div>
-
-    {/* Akcje */}
-
-    <div className="flex gap-2">
-      {userPermissions.includes("APPROVE_ARTICLE") && (
-        <Button onClick={() => actions.APPROVE_ARTICLE()} size="sm">
-          Zatwierdź zmiany
-        </Button>
-      )}
-      {userPermissions.includes("REJECT_ARTICLE") && (
-        <Button onClick={() => actions.REJECT_ARTICLE()} size="sm" variant="outline">
-          Zgłoś uwagi
-        </Button>
-      )}
-    </div>
-  </div>
-);
+  );
+};

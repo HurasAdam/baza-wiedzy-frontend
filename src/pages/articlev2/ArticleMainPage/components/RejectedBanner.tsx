@@ -27,33 +27,38 @@ interface Props {
 export const RejectedBanner = ({ userPermissions, actions, articleData }: Props) => {
   const [isRejectionReasonModalOpen, setIsRejectionReasonModalOpen] = useState(false);
 
-  if (!articleData.rejectionNote) return false;
+  if (!articleData.rejectionNote) return null;
 
   return (
-    <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-lg bg-muted/30 px-5 py-3 shadow-sm">
-      <div className="flex items-center gap-4">
-        <div className="flex items-center justify-center w-9 h-9 rounded-md bg-background border shadow-sm">
-          <XCircleIcon className="w-4 h-4 text-rose-500" />
-        </div>
-        <div className="flex flex-col leading-tight space-y-0.5">
-          <p className="text-sm font-medium text-foreground">Artykuł odrzucony – wymaga poprawek</p>
+    <div className="mb-6 relative overflow-hidden rounded-xl border border-border bg-background px-6 py-4 shadow-sm">
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-muted-foreground/30 via-muted-foreground/10 to-transparent" />
 
-          <p className="text-xs text-muted-foreground flex items-center gap-2">
-            Poniżej znajdziesz uwagi i kwestie wymagające zmian
-            <button
-              onClick={() => setIsRejectionReasonModalOpen(true)}
-              className="flex items-center text-xs text-foreground underline hover:text-primary hover:underline ml-1 "
-            >
-              Zobacz uwagi
-            </button>
-          </p>
-        </div>
-      </div>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+        <div className="flex items-center gap-4">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl border bg-muted/40">
+            <XCircleIcon className="h-5 w-5 text-rose-500" />
+          </div>
 
-      <div className="flex gap-2 mt-2 sm:mt-0">
-        <Button onClick={() => actions.REQUEST_ARTICLE_REVIEW()} size="sm">
-          Wyślij do ponownej weryfikacji
-        </Button>
+          <div className="flex flex-col leading-tight space-y-1">
+            <p className="text-sm font-semibold text-foreground">Artykuł odrzucony - wymaga poprawek</p>
+            <p className="text-xs text-muted-foreground flex items-center gap-1">
+              Poniżej znajdziesz uwagi i kwestie wymagające zmian
+              <button
+                onClick={() => setIsRejectionReasonModalOpen(true)}
+                className="text-xs text-foreground underline hover:text-primary hover:underline ml-1"
+              >
+                Zobacz uwagi
+              </button>
+            </p>
+          </div>
+        </div>
+
+        {/* Action */}
+        <div className="flex gap-2 mt-2 sm:mt-0">
+          <Button size="sm" className="h-8 px-3 text-xs font-medium" onClick={actions.REQUEST_ARTICLE_REVIEW}>
+            Wyślij do ponownej weryfikacji
+          </Button>
+        </div>
       </div>
 
       <ArticleRejectionReasonModal
