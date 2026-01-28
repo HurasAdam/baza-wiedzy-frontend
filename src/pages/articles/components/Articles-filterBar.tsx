@@ -1,9 +1,9 @@
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Box, FolderSearch, X } from "lucide-react";
+import { Box, FolderSearch, Plus, Type, X } from "lucide-react";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import type { IProduct } from "../../../types/product";
 import type { ProductCategory } from "../../../types/product-category";
 
@@ -40,76 +40,33 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
 }) => {
   const hasFilters = selectedTitle || selectedProduct || selectedCategory || selectedPage > 1;
 
+  const navigate = useNavigate();
+
   return (
-    <div className="bg-background flex flex-col gap-4 mb-1">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-4 ">
-            <div className=" rounded-xl bg-primary/10">
-              <FolderSearch className="w-6 h-6 text-muted-foreground" />
+    <div className="rounded-xl border border-border bg-background shadow-sm">
+      {/* ===== Header ===== */}
+      <div className="flex items-center justify-between px-6 py-4 border-b border-border">
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-muted">
+            <FolderSearch className="h-4 w-4 text-muted-foreground" />
+          </div>
+          <h1 className="text-lg font-semibold text-foreground">Baza artykułów</h1>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <Button onClick={() => navigate("/articles/new")} className="group " size="sm">
+            <div className="flex items-center gap-2 ">
+              <Plus className=" w-4 h-4 group-hover:animate-spin" />
+              Nowy artykuł
             </div>
-            <h1 className="text-xl font-semibold text-foreground flex items-center gap-2">Baza artykułów</h1>
-          </div>
-
-          <div className="flex gap-2 pt-2.5 flex-wrap px-2 h-6 mb-3">
-            {selectedTitle && (
-              <Badge
-                variant="secondary"
-                className="flex items-center gap-1 w-full min-w-[130px] max-w-[130px] justify-between"
-              >
-                <span className="text-xs font-semibold">🔍</span>
-                <span className="truncate" title={selectedTitle}>
-                  {selectedTitle}
-                </span>
-                <button
-                  onClick={() => onTitleChange({ target: { value: "" } } as any)}
-                  className="hover:text-destructive"
-                  aria-label="Usuń filtr tekstowy"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </Badge>
-            )}
-
-            {/* Product */}
-            {selectedProduct && (
-              <Badge variant="default" className="flex items-center gap-1">
-                <Box className="w-3 h-3 text-foreground" /> {/* Ikonka po lewej */}
-                {products.find((p) => p._id === selectedProduct)?.name || "Produkt"}
-                <button
-                  onClick={() => onProductChange("__clear__")}
-                  className="hover:text-destructive"
-                  aria-label="Usuń filtr produktu"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </Badge>
-            )}
-
-            {/* Category */}
-            {selectedCategory && (
-              <Badge variant="secondary" className="flex items-center gap-1">
-                {categories?.find((c) => c._id === selectedCategory)?.name || "Kategoria"}
-                <button onClick={() => onCategoryChange("__clear__")} className="hover:text-destructive">
-                  <X className="w-4 h-4" />
-                </button>
-              </Badge>
-            )}
-          </div>
+          </Button>
         </div>
       </div>
 
-      {/* ---- Filters ---- */}
-      <div className="flex px-3 py-2 gap-3 items-between  flex-wrap">
-        {/* Search */}
-        <Input
-          value={selectedTitle}
-          onChange={onTitleChange}
-          placeholder="Szukaj artykułów..."
-          className="w-52 border-input"
-        />
+      {/* ===== Filters bar ===== */}
+      <div className="flex flex-wrap items-center gap-3 px-6 py-4">
+        <Input value={selectedTitle} onChange={onTitleChange} placeholder="Szukaj artykułów" className="w-60" />
 
-        {/* Product */}
         <Select
           onValueChange={(value) => onProductChange(value === "all" ? "__clear__" : value)}
           value={selectedProduct || "all"}
@@ -129,7 +86,6 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
           </SelectContent>
         </Select>
 
-        {/* Category */}
         <Select
           onValueChange={(value) => onCategoryChange(value === "all" ? "__clear__" : value)}
           value={selectedCategory || "all"}
@@ -150,25 +106,57 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
           </SelectContent>
         </Select>
 
-        <Button variant="outline" size="sm" disabled={!hasFilters} onClick={onResetAll} className="">
-          Wyczyść filtry
+        <Button variant="ghost" size="sm" disabled={!hasFilters} onClick={onResetAll} className="text-muted-foreground">
+          Wyczyść
         </Button>
 
-        <div className="ml-auto flex items-center gap-3 flex-col ">
+        <div className="ml-auto flex flex-col items-end gap-0.5">
           {typeof resultsCount === "number" && (
-            <Badge variant="outline" className="text-xs font-medium px-3 py-1">
-              Znaleziono: {resultsCount}
-            </Badge>
+            <span className="text-sm text-muted-foreground">{resultsCount} wyników</span>
           )}
-
           {currentPage && totalPages && (
-            <span className="text-muted-foreground text-xs">
-              Strona <span className="font-semibold">{currentPage}</span> z{" "}
-              <span className="font-semibold">{totalPages}</span>
+            <span className="text-[11px] text-muted-foreground">
+              Strona <span className="font-base">{currentPage}</span> z <span className="font-base">{totalPages}</span>
             </span>
           )}
         </div>
       </div>
+
+      {/* ===== Active filters ===== */}
+      {hasFilters && (
+        <div className="flex flex-wrap gap-2 pt-2.5 px-6 pb-4 border-t border-border">
+          {selectedTitle && (
+            <div className="flex items-center gap-2 rounded-xl bg-muted px-3 py-1 text-xs">
+              <Type className="h-3 w-3" />
+              <span className="truncate max-w-[140px] text-foreground">{selectedTitle}</span>
+              <button onClick={() => onTitleChange({ target: { value: "" } } as any)}>
+                <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
+              </button>
+            </div>
+          )}
+
+          {selectedProduct && (
+            <div className="flex items-center gap-2 rounded-xl bg-primary/55 px-3 py-1 text-xs">
+              <Box className="h-3 w-3" />
+              <span className="text-foreground">
+                {products.find((p) => p._id === selectedProduct)?.name || "Produkt"}
+              </span>
+              <button onClick={() => onProductChange("__clear__")}>
+                <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
+              </button>
+            </div>
+          )}
+
+          {selectedCategory && (
+            <div className="flex items-center gap-2 rounded-xl bg-muted px-3 py-1 text-xs">
+              <span>{categories?.find((c) => c._id === selectedCategory)?.name || "Kategoria"}</span>
+              <button onClick={() => onCategoryChange("__clear__")}>
+                <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
