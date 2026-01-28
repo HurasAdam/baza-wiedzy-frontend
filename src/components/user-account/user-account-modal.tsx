@@ -1,12 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { AxiosError } from "axios";
-import { Check, Loader } from "lucide-react";
+import { Check, Loader, PlusIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type { z } from "zod";
 import queryClient from "../../config/query.client";
-import { iconMap } from "../../constants/role-icons"; // dopasuj ścieżkę jeśli trzeba
+import { iconMap } from "../../constants/role-icons";
 import { useCreateUserAccountMutation } from "../../hooks/users/use-users";
 import { createUserAccountSchema } from "../../validation/create-user-account.schema";
 import { Button } from "../ui/button";
@@ -53,7 +53,6 @@ export const UserAccountModal = ({
 
   const { mutate, isPending: isCreateUserAccountPending } = useCreateUserAccountMutation();
 
-  // rozbuduj mapę jeśli chcesz konkretne hexy zamiast CSS vars
   const colorMap: Record<string, string> = {
     blue: "#3b82f6",
     green: "#10b981",
@@ -70,7 +69,7 @@ export const UserAccountModal = ({
     if (!label) return undefined;
     const key = label.toLowerCase();
     if (colorMap[key]) return colorMap[key];
-    // spróbuj zmiennych css (pasuje do Twoich tematów jeśli masz --color-<name> albo --<name>)
+
     return `var(--color-${key}), var(--${key})`;
   };
 
@@ -102,7 +101,7 @@ export const UserAccountModal = ({
                 <div className="opacity-80">Podany szId już istnieje w bazie danych. Proszę wybrać inny.</div>
               </div>
             </div>,
-            { duration: 7000 }
+            { duration: 7000 },
           );
           return;
         }
@@ -118,7 +117,12 @@ export const UserAccountModal = ({
         className="max-h-[85vh] min-w-[29vw] w-full max-w-md rounded-2xl shadow-xl overflow-y-auto p-6 text-card-foreground"
       >
         <DialogHeader>
-          <DialogTitle className="text-2xl font-semibold text-foreground">Utwórz konto użytkownika</DialogTitle>
+          <DialogTitle className="text-xl flex items-center gap-3.5 font-semibold text-foreground">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-muted">
+              <PlusIcon className="h-4 w-4 text-muted-foreground" />
+            </div>
+            Utwórz konto użytkownika
+          </DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
@@ -130,7 +134,7 @@ export const UserAccountModal = ({
                 <FormItem>
                   <FormLabel className="text-foreground">Imię</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Wprowadź imię" className=" border-ring bg-input/30 " />
+                    <Input {...field} placeholder="Wprowadź imię" className="  bg-input/30 " />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -144,11 +148,7 @@ export const UserAccountModal = ({
                 <FormItem>
                   <FormLabel className="text-foreground">Nazwisko</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="Wprowadź nazwisko"
-                      className="text-input-foreground border-ring bg-input/30"
-                    />
+                    <Input {...field} placeholder="Wprowadź nazwisko" className="text-input-foreground  bg-input/30" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -167,7 +167,7 @@ export const UserAccountModal = ({
                     <Input
                       {...field}
                       placeholder="Wprowadź pełen adres email"
-                      className="text-input-foreground border-ring bg-input/30 "
+                      className="text-input-foreground  bg-input/30 "
                     />
                   </FormControl>
                   <FormMessage />
@@ -187,7 +187,7 @@ export const UserAccountModal = ({
                         type="text"
                         {...field}
                         placeholder="Kliknij generuj, aby ustawić hasło"
-                        className="text-foreground border-ring bg-input/30"
+                        className="text-foreground bg-input/30"
                       />
                     </FormControl>
                     <Button type="button" variant="default" onClick={generatePassword}>
@@ -214,7 +214,7 @@ export const UserAccountModal = ({
                     <Input
                       {...field}
                       placeholder="Wprowadź telefon kontaktowy"
-                      className="text-input-foreground border-ring bg-input/30"
+                      className="text-input-foreground  bg-input/30"
                     />
                   </FormControl>
                   <FormMessage />
@@ -230,7 +230,7 @@ export const UserAccountModal = ({
                   <FormLabel className="text-foreground">Rola</FormLabel>
                   <FormControl>
                     <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger className="w-full  text-input-foreground border-ring bg-input/30">
+                      <SelectTrigger className="w-full  text-input-foreground  bg-input/30">
                         <SelectValue placeholder="-- Wybierz rolę --" />
                       </SelectTrigger>
                       <SelectContent>
