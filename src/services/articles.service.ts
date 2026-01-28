@@ -24,7 +24,7 @@ export const getPopularArticles = (params: URLSearchParams) => {
   return api.get(buildUrl(baseUrl, "popular"), { params });
 };
 
-export const findTrashed = (params: URLSearchParams) => {
+export const findTrashed = (params: URLSearchParams): Promise<ArticlesResponse> => {
   return api.get(buildUrl(baseUrl, "trashed"), { params });
 };
 export const findOneTrashed = (articleId: string) => {

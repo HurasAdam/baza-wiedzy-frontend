@@ -30,11 +30,11 @@ export interface Article {
   tags: Tag[];
   isVerified: boolean;
   status: string;
-  rejectionReason: string | null; // zmiana tu
+  rejectionReason: string | null;
   rejectedBy?: string | null;
   createdBy: ArticleAuthor;
-  viewsCounter: number; // zmiana tu
-  isTrashed: boolean; // zmiana tu
+  viewsCounter: number;
+  isTrashed: boolean;
   product: Product;
   category: Category;
   createdAt: string;

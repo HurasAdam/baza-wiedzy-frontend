@@ -1,3 +1,4 @@
+import { Archive } from "lucide-react";
 import { NoDataFound } from "../../../../components/shared/NoDataFound";
 import SkeletonArticleCard from "../../../pending-articles/components/SkeletonArticleCard";
 import ListItemCard from "./ListItemCard";
@@ -103,6 +104,19 @@ const ListSection = ({
             buttonText="Wyczyść filtry"
             buttonAction={onResetAllFilters}
           />
+        )}
+
+      {!isLoading &&
+        !isError &&
+        articles?.data.length === 0 &&
+        !selectedTitle &&
+        !selectedProduct &&
+        !selectedCategory && (
+          <div className="flex flex-col items-center justify-center h-[60vh] text-muted-foreground">
+            <Archive className="w-20 h-20 mb-4 text-muted-foreground/50" />
+            <p className="text-lg font-medium">Brak artykułów w archiwum</p>
+            <p className="text-sm text-muted-foreground mt-1">Archiwum jest obecnie puste.</p>
+          </div>
         )}
 
       {!isError &&
