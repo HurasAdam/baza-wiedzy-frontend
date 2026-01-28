@@ -11,6 +11,7 @@ export interface ContentActions {
   handleMarkAsImportant: (articleId: string) => void;
   handleUnmarkAsImportant: (articleId: string) => void;
   openAddFlagModal: () => void;
+  onArchiveRequest: () => void;
 }
 
 interface Props {

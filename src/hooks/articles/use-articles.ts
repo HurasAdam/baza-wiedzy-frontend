@@ -81,6 +81,22 @@ export const useUnmarkAsImportantMutation = () => {
   });
 };
 
+export const useArchivizeArticleMutation = () => {
+  return useMutation({
+    mutationFn: (articleId: string) => {
+      return articlesService.trashArticle(articleId);
+    },
+  });
+};
+
+export const useRestoreArticleMutation = () => {
+  return useMutation({
+    mutationFn: (articleId: string) => {
+      return articlesService.restoreArticle(articleId);
+    },
+  });
+};
+
 export const useFindArticlesQuery = (params?: URLSearchParams) => {
   return useQuery({
     queryKey: ["articles", params?.toString()],
@@ -125,5 +141,23 @@ export const useFindArticlesCreatedByUserQuery = (query) => {
     refetchOnWindowFocus: false,
     staleTime: 0,
     retry: false,
+  });
+};
+
+export const useFindArchivizedArticles = (query) => {
+  return useQuery({
+    queryKey: ["archived-articles", query?.toString()],
+    queryFn: () => {
+      return articlesService.findTrashed(query);
+    },
+  });
+};
+
+export const useFindOneArchivizedArticle = (articleId: string) => {
+  return useQuery({
+    queryKey: ["archived-article", articleId],
+    queryFn: () => {
+      return articlesService.findOneTrashed(articleId);
+    },
   });
 };

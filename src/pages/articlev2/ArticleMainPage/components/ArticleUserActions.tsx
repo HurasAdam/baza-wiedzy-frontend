@@ -1,4 +1,4 @@
-import { Bell, BellOff, Flag, Loader, Plus, Star, StarOff } from "lucide-react";
+import { ArchiveIcon, Bell, BellOff, Flag, Loader, Plus, Star, StarOff } from "lucide-react";
 import { Button } from "../../../../components/ui/button";
 import { Card, CardContent } from "../../../../components/ui/card";
 import type { Article } from "../../../../types/article";
@@ -30,6 +30,7 @@ export const ArticleUserActions = ({
     handleMarkAsImportant,
     handleUnmarkAsImportant,
     openAddFlagModal,
+    onArchiveRequest,
   } = actions;
 
   return (
@@ -77,7 +78,16 @@ export const ArticleUserActions = ({
         >
           <Plus className="w-4 h-4" /> Dodaj etykietę
         </Button>
-
+        {userPermissions.includes("ARCHIVE_ARTICLE") && article.isVisible && (
+          <Button
+            size="sm"
+            variant="outline"
+            className="w-full flex items-center justify-center gap-2"
+            onClick={onArchiveRequest}
+          >
+            <ArchiveIcon className="w-4 h-4" /> Archiwizuj
+          </Button>
+        )}
         {userPermissions.includes("SET_ARTICLE_PRIORITY") && (
           <Button
             size="sm"

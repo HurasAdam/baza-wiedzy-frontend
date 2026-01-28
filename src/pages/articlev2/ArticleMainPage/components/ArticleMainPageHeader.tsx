@@ -23,7 +23,14 @@ import { cn } from "../../../../lib/utils";
 import { ArticleStatusLabel } from "./ArticleStatusLabel";
 
 export const ArticleMainPageHeader = ({ article, userPermissions, actions }) => {
-  const { handleFollowToggle, openExtraInfoModal, handleUnmarkAsImportant, handleMarkAsImportant, refetch } = actions;
+  const {
+    handleFollowToggle,
+    openExtraInfoModal,
+    handleUnmarkAsImportant,
+    handleMarkAsImportant,
+    onArchiveRequest,
+    refetch,
+  } = actions;
 
   const views = [
     { label: "Dane", path: "", icon: Info, always: true },
@@ -80,7 +87,7 @@ export const ArticleMainPageHeader = ({ article, userPermissions, actions }) => 
                     cn(
                       "flex items-center gap-1.5 px-3 py-2 rounded-md text-xs font-medium transition-all",
                       "text-muted-foreground hover:text-foreground",
-                      isActive ? "bg-background text-foreground shadow-sm" : "hover:bg-background/50"
+                      isActive ? "bg-background text-foreground shadow-sm" : "hover:bg-background/50",
                     )
                   }
                 >
@@ -115,8 +122,8 @@ export const ArticleMainPageHeader = ({ article, userPermissions, actions }) => 
                 </NavLink>
               </DropdownMenuItem>
             )}
-            {userPermissions.includes("ARCHIVE_ARTICLE") && (
-              <DropdownMenuItem onClick={() => console.log("Archiwizuj")}>
+            {userPermissions.includes("ARCHIVE_ARTICLE") && article.isVisible && (
+              <DropdownMenuItem onClick={onArchiveRequest}>
                 <Archive className="w-4 h-4 mr-2" /> Archiwizuj
               </DropdownMenuItem>
             )}

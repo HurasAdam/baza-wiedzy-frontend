@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { toast } from "sonner";
 import { ArticleExtraInfoModal } from "../../../components/article/article-extra-info.modal";
 import { FlagModal, type FlagForm } from "../../../components/flag/flag-modal";
@@ -13,6 +13,7 @@ import {
 } from "../../../hooks/article-user-flag/use-article-user-flag";
 import {
   useAproveArticleMutation,
+  useArchivizeArticleMutation,
   useFollowArticleMutation,
   useMarkAsImportantMutation,
   useRejectArticleMutation,
@@ -28,6 +29,7 @@ import { ArticleStatusBannerSection } from "./components/ArticleStatusBannerSect
 
 export const Articlev2MainPage = () => {
   const { article, articleUserFlag, userPermissions, refetch } = useOutletContext<ArticleOutletContext>();
+  const navigate = useNavigate();
 
   // ----- MODALS AND ALERTS -----
   const [isExtraInforModalOpen, setIsExtraInfoModalOpen] = useState(false);
@@ -36,6 +38,7 @@ export const Articlev2MainPage = () => {
   const [isApprovingArticle, setIsApprovingArticle] = useState(false);
   const [isRejectingArticle, setIsRejectingArticle] = useState(false);
   const [isRequestingArticleReview, setIsRequestingArticleReview] = useState(false);
+  const [isRequestingArticleArchivization, setIsRequestingArticleArchivization] = useState(false);
 
   // ------ MUTATIONS ------
   const { mutate: createFlagMutate, isPending: isCreateFlagPending } = useCreateFlagMutation();
@@ -48,6 +51,7 @@ export const Articlev2MainPage = () => {
   const { mutate: approveMutate, isPending: isApproveLoading } = useAproveArticleMutation();
   const { mutate: rejectionMutate, isPending: isRejectionLoading } = useRejectArticleMutation();
   const { mutate: requestReviewMutate, isPending: isRequestReviewLoading } = useRequestReviewArticleMutation();
+  const { mutate: archivizeMutate, isPending: isArchivizeLoading } = useArchivizeArticleMutation();
 
   // ----- ACTION HANDLERS -----
   const openExtraInfoModal = () => setIsExtraInfoModalOpen(true);
@@ -128,6 +132,27 @@ export const Articlev2MainPage = () => {
     });
   };
 
+  const handleArchivize = () => {
+    archivizeMutate(article._id, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["articles"] });
+        onArchiveRequestCancel();
+        toast.success("Artykuł został przeniesiony do archizum", {
+          position: "bottom-right",
+        });
+        navigate("/articles");
+      },
+    });
+  };
+
+  const onArchiveRequest = () => {
+    setIsRequestingArticleArchivization(true);
+  };
+
+  const onArchiveRequestCancel = () => {
+    setIsRequestingArticleArchivization(false);
+  };
+
   const onApprove = (): void => {
     setIsApprovingArticle(true);
   };
@@ -177,7 +202,7 @@ export const Articlev2MainPage = () => {
           else toast.error("Wystąpił nieoczekiwany błąd. Spróbuj ponownie później.");
         },
         onSettled: () => setIsRejectingArticle(false),
-      }
+      },
     );
   };
 
@@ -214,6 +239,7 @@ export const Articlev2MainPage = () => {
           openExtraInfoModal,
           handleUnmarkAsImportant,
           handleMarkAsImportant,
+          onArchiveRequest,
           refetch,
         }}
       />
@@ -247,6 +273,7 @@ export const Articlev2MainPage = () => {
           openMarkWithFlagModal,
           handleMarkAsImportant,
           handleUnmarkAsImportant,
+          onArchiveRequest,
           openAddFlagModal,
         }}
       />
@@ -278,10 +305,10 @@ export const Articlev2MainPage = () => {
           article.status === "draft" && !article.isVisible
             ? "Zatwierdź artykuł"
             : article.status === "draft" && article.isVisible
-            ? "Zatwierdź zmiany w artykule"
-            : article.status === "pending" && article.isVisible
-            ? "Potwierdź aktualność artykułu"
-            : "Zatwierdź artykuł"
+              ? "Zatwierdź zmiany w artykule"
+              : article.status === "pending" && article.isVisible
+                ? "Potwierdź aktualność artykułu"
+                : "Zatwierdź artykuł"
         }
         onCancel={onApproveCancel}
         onConfirm={onApproveConfirm}
@@ -327,6 +354,37 @@ export const Articlev2MainPage = () => {
           <span className="text-sm text-muted-foreground">
             Potwierdzasz, że wprowadzone zmiany są gotowe do ponownej oceny.
           </span>
+        </div>
+      </Alert>
+      <Alert
+        isOpen={isRequestingArticleArchivization}
+        isLoading={isArchivizeLoading}
+        type="warning"
+        title="Archiwizacja artykułu"
+        onCancel={onArchiveRequestCancel}
+        onConfirm={handleArchivize}
+        requireConfirmation={true}
+        isConfirmEnabled={true}
+      >
+        <div className="flex flex-col gap-4">
+          {/* Główny komunikat */}
+          <div className="flex flex-col gap-2">
+            <span className="font-semibold text-base text-foreground">
+              Czy na pewno chcesz przenieść ten artykuł do archiwum?
+            </span>
+            <span className="text-sm text-muted-foreground leading-relaxed">
+              Po zatwierdzeniu artykuł zostanie przeniesiony do archiwum i nie będzie widoczny w wyszukiwarce dla
+              użytkowników końcowych.
+            </span>
+          </div>
+
+          {/* Subtelna informacja o dostępności w panelu */}
+          <div className="flex items-start gap-2 pt-2 border-t border-border">
+            <span className="text-xs text-muted-foreground font-medium leading-snug">
+              Artykuł będzie widoczny w panelu administratora w sekcji archiwum i możliwe będzie jego przywrócenie w
+              dowolnym momencie.
+            </span>
+          </div>
         </div>
       </Alert>
 
