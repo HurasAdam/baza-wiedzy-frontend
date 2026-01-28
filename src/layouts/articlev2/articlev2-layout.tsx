@@ -37,11 +37,15 @@ export default function Articlev2Layout() {
     return null;
   }
   if (isLoading) {
-    return <ArticleMainPageSkeleton />;
+    return (
+      <div className="max-w-[1320px] mx-auto">
+        <ArticleMainPageSkeleton />
+      </div>
+    );
   }
 
   return (
-    <div className=" max-w-[1400px] px-6 lg:px-0   mx-auto">
+    <div className=" max-w-[1320px] px-6 lg:px-0   mx-auto">
       <Outlet
         context={{
           article,

@@ -64,12 +64,12 @@ export function ReportDetailsPage() {
 
           toast.error("Wystapił błąd, spróbuj ponownie");
         },
-      }
+      },
     );
   };
 
   return (
-    <div className="mx-auto max-w-[1400px] h-full">
+    <div className="max-w-[1320px] mx-auto h-full">
       <Header report={report} canManageReportStatus={userPermissions.includes("MANAGE_REPORT_STATUS")} />
 
       <DetailsSection report={report} />
