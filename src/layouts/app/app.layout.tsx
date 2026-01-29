@@ -41,8 +41,8 @@ const AppLayout = () => {
       <main className="flex w-full flex-1 min-h-0 bg-sidebar  ">
         <Sidebar onOpenChangeLogModal={() => setIsChangeLogModalOpen(true)} />
 
-        <div className="flex-1 min-h-0 overflow-y-auto rounded-l-2xl scrollbar-custom bg-background border border-border/65">
-          <div className="container mx-auto px-2 sm:px-6 lg:px-6 py-0 md:py-7.5 w-full h-full">
+        <div className="flex-1 min-h-0 overflow-y-auto rounded-l border-l  scrollbar-custom bg-background  border-border/60">
+          <div className="container mx-auto px-2 sm:px-6 lg:px-6 py-0 md:py-8 w-full h-full">
             <Outlet context={{ onOpenCreateIssueReport: () => setIsCreatingIssueReport(true) }} />
           </div>
         </div>

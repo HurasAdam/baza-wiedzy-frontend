@@ -151,7 +151,7 @@ const Header = ({
   });
 
   return (
-    <div className="bg-muted/30 backdrop-blur-sm  sticky top-0 z-50">
+    <div className="bg-sidebar border-b border-border/65 backdrop-blur-sm  sticky top-0 z-50">
       <div className="flex h-14 items-center justify-between px-4 sm:px-6 lg:pr-16">
         <div className="flex h-14 items-center  mb-1.5 gap-3 ">
           <DropdownMenu>
