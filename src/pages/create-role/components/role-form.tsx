@@ -53,6 +53,9 @@ const RoleForm = ({ permissions = [], isPermissionsLoading }: RoleFormProps) => 
   const selectedIcon = watch("iconKey");
   const selectedPermissions = watch("permissions") ?? [];
 
+  const roleName = watch("name");
+  const isAdminRole = roleName === "ADMIN";
+
   const groupedPermissions = useMemo(() => groupPermissionsByCategory(permissions || []), [permissions]);
 
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
@@ -60,17 +63,19 @@ const RoleForm = ({ permissions = [], isPermissionsLoading }: RoleFormProps) => 
   // toggle single permission
   const togglePermission = useCallback(
     (perm: string) => {
+      if (isAdminRole) return;
       const updated = selectedPermissions.includes(perm)
         ? selectedPermissions.filter((p) => p !== perm)
         : [...selectedPermissions, perm];
       setValue("permissions", updated, { shouldDirty: true });
     },
-    [selectedPermissions, setValue]
+    [selectedPermissions, setValue],
   );
 
   // toggle all in category
   const toggleAllInCategory = useCallback(
     (category: string) => {
+      if (isAdminRole) return;
       const perms = groupedPermissions[category] || [];
       const allSelected = perms.every((p) => selectedPermissions.includes(p.key));
       const newPermissions = new Set(selectedPermissions);
@@ -80,7 +85,7 @@ const RoleForm = ({ permissions = [], isPermissionsLoading }: RoleFormProps) => 
         shouldDirty: true,
       });
     },
-    [groupedPermissions, selectedPermissions, setValue]
+    [groupedPermissions, selectedPermissions, setValue],
   );
 
   const categoryCounts = useMemo(() => {
@@ -244,6 +249,7 @@ const RoleForm = ({ permissions = [], isPermissionsLoading }: RoleFormProps) => 
 
                                 <Switch
                                   checked={checked}
+                                  disabled={isAdminRole}
                                   onCheckedChange={() => togglePermission(key)}
                                   aria-label={`Uprawnienie ${label}`}
                                 />
