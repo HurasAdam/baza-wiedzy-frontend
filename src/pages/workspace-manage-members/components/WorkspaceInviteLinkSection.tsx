@@ -42,7 +42,7 @@ const WorkspaceInviteLinkSection = ({ inviteCode }: WorkspaceInviteLinkSectionPr
       <CardHeader className="pb-2">
         <CardTitle className="text-sm font-semibold">Kod zaproszenia</CardTitle>
         <CardDescription className="text-muted-foreground text-sm">
-          Udostępnij ten kod, aby inni mogli dołączyć do workspace.
+          Udostępnij ten kod, aby inni mogli dołączyć do kolekcji.
         </CardDescription>
       </CardHeader>
       <CardContent className="flex items-center gap-2">

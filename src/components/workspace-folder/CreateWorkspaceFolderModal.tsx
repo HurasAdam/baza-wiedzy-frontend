@@ -70,7 +70,7 @@ export const CreateWorkspaceFolderModal = ({
 
           toast.error("Wystąpił błąd serwera");
         },
-      }
+      },
     );
   };
 

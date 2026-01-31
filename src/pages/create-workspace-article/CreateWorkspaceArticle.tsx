@@ -1,15 +1,16 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { motion } from "framer-motion";
 import { Loader } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { Button } from "../../components/ui/button";
 import { WorkspaceArticleForm } from "../../components/workspace-article/workspace-article-form";
+import * as animation from "../../constants/animations";
 import { useCreateWorkspaceArticleMutation } from "../../hooks/workspace-articles/use-workspace-articles";
 import type { Workspace } from "../../layouts/workspace/components/WorkspaceSidebar";
 import { workspaceArticleSchema, type WorkspaceArticleFormData } from "../../validation/workspace-article.schema";
 import CreateArticleHeader from "./components/CreateArticleHeader";
-
 type OutletContext = {
   workspace: Workspace;
   folders: WorkspaceFolder[];
@@ -50,7 +51,13 @@ export const CreateWorkspaceArticlePage = () => {
   const handleSubmit = form.handleSubmit(onSubmit);
 
   return (
-    <div className="flex flex-col min-h-screen bg-background/50 pt-1.5">
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="flex flex-col min-h-screen bg-background/50 pt-1.5"
+    >
       <CreateArticleHeader />
 
       {/* ===================================================== */}
@@ -80,6 +87,6 @@ export const CreateWorkspaceArticlePage = () => {
           )}
         </Button>
       </div>
-    </div>
+    </motion.div>
   );
 };

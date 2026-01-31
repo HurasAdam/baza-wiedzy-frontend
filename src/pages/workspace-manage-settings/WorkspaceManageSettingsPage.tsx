@@ -1,10 +1,11 @@
+import { motion } from "framer-motion";
 import { MoreVertical, Settings, Trash2 } from "lucide-react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { Separator } from "../../components/ui/separator";
 import WorkspaceForm, { colorOptions } from "../../components/workspace/workspace-form";
 import queryClient from "../../config/query.client";
+import * as animation from "../../constants/animations";
 import { useDeleteWorkspaceMutation, useUpdateWorkspaceMutation } from "../../hooks/workspace/use-workspace";
-
 export const WorkspaceManageSettingsPage = () => {
   const navigate = useNavigate();
   const { mutate, isPending } = useUpdateWorkspaceMutation();
@@ -23,7 +24,7 @@ export const WorkspaceManageSettingsPage = () => {
             description: "Dane kolekcji zostały zaktualizowane",
           });
         },
-      }
+      },
     );
   };
 
@@ -45,7 +46,13 @@ export const WorkspaceManageSettingsPage = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto py-8  ">
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="max-w-6xl mx-auto py-8  "
+    >
       <header className="flex items-center justify-between mb-8">
         <div>
           <div className="flex items-center gap-2">
@@ -98,7 +105,7 @@ export const WorkspaceManageSettingsPage = () => {
           <span className="font-medium mx-1.5 text-destructive">nieodwracalna</span>!
         </p>
       </Alert>
-    </div>
+    </motion.div>
   );
 };
 

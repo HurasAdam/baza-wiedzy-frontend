@@ -1,11 +1,13 @@
 import { Separator } from "@/components/ui/separator";
 import type { AxiosError } from "axios";
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { useOutletContext, useParams, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { Alert } from "../../components/shared/alert-modal";
 import { EditWorkspaceFolderModal } from "../../components/workspace-folder/EditWorkspaceFolderModal";
 import queryClient from "../../config/query.client";
+import * as animation from "../../constants/animations";
 import { FolderSort, type FolderSortType } from "../../constants/workspace-folders-sort";
 import {
   useDeleteWorkspaceFolderMutation,
@@ -84,7 +86,7 @@ export const WorkspaceManageFoldersPage = () => {
 
           toast.error("Wystąpił błąd serwera");
         },
-      }
+      },
     );
   };
 
@@ -100,7 +102,13 @@ export const WorkspaceManageFoldersPage = () => {
   };
 
   return (
-    <div className="py-6 w-full ">
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="py-6 w-full "
+    >
       <div className="max-w-6xl mx-auto px-4">
         <ManageFoldersHeader handleAddFolder={handleAddFolder} permissions={permissions} />
         <Separator className="my-4" />
@@ -151,6 +159,6 @@ export const WorkspaceManageFoldersPage = () => {
           Czy na pewno chcesz usunąć folder <strong>{selectedFolder?.name}</strong>?
         </Alert>
       )}
-    </div>
+    </motion.div>
   );
 };

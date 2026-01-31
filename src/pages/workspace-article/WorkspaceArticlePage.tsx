@@ -1,8 +1,10 @@
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { EditWorkspaceArticleModal } from "../../components/workspace-article-edit/EditWorkspaceArticleModal";
 import { CreateWorkspaceArticleVariantModal } from "../../components/workspace-article-variant/CreateWorkspaceArticleVariantModal";
+import * as animation from "../../constants/animations";
 import { useFindWorkspaceArticleQuery } from "../../hooks/workspace-articles/use-workspace-articles";
 import type { Folder } from "../workspace-manage-folders/components/ManageFoldersFilters";
 import ArticleHeader from "./components/ArticleHeader";
@@ -49,7 +51,13 @@ export function WorkspaceArticlePage() {
   };
 
   return (
-    <div className="mx-auto max-w-[1380px]  py-1 space-y-6">
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="mx-auto max-w-[1380px]  py-1 space-y-6"
+    >
       <ArticleHeader
         title={article.title}
         folderName={article.folder.name}
@@ -84,6 +92,6 @@ export function WorkspaceArticlePage() {
           navigate={navigate}
         />
       )}
-    </div>
+    </motion.div>
   );
 }

@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 import { FileText, FolderKanban, Lock, Plus } from "lucide-react";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
-
+import * as animation from "../../constants/animations";
 export function WorkspaceOverviewPage() {
   const navigate = useNavigate();
   const { workspaceId } = useParams();
@@ -12,7 +13,13 @@ export function WorkspaceOverviewPage() {
   };
 
   return (
-    <div className="flex flex-col h-full w-full py-8 px-6 lg:px-12 bg-gradient-to-br from-background via-background/90 to-background/60 backdrop-blur-md">
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="flex flex-col h-full w-full py-8 px-6 lg:px-12 bg-gradient-to-br from-background via-background/90 to-background/60 backdrop-blur-md"
+    >
       {/* Header */}
       <div className="flex items-center justify-between mb-10">
         <div>
@@ -74,6 +81,6 @@ export function WorkspaceOverviewPage() {
           ))}
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

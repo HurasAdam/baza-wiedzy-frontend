@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 import { ChevronDown, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -8,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu";
 import { WORKSPACE_ICONS } from "../../../components/workspace/workspace-form";
+import { sidebarVariants } from "../../../constants/animations";
 import { WorkspaceSidebarFoldersList } from "./WorkspaceSidebarFoldersList";
 import { WorkspaceSidebarNavLinks } from "./WorkspaceSidebarNavLinks ";
 
@@ -56,7 +58,13 @@ export const WorkspaceSidebar = ({
   const navigate = useNavigate();
 
   return (
-    <aside className="w-64 border-r  flex flex-col bg-gradient-to-b from-background/80 via-background/60 to-background/30 backdrop-blur-xl shadow-inner">
+    <motion.aside
+      variants={sidebarVariants}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="w-64 border-r  flex flex-col bg-gradient-to-b from-background/80 via-background/60 to-background/30 backdrop-blur-xl shadow-inner"
+    >
       <div className="border-b flex flex-col px-2 pt-2 pb-2">
         <DropdownMenu>
           <DropdownMenuTrigger className="flex items-center hover:bg-muted/15 gap-3 p-3 mb-3 rounded-xl bg-gradient-to-r from-background/20 via-background/10 to-background/20 shadow-sm w-full justify-between">
@@ -138,6 +146,6 @@ export const WorkspaceSidebar = ({
           Powrót do BW
         </Button>
       </div>
-    </aside>
+    </motion.aside>
   );
 };

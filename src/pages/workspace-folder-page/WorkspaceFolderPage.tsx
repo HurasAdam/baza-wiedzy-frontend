@@ -1,6 +1,8 @@
+import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { useOutletContext, useParams, useSearchParams } from "react-router-dom";
 import WorkspaceArticleDrawer from "../../components/workspace-article-drawer/WorkspaceArticleDrawer";
+import * as animation from "../../constants/animations";
 import { useFindArticlesByFolderQuery } from "../../hooks/workspace-articles/use-workspace-articles";
 import { useFindOneWorkspaceFolderQuery } from "../../hooks/workspace-folders/use-workspace-folder";
 import WorkspaceArticleFilters from "./components/WorkspaceArticleFilters";
@@ -65,7 +67,13 @@ export function WorkspaceFolderPage() {
   }, [isDrawerOpen]);
 
   return (
-    <div className="flex flex-col pb-5 max-w-[1380px] mx-auto ">
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="flex flex-col pb-5 max-w-[1380px] mx-auto "
+    >
       <WorkspaceFolderHeader folder={folderData} isLoading={isFolderDataLoading} permissions={permissions} />
 
       <WorkspaceArticleFilters
@@ -104,6 +112,6 @@ export function WorkspaceFolderPage() {
           if (!open) setSelectedArticleId(null);
         }}
       />
-    </div>
+    </motion.div>
   );
 }
