@@ -235,7 +235,7 @@ const Header = ({
                   <Plus className="w-5 h-5" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent className="bg-muted">Dodaj artykuł</TooltipContent>
+              <TooltipContent className="text-xs">Dodaj artykuł</TooltipContent>
             </Tooltip>
           )}
 
@@ -271,10 +271,10 @@ const Header = ({
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button variant="secondary" size="icon" className="" onClick={onOpenCreateIssueReport}>
-                  <Bug className="w-5 h-5 text-foreground group-hover:text-destructive/60" />
+                  <Bug className="w-5 h-5" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent className="text-sm rounded-md px-2 py-1 shadow-md bg-muted">Zgłoś problem</TooltipContent>
+              <TooltipContent className="text-xs">Zgłoś problem</TooltipContent>
             </Tooltip>
           )}
           {userPermissions.includes("ACCESS_ADMIN_PANEL") && (
