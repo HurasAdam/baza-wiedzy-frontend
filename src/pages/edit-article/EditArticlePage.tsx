@@ -46,6 +46,7 @@ export const EditArticlePage = ({ articleId, onEditCancel }: EditArticlePageProp
 
     const dto: ArticleCreateDto = {
       ...formData,
+      product: formData.product.value,
       tags: formData.tags.map((tag) => tag.value),
     };
 
@@ -66,7 +67,7 @@ export const EditArticlePage = ({ articleId, onEditCancel }: EditArticlePageProp
                 <strong style={{ fontWeight: 600, marginBottom: 4 }}>Tytuł artykułu jest już zajęty</strong>
                 <span>Istnieje już artykuł o takim samym tytule...</span>
               </div>,
-              { duration: 6200 }
+              { duration: 6200 },
             );
             return;
           } else if (status === 403) {
@@ -76,47 +77,52 @@ export const EditArticlePage = ({ articleId, onEditCancel }: EditArticlePageProp
             toast.error("Wystąpił błąd, spróbuj ponownie");
           }
         },
-      }
+      },
     );
   };
-
+  console.log("A", article);
   const handleSave = (formData: ArticleFormData) => onSave({ articleId, formData });
 
   const form = useForm<ArticleFormData>({
     resolver: zodResolver(articleSchema),
     defaultValues: {
       title: article?.title ?? "",
-      product: article?.product?._id ?? "",
-      category: article?.category?._id ?? "",
-      tags: article ? article.tags.map((tag) => ({ label: tag.name, value: tag._id })) : [],
-      responseVariants: article?.responseVariants.map((cd) => ({
-        version: typeof cd.version === "number" ? cd.version : parseInt(cd.version ?? "1", 10),
-        variantContent: cd.variantContent ?? "",
-        variantName: cd.variantName ?? "",
-      })) ?? [{ version: 1, variantContent: "", variantName: "" }],
+      product: article?.product
+        ? { label: article.product.name, value: article.product._id }
+        : { label: "", value: "" },
+      category: article?.category
+        ? { label: article.category.name, value: article.category._id }
+        : { label: "", value: "" },
+      tags: article?.tags.map((tag) => ({ label: tag.name, value: tag._id })) ?? [],
+      responseVariants: article?.responseVariants.map((rv) => ({
+        version: typeof rv.version === "number" ? rv.version : parseInt(rv.version ?? "1", 10),
+        variantName: rv.variantName ?? "",
+        variantContent: rv.variantContent ?? "",
+      })) ?? [{ version: 1, variantName: "", variantContent: "" }],
       employeeDescription: article?.employeeDescription ?? "",
       file: [],
     },
   });
+
   const { isDirty } = form.formState;
   const handleSubmit = form.handleSubmit(handleSave);
 
   const formattedProducts: SelectOption[] = mapToSelectOptions<IProduct>(
     products,
     (p) => p.name,
-    (p) => p._id
+    (p) => p._id,
   );
 
   const formattedCategoriesBySelectedProduct: SelectOption[] = mapToSelectOptions<ProductCategory>(
     categories,
     (c) => c.name,
-    (c) => c._id
+    (c) => c._id,
   );
 
   const formattedTags: SelectOption[] = mapToSelectOptions<Tag>(
     tags?.tags ?? [],
     (t) => t.name,
-    (t) => t._id
+    (t) => t._id,
   );
 
   useEffect(() => {

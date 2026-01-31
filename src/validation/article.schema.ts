@@ -4,12 +4,19 @@ export const articleSchema = z.object({
   title: z.string().min(3, { message: "Tytuł artykułu musi zawierać co najmniej 3 znaki." }).max(200, {
     message: "Tytuł artykułu może zawierać maksymalnie 200 znaków.",
   }),
-  product: z.string().min(1, {
-    message: "Produkt jest wymagany. Wybierz jedną z dostępnych opcji.",
-  }),
-  category: z.string().min(1, {
-    message: "Kategoria jest wymagana. Wybierz jedną z dostępnych opcji.",
-  }),
+  product: z
+    .object({
+      value: z.string(),
+      label: z.string(),
+      color: z.string().optional(),
+    })
+    .refine((val) => !!val.value, { message: "Produkt jest wymagany. Wybierz jedną z dostępnych opcji." }),
+  category: z
+    .object({
+      value: z.string(),
+      label: z.string(),
+    })
+    .refine((val) => !!val.value, { message: "Kategoria jest wymagana. Wybierz jedną z dostępnych opcji." }),
   tags: z
     .array(z.object({ value: z.string(), label: z.string() }))
     .nonempty({ message: "Wybierz co najmniej jeden tag." }),
@@ -33,7 +40,7 @@ export const articleSchema = z.object({
           .max(9000, {
             message: "Treść odpowiedzi dla klienta może zawierać maksymalnie 9000 znaków.",
           }),
-      })
+      }),
     )
     .min(1),
   employeeDescription: z
@@ -49,11 +56,11 @@ export const articleSchema = z.object({
 
 export type ArticleFormData = z.infer<typeof articleSchema>;
 
-// Typ do wysłania na API, gdzie tags to string[]
-export type ArticleCreateDto = Omit<ArticleFormData, "tags"> & {
+export type ArticleCreateDto = Omit<ArticleFormData, "tags" | "product" | "category"> & {
   tags: string[];
+  product: string;
+  category: string;
 };
-
 export type RejectArticleDto = {
   articleId: string;
   rejectionReason: string;

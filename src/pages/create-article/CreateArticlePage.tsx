@@ -14,7 +14,7 @@ import { useFindTagsQuery } from "../../hooks/tags/use-tags";
 import type { IProduct } from "../../types/product";
 import type { ProductCategory } from "../../types/product-category";
 import type { Tag } from "../../types/tags";
-import { mapToSelectOptions } from "../../utils/form-mappers";
+import { mapToSelectOptions, mapToSelectProductOptions } from "../../utils/form-mappers";
 import { articleSchema, type ArticleCreateDto, type ArticleFormData } from "../../validation/article.schema";
 import { Banner } from "./components/Banner";
 import { Header } from "./components/Header";
@@ -29,6 +29,8 @@ export const CreateArticlePage = () => {
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const { data: products = [] } = useFindProductsQuery();
 
+  console.log("WYBRANY PRODUTK TO", selectedProductId);
+
   const { data: categories = [], isLoading: loadingCategories } = useFindCategoriesByProductQuery(selectedProductId);
   const { data: tags, isLoading: loadingTags } = useFindTagsQuery();
 
@@ -37,6 +39,8 @@ export const CreateArticlePage = () => {
   const onSave = (formData: ArticleFormData) => {
     const dto: ArticleCreateDto = {
       ...formData,
+      product: formData.product.value,
+      category: formData.category.value,
       tags: formData.tags.map((tag: { label: string; value: string }) => tag.value),
     };
 
@@ -83,8 +87,8 @@ export const CreateArticlePage = () => {
     resolver: zodResolver(articleSchema),
     defaultValues: {
       title: "",
-      product: "",
-      category: "",
+      product: { label: "", value: "" },
+      category: { label: "", value: "" },
       tags: [],
       responseVariants: [
         {
@@ -101,10 +105,11 @@ export const CreateArticlePage = () => {
   const handleSubmit = form.handleSubmit(onSave);
   const { isDirty } = form.formState;
 
-  const formattedProducts: SelectOption[] = mapToSelectOptions<IProduct>(
+  const formattedProducts: SelectOption[] = mapToSelectProductOptions<IProduct>(
     products,
     (p) => p.name,
     (p) => p._id,
+    (p) => p.labelColor,
   );
 
   const formattedCategoriesBySelectedProduct: SelectOption[] = mapToSelectOptions<ProductCategory>(

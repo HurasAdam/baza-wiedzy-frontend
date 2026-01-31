@@ -1,5 +1,7 @@
-import { BoxIcon, Hash, Link, Loader, PersonStanding, Plus, Type } from "lucide-react";
+import { Box, BoxIcon, CheckIcon, ChevronsUpDownIcon, Hash, Link, PersonStanding, Plus, Type } from "lucide-react";
+import { useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
+import { cn } from "../../lib/utils";
 import type { SelectOption } from "../../pages/create-article/CreateArticlePage";
 import type { Article } from "../../types/article";
 import { type ArticleFormData } from "../../validation/article.schema";
@@ -7,9 +9,10 @@ import MultipleSelector from "../shared/multiple-selector";
 import { RequiredLabel } from "../shared/required-label";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../ui/command";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Textarea } from "../ui/textarea";
 import { TooltipProvider } from "../ui/tooltip";
 import ArticleResponseVariantCard from "./article-response-variant-card";
@@ -17,7 +20,7 @@ import ArticleResponseVariantCard from "./article-response-variant-card";
 interface ArticleFormProps {
   article?: Article;
   tags: SelectOption[];
-  products: SelectOption[];
+  products: (SelectOption & { color: string })[];
   categories: SelectOption[];
   onProductChange: (productId: string) => void;
   loadingCategories: boolean;
@@ -26,6 +29,11 @@ interface ArticleFormProps {
 const ArticleForm = ({ tags, products, categories, onProductChange, loadingCategories }: ArticleFormProps) => {
   const form = useFormContext<ArticleFormData>();
   const { fields, append, remove } = useFieldArray({ control: form.control, name: "responseVariants" });
+
+  const [open, setOpen] = useState(false);
+  const [openCategories, setOpenCategories] = useState(false);
+  const [productValue, setProductValue] = useState("");
+  const [categoryValue, setCategoryValue] = useState("");
 
   return (
     <Form {...form}>
@@ -130,34 +138,78 @@ const ArticleForm = ({ tags, products, categories, onProductChange, loadingCateg
                 <FormField
                   control={form.control}
                   name="product"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Select
-                          value={field.value}
-                          onValueChange={(val) => {
-                            field.onChange(val);
-                            onProductChange(val);
-                          }}
-                        >
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Wybierz produkt" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {products.map(({ label, value }) => (
-                              <SelectItem key={value} value={value}>
-                                {label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormDescription className="mt-3 text-[13px] text-muted-foreground">
-                        Wybierz produkt, którego dotyczy artykuł, aby zapewnić jego prawidłową kategoryzację.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <Popover open={open} onOpenChange={setOpen}>
+                          <FormControl>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                aria-expanded={open}
+                                className="min-w-[200px]max-w-xs justify-between bg-transparent"
+                                aria-label="product combobox"
+                              >
+                                {field.value.value ? (
+                                  products.find((method) => method.label === field.value.label)?.label
+                                ) : (
+                                  <span className="text-muted-foreground">Wybierz produkt...</span>
+                                )}
+                                <ChevronsUpDownIcon className="opacity-50" />
+                              </Button>
+                            </PopoverTrigger>
+                          </FormControl>
+                          <PopoverContent className="w-(--radix-popper-anchor-width) p-0">
+                            <Command>
+                              <CommandInput placeholder="Wyszukaj produkt... " />
+                              <CommandList className="scrollbar-custom ">
+                                <CommandEmpty>Brak wyników spełniających kryteria wyszukiwania</CommandEmpty>
+                                <CommandGroup>
+                                  {products.map((method) => (
+                                    <CommandItem
+                                      key={method.value}
+                                      value={method.label}
+                                      onSelect={() => {
+                                        setProductValue(method.value);
+                                        field.onChange(method);
+                                        onProductChange(method.value);
+                                        setOpen(false);
+                                      }}
+                                      className="group flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:bg-accent/60"
+                                    >
+                                      <div
+                                        className="flex items-center justify-center w-7 h-7 rounded-xl border shadow-sm transition-all group-hover:shadow-md"
+                                        style={{
+                                          borderColor: `${method.color}35`,
+                                          backgroundColor: `${method.color}35`,
+                                        }}
+                                      >
+                                        <Box size={18} style={{ color: method.color }} />
+                                      </div>
+
+                                      <span className="font-medium">{method.label}</span>
+
+                                      <CheckIcon
+                                        className={cn(
+                                          "ml-auto transition-opacity text-primary",
+                                          productValue === method.value ? "opacity-100" : "opacity-0",
+                                        )}
+                                      />
+                                    </CommandItem>
+                                  ))}
+                                </CommandGroup>
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+                        <FormDescription className="mt-3 text-[13px] text-muted-foreground">
+                          Wybierz produkt, którego dotyczy artykuł, aby zapewnić jego prawidłową kategoryzację.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
                 />
               </CardContent>
             </Card>
@@ -178,25 +230,73 @@ const ArticleForm = ({ tags, products, categories, onProductChange, loadingCateg
                   name="category"
                   render={({ field }) => (
                     <FormItem>
-                      <FormControl>
-                        <Select value={field.value} onValueChange={field.onChange} disabled={loadingCategories}>
-                          <SelectTrigger className="w-full">
-                            {loadingCategories ? (
-                              <Loader className="animate-spin w-4 h-4" />
-                            ) : (
-                              <SelectValue placeholder="Wybierz kategorię" />
-                            )}
-                          </SelectTrigger>
-                          <SelectContent>
-                            {categories.map(({ label, value }) => (
-                              <SelectItem key={value} value={value}>
-                                {label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormDescription className="mt-3 text-[13px]">
+                      <Popover open={openCategories} onOpenChange={setOpenCategories}>
+                        <FormControl>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              aria-expanded={openCategories}
+                              className="min-w-[200px]max-w-xs justify-between bg-transparent "
+                              aria-label="category combobox"
+                            >
+                              {field.value.value ? (
+                                categories.find((method) => method.label === field.value.label)?.label
+                              ) : (
+                                <span className="text-muted-foreground">Wybierz kategorie..</span>
+                              )}
+                              <ChevronsUpDownIcon className="opacity-50" />
+                            </Button>
+                          </PopoverTrigger>
+                        </FormControl>
+                        <PopoverContent
+                          className="w-(--radix-popper-anchor-width) p-0 "
+                          side="bottom"
+                          align="start"
+                          avoidCollisions={false}
+                        >
+                          <Command>
+                            <CommandInput placeholder="Wyszukaj kategorie.." />
+                            <CommandList className="scrollbar-custom ">
+                              <CommandEmpty>Brak kategorii spełniających kryteria wyszukiwania</CommandEmpty>
+                              <CommandGroup>
+                                {categories.map((option) => (
+                                  <CommandItem
+                                    key={option.value}
+                                    value={option.label}
+                                    onSelect={() => {
+                                      field.onChange(option);
+                                      setCategoryValue(option.value);
+                                      setOpenCategories(false);
+                                    }}
+                                    className={cn(
+                                      "group flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer transition-all duration-150 ease-in-out",
+                                      categoryValue === option.value ? "bg-card shadow-sm" : "hover:bg-accent/10",
+                                    )}
+                                  >
+                                    <div className="flex items-center justify-center w-5 h-5 rounded-sm">
+                                      <Link
+                                        size={14}
+                                        className="text-muted-foreground group-hover:text-foreground transition-colors"
+                                      />
+                                    </div>
+
+                                    <span className="font-medium text-header-foreground truncate">{option.label}</span>
+
+                                    <CheckIcon
+                                      className={cn(
+                                        "ml-auto w-4 h-4 transition-opacity duration-200",
+                                        categoryValue === option.value ? "opacity-100 text-primary" : "opacity-0",
+                                      )}
+                                    />
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                      <FormDescription className="mt-3 text-[13px] text-muted-foreground">
                         Wybierz kategorię pasującą do treści artykułu - lista zależy od wybranego produktu.
                       </FormDescription>
                       <FormMessage />
