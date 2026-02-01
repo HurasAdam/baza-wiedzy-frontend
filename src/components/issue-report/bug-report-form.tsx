@@ -84,7 +84,7 @@ const BugReportForm = ({ onSend, isLoading }: Props) => {
                 <RequiredLabel>Tytuł błędu</RequiredLabel>
               </FormLabel>
               <FormControl>
-                <Input placeholder="Np. Aplikacja zawiesza się po zapisaniu formularza" {...field} />
+                <Input placeholder="Np. Aplikacja zawiesza się po wysłaniu danych formularza" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

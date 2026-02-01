@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { AxiosError } from "axios";
 import { Loader, MessageSquare, MessagesSquare, Save } from "lucide-react";
 import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -67,7 +68,21 @@ export const EditFunnyMessageModal = ({
           queryClient.invalidateQueries({ queryKey: ["funny-messages"] });
           onClose();
         },
-      }
+        onError: (error) => {
+          const { status } = error as AxiosError;
+
+          if (status === 403) {
+            toast.error("Brak uprawnień", {
+              description: "Nie posiadasz wymaganych uprawnień do wykonania tej operacji.",
+              position: "bottom-right",
+              duration: 7000,
+            });
+            return;
+          }
+
+          toast.error("Wystapił błąd, spróbuj ponownie");
+        },
+      },
     );
   };
 
