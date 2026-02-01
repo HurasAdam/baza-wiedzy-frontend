@@ -94,7 +94,7 @@ const IssueReportsList = ({ isLoading, isError, error, reports, navigate }: Issu
                       className="inline-flex items-center px-2 py-[1px] mt-1 rounded-full text-[9px] font-medium uppercase tracking-wide w-fit
                    bg-muted/10 text-muted-foreground border border-muted/20"
                     >
-                      {report.category}
+                      {report.category.slug}
                     </span>
                   </div>
                 </div>

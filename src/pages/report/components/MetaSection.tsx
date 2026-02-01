@@ -42,10 +42,11 @@ export function MetaSection({ report }: Props) {
             label="Status"
             value={<Badge className={`${status.badge} border-none px-2 py-1`}>{status.label}</Badge>}
           />
-          <MetaRow
+          <CategoryMetaRow
             icon={<Shapes className="w-5 h-5 text-muted-foreground" />}
             label="Kategoria"
-            value={report.category}
+            slug={report.category.slug}
+            slugValue={report.category.label}
           />
           <MetaRow
             icon={<Calendar className="w-5 h-5 text-muted-foreground" />}
@@ -77,6 +78,27 @@ function MetaRow({ icon, label, value }: { icon: React.ReactNode; label: string;
       <div className="flex-1 flex justify-between items-center min-w-0">
         <span className="text-xs text-muted-foreground uppercase tracking-wide">{label}</span>
         <span className="text-sm font-medium text-right">{value}</span>
+      </div>
+    </div>
+  );
+}
+
+function CategoryMetaRow({ icon, slug, slugValue }: { icon: React.ReactNode; slug: string; slugValue: string }) {
+  return (
+    <div className="flex flex-col gap-2 py-3">
+      {/* Nagłówek z ikoną i slug */}
+      <div className="flex items-center gap-2">
+        <div className="flex-shrink-0 flex items-center justify-center p-2 rounded-md bg-card border shadow-sm">
+          {icon}
+        </div>
+        <span className="inline-block px-3 py-1 text-sm font-semibold text-primary bg-primary/10 rounded-full shadow-sm">
+          {slug}
+        </span>
+      </div>
+
+      {/* Dokładny label pod spodem */}
+      <div className="ml-10">
+        <span className="text-[13px] text-muted-foreground">{slugValue}</span>
       </div>
     </div>
   );

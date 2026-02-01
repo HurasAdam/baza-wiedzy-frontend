@@ -8,12 +8,12 @@ interface Props {
 export const ProposalDescription = ({ report }: Props) => {
   return (
     <div className="space-y-4">
-      <DescriptionCard title="Opis propozycji" icon={<FileTextIcon />}>
+      <DescriptionCard className="min-h-[255px]" title="Opis propozycji" icon={<FileTextIcon />}>
         {report.currentBehavior}
       </DescriptionCard>
 
       {report.expectedBehavior && (
-        <DescriptionCard title="Przewidywana korzyść" icon="✅">
+        <DescriptionCard className="min-h-[255px]" title="Przewidywana korzyść" icon="✅">
           {report.expectedBehavior}
         </DescriptionCard>
       )}

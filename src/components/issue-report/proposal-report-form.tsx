@@ -1,79 +1,97 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CloudUpload, Loader, Paperclip } from "lucide-react";
+import { Loader } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { z } from "zod";
-import { FileInput, FileUploader, FileUploaderContent, FileUploaderItem } from "../shared/fileUploader";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
-const validCategories = ["Interfejs (UI)", "Backend", "Wydajność", "Inne"] as const;
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+
+export const proposalCategoriesByModule = {
+  "Interfejs i UX": [
+    { slug: "poprawa-ui", label: "Poprawa interfejsu (UI)", icon: "🎨" },
+    { slug: "ulepszenie-nawigacji", label: "Ułatwienie nawigacji / UX", icon: "🖱️" },
+    { slug: "nowe-elementy-wizualne", label: "Nowe elementy wizualne", icon: "✨" },
+  ],
+  Funkcjonalność: [
+    { slug: "nowa-funkcja", label: "Nowa funkcja / moduł", icon: "🛠️" },
+    { slug: "rozszerzenie-funkcji", label: "Rozszerzenie istniejącej funkcji", icon: "➕" },
+  ],
+  Powiadomienia: [
+    { slug: "nowe-powiadomienia", label: "Nowe powiadomienia / alerty", icon: "🔔" },
+    { slug: "usprawnienie-komunikatow", label: "Usprawnienie komunikatów dla użytkownika", icon: "📣" },
+  ],
+  PanelAdmina: [
+    { slug: "ulepszenia-panelu", label: "Ulepszenia panelu administracyjnego", icon: "🛡️" },
+    { slug: "raporty-statystyki", label: "Nowe raporty / statystyki", icon: "📊" },
+    { slug: "zarzadzanie-rolami", label: "Zarządzanie rolami / uprawnieniami", icon: "👥" },
+  ],
+  Inne: [{ slug: "ogolne-sugestie", label: "Ogólne sugestie", icon: "⚙️" }],
+};
+
+const formSchema = z.object({
+  type: z.literal("proposal"),
+  title: z.string().trim().min(3, { message: "Tytuł propozycji powinien zawierać conajmniej 3 znaki" }).max(120),
+  category: z.object({
+    slug: z.string().min(1),
+    label: z.string().min(1),
+  }),
+  currentBehavior: z.string().trim().min(10, { message: "Opis propozycji powinien zawierać conajmniej 10 znaków" }),
+  expectedBehavior: z
+    .string()
+    .trim()
+    .min(10, { message: "Opis korzyści powinien zawierać conajmniej 10 znaków" })
+    .optional(),
+  file: z.array(z.instanceof(File)).optional(),
+});
+
+export type ProposalReportFormValues = z.infer<typeof formSchema>;
 
 interface Props {
-  onSend: (formData: any) => void;
+  onSend: (formData: ProposalReportFormValues) => void;
   isLoading?: boolean;
 }
 
 const ProposalReportForm = ({ onSend, isLoading }: Props) => {
-  const allowedFormats = ["image/svg+xml", "image/png", "image/jpeg", "image/gif"];
-  const fileSchema = z
-    .instanceof(File)
-    .refine((file) => file.size <= 1024 * 1024 * 4, { message: "Maksymalny rozmiar pliku to 4 MB." })
-    .refine((file) => allowedFormats.includes(file.type), {
-      message: "Obsługiwane formaty plików: SVG, PNG, JPG, GIF.",
-    });
-
-  const dropZoneConfig = { maxFiles: 5, maxSize: 1024 * 1024 * 4, multiple: true };
-
-  const formSchema = z.object({
-    type: z.literal("proposal"),
-    title: z.string().trim().min(3).max(120),
-    category: z.enum(validCategories),
-    currentBehavior: z.string().trim().min(6).max(9000),
-    expectedBehavior: z.string().trim().min(6).max(9000).optional(),
-    file: z.array(fileSchema).optional(),
-  });
-
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<ProposalReportFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       type: "proposal",
       title: "",
-      category: validCategories[0],
+      category: { slug: "", label: "" },
       currentBehavior: "",
       expectedBehavior: "",
       file: [],
     },
   });
 
-  const [files, setFiles] = useState<File[]>([]);
-
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    try {
-      onSend(values);
-    } catch (err) {
-      toast.error("Nie udało się wysłać zgłoszenia");
-      console.error(err);
-    }
-  };
+  function onSubmit(values: ProposalReportFormValues) {
+    onSend(values);
+  }
 
   const RequiredLabel = ({ children }: { children: React.ReactNode }) => (
     <span>
-      {children} <span className="text-primary ml-0.5">*</span>
+      {children}
+      <span className="text-primary ml-0.5">*</span>
     </span>
   );
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 mx-auto rounded-xl px-6.5 pt-3 bg-background shadow-sm"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mx-auto px-6.5 pt-3 rounded-xl bg-background">
+        {/* Tytuł */}
         <FormField
           control={form.control}
           name="title"
@@ -83,30 +101,42 @@ const ProposalReportForm = ({ onSend, isLoading }: Props) => {
                 <RequiredLabel>Tytuł propozycji</RequiredLabel>
               </FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Np. Dodanie filtra zadań" />
+                <Input placeholder="Np. Dodanie nowego filtra w wyszukiwarce artykułów" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
+        {/* Kategoria */}
         <FormField
           control={form.control}
           name="category"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Kategoria</FormLabel>
-              <Select onValueChange={field.onChange} value={field.value}>
+              <Select value={JSON.stringify(field.value)} onValueChange={(val) => field.onChange(JSON.parse(val))}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger className="min-w-[550px]">
                     <SelectValue placeholder="Wybierz kategorię" />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent>
-                  {validCategories.map((cat) => (
-                    <SelectItem key={cat} value={cat}>
-                      {cat}
-                    </SelectItem>
+                <SelectContent className="max-h-[440px] overflow-y-auto">
+                  {Object.entries(proposalCategoriesByModule).map(([moduleSlug, categories], idx, arr) => (
+                    <div key={moduleSlug}>
+                      <SelectGroup>
+                        <SelectLabel>{moduleSlug}</SelectLabel>
+                        {categories.map((cat) => (
+                          <SelectItem key={cat.slug} value={JSON.stringify({ slug: moduleSlug, label: cat.slug })}>
+                            <span className="flex items-center gap-2 text-sm">
+                              <span>{cat.icon}</span>
+                              <span>{cat.label}</span>
+                            </span>
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                      {idx < arr.length - 1 && <SelectSeparator />}
+                    </div>
                   ))}
                 </SelectContent>
               </Select>
@@ -115,6 +145,7 @@ const ProposalReportForm = ({ onSend, isLoading }: Props) => {
           )}
         />
 
+        {/* Current Behavior */}
         <FormField
           control={form.control}
           name="currentBehavior"
@@ -124,65 +155,33 @@ const ProposalReportForm = ({ onSend, isLoading }: Props) => {
                 <RequiredLabel>Opis propozycji</RequiredLabel>
               </FormLabel>
               <FormControl>
-                <Textarea {...field} placeholder="Opisz propozycję" className="min-h-[120px]" />
+                <Textarea className="min-h-[120px]" placeholder="Opisz propozycję" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
+        {/* Expected Behavior */}
         <FormField
           control={form.control}
           name="expectedBehavior"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Przewidywana korzyść (opcjonalnie)</FormLabel>
+              <FormLabel>Przewidywana korzyść</FormLabel>
               <FormControl>
-                <Textarea {...field} placeholder="Co zyska użytkownik po wdrożeniu?" className="min-h-[80px]" />
+                <Textarea className="min-h-[80px]" placeholder="Co zyska użytkownik po wdrożeniu?" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="file"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                Dodaj załącznik <span className="text-foreground/65 text-xs">(Opcjonalnie)</span>
-              </FormLabel>
-              <FormControl>
-                <FileUploader
-                  value={files}
-                  onValueChange={setFiles}
-                  dropzoneOptions={dropZoneConfig}
-                  className="rounded-lg border p-2"
-                >
-                  <FileInput id="fileInput">
-                    <div className="flex flex-col items-center justify-center p-6 w-full">
-                      <CloudUpload className="w-8 h-8 text-gray-500" />
-                      <p className="text-xs text-gray-500">Kliknij lub przeciągnij plik tutaj (SVG, PNG, JPG, GIF)</p>
-                    </div>
-                  </FileInput>
-                  <FileUploaderContent>
-                    {files.map((f, i) => (
-                      <FileUploaderItem key={i} index={i}>
-                        <Paperclip className="h-4 w-4" />
-                        <span>{f.name}</span>
-                      </FileUploaderItem>
-                    ))}
-                  </FileUploaderContent>
-                </FileUploader>
-              </FormControl>
-            </FormItem>
-          )}
-        />
-
-        <div className="flex justify-end items-center">
-          <Button disabled={isLoading} type="submit" className="px-8 bg-primary/80 hover:bg-primary/90">
-            {isLoading && <Loader className="animate-spin mr-2" />} Wyślij propozycję
+        {/* Submit */}
+        <div className="flex justify-end">
+          <Button disabled={isLoading} type="submit" className="px-8">
+            {isLoading && <Loader className="animate-spin mr-2" />}
+            Wyślij propozycję
           </Button>
         </div>
       </form>
