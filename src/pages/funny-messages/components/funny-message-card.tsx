@@ -13,9 +13,10 @@ interface IFunnyMessageCardProps {
   onEdit?: (msgId: string) => void;
   onDelete?: (msg: IFunnyMessage) => void;
   currentUserId?: string;
+  canEdit?: boolean;
 }
 
-const FunnyMessageCard = ({ msg, onEdit, onDelete, currentUserId }: IFunnyMessageCardProps) => {
+const FunnyMessageCard = ({ msg, onEdit, onDelete, currentUserId, canEdit }: IFunnyMessageCardProps) => {
   return (
     <article
       aria-label={`Wiadomość: ${msg.title}`}
@@ -45,7 +46,7 @@ const FunnyMessageCard = ({ msg, onEdit, onDelete, currentUserId }: IFunnyMessag
             {new Date(msg.createdAt).toLocaleDateString()}
           </time>
 
-          {msg.createdBy._id === currentUserId && (
+          {msg.createdBy._id === currentUserId || canEdit ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon">
@@ -61,6 +62,8 @@ const FunnyMessageCard = ({ msg, onEdit, onDelete, currentUserId }: IFunnyMessag
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+          ) : (
+            <div className="w-3 h-3 mr-3.5" />
           )}
         </div>
       </header>

@@ -12,6 +12,7 @@ interface IFunnyMessagesListProps {
   onDelete?: (msg: IFunnyMessage) => void;
   onCreate?: () => void;
   canCreate?: boolean;
+  canEdit?: boolean;
   hasActiveFilters?: boolean;
 }
 
@@ -23,6 +24,7 @@ export const FunnyMessagesList = ({
   onDelete,
   onCreate,
   canCreate,
+  canEdit,
   hasActiveFilters = false,
 }: IFunnyMessagesListProps) => {
   if (isLoading) {
@@ -54,7 +56,14 @@ export const FunnyMessagesList = ({
   return (
     <div className="flex flex-col gap-4 mt-6">
       {messages.map((msg) => (
-        <FunnyMessageCard key={msg._id} msg={msg} currentUserId={currentUserId} onEdit={onEdit} onDelete={onDelete} />
+        <FunnyMessageCard
+          key={msg._id}
+          msg={msg}
+          currentUserId={currentUserId}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          canEdit={canEdit}
+        />
       ))}
     </div>
   );

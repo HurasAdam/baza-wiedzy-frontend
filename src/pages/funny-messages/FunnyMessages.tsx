@@ -106,6 +106,7 @@ export const FunnyMessages = () => {
           onDelete={onDeleteClick}
           onCreate={onCreateFunnyMessage}
           canCreate={userPermissions.includes("ADD_FUN_MESSAGE")}
+          canEdit={userPermissions.includes("EDIT_FUN_MESSAGE")}
           hasActiveFilters={hasFilters}
         />
       </div>

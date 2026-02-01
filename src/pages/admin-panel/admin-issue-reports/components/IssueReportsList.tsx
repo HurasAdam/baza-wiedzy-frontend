@@ -1,5 +1,4 @@
 import { Bug, Ellipsis, Lightbulb, Loader } from "lucide-react";
-import { toast } from "sonner";
 import { Dropdown } from "../../../../components/Dropdown";
 import { Badge } from "../../../../components/ui/badge";
 import { Button } from "../../../../components/ui/button";
@@ -123,11 +122,6 @@ const IssueReportsList = ({ isLoading, isError, error, reports, navigate }: Issu
                         label: "Szczegóły",
                         icon: <Bug className="w-4 h-4" />,
                         actionHandler: () => navigate(`/reports/${report._id}`),
-                      },
-                      {
-                        label: "Usuń",
-                        icon: <Bug className="w-4 h-4 text-red-500" />,
-                        actionHandler: () => toast.error(`Usuń ${report.title}`),
                       },
                     ]}
                     position={{ align: "end" }}
