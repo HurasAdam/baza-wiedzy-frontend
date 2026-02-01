@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { toast } from "sonner";
@@ -7,6 +8,7 @@ import { MarkWithFlagArticleModal } from "../../../components/flag/mark-with-fla
 import { ArticleChangesRejectionModal } from "../../../components/pending-articles/article-changes-rejection-modal";
 import { Alert } from "../../../components/shared/alert-modal";
 import queryClient from "../../../config/query.client";
+import * as animation from "../../../constants/animations";
 import {
   useCreateArticleUserFlagMutation,
   useUnflagArticleUserFlagMutation,
@@ -228,7 +230,13 @@ export const Articlev2MainPage = () => {
   };
 
   return (
-    <div className="mx-auto h-full">
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="mx-auto h-full"
+    >
       {/* Header */}
 
       <ArticleMainPageHeader
@@ -394,6 +402,6 @@ export const Articlev2MainPage = () => {
         setIsCreatingArticleRejection={setIsRejectingArticle}
         isPending={isRejectionLoading}
       />
-    </div>
+    </motion.div>
   );
 };

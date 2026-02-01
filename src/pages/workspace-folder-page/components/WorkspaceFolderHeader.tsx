@@ -46,7 +46,7 @@ export function WorkspaceFolderHeader({ folder, isLoading, permissions }: Worksp
   }
 
   return (
-    <div className="flex items-center justify-between shadow-sm bg-background  pb-2 mb-4 ">
+    <div className="flex items-center justify-between  bg-background  pb-2 mb-4 ">
       {/* Left side */}
       <div className="flex items-center gap-3">
         <div className="p-3 bg-primary/10 rounded-xl">

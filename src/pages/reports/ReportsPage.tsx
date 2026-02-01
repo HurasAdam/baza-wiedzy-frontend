@@ -1,6 +1,8 @@
 import { useFindIssueReportsQuery } from "@/hooks/issue-report/use-issue-report";
+import { motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
+import * as animation from "../../constants/animations";
 import { useAuthQuery } from "../../hooks/auth/use-auth";
 import IssueReportsHeader from "../admin-panel/admin-issue-reports/components/IssueReportsHeader";
 import IssueReportsList from "../admin-panel/admin-issue-reports/components/IssueReportsList";
@@ -29,7 +31,13 @@ export const ReportsPage = () => {
   const { data: reports = [], isLoading, isError, error } = useFindIssueReportsQuery(params);
   const { onOpenCreateIssueReport } = useOutletContext<{ onOpenCreateIssueReport: () => void }>();
   return (
-    <div className="mx-auto pb-5 max-w-[1320px] flex flex-col bg-gradient-to-br from-background via-background/90 to-background/60 backdrop-blur-md">
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="mx-auto pb-5 max-w-[1320px] flex flex-col bg-gradient-to-br from-background via-background/90 to-background/60 backdrop-blur-md"
+    >
       <IssueReportsHeader
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
@@ -43,6 +51,6 @@ export const ReportsPage = () => {
       />
 
       <IssueReportsList reports={reports} isLoading={isLoading} isError={isError} error={error} navigate={navigate} />
-    </div>
+    </motion.div>
   );
 };

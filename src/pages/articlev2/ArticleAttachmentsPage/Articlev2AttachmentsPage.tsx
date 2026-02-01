@@ -16,6 +16,7 @@ import { useState } from "react";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
+import { motion } from "framer-motion";
 import { ArticleAttachmentModal } from "../../../components/article-attachment/article-attachment-modal";
 import { AttachmentDescriptionModal } from "../../../components/attachment-description/attachment-description-modal";
 import { Alert } from "../../../components/shared/alert-modal";
@@ -29,6 +30,7 @@ import {
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu";
 import queryClient from "../../../config/query.client";
+import * as animation from "../../../constants/animations";
 import { ERROR_MESSAGES } from "../../../constants/error-messages";
 import {
   useDeleteArticleAttachmentMutation,
@@ -124,7 +126,13 @@ export const Articlev2AttachmentsPage = () => {
   };
 
   return (
-    <div className="space-y-8 mx-auto">
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="space-y-8 mx-auto"
+    >
       {/* ===== HEADER ===== */}
       <div className="flex items-center justify-between border-b border-border pb-4 mb-6">
         <div className="flex items-center gap-4">
@@ -260,6 +268,6 @@ export const Articlev2AttachmentsPage = () => {
           </>
         </Alert>
       )}
-    </div>
+    </motion.div>
   );
 };

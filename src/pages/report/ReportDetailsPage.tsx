@@ -3,17 +3,17 @@ import {
   useSendIssueReportCommentMutation,
 } from "@/hooks/issue-report-comments/use-issue-report-comment";
 import { useFindIssueReportQuery } from "@/hooks/issue-report/use-issue-report";
-
+import type { AxiosError } from "axios";
+import { motion } from "framer-motion";
 import { Loader } from "lucide-react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import queryClient from "../../config/query.client";
+import * as animation from "../../constants/animations";
+import { useAuthQuery } from "../../hooks/auth/use-auth";
 import { CommentFormSection } from "./components/CommentFormSection";
 import { CommentListSection } from "./components/CommentListSection";
-
-import type { AxiosError } from "axios";
-import { useAuthQuery } from "../../hooks/auth/use-auth";
 import { DetailsSection } from "./components/DetailsSection";
 import { Header } from "./components/Header";
 
@@ -69,7 +69,13 @@ export function ReportDetailsPage() {
   };
 
   return (
-    <div className="max-w-[1320px] mx-auto h-full">
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="max-w-[1320px] mx-auto h-full"
+    >
       <Header report={report} canManageReportStatus={userPermissions.includes("MANAGE_REPORT_STATUS")} />
 
       <DetailsSection report={report} />
@@ -83,6 +89,6 @@ export function ReportDetailsPage() {
       />
 
       <CommentListSection comments={comments} onDeleteComment={() => {}} onEditComment={() => {}} />
-    </div>
+    </motion.div>
   );
 }

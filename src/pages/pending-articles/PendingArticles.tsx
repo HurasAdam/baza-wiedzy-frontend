@@ -1,4 +1,5 @@
 import type { AxiosError } from "axios";
+import { motion } from "framer-motion";
 import { AlertTriangle, Clock, DiamondPlus } from "lucide-react";
 import React, { useState, type JSX } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -6,6 +7,7 @@ import { toast } from "sonner";
 import { PendingArticleRejectionModal } from "../../components/pending-articles/pending-article-rejection-modal";
 import { Alert } from "../../components/shared/alert-modal";
 import queryClient from "../../config/query.client";
+import * as animation from "../../constants/animations";
 import {
   useAproveArticleMutation,
   useFindArticlesQuery,
@@ -153,7 +155,13 @@ export const PendingArticles: React.FC = () => {
   };
 
   return (
-    <div className="pb-5 max-w-[1320px] mx-auto">
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="pb-5 max-w-[1320px] mx-auto"
+    >
       <PendingArticlesHeader
         currentStatus={currentStatus}
         setCurrentStatus={setCurrentStatus}
@@ -210,6 +218,6 @@ export const PendingArticles: React.FC = () => {
       >
         Czy na pewno chcesz zatwierdzić ten artykuł?
       </Alert>
-    </div>
+    </motion.div>
   );
 };

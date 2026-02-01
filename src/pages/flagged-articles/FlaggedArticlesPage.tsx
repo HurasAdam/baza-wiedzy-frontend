@@ -1,7 +1,9 @@
+import { motion } from "framer-motion";
 import React, { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import queryClient from "../../config/query.client";
+import * as animation from "../../constants/animations";
 import { useArticleToggleFavouriteMutation, useFindMyFlaggedArticlesQuery } from "../../hooks/articles/use-articles";
 import { useFindMyFlags } from "../../hooks/flag/user-flag";
 import { useFindCategoriesByProductQuery } from "../../hooks/product-categories/use-product-categories";
@@ -98,7 +100,13 @@ export const FlaggedArticlesPage: React.FC = () => {
   );
 
   return (
-    <div className="flex flex-col gap-2 pb-5 max-w-[1320px] mx-auto">
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="flex flex-col gap-2 pb-5 max-w-[1320px] mx-auto"
+    >
       <FlaggedArticlesHeader
         isLoading={isFlagsLoading}
         userFlags={userFlags}
@@ -134,6 +142,6 @@ export const FlaggedArticlesPage: React.FC = () => {
         selectedCategory={selectedCategory}
         pendingId={pendingId}
       />
-    </div>
+    </motion.div>
   );
 };

@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useFindArticleHistoryQuery } from "@/hooks/articles-history/use-articles-history";
+import { motion } from "framer-motion";
 import {
   ArrowLeft,
   CheckCircle,
@@ -18,6 +19,7 @@ import {
 } from "lucide-react";
 import { useMemo } from "react";
 import { Link, useNavigate, useOutletContext, useParams } from "react-router-dom";
+import * as animation from "../../../constants/animations";
 import type { ArticleOutletContext } from "../../article/ArticleMainPage";
 
 export function Articlev2HistoryPage() {
@@ -29,7 +31,13 @@ export function Articlev2HistoryPage() {
   const filtered = useMemo(() => historyList, [historyList]);
 
   return (
-    <div className="space-y-6 mx-auto h-full">
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="space-y-6 mx-auto h-full"
+    >
       {/* Nagłówek */}
       <div className="flex items-center justify-between border-b border-border pb-4 mb-6">
         <div className="flex items-center gap-4">
@@ -104,7 +112,7 @@ export function Articlev2HistoryPage() {
           );
         })}
       </div>
-    </div>
+    </motion.div>
   );
 }
 

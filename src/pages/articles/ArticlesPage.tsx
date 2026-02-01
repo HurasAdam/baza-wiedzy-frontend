@@ -1,9 +1,11 @@
+import { motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import ArticleDrawer from "../../components/article-drawer/ArticleDrawer";
 import Pagination from "../../components/shared/Pagination";
 import queryClient from "../../config/query.client";
+import * as animation from "../../constants/animations";
 import { useArticleToggleFavouriteMutation, useFindArticlesQuery } from "../../hooks/articles/use-articles";
 import { useFindCategoriesByProductQuery } from "../../hooks/product-categories/use-product-categories";
 import { useFindProductsQuery } from "../../hooks/products/use-products";
@@ -110,7 +112,13 @@ export const ArticlesPage: React.FC = () => {
   }, [isDrawerOpen]);
 
   return (
-    <div className="flex flex-col gap-1.5 pb-5 max-w-[1320px] mx-auto">
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="flex flex-col gap-1.5 pb-5 max-w-[1320px] mx-auto"
+    >
       <ArticlesFilterBar
         selectedTitle={titleParam}
         selectedProduct={selectedProduct}
@@ -163,6 +171,6 @@ export const ArticlesPage: React.FC = () => {
           if (!open) setSelectedArticleId(null);
         }}
       />
-    </div>
+    </motion.div>
   );
 };

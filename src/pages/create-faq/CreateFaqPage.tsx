@@ -1,11 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { AxiosError } from "axios";
+import { motion } from "framer-motion";
 import { Loader, Save } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import FaqForm from "../../components/faq/faq-form";
+import * as animation from "../../constants/animations";
 import { useCreateFaqMutaton } from "../../hooks/faq/use-faq";
 import { faqSchema, type FaqFormValues } from "../../validation/create-faq.schema";
 import { Banner } from "./components/Banner";
@@ -55,7 +57,13 @@ export function CreateFaqPage() {
   const handleSubmit = form.handleSubmit(onSave);
 
   return (
-    <div className="pb-5 max-w-[1400px] mx-auto min-h-screen flex flex-col">
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="pb-5 max-w-[1400px] mx-auto min-h-screen flex flex-col"
+    >
       <Header onBack={() => navigate(-1)} />
 
       <Banner canSave={canSave} isLoading={isPending} onSave={handleSubmit} onCancel={() => navigate(-1)} />
@@ -82,6 +90,6 @@ export function CreateFaqPage() {
           )}
         </Button>
       </div>
-    </div>
+    </motion.div>
   );
 }

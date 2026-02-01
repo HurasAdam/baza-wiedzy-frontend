@@ -30,8 +30,8 @@ export const pageScaleFadePremium = {
 
 export const pageFadePremium = {
   init: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.28, ease: easePremium } },
-  exit: { opacity: 0, transition: { duration: 0.28, ease: easePremium } },
+  visible: { opacity: 1, transition: { duration: 0.215, ease: easePremium } },
+  exit: { opacity: 0, transition: { duration: 0.215, ease: easePremium } },
 };
 
 export const sidebarVariants: Variants = {
@@ -74,4 +74,33 @@ export const modalVariants: Variants = {
       ease: "easeInOut",
     },
   },
+};
+
+// ADMIN SIDEBAR
+
+export const xd: [number, number, number, number] = [0.22, 1, 0.36, 1]; // smooth bez skoków
+
+export const adminSidebarVariants: Variants = {
+  collapsed: {
+    width: 64,
+    transition: { duration: 0.28, ease: xd },
+  },
+  expanded: {
+    width: 240,
+    transition: { duration: 0.28, ease: xd },
+  },
+};
+
+export const sidebarContentVariants: Variants = {
+  visible: {
+    transition: {
+      staggerChildren: 0.05,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+export const sidebarItemVariants: Variants = {
+  init: { x: -10, opacity: 0 },
+  visible: { x: 0, opacity: 1, transition: { duration: 0.25, ease: xd } },
 };

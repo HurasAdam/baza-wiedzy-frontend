@@ -1,6 +1,8 @@
+import { motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 import { JstProjectModal } from "../../components/jst-project/jst-project-modal";
 import { JstSchoolModal } from "../../components/jst-school/jst-school-modal";
+import * as animation from "../../constants/animations";
 import { useAuthQuery } from "../../hooks/auth/use-auth";
 import { useFindJstProjectsQuery } from "../../hooks/jst-projects/use-jst-projects";
 import { useFindJstSchoolsQuery } from "../../hooks/jst-schools/use-jst-schools";
@@ -44,7 +46,13 @@ export const JstProjectsPage = () => {
   const onCreateJstProject = () => setIsCreatingJstProject(true);
 
   return (
-    <div className="flex w-full py-2 pb-5 max-w-[1320px] mx-auto">
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="flex w-full py-2 pb-5 max-w-[1320px] mx-auto"
+    >
       <div className="w-full">
         <JstProjectsHeader
           onCreateJstProject={onCreateJstProject}
@@ -75,6 +83,6 @@ export const JstProjectsPage = () => {
         setIsCreatingJstSchool={setIsCreatingJstSchool}
       />
       <JstProjectModal isCreatingJstProject={isCreatingJstProject} setIsCreatingJstProject={setIsCreatingJstProject} />
-    </div>
+    </motion.div>
   );
 };

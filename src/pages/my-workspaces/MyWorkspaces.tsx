@@ -1,10 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { WORKSPACE_ICONS } from "@/components/workspace/workspace-form";
 import { useFindUserWorkspacesQuery } from "@/hooks/workspace/use-workspace";
+import { motion } from "framer-motion";
 import { Layers, Plus } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CreateWorkspaceModal } from "../../components/workspace/CreateWorkspaceModal";
+import * as animation from "../../constants/animations";
 import { useAuthQuery } from "../../hooks/auth/use-auth";
 
 export const MyWorkspaces = () => {
@@ -34,7 +36,13 @@ export const MyWorkspaces = () => {
   }
 
   return (
-    <div className="flex flex-col h-full w-full py-4 px-6 lg:px-12 bg-gradient-to-br from-background via-background/90 to-background/60 backdrop-blur-md max-w-7xl mx-auto">
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="flex flex-col h-full w-full py-4 px-6 lg:px-12 bg-gradient-to-br from-background via-background/90 to-background/60 backdrop-blur-md max-w-7xl mx-auto"
+    >
       {/* Header */}
       <div className="flex items-center justify-between mb-10">
         <div>
@@ -106,6 +114,6 @@ export const MyWorkspaces = () => {
           onClose={onCloseCreateWorkspaceModal}
         />
       )}
-    </div>
+    </motion.div>
   );
 };

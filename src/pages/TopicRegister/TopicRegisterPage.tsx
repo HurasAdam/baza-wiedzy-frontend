@@ -1,7 +1,9 @@
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { ProductModal } from "../../components/product/product-modal";
 import { TopicModal } from "../../components/topic/topic-modal";
+import * as animation from "../../constants/animations";
 import { useAuthQuery } from "../../hooks/auth/use-auth";
 import { useFindProductsQuery } from "../../hooks/products/use-products";
 import { useFindTopicsQuery } from "../../hooks/topics/use-topics";
@@ -54,7 +56,13 @@ export const TopicRegisterPage = () => {
   };
 
   return (
-    <div className="flex w-full pb-5 max-w-[1320px] mx-auto">
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="flex w-full pb-5 max-w-[1320px] mx-auto"
+    >
       <div className="w-full">
         <TopicRegisterHeader
           products={products}
@@ -75,6 +83,6 @@ export const TopicRegisterPage = () => {
       <ProductModal isCreatingProduct={isCreatingProduct} setIsCreatingProduct={setIsCreatingProduct} />
 
       <TopicModal products={products} isCreatingTopic={isCreatingTopic} setIsCreatingTopic={setIsCreatingTopic} />
-    </div>
+    </motion.div>
   );
 };

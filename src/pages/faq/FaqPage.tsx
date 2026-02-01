@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -6,6 +7,7 @@ import { EditFaqItemModal } from "../../components/faq-item/edit-faq-item-modal"
 import { FaqItemModal } from "../../components/faq-item/faq-item-modal";
 import { Alert } from "../../components/shared/alert-modal";
 import queryClient from "../../config/query.client";
+import * as animation from "../../constants/animations";
 import { COLOR_TOKEN_MAP, ICONS } from "../../constants/faq-icons";
 import { useAuthQuery } from "../../hooks/auth/use-auth";
 import { useDeleteFaqItemMutaton } from "../../hooks/faq-item/use-faq-item";
@@ -116,7 +118,13 @@ export function FaqPage() {
   };
 
   return (
-    <section className="bg-background h-full pb-5 max-w-[1320px] mx-auto">
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="bg-background h-full pb-5 max-w-[1320px] mx-auto"
+    >
       <FaqHeader
         isFaqsLoading={isFaqsLoading}
         isFaqLoading={isFaqLoading}
@@ -181,6 +189,6 @@ export function FaqPage() {
           setIsEditingFaqItem={setIsEditingFaqItem}
         />
       )}
-    </section>
+    </motion.div>
   );
 }

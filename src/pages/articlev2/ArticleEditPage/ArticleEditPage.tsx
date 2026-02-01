@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { AxiosError } from "axios";
+import { motion } from "framer-motion";
 import { CheckCircle, RefreshCw } from "lucide-react";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -8,6 +9,7 @@ import { toast } from "sonner";
 import ArticleForm from "../../../components/article/article-form";
 import { Alert } from "../../../components/shared/alert-modal";
 import queryClient from "../../../config/query.client";
+import * as animation from "../../../constants/animations";
 import {
   useFindArticleQuery,
   useSimpleUpdateArticleMutation,
@@ -161,7 +163,7 @@ export const ArticleEditPage = () => {
   return (
     tags &&
     article && (
-      <>
+      <motion.div variants={animation.pageFadePremium} initial="init" animate="visible" exit="exit">
         <ArticleEditHeader article={article} />
 
         <ArticleEditBanner
@@ -244,7 +246,7 @@ export const ArticleEditPage = () => {
             </div>
           </div>
         </Alert>
-      </>
+      </motion.div>
     )
   );
 };

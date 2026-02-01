@@ -1,9 +1,11 @@
 import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { motion } from "framer-motion";
 import { CheckCircle, Clock, Loader, XCircle } from "lucide-react";
 import type { JSX } from "react";
 import { useState } from "react";
 import ArticleRejectionReasonModal from "../../components/my-entries/article-rejection-reason-modal";
 import { NoDataFound } from "../../components/shared/NoDataFound";
+import * as animation from "../../constants/animations";
 import { useFindArticlesCreatedByUserQuery } from "../../hooks/articles/use-articles";
 import MyEntryCard, { type Article } from "./components/MyEntryCard";
 import StatusBar from "./components/StatusBar";
@@ -50,7 +52,13 @@ export const MyEntriesPage = () => {
   };
 
   return (
-    <div className="mx-auto pb-5 max-w-[1320px]">
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="mx-auto pb-5 max-w-[1320px]"
+    >
       <h1 className="text-xl font-bold mb-6.5 tracking-wide text-foreground">Moje artykuły</h1>
 
       <StatusBar currentStatus={currentStatus} setCurrentStatus={setCurrentStatus} statuses={statuses} />
@@ -107,6 +115,6 @@ export const MyEntriesPage = () => {
           setOpen={onCloseRejectionReasonModal}
         />
       )}
-    </div>
+    </motion.div>
   );
 };

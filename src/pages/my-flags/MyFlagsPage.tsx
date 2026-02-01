@@ -3,6 +3,7 @@ import { ArrowRight, Flag, MoreHorizontal, Pencil, Plus, Trash2 } from "lucide-r
 import { useNavigate } from "react-router-dom";
 
 import type { AxiosError } from "axios";
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { toast } from "sonner";
 import { EditFlagModal } from "../../components/flag/edit-flag-modal";
@@ -16,6 +17,7 @@ import {
 } from "../../components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../components/ui/tooltip";
 import queryClient from "../../config/query.client";
+import * as animation from "../../constants/animations";
 import { useCreateFlagMutation, useDeleteOneFlagMutation, useFindMyFlagsWithStats } from "../../hooks/flag/user-flag";
 
 export const MyFlagsPage = () => {
@@ -92,7 +94,13 @@ export const MyFlagsPage = () => {
   }
 
   return (
-    <div className="flex flex-col h-full w-full py-3 px-8 lg:px-12 bg-gradient-to-br from-background via-background/90 to-background/60 backdrop-blur-md max-w-7xl mx-auto">
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="flex flex-col h-full w-full py-3 px-8 lg:px-12 bg-gradient-to-br from-background via-background/90 to-background/60 backdrop-blur-md max-w-7xl mx-auto"
+    >
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
@@ -227,6 +235,6 @@ export const MyFlagsPage = () => {
           Czy na pewno chcesz usunąć etykietkę : <strong>{flagToDelete?.name}</strong>?
         </Alert>
       )}
-    </div>
+    </motion.div>
   );
 };

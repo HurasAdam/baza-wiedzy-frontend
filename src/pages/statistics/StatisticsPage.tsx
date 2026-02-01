@@ -1,7 +1,9 @@
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { UserStatisticsAddedArticlesModal } from "../../components/user-statistics-added-articles-details/user-statistics-added-articles.modal";
 import { UserStatisticsAddedConversationReportsModal } from "../../components/user-statistics-added-coversation-reports-details/user-statistics-added-conersation-reports.modal";
 import { UserStatisticsEditedArticlesModal } from "../../components/user-statistics-edited-articles-details/user-statistics-edited-articles.modal";
+import * as animation from "../../constants/animations";
 import { useAuthQuery } from "../../hooks/auth/use-auth";
 import { useExportUsersStatistics, useFindAllUsersStatistics } from "../../hooks/user-statistics/user-user-statistics";
 import StatisticsHeader from "./components/StatisticsHeader";
@@ -54,7 +56,13 @@ export const StatisticsPage = () => {
   };
 
   return (
-    <div className="space-y-6 pb-5 max-w-[1320px] mx-auto py-4 ">
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="space-y-6 pb-5 max-w-[1320px] mx-auto py-4 "
+    >
       <StatisticsHeader
         startDate={startDate}
         endDate={endDate}
@@ -108,6 +116,6 @@ export const StatisticsPage = () => {
             endDate={endDate}
           />
         )}
-    </div>
+    </motion.div>
   );
 };

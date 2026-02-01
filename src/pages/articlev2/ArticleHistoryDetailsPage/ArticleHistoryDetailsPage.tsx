@@ -6,6 +6,8 @@ import type { ArticleOutletContext } from "../../article/ArticleMainPage";
 import { ArticleDetailsApproved } from "./components/ArticleDetailsApproved";
 import { ArticeDetailsCreated } from "./components/ArticleDetailsCreated";
 
+import { motion } from "framer-motion";
+import * as animation from "../../../constants/animations";
 import { ArticleDetailsAttachmentAdded } from "./components/ArticleDetailsAttachmentAdded";
 import { ArticleDetailsAttachmentRemoved } from "./components/ArticleDetailsAttachmentRemoved";
 import { ArticleDetailsExpired } from "./components/ArticleDetailsExpired";
@@ -22,7 +24,13 @@ export const Articlev2HistoryDetailPage = () => {
   const item = Array.isArray(data) ? data[0] : data;
 
   return (
-    <div className="space-y-3.5 max-w-[1400px]">
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="space-y-3.5 max-w-[1400px]"
+    >
       <HistoryHeader article={article} onRefresh={() => refetch()} isRefetching={isRefetching} />
 
       {(() => {
@@ -55,6 +63,6 @@ export const Articlev2HistoryDetailPage = () => {
           }
         }
       })()}
-    </div>
+    </motion.div>
   );
 };

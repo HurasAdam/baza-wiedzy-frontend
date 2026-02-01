@@ -1,9 +1,11 @@
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { toast } from "sonner";
 import { EditFunnyMessageModal } from "../../components/funny-messages/edit-funny-message-modal";
 import { FunnyMessageModal } from "../../components/funny-messages/funny-message-modal";
 import { Alert } from "../../components/shared/alert-modal";
 import queryClient from "../../config/query.client";
+import * as animation from "../../constants/animations";
 import { useAuthQuery } from "../../hooks/auth/use-auth";
 import {
   useDeleteOneFunnyMessageMutation,
@@ -75,7 +77,13 @@ export const FunnyMessages = () => {
   const showFilterBar = usersData && (hasMessages || hasFilters);
 
   return (
-    <div className="flex w-full pb-5 max-w-[1320px] mx-auto">
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="flex w-full pb-5 max-w-[1320px] mx-auto"
+    >
       <div className="w-full">
         <FunnyMessagesHeader onCreateFunnyMessage={onCreateFunnyMessage} userPermissions={userPermissions} />
 
@@ -126,6 +134,6 @@ export const FunnyMessages = () => {
           Czy na pewno chcesz usunąć wiadomość <strong>{messageToDelete?.title}</strong>?
         </Alert>
       )}
-    </div>
+    </motion.div>
   );
 };

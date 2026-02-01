@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from "framer-motion";
 import { useAuthQuery } from "../../../hooks/auth/use-auth";
 import { CommentCard } from "./CommentCard";
 
@@ -28,13 +29,34 @@ export function CommentListSection({ comments, onEditComment, onDeleteComment }:
       {comments.length === 0 ? (
         <p className="text-sm text-muted-foreground">Brak komentarzy.</p>
       ) : (
-        <div className="space-y-4">
-          {comments.map((c) => {
-            const isCommentAuthro = user?._id === c?.createdBy._id;
+        <AnimatePresence mode="popLayout">
+          <div className="space-y-4">
+            {comments.map((c) => {
+              const isCommentAuthor = user?._id === c?.createdBy._id;
 
-            return <CommentCard comment={c} canManage={isCommentAuthro} onEdit={() => {}} onDelete={() => {}} />;
-          })}
-        </div>
+              return (
+                <motion.div
+                  key={c._id}
+                  initial={{ opacity: 0, scale: 0.995 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.995 }}
+                  transition={{
+                    duration: 0.1,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                  layout
+                >
+                  <CommentCard
+                    comment={c}
+                    canManage={isCommentAuthor}
+                    onEdit={() => onEditComment?.(c._id)}
+                    onDelete={() => onDeleteComment?.(c._id)}
+                  />
+                </motion.div>
+              );
+            })}
+          </div>
+        </AnimatePresence>
       )}
     </section>
   );

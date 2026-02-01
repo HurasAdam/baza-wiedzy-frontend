@@ -32,7 +32,9 @@ import {
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu";
 
+import { motion } from "framer-motion";
 import { Separator } from "../../../components/ui/separator";
+import * as animation from "../../../constants/animations";
 import { useFindUserWorkspacesQuery } from "../../../hooks/workspace/use-workspace";
 import { useSidebar } from "../../../providers/sidebar-provider";
 import { SidebarMyNav, type MySectionNavItem } from "./Sidebar-my-nav";
@@ -132,7 +134,11 @@ export const Sidebar = ({
   };
 
   return (
-    <div
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
       style={{
         background: "var(--sidebar)",
         boxShadow: "var(--sidebar-shadow)",
@@ -268,6 +274,6 @@ export const Sidebar = ({
           </Button>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };

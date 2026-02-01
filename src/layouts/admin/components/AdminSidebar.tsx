@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 import {
   Archive,
   BookOpen,
@@ -17,6 +18,7 @@ import {
 import { useLocation, useNavigate } from "react-router";
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../../components/ui/tooltip";
+import { sidebarVariants } from "../../../constants/animations";
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -57,7 +59,11 @@ export const AdminSidebar = ({ isCollapsed }: SidebarProps) => {
   const navigate = useNavigate();
 
   return (
-    <aside
+    <motion.aside
+      variants={sidebarVariants}
+      initial="init"
+      animate="visible"
+      exit="exit"
       className={cn(
         "h-screen bg-admin-sidebar border-r flex flex-col justify-between px-2 pt-2 pb-4 ",
         isCollapsed ? "w-16 md:w-[80px]" : "w-16 md:w-[240px]",
@@ -121,6 +127,6 @@ export const AdminSidebar = ({ isCollapsed }: SidebarProps) => {
           {!isCollapsed && <span>Powrót do BW</span>}
         </Button>
       </div>
-    </aside>
+    </motion.aside>
   );
 };
