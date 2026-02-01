@@ -59,7 +59,7 @@ const FolderListView = ({ view, folders, openEdit, openDelete, permissions }: Fo
                     </span>
                   </TooltipTrigger>
                   {folder.articlesCount > 0 && (
-                    <TooltipContent side="right" align="start" className="bg-muted p-3 space-y-1">
+                    <TooltipContent side="right" align="start" className=" p-3 space-y-1">
                       <p>Nie można usunąć folderu zawierającego artykuły</p>
                       <p>Usuń lub przenieś powiązane artykuły przed usunięciem folderu</p>
                     </TooltipContent>
@@ -116,7 +116,7 @@ const FolderListView = ({ view, folders, openEdit, openDelete, permissions }: Fo
                     </span>
                   </TooltipTrigger>
                   {folder.articlesCount > 0 && (
-                    <TooltipContent className="bg-muted p-3 space-y-1">
+                    <TooltipContent className="p-3 space-y-1">
                       <p>Nie można usunąć folderu zawierającego artykuły</p>
                       <p>Usuń lub przenieś powiązane artykuły przed usunięciem folderu</p>
                     </TooltipContent>
