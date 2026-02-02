@@ -139,7 +139,7 @@ export const UserStatisticsAddedArticlesModal = ({
                           <td className="py-3 px-6 text-right">
                             <div className="flex justify-center gap-3">
                               <a
-                                href={`http://localhost:5173/articles/${article._id}`}
+                                href={`${import.meta.env.VITE_BACKEND_BASE_URL}/${article._id}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-accent hover:underline font-medium text-xs"
