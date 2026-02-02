@@ -17,18 +17,20 @@ type Theme =
   | "dark-sage"
   | "light-luxury"
   | "dark-luxury"
+  | "light-perpetuity"
+  | "dark-perpetuity"
+  | "light-twitter"
+  | "dark-twitter"
+  | "light-bloom"
+  | "dark-bloom"
   | "dark-aqua"
-  | "dark-aqua-gradient"
   | "dark-halloween"
-  | "dark-halloween-gradient"
   | "dark-violet"
   | "dark-amber"
   | "light-violet"
   | "aqua"
   | "deep-forest"
   | "deep-aqua"
-  | "corporate-default"
-  | "corporate-gray"
   | "night-green"
   | "night-violet";
 
@@ -80,19 +82,21 @@ export function ThemeProvider({
       "dark-sage",
       "light-luxury",
       "dark-luxury",
+      "light-perpetuity",
+      "dark-perpetuity",
+      "light-twitter",
+      "dark-twitter",
+      "light-bloom",
+      "dark-bloom",
       "dark-aqua",
-      "dark-aqua-gradient",
       "dark-violet",
       "dark-amber",
       "light-amber",
       "light-violet",
       "aqua",
       "dark-halloween",
-      "dark-halloween-gradient",
       "deep-forest",
       "deep-aqua",
-      "corporate-default",
-      "corporate-gray",
       "night-green",
       "night-violet",
     );

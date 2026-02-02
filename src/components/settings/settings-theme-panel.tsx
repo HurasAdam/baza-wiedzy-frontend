@@ -99,6 +99,38 @@ const THEMES = [
     label: "Dark · Luxury",
     colors: ["#b91c1c", "#b45309", "#92400e", "#44403c"],
   },
+  {
+    key: "light-perpetuity",
+    label: "Light · Perpetuity",
+    colors: ["#06858e", "#c9e5e7", "#d9eaea", "#cde0e2"],
+  },
+  {
+    key: "dark-perpetuity",
+    label: "Dark · Perpetuity",
+    colors: ["#4de8e8", "#164955", "#0f3039", "#0e383c"],
+  },
+
+  {
+    key: "light-twitter",
+    label: "Light · Twitter",
+    colors: ["#1da1f2", "#e1eaef", "#0f1419", "#E3ECF6"],
+  },
+  {
+    key: "dark-twitter",
+    label: "Dark · Twitter",
+    colors: ["#1c9cf0", "#061622", "#d9d9d9", "#17181c"],
+  },
+
+  {
+    key: "light-bloom",
+    label: "Light · Bloom",
+    colors: ["#7033ff", "#f5f8fb", "#e7e7ee", "#edf0f4"],
+  },
+  {
+    key: "dark-bloom",
+    label: "Dark · Bloom",
+    colors: ["#8c5cff", "#1e293b", "#2a2c33", "#33353a"],
+  },
 
   // DARK VIOLET / AQUA / HALLOWEEN
   {
