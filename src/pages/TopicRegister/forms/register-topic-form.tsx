@@ -71,12 +71,12 @@ export const RegisterTopicForm = ({ topic }: { topic: ITopic }) => {
                 </div>
               </div>
             </div>,
-            { duration: toastDuration, position: "bottom-right" }
+            { duration: toastDuration, position: "bottom-right" },
           );
 
           setTimeout(() => setFeedback(null), toastDuration);
         },
-      }
+      },
     );
   };
 
@@ -112,8 +112,16 @@ export const RegisterTopicForm = ({ topic }: { topic: ITopic }) => {
               <Input
                 type="number"
                 min={1}
+                max={20}
                 value={field.value}
-                onChange={(e) => field.onChange(Number(e.target.value) || 1)}
+                onChange={(e) => {
+                  let value = Number(e.target.value) || 1;
+
+                  if (value > 20) value = 20;
+                  if (value < 1) value = 1;
+
+                  field.onChange(value);
+                }}
                 className="w-16 text-center bg-transparent focus:outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-moz-number-spin-button]:appearance-none"
               />
 
@@ -122,7 +130,7 @@ export const RegisterTopicForm = ({ topic }: { topic: ITopic }) => {
                 variant="outline"
                 size="icon"
                 className="rounded-r-lg"
-                onClick={() => field.onChange(Number(field.value) + 1)}
+                onClick={() => field.onChange(Math.min(20, Number(field.value) + 1))}
               >
                 <Plus className="w-4 h-4" />
               </Button>
