@@ -107,6 +107,7 @@ const RoleForm = ({ permissions = [], isPermissionsLoading }: RoleFormProps) => 
           Nazwa roli
         </label>
         <Input
+          disabled={isAdminRole}
           id="role-name"
           {...register("name", { required: true })}
           placeholder="Np. Moderator"
