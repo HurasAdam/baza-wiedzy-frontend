@@ -117,10 +117,9 @@ const TableArticleCard = ({ article, openArticleDrawer, onMouseEnter, onMouseLea
           <span
             className="inline-flex items-center px-2 py-[1px] mt-1 rounded-full text-[9px] font-medium uppercase tracking-wide w-fit"
             style={{
-              backgroundColor: `${article.product.labelColor}1A`,
-              color: article.product.labelColor,
-              border: `1px solid ${article.product.labelColor}33`,
-              opacity: 0.85,
+              backgroundColor: `${article.product.labelColor}14`,
+              color: `${article.product.labelColor}E6`,
+              border: `1px solid ${article.product.labelColor}26`,
             }}
           >
             {article.product.name}
