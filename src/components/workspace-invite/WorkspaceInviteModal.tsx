@@ -69,7 +69,7 @@ export const WorkspaceInviteModal = ({ isOpen, setIsOpen, onSave, isLoading }: W
                   <FormControl>
                     <input
                       {...field}
-                      placeholder="Wpisz kod kolekcji..."
+                      placeholder="Wprowadź kod zaproszenia.."
                       className="w-full px-4 py-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary placeholder:text-muted-foreground transition"
                     />
                   </FormControl>

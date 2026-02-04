@@ -55,7 +55,7 @@ export const ProductForm = ({
             <FormItem>
               <FormLabel>Nazwa</FormLabel>
               <FormControl>
-                <Input className="border-ring" {...field} placeholder="Nazwa produktu" />
+                <Input className="" {...field} placeholder="Nazwa produktu" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -77,7 +77,7 @@ export const ProductForm = ({
                       onClick={() => field.onChange(color)}
                       className={cn(
                         "w-6 h-6 rounded-sm cursor-pointer hover:opacity-80 transition-all duration-300",
-                        field.value === color && "ring-2 ring-offset-2 ring-blue-500"
+                        field.value === color && "ring-2 ring-offset-2 ring-blue-500",
                       )}
                       style={{ backgroundColor: color }}
                     />

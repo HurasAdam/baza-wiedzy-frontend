@@ -74,7 +74,7 @@ export const TopicForm = ({
                     </>
                   ) : (
                     <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger className="w-full border-ring">
+                      <SelectTrigger className="w-full">
                         <SelectValue placeholder="-- Wybierz produkt --" />
                       </SelectTrigger>
                       <SelectContent side="bottom">
@@ -99,7 +99,7 @@ export const TopicForm = ({
               <FormItem>
                 <FormLabel>Nazwa</FormLabel>
                 <FormControl>
-                  <Input className="border-ring" {...field} placeholder="Nazwa tematu" />
+                  <Input {...field} placeholder="Nazwa tematu" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
