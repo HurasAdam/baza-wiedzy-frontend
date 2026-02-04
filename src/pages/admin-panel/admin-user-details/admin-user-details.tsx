@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Dropdown } from "../../../components/Dropdown";
 import { Alert } from "../../../components/shared/alert-modal";
 import { Avatar, AvatarFallback, AvatarImage } from "../../../components/ui/avatar";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../../../components/ui/tooltip";
 import { UpdateUserRoleModal } from "../../../components/user-role/update-user-role-modal";
 import queryClient from "../../../config/query.client";
 import {
@@ -57,12 +58,12 @@ export const AdminUserDetailsPage = () => {
   const { mutate: disableUserAccountMutation, isPending: isDisableAccountLoading } = useDisableUserAccountMutation();
   const { mutate: enableUserAccountMutation, isPending: isEnableAccountLoading } = useEnableUserAccountMutation();
 
-  const [activeTab, setActiveTab] = useState<"account" | "questionsAndAnswers" | "topics">("account");
+  const [activeTab, setActiveTab] = useState<"account" | "statistics" | "topics">("account");
   const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
 
-  const tabs: { key: "account" | "questionsAndAnswers" | "topics"; label: string }[] = [
+  const tabs: { key: "account" | "statistics"; label: string; disabled?: boolean }[] = [
     { key: "account", label: "Dane konta" },
-    { key: "questionsAndAnswers", label: "Pytania i odpowiedzi" },
+    { key: "statistics", label: "Statystyki", disabled: true },
   ];
 
   const onConfirm = () => {
@@ -200,14 +201,25 @@ export const AdminUserDetailsPage = () => {
 
         {/* Tab options */}
         <div className="w-full md:w-3/4   lg:w-[46%] grid grid-cols-3 border-b">
-          {tabs.map((tab, index) => (
-            <ProductTabCard
-              key={index}
-              onClick={() => setActiveTab(tab.key)}
-              isActive={activeTab === tab.key}
-              name={tab.label}
-            />
-          ))}
+          {tabs.map((tab, index) =>
+            tab.disabled ? (
+              <Tooltip key={index}>
+                <TooltipTrigger asChild>
+                  <div>
+                    <ProductTabCard onClick={() => {}} isActive={false} name={tab.label} />
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>Funkcja w przygotowaniu</TooltipContent>
+              </Tooltip>
+            ) : (
+              <ProductTabCard
+                key={index}
+                onClick={() => setActiveTab(tab.key)}
+                isActive={activeTab === tab.key}
+                name={tab.label}
+              />
+            ),
+          )}
         </div>
       </div>
 
@@ -215,7 +227,7 @@ export const AdminUserDetailsPage = () => {
       <div className="flex-1 py-6 min-h-[400px]">
         {activeTab === "account" && <UserInfoTab user={faq} />}
 
-        {activeTab === "questionsAndAnswers" && faq && <UserArticlesTab faqId={faq._id} questions={[]} />}
+        {activeTab === "statistics" && faq && <UserArticlesTab faqId={faq._id} questions={[]} />}
       </div>
       {pendingAction && (
         <Alert
