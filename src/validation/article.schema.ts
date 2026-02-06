@@ -34,8 +34,8 @@ export const articleSchema = z.object({
         variantName: z.string().max(100).optional(),
         variantContent: z
           .string()
-          .min(6, {
-            message: "Treść odpowiedzi dla klienta musi zawierać co najmniej 6 znaków.",
+          .min(1, {
+            message: "Treść odpowiedzi dla klienta musi zawierać co najmniej 1 znak.",
           })
           .max(9000, {
             message: "Treść odpowiedzi dla klienta może zawierać maksymalnie 9000 znaków.",
