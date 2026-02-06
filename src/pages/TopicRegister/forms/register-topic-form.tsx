@@ -82,7 +82,7 @@ export const RegisterTopicForm = ({ topic }: { topic: ITopic }) => {
 
   return (
     <Form {...form}>
-      <form className="flex items-center gap-4 shrink-0">
+      <form className="flex items-center gap-4 shrink-0  w-[750px] justify-between">
         <Controller
           control={form.control}
           name="description"
@@ -90,7 +90,7 @@ export const RegisterTopicForm = ({ topic }: { topic: ITopic }) => {
             <Input
               {...field}
               placeholder="Notatka (opcjonalnie)"
-              className="h-10 w-[200px] text-sm px-3 py-1 bg-surface/70 focus:bg-surface/90 rounded-md"
+              className="h-10 w-[400px] text-sm px-3 py-1 bg-surface/70 focus:bg-surface/90 rounded-md"
             />
           )}
         />
