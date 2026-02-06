@@ -35,7 +35,7 @@ const JstProjectForm = ({ defaultValues, onSubmit, isSubmitting, submitText }: J
               <FormItem>
                 <FormLabel>Nazwa</FormLabel>
                 <FormControl>
-                  <Input className="border-ring" {...field} placeholder="Nazwa projektu" />
+                  <Input {...field} placeholder="Nazwa projektu" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -48,7 +48,7 @@ const JstProjectForm = ({ defaultValues, onSubmit, isSubmitting, submitText }: J
               <FormItem>
                 <FormLabel>Opis</FormLabel>
                 <FormControl>
-                  <Textarea className="border-ring" {...field} placeholder="Opis projektu" rows={3} />
+                  <Textarea {...field} placeholder="Opis projektu" rows={3} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
