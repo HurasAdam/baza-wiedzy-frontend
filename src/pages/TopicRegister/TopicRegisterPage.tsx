@@ -8,6 +8,7 @@ import { useAuthQuery } from "../../hooks/auth/use-auth";
 import { useFindProductsQuery } from "../../hooks/products/use-products";
 import { useFindTopicsQuery } from "../../hooks/topics/use-topics";
 import TopicListSection from "./components/TopicListSection";
+import TopicListSectionHeader from "./components/TopicListSectionHeader";
 import TopicRegisterHeader from "./components/TopicRegisterHeader";
 
 export const TopicRegisterPage = () => {
@@ -76,6 +77,7 @@ export const TopicRegisterPage = () => {
           onResetAllFilters={onResetAllFilters}
           userPermissions={userPermissions}
         />
+        <TopicListSectionHeader />
 
         <TopicListSection isTopicsLoading={isTopicsLoading} topics={topics} title={title} setParams={setParams} />
       </div>
