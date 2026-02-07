@@ -1,5 +1,6 @@
 import api from "@/config/api.client";
 import type { WorkspaceAddMemberFormData } from "../components/workspace-invite/WorkspaceAddMemberModal";
+import type { WorkspaceInviteCandidate } from "../types/workspace-member";
 const baseUrl = "/workspace-members";
 
 const updatePermissions = (memberId: string, payload: Record<string, boolean>) => {
@@ -10,7 +11,7 @@ const findCurrentWorkspaceMember = (workspaceId: string) => {
   return api.get(`${baseUrl}/me/${workspaceId}`);
 };
 
-const findWorkspaceInviteCandidates = (workspaceId: string) => {
+const findWorkspaceInviteCandidates = (workspaceId: string): Promise<WorkspaceInviteCandidate[]> => {
   return api.get(`${baseUrl}/candidates/${workspaceId}`);
 };
 

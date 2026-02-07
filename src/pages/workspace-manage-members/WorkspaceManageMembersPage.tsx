@@ -22,7 +22,7 @@ export const WorkspaceManageMembersPage = () => {
       exit="exit"
       className="max-w-6xl mx-auto py-8  space-y-8"
     >
-      <WorkspaceManageMembersHeader workspaceId={workspaceId} />
+      <WorkspaceManageMembersHeader workspaceId={workspaceId} permissions={permissions} />
       <Separator />
 
       {workspaceId && <WorkspaceInviteLinkSection inviteCode={workspace.inviteCode} />}

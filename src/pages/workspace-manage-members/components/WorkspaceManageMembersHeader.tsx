@@ -1,5 +1,5 @@
 import type { AxiosError } from "axios";
-import { Plus, Users } from "lucide-react";
+import { Lock, Plus, Users } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "../../../components/ui/button";
@@ -12,9 +12,10 @@ import { useAddWorkspaceMemberMutation } from "../../../hooks/workspace-members/
 
 interface Props {
   workspaceId?: string;
+  permissions: Record<string, boolean>;
 }
 
-const WorkspaceManageMembersHeader = ({ workspaceId }: Props) => {
+const WorkspaceManageMembersHeader = ({ workspaceId, permissions }: Props) => {
   const [isAddMemberModalOpen, setIsAddMemberModalOpen] = useState<boolean>(false);
   const { mutate: addWorkspaceMemberMutate, isPending: isAddMemberLoading } = useAddWorkspaceMemberMutation();
 
@@ -82,8 +83,23 @@ const WorkspaceManageMembersHeader = ({ workspaceId }: Props) => {
         <h1 className="text-2xl font-semibold tracking-tight">Użytkownicy dodani do kolekcji</h1>
       </div>
 
-      <Button onClick={onAddMember}>
-        <Plus /> Dodaj użytkownika
+      <Button
+        onClick={() => {
+          if (!permissions?.addMember) return;
+          onAddMember();
+        }}
+        className={!permissions?.addMember ? "opacity-50 cursor-not-allowed" : ""}
+        title={!permissions?.addMember ? "Brak uprawnień do dodania użytkowników" : ""}
+      >
+        {!permissions?.addMember ? (
+          <>
+            <Lock className="w-4 h-4 text-primary-foreground pointer-events-none" /> Dodaj użytkownika
+          </>
+        ) : (
+          <>
+            <Plus /> Dodaj użytkownika
+          </>
+        )}
       </Button>
 
       {isAddMemberModalOpen && (
