@@ -95,28 +95,39 @@ export const WorkspaceAddMemberModal = ({
                         >
                           <CommandEmpty>Brak wyników</CommandEmpty>
                           <CommandGroup>
-                            {workspaceInviteCandidates.map((user) => (
-                              <CommandItem
-                                key={user._id}
-                                onSelect={() => {
-                                  field.onChange(user._id);
-                                  setOpen(false);
-                                }}
-                                className={cn(
-                                  "flex items-center justify-between px-3 py-2 cursor-pointer rounded-md transition-all duration-150",
-                                  "hover:bg-accent/20",
-                                  field.value === user._id ? "bg-accent/30 shadow-md" : "",
-                                )}
-                              >
-                                <div className="flex flex-col">
-                                  <span className="font-medium text-foreground">
-                                    {user.name} {user.surname}
-                                  </span>
-                                  <span className="text-sm text-muted-foreground">{user.email}</span>
-                                </div>
-                                {field.value === user._id && <CheckIcon className="w-4 h-4 text-primary" />}
-                              </CommandItem>
-                            ))}
+                            {workspaceInviteCandidates.map((user) => {
+                              const initials = `${user.name?.[0] || ""}${user.surname?.[0] || ""}`.toUpperCase();
+
+                              return (
+                                <CommandItem
+                                  key={user._id}
+                                  onSelect={() => {
+                                    field.onChange(user._id);
+                                    setOpen(false);
+                                  }}
+                                  className={cn(
+                                    "flex items-center justify-between px-3 py-2 cursor-pointer rounded-md transition-all duration-150",
+                                    "hover:bg-accent/20",
+                                    field.value === user._id ? "bg-accent/30 shadow-md" : "",
+                                  )}
+                                >
+                                  <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-sm font-semibold text-primary">
+                                      {initials}
+                                    </div>
+
+                                    <div className="flex flex-col">
+                                      <span className="font-medium text-foreground">
+                                        {user.name} {user.surname}
+                                      </span>
+                                      <span className="text-sm text-muted-foreground">{user.email}</span>
+                                    </div>
+                                  </div>
+
+                                  {field.value === user._id && <CheckIcon className="w-4 h-4 text-primary" />}
+                                </CommandItem>
+                              );
+                            })}
                           </CommandGroup>
                         </CommandList>
                       </Command>
