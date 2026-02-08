@@ -33,7 +33,7 @@ const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
           <CardTitle className="text-2xl font-bold text-foreground">Baza Wiedzy</CardTitle>
 
           <CardDescription className="text-sm text-muted-foreground mt-1.5">
-            Wprowadź swoje dane, aby uzyskać dostęp do bazy wiedzy i szablonów odpowiedzi.
+            Wprowadź dane logowania, aby uzyskać dostęp do zasobów bazy wiedzy.
           </CardDescription>
         </CardHeader>
         <CardContent>
