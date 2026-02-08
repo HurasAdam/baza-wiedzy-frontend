@@ -99,6 +99,20 @@ export const Header = ({ report, canManageReportStatus }: Props) => {
           description: "Zgłoszenie zostało usunięte",
         });
       },
+      onError: (error) => {
+        const { status } = error as AxiosError;
+
+        if (status === 403) {
+          toast.error("Brak uprawnień", {
+            description: "Nie posiadasz wymaganych uprawnień do wykonania tej operacji.",
+            position: "bottom-right",
+            duration: 7000,
+          });
+          return;
+        }
+
+        toast.error("Wystapił błąd, spróbuj ponownie");
+      },
     });
   };
 
@@ -152,19 +166,21 @@ export const Header = ({ report, canManageReportStatus }: Props) => {
           </DropdownMenu>
         )}
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <MoreVertical className="w-5 h-5" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>Edytuj</DropdownMenuItem>
-            <DropdownMenuItem onClick={onRequestDelete} className="text-red-600">
-              Usuń
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {canManageReportStatus && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <MoreVertical className="w-5 h-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem>Edytuj</DropdownMenuItem>
+              <DropdownMenuItem onClick={onRequestDelete} className="text-red-600">
+                Usuń
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
 
       <Alert
