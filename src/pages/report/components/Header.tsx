@@ -55,7 +55,7 @@ export const Header = ({ report, canManageReportStatus }: Props) => {
   const formattedDate = new Date(report.createdAt).toLocaleString("pl-PL");
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState<boolean>(false);
   const { mutate: updateReportStatusMutate } = useUpdateReportStatusMutation();
-  const { mutate: deleteReportMutate } = useDeleteIssueReportMutation();
+  const { mutate: deleteReportMutate, isPending: isDeleteReportLoading } = useDeleteIssueReportMutation();
 
   const onRequestDelete = () => {
     setIsDeleteAlertOpen(true);
@@ -185,7 +185,7 @@ export const Header = ({ report, canManageReportStatus }: Props) => {
 
       <Alert
         isOpen={isDeleteAlertOpen}
-        isLoading={false}
+        isLoading={isDeleteReportLoading}
         type="warning"
         title="Usunięcie zgłoszenia"
         onCancel={() => setIsDeleteAlertOpen(false)}
