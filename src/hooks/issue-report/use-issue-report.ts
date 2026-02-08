@@ -14,6 +14,14 @@ export const useUpdateReportStatusMutation = () => {
   });
 };
 
+export const useDeleteIssueReportMutation = () => {
+  return useMutation({
+    mutationFn: (reportId: string) => {
+      return issueReportsService.deleteIssueReport(reportId);
+    },
+  });
+};
+
 export const useFindIssueReportsQuery = (params?: URLSearchParams) => {
   return useQuery({
     queryKey: ["issue-reports", params?.toString()],

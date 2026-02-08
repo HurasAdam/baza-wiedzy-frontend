@@ -22,9 +22,14 @@ const updateStatus = ({ reportId, payload }: { reportId: string; payload: string
   return api.patch(`${BASE_URL}/${reportId}/status`, { status: payload });
 };
 
+const deleteIssueReport = (reportId: string) => {
+  return api.delete(`${BASE_URL}/${reportId}`);
+};
+
 export const issueReportsService = {
   sendIssueReport,
   find,
   findOne,
   updateStatus,
+  deleteIssueReport,
 };

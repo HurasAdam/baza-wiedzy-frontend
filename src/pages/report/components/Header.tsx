@@ -1,8 +1,10 @@
 import { Badge } from "@/components/ui/badge";
 import type { AxiosError } from "axios";
 import { ArrowLeft, Calendar, MoreVertical } from "lucide-react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { Alert } from "../../../components/shared/alert-modal";
 import { Button } from "../../../components/ui/button";
 import {
   DropdownMenu,
@@ -11,7 +13,10 @@ import {
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu";
 import queryClient from "../../../config/query.client";
-import { useUpdateReportStatusMutation } from "../../../hooks/issue-report/use-issue-report";
+import {
+  useDeleteIssueReportMutation,
+  useUpdateReportStatusMutation,
+} from "../../../hooks/issue-report/use-issue-report";
 import { cn } from "../../../lib/utils";
 import type { Report } from "../../admin-panel/admin-issue-reports/components/IssueReportsList";
 
@@ -48,10 +53,15 @@ const statusConfig: Record<
 export const Header = ({ report, canManageReportStatus }: Props) => {
   const navigate = useNavigate();
   const formattedDate = new Date(report.createdAt).toLocaleString("pl-PL");
+  const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState<boolean>(false);
   const { mutate: updateReportStatusMutate } = useUpdateReportStatusMutation();
+  const { mutate: deleteReportMutate } = useDeleteIssueReportMutation();
+
+  const onRequestDelete = () => {
+    setIsDeleteAlertOpen(true);
+  };
 
   const onStatusChange = (reportId: string, status: string) => {
-    console.log(status);
     updateReportStatusMutate(
       { reportId, payload: status },
       {
@@ -76,8 +86,20 @@ export const Header = ({ report, canManageReportStatus }: Props) => {
 
           toast.error("Wystapił błąd, spróbuj ponownie");
         },
-      }
+      },
     );
+  };
+
+  const onDeleteConfirm = (reportId: string) => {
+    deleteReportMutate(reportId, {
+      onSuccess: () => {
+        navigate("/reports");
+        toast.success("Zmiany zostały zapisane", {
+          position: "bottom-right",
+          description: "Zgłoszenie zostało usunięte",
+        });
+      },
+    });
   };
 
   return (
@@ -138,10 +160,39 @@ export const Header = ({ report, canManageReportStatus }: Props) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem>Edytuj</DropdownMenuItem>
-            <DropdownMenuItem className="text-red-600">Usuń</DropdownMenuItem>
+            <DropdownMenuItem onClick={onRequestDelete} className="text-red-600">
+              Usuń
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+      <Alert
+        isOpen={isDeleteAlertOpen}
+        isLoading={false}
+        type="warning"
+        title="Usunięcie zgłoszenia"
+        onCancel={() => setIsDeleteAlertOpen(false)}
+        onConfirm={() => onDeleteConfirm(report._id)}
+        requireConfirmation={true}
+        isConfirmEnabled={true}
+      >
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <span className="font-semibold text-base text-foreground">Czy na pewno chcesz usunąć to zgłoszenie?</span>
+            <span className="text-sm text-muted-foreground leading-relaxed">
+              Po zatwierdzeniu zgłoszenie zostanie trwale usunięte wraz ze wszystkimi komentarzami powiązanymi z tym
+              zgłoszeniem.
+            </span>
+          </div>
+
+          <div className="flex items-start gap-2 pt-2 border-t border-border">
+            <span className="text-xs text-muted-foreground font-medium leading-snug">
+              Operacja jest nieodwracalna. Usuń zgłoszenie tylko wtedy, gdy jesteś pewien, że nie jest już potrzebne.
+            </span>
+          </div>
+        </div>
+      </Alert>
     </header>
   );
 };
