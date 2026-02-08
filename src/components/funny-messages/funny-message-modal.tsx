@@ -94,7 +94,7 @@ export const FunnyMessageModal = ({
                   <FormItem>
                     <FormLabel>Tytuł</FormLabel>
                     <FormControl>
-                      <Input className="border-ring bg-input/30" {...field} placeholder="Tytuł wiadomości" />
+                      <Input {...field} placeholder="Tytuł wiadomości" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -110,7 +110,7 @@ export const FunnyMessageModal = ({
                     <FormLabel>Typ wiadomości</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
-                        <SelectTrigger className="border-ring ">
+                        <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
                       </FormControl>
@@ -133,12 +133,7 @@ export const FunnyMessageModal = ({
                     <FormItem>
                       <FormLabel>Treść wiadomości</FormLabel>
                       <FormControl>
-                        <Textarea
-                          className="min-h-26 border-ring "
-                          {...field}
-                          placeholder="Wpisz treść wiadomości"
-                          rows={8}
-                        />
+                        <Textarea className="min-h-26" {...field} placeholder="Wpisz treść wiadomości" rows={8} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
