@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import type { AxiosError } from "axios";
-import { ArrowLeft, Calendar, MoreVertical } from "lucide-react";
-import { useState } from "react";
+import { ArrowLeft, Calendar, CheckCircle, CircleDot, MoreVertical, Trash2, XCircle } from "lucide-react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Alert } from "../../../components/shared/alert-modal";
@@ -31,30 +31,33 @@ const statusConfig: Record<
     label: string;
     dotColor: string;
     badgeColor: string;
+    Icon: React.ElementType;
   }
 > = {
   open: {
     label: "Otwarte",
     dotColor: "bg-sky-600/90",
-    badgeColor: "bg-sky-600/70  text-blue-100",
+    badgeColor: "bg-sky-600/70 text-blue-100",
+    Icon: CircleDot,
   },
   resolved: {
     label: "Zrealizowane",
     dotColor: "bg-green-600/90",
     badgeColor: "bg-green-600/85 text-green-100",
+    Icon: CheckCircle,
   },
   closed: {
     label: "Zamknięte",
     dotColor: "bg-gray-500",
     badgeColor: "bg-gray-100 text-gray-800",
+    Icon: XCircle,
   },
 };
-
 export const Header = ({ report, canManageReportStatus }: Props) => {
   const navigate = useNavigate();
   const formattedDate = new Date(report.createdAt).toLocaleString("pl-PL");
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState<boolean>(false);
-  const { mutate: updateReportStatusMutate } = useUpdateReportStatusMutation();
+  const { mutate: updateReportStatusMutate, isPending: isStatusUpdating } = useUpdateReportStatusMutation();
   const { mutate: deleteReportMutate, isPending: isDeleteReportLoading } = useDeleteIssueReportMutation();
 
   const onRequestDelete = () => {
@@ -115,7 +118,7 @@ export const Header = ({ report, canManageReportStatus }: Props) => {
       },
     });
   };
-
+  const CurrentIcon = statusConfig[report.status]?.Icon;
   return (
     <header className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-border pb-4 mb-6 gap-4">
       <div className="flex items-start md:items-center gap-4 w-full md:w-auto">
@@ -149,19 +152,35 @@ export const Header = ({ report, canManageReportStatus }: Props) => {
         {canManageReportStatus && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="flex items-center gap-2">
-                <Badge className={statusConfig[report.status]?.badgeColor}>{statusConfig[report.status]?.label}</Badge>
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-2 min-w-[140px]"
+                disabled={isStatusUpdating}
+              >
+                <Badge className={`${statusConfig[report.status]?.badgeColor}  min-w-[100px]`}>
+                  <span className="w-4 flex justify-center">
+                    {isStatusUpdating ? (
+                      <span className="animate-spin w-3 h-3 border-2 border-current border-t-transparent rounded-full" />
+                    ) : (
+                      <CurrentIcon className="w-4 h-4 opacity-80" />
+                    )}
+                  </span>
+                  {statusConfig[report.status]?.label}
+                </Badge>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              {Object.entries(statusConfig).map(([status, config]) => (
-                <DropdownMenuItem onSelect={() => onStatusChange(report._id, status)} key={status}>
-                  <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${config.dotColor}`} />
-                    {config.label}
-                  </div>
-                </DropdownMenuItem>
-              ))}
+              {Object.entries(statusConfig)
+                .filter(([status]) => status !== report.status)
+                .map(([status, config]) => (
+                  <DropdownMenuItem onSelect={() => onStatusChange(report._id, status)} key={status}>
+                    <div className="flex items-center gap-2">
+                      <div className={`w-2 h-2 rounded-full ${config.dotColor}`} />
+                      {config.label}
+                    </div>
+                  </DropdownMenuItem>
+                ))}
             </DropdownMenuContent>
           </DropdownMenu>
         )}
@@ -174,9 +193,9 @@ export const Header = ({ report, canManageReportStatus }: Props) => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>Edytuj</DropdownMenuItem>
-              <DropdownMenuItem onClick={onRequestDelete} className="text-red-600">
-                Usuń
+              <DropdownMenuItem onClick={onRequestDelete} className="text-destructive">
+                <Trash2 className="w-4 h-4 mr-2" />
+                Usuń zgłoszenie
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
