@@ -4,7 +4,7 @@ const TopicListSectionHeader = () => {
       <div className="flex-1 ml-10 min-w-[490px]">Temat</div>
       <div className="flex-1 min-w-[200px]"> Notatka</div>
       <div className="w-50 text-center">Ilość odnotowań</div>
-      <div className="w-30 text-center">Akcje</div>
+      <div className="w-30 text-center">Rozwiązanie</div>
     </div>
   );
 };
