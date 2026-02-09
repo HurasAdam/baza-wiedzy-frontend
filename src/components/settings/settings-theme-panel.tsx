@@ -16,16 +16,16 @@ const THEMES = [
     colors: ["#d97757", "#1b1b19", "#faf9f5", "#363636"],
   },
 
-  // AMBER
+  // CAFFEINE
   {
-    key: "light-amber",
-    label: "Light · Amber",
-    colors: ["#f59e0b", "#fffbeb", "#f3f4f6", "#e5e7eb"],
+    key: "light-caffeine",
+    label: "Light · Caffeine",
+    colors: ["#c1a875", "#f1ede1", "#e5e1d5", "#e5e7eb"],
   },
   {
-    key: "dark-amber",
-    label: "Dark · Amber",
-    colors: ["#f59e0b", "#92400e", "#262626", "#434343"],
+    key: "dark-caffeine",
+    label: "Dark · Caffeine",
+    colors: ["#d4bc8b", "#2d2b28", "#262626", "#f8f7f2"],
   },
 
   // CATPPUCCIN
@@ -49,6 +49,17 @@ const THEMES = [
   {
     key: "dark-darkmatter",
     label: "Dark · Darkmatter",
+    colors: ["#e78a53", "#222222", "#5f8787", "#434343"],
+  },
+  // DARKMATTER FORK
+  {
+    key: "light-classy",
+    label: "Light · Darkmatter-fork",
+    colors: ["#d87943", "#eeeeee", "#527575", "#e5e7eb"],
+  },
+  {
+    key: "dark-classy",
+    label: "Dark · Darkmatter-fork",
     colors: ["#e78a53", "#222222", "#5f8787", "#434343"],
   },
 
@@ -130,6 +141,17 @@ const THEMES = [
     key: "dark-bloom",
     label: "Dark · Bloom",
     colors: ["#8c5cff", "#1e293b", "#2a2c33", "#33353a"],
+  },
+
+  {
+    key: "light-slack",
+    label: "Light · Slack",
+    colors: ["#611c69", "#e0215b", "#f4f0f7", "#edf0f4"],
+  },
+  {
+    key: "dark-slack",
+    label: "Dark · Slack",
+    colors: ["#a559a5", "#e0215b", "#2a2e33", "#1a1d22"],
   },
 
   // DARK VIOLET / AQUA / HALLOWEEN

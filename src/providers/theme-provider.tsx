@@ -3,8 +3,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 type Theme =
   | "light"
   | "dark-claude "
-  | "light-amber"
-  | "dark-amber"
+  | "light-caffeine"
+  | "dark-caffeine"
   | "light-catppuccin"
   | "dark-catppuccin"
   | "light-darkmatter"
@@ -23,10 +23,13 @@ type Theme =
   | "dark-twitter"
   | "light-bloom"
   | "dark-bloom"
+  | "light-classy"
+  | "dark-classy"
+  | "light-slac"
+  | "dark-slack"
   | "dark-aqua"
   | "dark-halloween"
   | "dark-violet"
-  | "dark-amber"
   | "light-violet"
   | "aqua"
   | "deep-forest"
@@ -68,8 +71,8 @@ export function ThemeProvider({
     root.classList.remove(
       "light",
       "dark-claude",
-      "light-amber",
-      "dark-amber",
+      "light-caffeine",
+      "dark-caffeine",
       "light-catppuccin",
       "dark-catppuccin",
       "light-darkmatter",
@@ -88,10 +91,12 @@ export function ThemeProvider({
       "dark-twitter",
       "light-bloom",
       "dark-bloom",
+      "light-classy",
+      "dark-classy",
+      "light-slack",
+      "dark-slack",
       "dark-aqua",
       "dark-violet",
-      "dark-amber",
-      "light-amber",
       "light-violet",
       "aqua",
       "dark-halloween",
