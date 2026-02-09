@@ -140,7 +140,7 @@ const SettingsUserProfile = () => {
             Dane profilu
           </CardTitle>
           <p className="text-sm text-muted-foreground">
-            Edytuj swoje podstawowe informacje. Zmiany zostaną zapisane po kliknięciu „Zapisz”.
+            W tej sekcji możesz zmienić swój avatar oraz wyświetlić dane przypisane do profilu.
           </p>
         </CardHeader>
 
