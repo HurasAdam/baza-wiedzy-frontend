@@ -58,7 +58,7 @@ export function WorkspaceOverviewPage() {
             <div
               key={folder._id}
               onClick={() => handleOpenFolder(folder._id)}
-              className="cursor-pointer group rounded-2xl p-5 border border-border/40 bg-gradient-to-br from-card/70 to-card/40 backdrop-blur-sm 
+              className="cursor-pointer group rounded-2xl p-5 border border-border/65 bg-gradient-to-br from-card/70 to-card/40 backdrop-blur-sm 
                          shadow-sm hover:shadow-xl hover:border-primary/40 hover:from-card/80 transition-all duration-200"
             >
               <div className="flex items-center justify-between mb-4">
