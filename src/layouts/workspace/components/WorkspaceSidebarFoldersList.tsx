@@ -71,7 +71,7 @@ export const WorkspaceSidebarFoldersList = ({
               className={({ isActive }) =>
                 cn(
                   "flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors",
-                  isActive ? "bg-primary/10 text-primary/80 font-medium" : "text-muted-foreground hover:bg-muted"
+                  isActive ? "bg-primary/10 text-primary/80 font-medium" : "text-muted-foreground hover:bg-muted",
                 )
               }
             >
@@ -84,7 +84,7 @@ export const WorkspaceSidebarFoldersList = ({
                       <Folder size={18} className="text-muted-foreground" />
                     )}
                     {folder.articlesCount > 0 && (
-                      <span className="absolute -top-1 -right-1.5 flex items-center justify-center w-3.5 h-3.5 text-[9px] font-medium text-white bg-accent rounded-full shadow-sm">
+                      <span className="absolute -top-1 -right-1.5 flex items-center justify-center w-3.5 h-3.5 text-[9px] font-medium text-primary-foreground bg-primary rounded-full shadow-sm">
                         {folder.articlesCount}
                       </span>
                     )}
