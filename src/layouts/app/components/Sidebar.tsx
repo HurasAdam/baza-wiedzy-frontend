@@ -11,6 +11,7 @@ import {
   LandPlot,
   Layers2,
   LayoutDashboard,
+  Link,
   MailQuestionMark,
   MoreHorizontal,
   RectangleEllipsis,
@@ -62,7 +63,7 @@ const navItems: NavItem[] = [
   },
   { title: "Szkoły JST", href: `/jst-projects`, icon: School },
   { title: "Działy i kontakty", href: `/achieved`, icon: BookUser },
-
+  { title: "Przydatne linki", href: "/useful-links", icon: Link },
   {
     title: "Do zweryfikowania",
     href: "/articles-pending",

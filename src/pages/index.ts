@@ -53,6 +53,7 @@ import { ReportDetailsPage } from "./report/ReportDetailsPage";
 import { ReportsPage } from "./reports/ReportsPage";
 import { StatisticsPage } from "./statistics/StatisticsPage";
 import { TopicRegisterPage } from "./TopicRegister/TopicRegisterPage";
+import { UsefulLinksPage } from "./usefull-links/UsefulLinksPage";
 import { WorkspaceArticlePage } from "./workspace-article/WorkspaceArticlePage";
 import { WorkspaceFolderPage } from "./workspace-folder-page/WorkspaceFolderPage";
 import { WorkspaceManageFoldersPage } from "./workspace-manage-folders/WorkspaceManageFoldersPage";
@@ -121,4 +122,5 @@ export const PAGES = {
   JstDetailsPage,
   ArchivedArticleMainPage,
   ArchivedArticleHistoryPage,
+  UsefulLinksPage,
 };

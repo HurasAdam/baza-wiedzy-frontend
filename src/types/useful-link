@@ -1,0 +1,10 @@
+export interface UsefulLink {
+  _id: string;
+  name: string;
+  url: string;
+  description?: string;
+  isFeatured?: boolean;
+  linkCategory?: { _id: string; name: string };
+  createdAt: string;
+  updatedAt: string;
+}
