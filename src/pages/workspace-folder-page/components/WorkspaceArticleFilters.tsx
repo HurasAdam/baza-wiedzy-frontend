@@ -69,12 +69,7 @@ const WorkspaceArticleFilters: React.FC<ArticlesFilterBarProps> = ({
       {/* ---- Filters ---- */}
       <div className="flex px-3 py-2 gap-3 items-between  flex-wrap">
         {/* Search */}
-        <Input
-          value={selectedTitle}
-          onChange={onTitleChange}
-          placeholder="Szukaj artykułów..."
-          className="w-52 border-ring"
-        />
+        <Input value={selectedTitle} onChange={onTitleChange} placeholder="Szukaj artykułów..." className="w-52" />
 
         {/* Product */}
         {/* <Select
