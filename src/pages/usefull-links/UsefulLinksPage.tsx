@@ -178,7 +178,7 @@ export const UsefulLinksPage = () => {
             <span className="text-sm text-muted-foreground leading-relaxed">
               Link do zasobu:{" "}
               <a
-                href={`https://${links.find((l) => l._id === deletingLinkId)?.url}`}
+                href={`${links.find((l) => l._id === deletingLinkId)?.url}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-500 underline"
