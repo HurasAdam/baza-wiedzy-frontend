@@ -3,12 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../../components/ui/tooltip";
 import { cn } from "../../../lib/utils";
 
-const statusLabels: Record<string, string> = {
-  approved: "Zatwierdzony",
-  pending: "Oczekujący",
-  rejected: "Odrzucony",
-};
-
 export interface Article {
   _id: string;
   title: string;
@@ -95,12 +89,7 @@ const TableArticleCard = ({ article, openArticleDrawer, onMouseEnter, onMouseLea
   bg-muted/60 "
         >
           {article.isImportant ? (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Star className="w-4.5 h-4.5 text-yellow-600/90 " />
-              </TooltipTrigger>
-              <TooltipContent className="bg-muted p-2 rounded-md text-xs">Wymaga weryfikacji</TooltipContent>
-            </Tooltip>
+            <Star className="w-4.5 h-4.5 text-yellow-600/90 " />
           ) : (
             <FileText className="w-4.5 h-4.5 text-muted-foreground" />
           )}
