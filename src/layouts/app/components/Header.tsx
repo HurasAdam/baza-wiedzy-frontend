@@ -195,10 +195,7 @@ const Header = ({
 
               <DropdownMenuSeparator />
 
-              <DropdownMenuItem
-                onClick={() => console.log("TODO: create workspace modal")}
-                className="gap-2 p-2 cursor-pointer"
-              >
+              <DropdownMenuItem onClick={onCreateWorkspace} className="gap-2 p-2 cursor-pointer">
                 <div className="flex size-6 items-center justify-center rounded-md border bg-background">
                   <Plus className="w-4 h-4" />
                 </div>
