@@ -22,8 +22,8 @@ const JstProjectsHeader = ({ onCreateJstProject, onCreateJstSchool, userPermissi
   const hasDropdownOptions = dropdownOptions.length > 0;
 
   const triggerBtn = (
-    <Button variant="default" className="flex items-center gap-1 cursor-pointer">
-      Dodaj <Plus className="w-4 h-4" />
+    <Button variant="default" size="sm" className="flex items-center gap-2 cursor-pointer">
+      <Plus className="w-4 h-4" /> Dodaj
     </Button>
   );
 

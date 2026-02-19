@@ -107,7 +107,11 @@ export const MyFlagsPage = () => {
           <h1 className="text-2xl font-semibold text-foreground">Moje etykiety</h1>
           <p className="text-muted-foreground text-sm mt-1">Zarządzaj dodanymi etykietami</p>
         </div>
-        <Button onClick={handleCreateFlag} size="sm" className="gap-2 shadow-md hover:shadow-lg transition-all">
+        <Button
+          onClick={handleCreateFlag}
+          size="sm"
+          className="gap-2 shadow-md cursor-pointer hover:shadow-lg transition-all"
+        >
           <Plus className="w-4 h-4" />
           Nowa etykieta
         </Button>

@@ -84,7 +84,7 @@ export const UsefulLinksPage = () => {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size="sm" className="gap-2">
+            <Button size="sm" className="gap-2 cursor-pointer">
               <Plus className="w-4 h-4" />
               Dodaj
             </Button>

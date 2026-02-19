@@ -9,9 +9,9 @@ interface FunnyMessagesHeaderProps {
 
 const FunnyMessagesHeader = ({ userPermissions, onCreateFunnyMessage }: FunnyMessagesHeaderProps) => {
   const triggerBtn = (
-    <Button size="sm" className="gap-2 shadow-md hover:shadow-lg transition-all">
+    <Button size="sm" className="gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer">
       <Plus className="w-4 h-4" />
-      Dodaj wiadomość
+      Dodaj
     </Button>
   );
 

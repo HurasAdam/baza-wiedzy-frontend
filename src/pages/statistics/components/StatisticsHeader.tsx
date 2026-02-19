@@ -26,7 +26,7 @@ const StatisticsHeader = ({
           <ChartColumnDecreasing /> Statystyki użytkowników
         </h1>
 
-        <Button onClick={onExport} className="flex items-center gap-2">
+        <Button onClick={onExport} size="sm" className="flex items-center gap-2 cursor-pointer">
           {isExportLoading ? (
             <>
               <Loader2 className="animate-spin w-4 h-4" />

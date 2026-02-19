@@ -117,8 +117,8 @@ const FaqHeader = (props: FaqHeaderProps) => {
       {userPermissions.includes("ADD_FAQ") && (
         <Dropdown
           triggerBtn={
-            <Button variant="default" className="flex items-center gap-1 cursor-pointer">
-              Dodaj <Plus className="w-4 h-4" />
+            <Button variant="default" size="sm" className="flex gap-2 items-center cursor-pointer">
+              <Plus className="w-4 h-4" /> Dodaj
             </Button>
           }
           options={[

@@ -50,7 +50,11 @@ export const MyWorkspaces = () => {
           <p className="text-muted-foreground text-sm mt-1">Zarządzaj swoimi kolekcjami.</p>
         </div>
         {userPermissions.includes("ADD_COLLECTION") && (
-          <Button onClick={onCreateWorkspace} size="sm" className="gap-2 shadow-md hover:shadow-lg transition-all">
+          <Button
+            onClick={onCreateWorkspace}
+            size="sm"
+            className="gap-2 cursor-pointer shadow-md hover:shadow-lg transition-all"
+          >
             <Plus className="w-4 h-4" />
             Nowa kolekcja
           </Button>

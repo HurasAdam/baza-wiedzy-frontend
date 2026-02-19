@@ -54,9 +54,9 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
         </div>
 
         <div className="flex items-center gap-4">
-          <Button onClick={() => navigate("/articles/new")} className="group " size="sm">
+          <Button onClick={() => navigate("/articles/new")} className="cursor-pointer " size="sm">
             <div className="flex items-center gap-2 ">
-              <Plus className=" w-4 h-4 group-hover:animate-spin" />
+              <Plus className=" w-4 h-4" />
               Nowy artykuł
             </div>
           </Button>
