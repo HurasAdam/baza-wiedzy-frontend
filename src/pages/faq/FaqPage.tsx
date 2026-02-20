@@ -123,7 +123,7 @@ export function FaqPage() {
       initial="init"
       animate="visible"
       exit="exit"
-      className="bg-background h-full pb-5 max-w-[1320px] mx-auto"
+      className="flex flex-col h-full w-full py-6 px-10 max-w-6xl mx-auto"
     >
       <FaqHeader
         isFaqsLoading={isFaqsLoading}
