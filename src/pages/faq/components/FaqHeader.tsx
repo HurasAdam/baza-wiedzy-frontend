@@ -54,13 +54,10 @@ const FaqHeader = ({
         ) : (
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
-              <div
-                style={{ backgroundColor }}
-                className="w-13.5 h-13.5 rounded-xl flex items-center justify-center cursor-pointer transition-transform hover:scale-105 relative group bg-muted border"
-              >
-                <ActiveIcon className="w-7 h-7" />
+              <div className="w-13.5 h-13.5 rounded-xl flex items-center justify-center cursor-pointer transition-transform hover:scale-105 relative group bg-muted/35 border">
+                <ActiveIcon className="w-7 h-7" style={{ color: backgroundColor, opacity: 0.8 }} />
 
-                <ChevronDown className="w-4 h-4 absolute bottom-1 right-1 text-white opacity-80 transition-transform group-data-[state=open]:rotate-180" />
+                <ChevronDown className="w-4 h-4 absolute bottom-1 right-1 text-foreground opacity-85 transition-transform group-data-[state=open]:rotate-180" />
               </div>
             </PopoverTrigger>
 
