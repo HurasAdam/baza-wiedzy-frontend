@@ -14,6 +14,7 @@ import {
   Link,
   MailQuestionMark,
   MoreHorizontal,
+  Network,
   RectangleEllipsis,
   School,
   Smile,
@@ -52,8 +53,10 @@ const navItems: NavItem[] = [
   { title: "Start", href: "/dashboard", icon: LayoutDashboard },
   { title: "Baza artykułów", href: "/articles", icon: FolderSearch },
   // { title: "Moje ulubione", href: `/flagged-articles`, icon: HeartIcon },
+  { title: "Przydatne linki", href: "/useful-links", icon: Link },
   { title: "Rejestr tematów", href: "/register-topic", icon: Clipboard },
   // { title: "Moje wpisy", href: `/my-entries`, icon: UserRoundPen, requiredPermission: "ADD_ARTICLE" },
+
   { title: "FAQ", href: "/faq", icon: BookOpen },
   {
     title: "Statystyki",
@@ -61,9 +64,14 @@ const navItems: NavItem[] = [
     icon: ChartColumnDecreasing,
     requiredPermission: "VIEW_USER_STATS",
   },
+  {
+    title: "Narzędzia sieciowe",
+    href: "/network-tools",
+    icon: Network,
+  },
   { title: "Szkoły JST", href: `/jst-projects`, icon: School },
   { title: "Działy i kontakty", href: `/achieved`, icon: BookUser },
-  { title: "Przydatne linki", href: "/useful-links", icon: Link },
+
   {
     title: "Do zweryfikowania",
     href: "/articles-pending",
