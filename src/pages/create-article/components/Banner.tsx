@@ -9,34 +9,43 @@ interface Props {
 }
 
 export const Banner = ({ isDirty, isLoading, onCancel, onSave }: Props) => (
-  <div className="mb-6 flex items-center justify-between gap-4 rounded-lg bg-muted/30 px-5 py-3 shadow-sm">
-    <div className="flex items-center gap-4">
-      <div className="flex items-center justify-center w-10 h-10 rounded-md bg-background border shadow-sm">
-        <Plus className="w-4 h-4 text-primary/80" />
+  <div
+    className="mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-xl border border-border/40
+               bg-sidebar/70 px-5 py-3 shadow-xs backdrop-blur-sm"
+  >
+    {/* Ikona + tekst */}
+    <div className="flex items-start sm:items-center gap-3">
+      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 border border-primary/40">
+        <Plus className="w-5 h-5 text-primary" />
       </div>
-      <div className="leading-tight">
-        <ul className="text-xs text-muted-foreground list-disc ml-5 space-y-1">
+      <div className="flex flex-col gap-1 py-2">
+        <span className="text-xs text-muted-foreground">
+          Wprowadź dane artykułu, wypełniając wymagane pola, a następnie zapisz zmiany.
+        </span>
+        <ul className="text-xs text-muted-foreground list-disc ml-5 mt-1 space-y-0.5">
           <li>
-            Wprowadź dane artykułu, uzupełniając wymagane pola formularza oznaczone{" "}
-            <span className="text-primary font-semibold ml-1 ">*</span>
+            Pola oznaczone <span className="text-primary font-semibold">*</span> są wymagane
           </li>
-          <li>Zapisz zmiany, aby dodać artykuł.</li>
-          <li>
-            Po dodaniu artykuł zostanie zapisany jako szkic i będzie wymagał zatwierdzenia, zanim będzie widoczny w
-            wyszukiwarce.
-          </li>
+
+          <li>Dodany artykuł zostanie zapisany jako szkic i wymagał będzie zatwierdzenia przed publikacją</li>
         </ul>
+        {isDirty && (
+          <span className="text-xs text-yellow-600 mt-1">
+            Masz niezapisane zmiany – kliknij "Zapisz", aby kontynuować
+          </span>
+        )}
       </div>
     </div>
 
-    <div className="flex gap-2">
+    {/* Przyciski */}
+    <div className="flex gap-2 mt-3 sm:mt-0">
       <Button onClick={onCancel} size="sm" variant="outline">
         Anuluj
       </Button>
-      <Button onClick={onSave} size="sm" disabled={isLoading || !isDirty}>
+      <Button onClick={onSave} size="sm" disabled={!isDirty || isLoading}>
         {isLoading ? (
           <div className="flex items-center gap-2">
-            <Loader className="animate-spin w-4 h-4" />
+            <Loader className="w-4 h-4 animate-spin" />
             Zapisuję...
           </div>
         ) : (

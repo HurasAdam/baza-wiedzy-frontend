@@ -46,7 +46,10 @@ export const CreateArticlePage = () => {
 
     mutate(dto, {
       onSuccess: () => {
-        toast.success("Artykuł został dodany");
+        toast.success("Zmiany zostały zapisane", {
+          description: "Dodano szkic artykułu",
+          position: "bottom-right",
+        });
         navigate("/articles");
         return;
       },
@@ -134,7 +137,7 @@ export const CreateArticlePage = () => {
 
   return (
     tags && (
-      <div className="pb-5 max-w-[1400px] mx-auto min-h-screen flex flex-col ">
+      <div className="max-w-[1320px] px-6 lg:px-0 pb-6  mx-auto min-h-screen flex flex-col ">
         <Header onBack={() => navigate(-1)} />
 
         <Banner isDirty={isDirty} isLoading={isCreateLoading} onSave={handleSubmit} onCancel={() => navigate(-1)} />
