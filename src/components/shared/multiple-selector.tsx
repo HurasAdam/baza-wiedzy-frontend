@@ -1,5 +1,5 @@
 import { Command as CommandPrimitive, useCommandState } from "cmdk";
-import { X } from "lucide-react";
+import { X, type LucideIcon } from "lucide-react";
 import * as React from "react";
 import { forwardRef, useEffect } from "react";
 
@@ -75,6 +75,7 @@ interface MultipleSelectorProps {
   >;
   /** hide the clear all button. */
   hideClearAllButton?: boolean;
+  optionIcon?: LucideIcon;
 }
 
 export interface MultipleSelectorRef {
@@ -172,6 +173,7 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
       defaultOptions: arrayDefaultOptions = [],
       options: arrayOptions,
       delay,
+      optionIcon,
       onSearch,
       onSearchSync,
       loadingIndicator,
@@ -455,6 +457,18 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
                   data-fixed={option.fixed}
                   data-disabled={disabled || undefined}
                 >
+                  {optionIcon && (
+                    <div
+                      className="flex items-center justify-center w-5 h-5 rounded-xl
+                bg-muted
+                border border-border/60 
+                shadow-sm backdrop-blur-sm mr-0.5"
+                    >
+                      {React.createElement(optionIcon, {
+                        className: "w-3 h-3 text-muted-foreground",
+                      })}
+                    </div>
+                  )}
                   {option.label}
                   <button
                     className={cn(
@@ -574,6 +588,18 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
                               }}
                               className={cn("cursor-pointer", option.disable && "cursor-default text-muted-foreground")}
                             >
+                              {optionIcon && (
+                                <div
+                                  className="flex items-center justify-center w-7 h-7 rounded-xl 
+                bg-card
+                border border-border/60 
+                shadow-sm backdrop-blur-sm mr-0.5"
+                                >
+                                  {React.createElement(optionIcon, {
+                                    className: "w-3 h-3 text-muted-foreground",
+                                  })}
+                                </div>
+                              )}
                               {option.label}
                             </CommandItem>
                           );

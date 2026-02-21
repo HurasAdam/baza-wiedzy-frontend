@@ -328,6 +328,7 @@ const ArticleForm = ({ tags, products, categories, onProductChange, loadingCateg
                           value={field.value}
                           defaultOptions={tags}
                           onChange={field.onChange}
+                          optionIcon={Hash}
                         />
                       </FormControl>
                       <FormDescription className="mt-3 text-[13px]">
