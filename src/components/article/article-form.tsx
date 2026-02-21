@@ -90,9 +90,7 @@ const ArticleForm = ({ tags, products, categories, onProductChange, loadingCateg
                           className="min-h-[175px] border-input"
                         />
                       </FormControl>
-                      <FormDescription className="text-[13px]">
-                        Wewnętrzne uwagi widoczne tylko dla pracowników
-                      </FormDescription>
+                      <FormDescription className="text-[13px]">Notatka dla pracowników</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}

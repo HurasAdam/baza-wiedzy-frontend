@@ -2,40 +2,44 @@ import { Edit3, Loader } from "lucide-react";
 import { Button } from "../../../../components/ui/button";
 
 export const ArticleEditBanner = ({ isDirty, isLoading, onCancel, onSave }) => (
-  <div className="mb-6 flex items-center justify-between gap-4 rounded-lg bg-muted/30 px-5 py-3 shadow-sm">
-    <div className="flex items-center gap-4">
-      <div className="flex items-center justify-center w-10 h-10 rounded-md bg-background border shadow-sm">
-        <Edit3 className="w-4 h-4 text-primary/80" />
+  <div
+    className="mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-xl border border-border/60
+                  bg-sidebar/70 px-5 py-3 shadow-xs backdrop-blur-sm"
+  >
+    {/* Ikona + Tekst */}
+    <div className="flex items-start sm:items-center gap-3">
+      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 border border-primary/40">
+        <Edit3 className="w-5 h-5 text-primary" />
       </div>
-      <div className="leading-tight">
-        <p className="text-sm font-medium text-foreground">Tryb edycji artykułu</p>
-        <p className="text-xs text-muted-foreground">
-          Wprowadzasz zmiany w artykule. Po kliknięciu „Zapisz” wybierz odpowiedni tryb edycji:
-        </p>
-        <ul className="text-xs text-muted-foreground list-disc ml-5 mt-1 space-y-1">
+      <div className="flex flex-col gap-1 py-2">
+        <span className="text-xs text-muted-foreground">
+          Wprowadź zmiany w artykule, zapisz je, a następnie wybierz odpowiedni tryb edycji.
+        </span>
+        <ul className="text-xs text-muted-foreground list-disc ml-5 mt-1 space-y-0.5">
           <li>
-            <strong>Prosta edycja:</strong> modyfikuje treść nie wpływając na status artykułu
+            <strong>Prosta edycja:</strong> modyfikuje treść, nie wpływa na status artykułu
           </li>
           <li>
             <strong>Pełna edycja:</strong> modyfikuje treść i aktualizuje status artykułu
           </li>
         </ul>
         {isDirty && (
-          <p className="text-xs text-yellow-600 mt-1">
-            Masz niezapisane zmiany – kliknij „Zapisz”, aby kontynuować i wybrać tryb edycji.
-          </p>
+          <span className="text-xs text-yellow-600 mt-1">
+            Masz niezapisane zmiany - kliknij "Zapisz", aby kontynuować.
+          </span>
         )}
       </div>
     </div>
 
-    <div className="flex gap-2">
+    {/* Przyciski */}
+    <div className="flex gap-2 mt-3 sm:mt-0">
       <Button onClick={onCancel} size="sm" variant="outline">
         Anuluj
       </Button>
-      <Button onClick={onSave} size="sm" disabled={isLoading || !isDirty}>
+      <Button onClick={onSave} size="sm" disabled={!isDirty || isLoading}>
         {isLoading ? (
           <div className="flex items-center gap-2">
-            <Loader className="animate-spin w-4 h-4" />
+            <Loader className="w-4 h-4 animate-spin" />
             Zapisuję...
           </div>
         ) : (
