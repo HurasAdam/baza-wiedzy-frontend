@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { AxiosError } from "axios";
-import { Link as LinkIcon, Loader, Save } from "lucide-react";
+import { Link as LinkIcon, Loader, Save, Star } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -10,6 +10,7 @@ import { useCreateUsefulLinkMutation } from "../../hooks/useful-links/use-useful
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogTitle } from "../ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { Label } from "../ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Switch } from "../ui/switch";
 
@@ -192,9 +193,23 @@ export const UsefulLinkModal = ({ isOpen, setIsOpen }: UsefulLinkModalProps) => 
               name="isFeatured"
               render={({ field }) => (
                 <FormItem className="flex items-center justify-between gap-2">
-                  <FormLabel className="m-0">Wyróżnij link</FormLabel>
                   <FormControl>
-                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    <div className="border relative flex w-full items-start gap-2 rounded-md  p-4 shadow-xs outline-none">
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        className="order-1 h-4 w-6 after:absolute after:inset-0 [&_span]:size-3 data-[state=checked]:[&_span]:translate-x-2.5 data-[state=checked]:[&_span]:rtl:-translate-x-2.5"
+                      />
+                      <div className="flex grow items-center gap-3">
+                        <Star className={`${field.value ? "text-primary/85" : "text-muted-foreground"}`} />
+                        <div className="grid grow gap-2">
+                          <Label htmlFor={field.name}>Wyróżnij link</Label>
+                          <p id={`${field.name}-description`} className="text-muted-foreground text-xs">
+                            Wyróżnione linki wyświetlane jako pierwsze na liście.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </FormControl>
                 </FormItem>
               )}
