@@ -48,7 +48,7 @@ export const StatisticsTable = ({
     setUserStatisticsModal(variant, selectedUser);
   };
   return (
-    <Card>
+    <Card className="bg-gradient-to-br from-card/70 to-card/40 backdrop-blur-sm border border-border/70">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Icon className="w-4 h-4 text-primary" />
