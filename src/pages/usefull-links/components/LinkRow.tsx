@@ -44,7 +44,7 @@ export const LinkRow = ({ link, onDelete }: Props) => {
   return (
     <div
       onClick={() => openLink(link.url)}
-      className="group flex items-center justify-between p-3 rounded-lg border border-border hover:bg-muted/40 transition-all cursor-pointer"
+      className="group flex items-center justify-between p-3 rounded-lg border border-border/95 hover:bg-muted/40 transition-all cursor-pointer  backdrop-blur-sm"
     >
       <div className="flex items-center gap-3 min-w-0">
         <div
