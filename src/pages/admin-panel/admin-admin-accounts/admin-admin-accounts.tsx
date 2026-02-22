@@ -26,8 +26,8 @@ const dropdownOptions = [
 ];
 
 const triggerBtn = (
-  <Button variant="default" className="flex items-center gap-1 cursor-pointer">
-    Dodaj <Plus className="w-4 h-4" />
+  <Button size="sm" variant="default" className="flex items-center gap-2 cursor-pointer">
+    <Plus className="w-4 h-4" /> Dodaj
   </Button>
 );
 

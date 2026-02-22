@@ -44,8 +44,8 @@ export const UsersFilters = ({
         <div className="flex items-center gap-4">
           <Dropdown
             triggerBtn={
-              <Button size="sm" className="flex items-center gap-1">
-                Dodaj <Plus className="h-4 w-4" />
+              <Button size="sm" className="flex items-center gap-2">
+                <Plus className="h-4 w-4" /> Dodaj
               </Button>
             }
             options={[

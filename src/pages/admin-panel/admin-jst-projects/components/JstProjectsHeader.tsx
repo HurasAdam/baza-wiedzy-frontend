@@ -17,8 +17,8 @@ const JstProjectsHeader = ({
   jstProjectsCount,
 }: JstProjectsHeaderProps) => {
   const triggerBtn = (
-    <Button variant="default" className="flex items-center gap-1">
-      Dodaj <Plus className="w-4 h-4" />
+    <Button size="sm" variant="default" className="flex items-center gap-2">
+      <Plus className="w-4 h-4" /> Dodaj
     </Button>
   );
 

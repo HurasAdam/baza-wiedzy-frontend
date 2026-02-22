@@ -29,8 +29,8 @@ const FaqsHeader = ({ searchTerm, setSearchTerm, foundFaqsValue, navigate }: Faq
         </h1>
         <Dropdown
           triggerBtn={
-            <Button variant="default" className="flex items-center gap-1">
-              Dodaj <Plus className="w-4 h-4" />
+            <Button size="sm" variant="default" className="flex items-center gap-2">
+              <Plus className="w-4 h-4" /> Dodaj
             </Button>
           }
           options={dropdownOptions}
