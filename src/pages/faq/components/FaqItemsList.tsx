@@ -34,10 +34,11 @@ const FaqItemsList = ({ isFaqLoading, items, canEdit, onEdit, onDelete }: FaqIte
         <AccordionItem
           key={item._id}
           value={item._id}
-          className="group rounded-2xl border border-border/60 bg-background transition-all duration-200 data-[state=open]:shadow-sm data-[state=open]:border-primary/30"
+          className="group rounded-2xl border border-border/60 bg-background transition-all duration-200 data-[state=open]:shadow-sm data-[state=open]:border-primary/30 bg-gradient-to-br from-card/70 to-card/40 backdrop-blur-sm
+                         shadow-sm"
         >
           {/* Pytanie */}
-          <AccordionTrigger className="px-6 py-5 hover:no-underline">
+          <AccordionTrigger className="px-6 py-5 hover:no-underline ">
             <div className="flex items-center justify-between w-full">
               <div className="text-base font-medium tracking-tight">{item.question}</div>
             </div>
@@ -45,7 +46,7 @@ const FaqItemsList = ({ isFaqLoading, items, canEdit, onEdit, onDelete }: FaqIte
 
           {/* Odpowiedź */}
           <AccordionContent className="px-6 pb-6">
-            <div className="rounded-xl bg-muted/40 border border-border/40 pr-5 py-5 text-sm leading-relaxed text-muted-foreground">
+            <div className="rounded-xl bg-background border border-border/40 pr-5 py-5 text-sm leading-relaxed text-muted-foreground">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-start gap-4 flex-1 mb-1.5">
                   <div className="min-w-0.5 max-w-0.5 min-h-[40px] rounded-full bg-primary/60 mt-1 self-stretch" />
