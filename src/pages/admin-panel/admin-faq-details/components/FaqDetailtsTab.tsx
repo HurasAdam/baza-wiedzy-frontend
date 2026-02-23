@@ -65,7 +65,10 @@ export const FaqDetailtsTab = ({ faq }: ProductDetailsTabProps) => {
       { faqId, data },
       {
         onSuccess: () => {
-          toast.success("Produkt został zaktualizowany");
+          toast.success("Zmiany zostały zapisane", {
+            position: "bottom-right",
+            description: "FAQ zostało zaktualizowane",
+          });
           queryClient.invalidateQueries({ queryKey: ["faq", faqId] });
           form.reset();
           setIsEditing(false);

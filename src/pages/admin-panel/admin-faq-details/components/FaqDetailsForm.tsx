@@ -30,7 +30,7 @@ export const FaqDetailsForm = () => {
 
       <div className="mb-4">
         <label className="block text-sm font-medium mb-1 text-header-foreground">Tytuł:</label>
-        <Input {...register("title")} placeholder="Wpisz tytuł FAQ" className="h-10 text-foreground border-ring" />
+        <Input {...register("title")} placeholder="Wpisz tytuł FAQ" className="h-10 text-foreground" />
       </div>
 
       {/* --- description --- */}
@@ -39,7 +39,7 @@ export const FaqDetailsForm = () => {
         <Textarea
           {...register("description", { maxLength: 1500 })}
           placeholder="Wpisz opis FAQ (opcjonalnie). Możesz użyć do 1500 znaków."
-          className="w-full min-h-[6rem] p-3 rounded-md border-ring bg-card text-foreground placeholder:text-muted-foreground resize-vertical"
+          className="w-full min-h-[6rem] p-3 rounded-md  bg-card text-foreground placeholder:text-muted-foreground resize-vertical"
         />
         <div className="flex justify-end text-xs text-muted-foreground mt-1">
           <span>{description.length}/1500</span>
