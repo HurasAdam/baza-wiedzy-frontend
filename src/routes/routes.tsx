@@ -9,6 +9,7 @@ export const protectedRoutePaths = [
   { path: PROTECTED_ROUTES.ARTICLE, element: <PAGES.ArticlePage /> },
   { path: PROTECTED_ROUTES.JST_PROJECTS, element: <PAGES.JstProjectsPage /> },
   { path: PROTECTED_ROUTES.FAQ, element: <PAGES.FaqPage /> },
+  { path: PROTECTED_ROUTES.NETWORK_TOOLS, element: <PAGES.NetworkToolsPage /> },
   {
     path: PROTECTED_ROUTES.PENDING_ARTICLES,
     element: <PAGES.PendingArticles />,

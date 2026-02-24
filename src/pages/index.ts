@@ -46,6 +46,7 @@ import { JstProjectsPage } from "./jst-projects/JstProjectsPage";
 import { MyEntriesPage } from "./my-entries/MyEntriesPage";
 import { MyFlagsPage } from "./my-flags/MyFlagsPage";
 import { MyWorkspaces } from "./my-workspaces/MyWorkspaces";
+import { NetworkToolsPage } from "./network-tools/NetworkToolsPage";
 import { NotFoundPage } from "./notFound/NotFoungPage";
 import { OnboardingPage } from "./onboarding/OnboardingPage";
 import { PendingArticles } from "./pending-articles/PendingArticles";
@@ -123,4 +124,5 @@ export const PAGES = {
   ArchivedArticleMainPage,
   ArchivedArticleHistoryPage,
   UsefulLinksPage,
+  NetworkToolsPage,
 };

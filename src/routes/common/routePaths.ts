@@ -13,6 +13,7 @@ export const PROTECTED_ROUTES = {
   FAVORITES_ARTICLES: "favorites-articles",
   MANAGE_USERS: "manage-users",
   MANAGE_PRODUCTS: "manage-products",
+  NETWORK_TOOLS: "network-tools",
   ONBOARDING: "account-onboarding",
   USEFULLINKS: "useful-links",
   FAQ: "faq",
