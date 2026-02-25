@@ -5,7 +5,7 @@ export const useFindOneArticleUserFlagQuery = (articleId: string) => {
   return useQuery({
     queryKey: ["article-user-flag", articleId],
     queryFn: () => articleUserFlagService.findOne(articleId),
-    enabled: !!articleId, // <- query wykona się tylko, jeśli articleId jest prawdziwe
+    enabled: !!articleId,
   });
 };
 

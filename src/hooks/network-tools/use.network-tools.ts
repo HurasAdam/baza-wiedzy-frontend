@@ -4,7 +4,10 @@ import { networkToolsService } from "../../services/network-tools.service";
 export const useSendNetworkQuery = (params?: { domain: string; resolver: string; recordType: string }) => {
   return useQuery({
     queryKey: ["dns-lookup", params],
-    queryFn: () => networkToolsService.find(params),
-    enabled: !!params?.domain, // fetch tylko jeśli domain istnieje
+    queryFn: () => networkToolsService.find(params!),
+    enabled: !!params,
+    refetchOnWindowFocus: false,
+    staleTime: 0,
+    retry: false,
   });
 };
