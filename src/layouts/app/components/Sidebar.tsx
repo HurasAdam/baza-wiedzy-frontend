@@ -72,13 +72,13 @@ const navItems: NavItem[] = [
   { title: "Szkoły JST", href: `/jst-projects`, icon: School },
   { title: "Działy i kontakty", href: `/achieved`, icon: BookUser },
 
+  { title: "Zabawne wiad.", href: "/funny-messages", icon: Smile },
   {
     title: "Do zweryfikowania",
     href: "/articles-pending",
     icon: RectangleEllipsis,
     requiredPermission: "ACCESS_PENDING_ARTICLES_PANEL",
   },
-  { title: "Zabawne wiad.", href: "/funny-messages", icon: Smile },
 ];
 
 export const myNavItems: MySectionNavItem[] = [
