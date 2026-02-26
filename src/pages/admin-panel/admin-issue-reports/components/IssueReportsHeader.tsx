@@ -43,7 +43,7 @@ const IssueReportsHeader = ({
         </div>
         {userPermissions.includes("SEND_REPORT") && (
           <Button size="sm" onClick={openSendIssueReportModal}>
-            <Plus className="text-card" /> Nowe zgłoszenie
+            <Plus className="w-4 h-4" /> Nowe zgłoszenie
           </Button>
         )}
       </header>
