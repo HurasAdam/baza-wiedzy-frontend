@@ -31,7 +31,7 @@ const IssueReportsHeader = ({
   const hasActiveFilters = !!filterType || !!filterStatus;
 
   return (
-    <div className="mb-6 space-y-4">
+    <div className="mb-6 space-y-4 ">
       {/* Context */}
       <header className="flex justify-between items-center">
         <div className="flex flex-col ">
@@ -89,7 +89,7 @@ const IssueReportsHeader = ({
       <Separator />
 
       {/* Controls */}
-      <div className="bg-card border rounded-xl p-4">
+      <div className="bg-card/80 border rounded-xl p-4">
         <IssueReportsFilters
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}

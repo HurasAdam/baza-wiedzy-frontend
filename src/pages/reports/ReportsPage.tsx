@@ -36,7 +36,7 @@ export const ReportsPage = () => {
       initial="init"
       animate="visible"
       exit="exit"
-      className="mx-auto pb-5 max-w-[1320px] flex flex-col bg-gradient-to-br from-background via-background/90 to-background/60 backdrop-blur-md"
+      className="mx-auto pb-5 max-w-[1320px] flex flex-col  backdrop-blur-md"
     >
       <IssueReportsHeader
         searchTerm={searchTerm}
