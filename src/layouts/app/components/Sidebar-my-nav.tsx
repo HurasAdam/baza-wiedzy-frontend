@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -15,56 +16,23 @@ interface MySectionNavProps extends React.HtmlHTMLAttributes<HTMLElement> {
   isCollapsed: boolean;
 }
 
+const MotionButton = motion(Button);
+
 export const SidebarMyNav = ({ items, isCollapsed, ...props }: MySectionNavProps) => {
   const location = useLocation();
   const navigate = useNavigate();
 
   if (!items?.length) return null;
 
-  if (isCollapsed) {
-    return (
-      <div className="mt-2 border-t flex justify-center py-2" {...props}>
-        <nav className="flex flex-col gap-y-1.5">
-          {items.map((el) => {
-            const Icon = el.icon;
-            const isActive = location.pathname === el.href || location.pathname.startsWith(el.href + "/");
-
-            const handleClick = () => {
-              navigate(el.href);
-            };
-
-            return (
-              <Button
-                key={el.href}
-                variant={isActive ? "outline" : "ghost"}
-                className={cn(
-                  "justify-start text-sidebar-foreground border-transparent hover:text-sidebar-accent-foreground hover:bg-sidebar-hover rounded-md transition-colors duration-200",
-                  isActive &&
-                    "bg-sidebar-primary hover:bg-sidebar-primary border-sidebar-border text-sidebar-primary-foreground font-semibold",
-                  isCollapsed && "w-10 justify-center",
-                )}
-                onClick={handleClick}
-                title={isCollapsed ? el.title : undefined}
-              >
-                <Icon className={cn("w-5 h-5", isCollapsed && "mx-auto")} />
-                {!isCollapsed && <span className="ml-1.5">{el.title}</span>}
-              </Button>
-            );
-          })}
-        </nav>
-      </div>
-    );
-  }
-
   return (
-    <div className="mt-2 border-t px-2" {...props}>
-      <div className="flex items-center px-3.5 py-2.5 ">
-        <h3 className="text-[11px] font-medium text-muted-foreground/80  tracking-wide flex items-center gap-2">
+    <div className="mt-2 border-t border-border/50" {...props}>
+      <div className="flex items-center px-4 py-3">
+        <h3 className="text-[10px] font-semibold uppercase tracking-[0.12em] text-sidebar-foreground/40">
           {!isCollapsed && "Moje"}
         </h3>
       </div>
 
-      <nav className="flex flex-col gap-y-1.5">
+      <nav className="flex flex-col gap-y-1.5 px-4 py-2">
         {items.map((el) => {
           const Icon = el.icon;
           const isActive = location.pathname === el.href || location.pathname.startsWith(el.href + "/");
@@ -74,21 +42,40 @@ export const SidebarMyNav = ({ items, isCollapsed, ...props }: MySectionNavProps
           };
 
           return (
-            <Button
+            <MotionButton
               key={el.href}
-              variant={isActive ? "outline" : "ghost"}
-              className={cn(
-                "justify-start text-sidebar-foreground border-transparent hover:text-sidebar-accent-foreground hover:bg-sidebar-hover rounded-md transition-colors duration-200",
-                isActive &&
-                  "bg-sidebar-primary hover:bg-sidebar-primary border-sidebar-border text-sidebar-primary-foreground font-semibold",
-                isCollapsed && "w-10 justify-center",
-              )}
+              variant="ghost"
               onClick={handleClick}
+              whileHover={{ backgroundColor: "rgba(255,255,255,0.04)" }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              className={cn(
+                "relative h-9 px-3 justify-start rounded-lg",
+                "text-sidebar-foreground hover:text-sidebar-foreground",
+                isActive && "text-sidebar-foreground font-medium",
+                isCollapsed && "w-10 justify-center px-0",
+              )}
               title={isCollapsed ? el.title : undefined}
             >
-              <Icon className={cn("w-5 h-5", isCollapsed && "mx-auto")} />
-              {!isCollapsed && <span className="ml-1.5">{el.title}</span>}
-            </Button>
+              {isActive && (
+                <motion.div
+                  layoutId="activeSidebarItem"
+                  className="absolute left-0 top-1 bottom-1 w-[3px] rounded-full bg-primary"
+                  transition={{ type: "spring", stiffness: 500, damping: 35 }}
+                />
+              )}
+
+              <Icon
+                strokeWidth={1.5}
+                className={cn(
+                  "relative z-10 w-4.5 h-4.5 transition-all",
+                  isActive ? "text-sidebar-primary" : "text-sidebar-foreground/65 group-hover:text-sidebar-foreground",
+                  isCollapsed && "mx-auto",
+                )}
+              />
+
+              {!isCollapsed && <span className="relative z-10 ml-3 text-[14px] tracking-tight">{el.title}</span>}
+            </MotionButton>
           );
         })}
       </nav>

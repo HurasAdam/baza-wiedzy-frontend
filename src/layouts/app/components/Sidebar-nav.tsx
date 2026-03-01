@@ -1,7 +1,7 @@
-import type { Workspace } from "@/types";
-
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import type { Workspace } from "@/types";
+import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
 import { useLocation, useNavigate } from "react-router";
 
@@ -16,12 +16,14 @@ interface SidebarNavProps extends React.HtmlHTMLAttributes<HTMLElement> {
   className?: string;
 }
 
+const MotionButton = motion(Button);
+
 export const SidebarNav = ({ items, isCollapsed, className, currentWorkspace, ...props }: SidebarNavProps) => {
   const location = useLocation();
   const navigate = useNavigate();
 
   return (
-    <nav className={cn("flex flex-col gap-y-1.5 p-2.5", className)} {...props}>
+    <nav className={cn("flex flex-col gap-y-1.5 px-4 py-5 relative", className)} {...props}>
       {items.map((el) => {
         const Icon = el.icon;
         const isActive = location.pathname === el.href || location.pathname.startsWith(el.href + "/");
@@ -37,20 +39,38 @@ export const SidebarNav = ({ items, isCollapsed, className, currentWorkspace, ..
         };
 
         return (
-          <Button
+          <MotionButton
             key={el.href}
-            variant={isActive ? "outline" : "ghost"}
-            className={cn(
-              "justify-start text-sidebar-foreground border-transparent hover:text-sidebar-accent-foreground hover:bg-sidebar-hover rounded-md transition-colors duration-200  ",
-              isActive &&
-                "bg-sidebar-primary hover:bg-sidebar-primary border-sidebar-border text-sidebar-primary-foreground font-semibold ",
-              isCollapsed && "w-10 justify-center "
-            )}
+            variant="ghost"
             onClick={handleClick}
+            whileHover={{ backgroundColor: "rgba(255,255,255,0.04)" }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            className={cn(
+              "relative h-9 px-3 justify-start rounded-lg",
+              "text-sidebar-foreground hover:text-sidebar-foreground",
+              isActive && " text-sidebar-foreground font-medium",
+            )}
           >
-            <Icon className={cn("w-5 h-5", isCollapsed && "mx-auto")} />
-            {!isCollapsed && <span className="ml-1.5">{el.title}</span>}
-          </Button>
+            {/* Animated active background (Linear-style) */}
+            {isActive && (
+              <motion.div
+                layoutId="activeSidebarItem"
+                className="absolute left-0 top-1 bottom-1 w-[3px] rounded-full bg-primary"
+                transition={{ type: "spring", stiffness: 500, damping: 35 }}
+              />
+            )}
+
+            <Icon
+              strokeWidth={1.5}
+              className={cn(
+                "relative z-10 w-4.5 h-4.5 transition-all",
+                isActive ? "text-sidebar-primary" : "text-sidebar-foreground/65 group-hover:text-sidebar-foreground",
+              )}
+            />
+
+            {!isCollapsed && <span className="relative z-10 ml-3 text-[14px] tracking-tight">{el.title}</span>}
+          </MotionButton>
         );
       })}
     </nav>

@@ -31,14 +31,18 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu";
 
 import { motion } from "framer-motion";
+import { Avatar, AvatarFallback, AvatarImage } from "../../../components/ui/avatar";
 import { Separator } from "../../../components/ui/separator";
 import * as animation from "../../../constants/animations";
 import { useFindUserWorkspacesQuery } from "../../../hooks/workspace/use-workspace";
 import { useSidebar } from "../../../providers/sidebar-provider";
+import { CurrentUserAvatarDropdown } from "./CurrentUserAvatarDropdown";
 import { SidebarMyNav, type MySectionNavItem } from "./Sidebar-my-nav";
 import { SidebarNav } from "./Sidebar-nav";
 
@@ -109,11 +113,15 @@ export const myNavItems: MySectionNavItem[] = [
 const APP_VERSION = import.meta.env.VITE_APP_VERSION;
 
 export const Sidebar = ({
+  onCreateWorkspace,
   currentWorkspace,
+  onOpenSettingsModal,
   onOpenChangeLogModal,
 }: {
   currentWorkspace?: Workspace | null;
   onOpenChangeLogModal: () => void;
+  onCreateWorkspace: () => void;
+  onOpenSettingsModal: () => void;
 }) => {
   const { variant: sidebarVariant, setVariant } = useSidebar();
   const navigate = useNavigate();
@@ -149,86 +157,21 @@ export const Sidebar = ({
       animate="visible"
       exit="exit"
       style={{
-        background: "var(--sidebar)",
+        // background: "linear-gradient(to bottom, var(--sidebar), var(--sidebar)/95%)",
         boxShadow: "var(--sidebar-shadow)",
       }}
       className={cn(
-        "flex flex-col  border-r-sidebar-border transition-all duration-300",
-        sidebarVariant === "compact" ? "w-22 md:w[80px]" : "w-16 md:w-[240px] border-sidebar-border",
+        "flex flex-col backdrop-blur-sm transition-all duration-300 bg-gradient-to-br from-muted/60 to-card/60",
+        sidebarVariant === "compact" ? "w-20" : "w-[260px]",
       )}
     >
-      {/* <div className="flex h-14 items-center border-b px-4 mb-1.5 gap-2 ">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button
-              className="flex items-center justify-center focus:outline-none focus:ring-0"
-              aria-label="Switch workspace"
-            >
-              <Origami className="size-6 text-sidebar-logo/65 hover:text-sidebar-primary transition-colors" />
-            </button>
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent
-            className="w-56 rounded-lg shadow-md bg-background scrollbar-custom"
-            align="start"
-            sideOffset={4}
-          >
-            <DropdownMenuLabel className="text-xs text-muted-foreground">Twoje kolekcje</DropdownMenuLabel>
-
-            {isPending ? (
-              <div className="flex items-center justify-center py-2">
-                <Loader className="w-4 h-4 animate-spin" />
-              </div>
-            ) : (
-              workspaces?.map((ws) => (
-                <DropdownMenuItem
-                  key={ws._id}
-                  onClick={() => navigate(`/workspace/${ws._id}`)}
-                  className="gap-2 p-2 cursor-pointer"
-                >
-                  <div className="flex size-6 items-center justify-center rounded-md border bg-background">
-                    {React.createElement(WORKSPACE_ICONS[ws.icon] || Layers, {
-                      className: "w-5 h-5",
-                      style: { color: ws.labelColor },
-                    })}
-                  </div>
-                  {ws.name}
-                  {currentWorkspace?._id === ws._id && (
-                    <DropdownMenuShortcut>
-                      <Check className="w-4 h-4" />
-                    </DropdownMenuShortcut>
-                  )}
-                </DropdownMenuItem>
-              ))
-            )}
-
-            <DropdownMenuSeparator />
-
-            <DropdownMenuItem
-              onClick={() => console.log("TODO: create workspace modal")}
-              className="gap-2 p-2 cursor-pointer"
-            >
-              <div className="flex size-6 items-center justify-center rounded-md border bg-background">
-                <Plus className="w-4 h-4" />
-              </div>
-              Dodaj kolekcję
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-        {sidebarVariant !== "compact" && (
-          <span className="font-semibold text-lg hidden md:block text-sidebar-foreground">Baza wiedzy</span>
-        )}
-
-        <Button
-          variant="ghost"
-          size="icon"
-          className="ml-auto hidden md:block hover:bg-transparent"
-          onClick={toggleVariant}
-        >
-          {sidebarVariant === "compact" ? <ChevronsRight className="size-4" /> : <ChevronsLeft className="size-4" />}
-        </Button>
-      </div> */}
+      <div className="px-5 pt-3 pb-1 ">
+        <CurrentUserAvatarDropdown
+          compact={false}
+          onOpenSettings={onOpenSettingsModal}
+          onJoinWorkspace={() => console.log("Join workspace")}
+        />
+      </div>
 
       <ScrollArea className="flex-1 py-2 ">
         <SidebarNav
@@ -284,5 +227,39 @@ export const Sidebar = ({
         </div>
       )}
     </motion.div>
+  );
+};
+
+// USER SDIEBAR
+
+export const SidebarUser = () => {
+  const { data: authData } = useAuthQuery();
+  const navigate = useNavigate();
+
+  return (
+    <div className="flex items-center justify-center p-4 border-b border-border/50">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button className="flex items-center gap-2 rounded-full hover:bg-sidebar-hover transition-colors p-1">
+            <Avatar className="w-10 h-10">
+              {authData?.avatar ? (
+                <AvatarImage src={authData.avatar} />
+              ) : (
+                <AvatarFallback>{authData?.email?.[0].toUpperCase() || "U"}</AvatarFallback>
+              )}
+            </Avatar>
+            <span className="text-sm font-medium">{authData?.email}</span>
+          </button>
+        </DropdownMenuTrigger>
+
+        <DropdownMenuContent className="w-56" side="right" align="end">
+          <DropdownMenuLabel className="text-xs text-muted-foreground">Konto</DropdownMenuLabel>
+          <DropdownMenuItem onClick={() => navigate("/profile")}>Profil</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => navigate("/settings")}>Ustawienia</DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() => console.log("Wyloguj")}>Wyloguj</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 };

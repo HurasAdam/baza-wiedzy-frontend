@@ -2,6 +2,7 @@ import { SendIssueReportModal } from "@/components/issue-report/send-issue-repor
 import { SettingsModal } from "@/components/settings/settings-modal";
 import { CreateWorkspaceModal } from "@/components/workspace/CreateWorkspaceModal";
 import { useQuery } from "@tanstack/react-query";
+import { BellIcon, BookPlus, Bug, FolderPlus, Settings } from "lucide-react";
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { ChangeLogModal } from "../../components/change-log/change-log-modal";
@@ -9,6 +10,7 @@ import { IssueReportsModal } from "../../components/issue-reports/issue-reports-
 import { NotificationsPanel } from "../../components/notifications-panel/notifications-panel";
 import { WorkspaceInviteModal } from "../../components/workspace-invite/WorkspaceInviteModal";
 import Header from "./components/Header";
+import { LeftNavBar } from "./components/LeftNavbar";
 import { Sidebar } from "./components/Sidebar";
 
 const AppLayout = () => {
@@ -26,8 +28,8 @@ const AppLayout = () => {
   const [isNotificationsPanelOpen, setIsNotificationsPanelOpen] = useState(false);
 
   return (
-    <div className="flex flex-col h-screen w-full">
-      <Header
+    <div className="flex flex-col h-screen w-full ">
+      {/* <Header
         onCreateWorkspace={() => setIsCreatingWorkspace(true)}
         onOpenSettingsModal={() => setIsSettingsModalOpen(true)}
         onOpenIssueReportsModal={() => setIsIssueReportsModalOpen(true)}
@@ -36,14 +38,45 @@ const AppLayout = () => {
           setIsNotificationsPanelOpen(true);
         }}
         onOpenWorkspaceInviteModal={() => setIsWorkspaceInviteModalOpen(true)}
-      />
+      /> */}
 
-      <main className="flex w-full flex-1 min-h-0 bg-sidebar  ">
-        <Sidebar onOpenChangeLogModal={() => setIsChangeLogModalOpen(true)} />
+      <main className="flex w-full flex-1 min-h-0   bg-background">
+        <div className="flex w-full flex-1 min-h-0 bg-gradient-to-br from-muted/60 to-card/60">
+          <LeftNavBar
+            items={[
+              { title: "A", href: "/articles/new", icon: BellIcon },
+              { title: "A", href: "/articles/new", icon: BookPlus },
 
-        <div className="flex-1 min-h-0 overflow-y-auto rounded-l border-l  scrollbar-custom bg-background  border-border/60">
-          <div className="container mx-auto px-2 sm:px-6 lg:px-6 py-0 md:py-8 w-full h-full">
-            <Outlet context={{ onOpenCreateIssueReport: () => setIsCreatingIssueReport(true) }} />
+              { title: "B", href: "/b", icon: FolderPlus },
+              { title: "C", href: "/c", icon: Bug },
+              { title: "B", href: "/b", icon: Settings },
+            ]}
+          />
+
+          <Sidebar
+            onCreateWorkspace={() => setIsCreatingWorkspace(true)}
+            onOpenChangeLogModal={() => setIsChangeLogModalOpen(true)}
+            onOpenSettingsModal={() => setIsSettingsModalOpen(true)}
+          />
+
+          <div className="flex flex-col flex-1 rounded-2xl bg-sidebar shadow-xl my-1.5 border border-border/80">
+            <Header
+              onCreateWorkspace={() => setIsCreatingWorkspace(true)}
+              onOpenSettingsModal={() => setIsSettingsModalOpen(true)}
+              onOpenIssueReportsModal={() => setIsIssueReportsModalOpen(true)}
+              onOpenCreateIssueReport={() => setIsCreatingIssueReport(true)}
+              onOpenNotificationsPanel={() => {
+                setIsNotificationsPanelOpen(true);
+              }}
+              onOpenWorkspaceInviteModal={() => setIsWorkspaceInviteModalOpen(true)}
+            />
+            <div className="flex-1 min-h-0 overflow-y-auto scrollbar-custom  ">
+              <div className="min-h-screen   shadow-xl  ">
+                <div className="">
+                  <Outlet context={{ onOpenCreateIssueReport: () => setIsCreatingIssueReport(true) }} />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </main>

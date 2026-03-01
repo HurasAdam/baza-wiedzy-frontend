@@ -5,11 +5,8 @@ import {
   ChevronsLeft,
   ChevronsRight,
   FolderPlus,
-  Layers,
   Link,
-  Loader,
   LogOut,
-  Origami,
   Plus,
   PlusCircle,
   Settings,
@@ -36,10 +33,8 @@ import { useAuthQuery, useLogoutMutation } from "@/hooks/auth/use-auth";
 import { useFindMySummaryNotificationsQuery } from "@/hooks/notifications/use-notifications";
 import { useSound } from "@/providers/sound-provider";
 import { getAvatarFallbackText } from "@/utils/avatar";
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { WORKSPACE_ICONS } from "../../../components/workspace/workspace-form";
 import { useFindUserWorkspacesQuery } from "../../../hooks/workspace/use-workspace";
 import { useSidebar } from "../../../providers/sidebar-provider";
 
@@ -151,63 +146,9 @@ const Header = ({
   });
 
   return (
-    <div className="bg-sidebar border-b border-border/65 backdrop-blur-sm  sticky top-0 z-50">
-      <div className="flex h-14 items-center justify-between px-4 sm:px-6 lg:pr-16">
+    <div className="border-b border-border/45 rounded-t-2xl   sticky top-0 z-50">
+      <div className="flex h-14 items-center justify-between px-4 sm:px-6 lg:pr-16 ">
         <div className="flex h-14 items-center  mb-1.5 gap-3 ">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button
-                className="flex items-center justify-center focus:outline-none focus:ring-0"
-                aria-label="Switch workspace"
-              >
-                <Origami className="size-6 text-sidebar-logo/65 hover:text-sidebar-primary transition-colors" />
-              </button>
-            </DropdownMenuTrigger>
-
-            <DropdownMenuContent
-              className="w-56 rounded-lg shadow-md bg-background scrollbar-custom"
-              align="start"
-              sideOffset={4}
-            >
-              <DropdownMenuLabel className="text-xs text-muted-foreground">Twoje kolekcje</DropdownMenuLabel>
-
-              {isPending ? (
-                <div className="flex items-center justify-center py-2">
-                  <Loader className="w-4 h-4 animate-spin" />
-                </div>
-              ) : (
-                workspaces?.map((ws) => (
-                  <DropdownMenuItem
-                    key={ws._id}
-                    onClick={() => navigate(`/workspace/${ws._id}`)}
-                    className="gap-2 p-2 cursor-pointer"
-                  >
-                    <div className="flex size-6 items-center justify-center rounded-md border bg-background">
-                      {React.createElement(WORKSPACE_ICONS[ws.icon] || Layers, {
-                        className: "w-5 h-5",
-                        style: { color: ws.labelColor },
-                      })}
-                    </div>
-                    {ws.name}
-                  </DropdownMenuItem>
-                ))
-              )}
-
-              <DropdownMenuSeparator />
-
-              <DropdownMenuItem onClick={onCreateWorkspace} className="gap-2 p-2 cursor-pointer">
-                <div className="flex size-6 items-center justify-center rounded-md border bg-background">
-                  <Plus className="w-4 h-4" />
-                </div>
-                Dodaj kolekcję
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          {sidebarVariant !== "compact" && (
-            <span className="font-semibold text-lg hidden md:block text-sidebar-foreground">Baza wiedzy</span>
-          )}
-
           <Button
             variant="ghost"
             size="icon"
@@ -224,12 +165,12 @@ const Header = ({
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
-                  size="icon"
+                  size="sm"
                   variant="secondary"
                   onClick={() => navigate("articles/new")}
-                  className="transition-transform hover:scale-105"
+                  className="transition-transform hover:scale-105 w-9 h-9 rounded-full"
                 >
-                  <Plus className="w-5 h-5" />
+                  <Plus className="w-3 h-3" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent className="text-xs">Dodaj artykuł</TooltipContent>
@@ -239,7 +180,11 @@ const Header = ({
           {(userPermissions.includes("ADD_COLLECTION") || userPermissions.includes("JOIN_COLLECTION")) && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button size="icon" variant="secondary" className="transition-transform hover:scale-105">
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  className="transition-transform hover:scale-105 w-9 h-9 rounded-full"
+                >
                   <FolderPlus className="w-5 h-5" />
                 </Button>
               </DropdownMenuTrigger>
@@ -267,7 +212,12 @@ const Header = ({
           {userPermissions.includes("SEND_REPORT") && (
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="secondary" size="icon" className="" onClick={onOpenCreateIssueReport}>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="w-9 h-9 rounded-full"
+                  onClick={onOpenCreateIssueReport}
+                >
                   <Bug className="w-5 h-5" />
                 </Button>
               </TooltipTrigger>

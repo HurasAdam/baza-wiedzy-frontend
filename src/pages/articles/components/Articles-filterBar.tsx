@@ -53,7 +53,7 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
   const navigate = useNavigate();
 
   return (
-    <div className="rounded-xl border border-border bg-background shadow-sm">
+    <div className="rounded-xl border border-border/75 bg-sidebar shadow-sm">
       {/* ===== Header ===== */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-border">
         <div className="flex items-center gap-3">
