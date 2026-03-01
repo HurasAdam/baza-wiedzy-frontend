@@ -71,17 +71,18 @@ const AppLayout = () => {
                 onClick: () => navigate("/articles/new"),
               },
               {
-                title: "Dołącz do kolekcji",
-                icon: UserPlus,
-                onClick: () => setIsWorkspaceInviteModalOpen(true),
-              },
-              {
                 title: "Dodaj kolekcje",
                 icon: FolderPlus,
                 onClick: () => setIsCreatingWorkspace(true),
               },
               {
-                title: "Panel admina",
+                title: "Dołącz do kolekcji",
+                icon: UserPlus,
+                onClick: () => setIsWorkspaceInviteModalOpen(true),
+              },
+
+              {
+                title: "Zgłoszenia i propozycje",
                 icon: MailQuestionMark,
                 onClick: () => navigate("/reports"),
               },
