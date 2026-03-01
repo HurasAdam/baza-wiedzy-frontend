@@ -102,7 +102,7 @@ export const CurrentUserAvatarDropdown: React.FC<CurrentUserDropdownProps> = ({
         <button className="flex items-center justify-between gap-1  rounded-full  w-full hover:bg-muted/40 transition-all duration-200 p-1">
           <div className="flex items-center gap-4 ">
             <Avatar className="w-12 h-12 shadow-md rounded-xl">
-              <AvatarImage src={avatarUrl ?? undefined} />
+              <AvatarImage src={avatarUrl ?? undefined} alt={user?.name ?? "Avatar"} crossOrigin="anonymous" />
               <AvatarFallback className="bg-primary/80 text-primary-forground text-base font-sembibold rounded-xl ">
                 {initials}
               </AvatarFallback>
