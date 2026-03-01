@@ -1,6 +1,6 @@
-import { Tooltip } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { motion } from "framer-motion";
-import { Layers2, Loader, LogOut, Origami, Plus, type LucideIcon } from "lucide-react";
+import { HelpCircle, Layers2, LogOut, Origami, Plus, type LucideIcon } from "lucide-react";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../../../components/ui/button";
@@ -18,106 +18,141 @@ import { cn } from "../../../lib/utils";
 
 interface LeftNavItem {
   title: string;
-  href: string;
   icon: LucideIcon;
+  onClick: () => void;
+  hasBadge?: number; // np. powiadomienia
 }
 
 interface LeftNavBarProps {
   items: LeftNavItem[];
   onCreateWorkspace: () => void;
+  onOpenInviteModal: () => void;
+  onOpenChangeLogModal: () => void;
+  onOpenLogoutAlert: () => void;
 }
 
-export const LeftNavBar = ({ items, onCreateWorkspace }: LeftNavBarProps) => {
+export const LeftNavBar = ({
+  items,
+  onCreateWorkspace,
+  onOpenInviteModal,
+  onOpenChangeLogModal,
+  onOpenLogoutAlert,
+}: LeftNavBarProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { data: workspaces = [], isPending } = useFindUserWorkspacesQuery();
 
   return (
-    <nav
-      className="flex flex-col items-center justify-between py-1 px-0.5 gap-y-2.5 
-                 bg-gradient-to-br from-muted to-muted shadow-md  border border-border/55 h-full"
-    >
-      <div className="flex flex-col items-center">
-        <div className={cn("flex items-center mb-6.5 px-2.5 h-13 border-b  transition-colors justify-center")}>
-          <div className="flex items-center gap-3.5 ">
-            {/* Logo jako dropdown trigger */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button
-                  className="flex items-center justify-center w-8.5 h-8.5 rounded-md  hover:bg-primary/60 transition-colors"
-                  aria-label="Switch workspace"
-                >
-                  <Origami className="w-5 h-5 text-sidebar-logo/70" />
-                </button>
-              </DropdownMenuTrigger>
-
-              <DropdownMenuContent
-                className="w-56 rounded-lg shadow-lg bg-background scrollbar-custom"
-                align="start"
-                sideOffset={4}
-              >
-                <DropdownMenuLabel className="text-xs text-muted-foreground">Twoje kolekcje</DropdownMenuLabel>
-
-                {isPending ? (
-                  <div className="flex items-center justify-center py-2">
-                    <Loader className="w-4 h-4 animate-spin text-foreground" />
-                  </div>
-                ) : (
-                  workspaces?.map((ws) => (
-                    <DropdownMenuItem
-                      key={ws._id}
-                      onClick={() => navigate(`/workspace/${ws._id}`)}
-                      className="gap-2 p-2 cursor-pointer"
-                    >
-                      <div className="flex items-center justify-center w-6 h-6 rounded-md border bg-background">
-                        {React.createElement(WORKSPACE_ICONS[ws.icon] || Layers2, {
-                          className: "w-4 h-4",
-                          style: { color: ws.labelColor },
-                        })}
-                      </div>
-                      {ws.name}
-                    </DropdownMenuItem>
-                  ))
-                )}
-
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={onCreateWorkspace} className="gap-2 p-2 cursor-pointer">
-                  <Plus className="w-4 h-4" />
-                  Dodaj kolekcję
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
-
-        {items.map((item) => {
-          const Icon = item.icon;
-          const isActive = location.pathname === item.href;
-
-          const button = (
-            <motion.button
-              key={item.href}
-              onClick={() => navigate(item.href)}
-              className=" flex items-center justify-center w-10 h-10  hover:bg-primary   rounded-lg  text-sidebar-foreground transition-colors"
-              whileTap={{ scale: 0.95 }}
+    <nav className="flex flex-col items-center justify-between py-2 px-[9px] gap-y-3 bg-gradient-to-br from-muted to-muted shadow-md border border-border/55 h-full">
+      {/* GÓRA: Workspace / logo */}
+      <div className="flex flex-col items-center w-full">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button
+              className="flex items-center justify-center w-10 h-10 rounded-md hover:bg-primary/60 transition-colors mb-4"
+              aria-label="Switch workspace"
             >
-              {/* Active vertical indicator */}
+              <Origami className="w-5 h-5 text-sidebar-logo/70" />
+            </button>
+          </DropdownMenuTrigger>
 
-              <Icon className={isActive ? "text-muted-foreground w-4 h-4" : "w-4 h-4  text-muted-foreground "} />
-            </motion.button>
-          );
+          <DropdownMenuContent
+            className="w-56 mt-1 rounded-lg shadow-lg bg-background scrollbar-custom"
+            align="start"
+            sideOffset={11}
+            side="right"
+          >
+            <DropdownMenuLabel className="text-xs text-muted-foreground">Twoje kolekcje</DropdownMenuLabel>
 
-          return (
-            <Tooltip key={item.href} content={item.title} placement="right">
-              {button}
-            </Tooltip>
-          );
-        })}
+            {isPending ? (
+              <div className="flex items-center justify-center py-2">
+                <span className="w-4 h-4 animate-spin border-2 border-gray-300 border-t-transparent rounded-full" />
+              </div>
+            ) : (
+              workspaces.map((ws) => (
+                <DropdownMenuItem
+                  key={ws._id}
+                  onClick={() => navigate(`/workspace/${ws._id}`)}
+                  className="gap-2 p-2 cursor-pointer"
+                >
+                  <div className="flex items-center justify-center w-6 h-6 rounded-md border bg-background">
+                    {React.createElement(WORKSPACE_ICONS[ws.icon] || Layers2, {
+                      className: "w-4 h-4",
+                      style: { color: ws.labelColor },
+                    })}
+                  </div>
+                  {ws.name}
+                </DropdownMenuItem>
+              ))
+            )}
+
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={onCreateWorkspace} className="gap-2 p-2 cursor-pointer">
+              <Plus className="w-4 h-4" />
+              Dodaj kolekcję
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {/* AKCJE: dołącz / nowe / ustawienia / powiadomienia */}
+        <div className="flex flex-col items-center mt-4 gap-y-2">
+          {items.map((item) => {
+            const Icon = item.icon;
+            const isActive = false; // Możesz dodać logikę aktywnej strony, jeśli potrzebne
+
+            return (
+              <Tooltip key={item.title}>
+                <TooltipTrigger asChild>
+                  <motion.button
+                    onClick={item.onClick}
+                    className={cn(
+                      "relative flex items-center justify-center w-10 h-10 hover:bg-primary/20 rounded-lg text-sidebar-foreground transition-colors",
+                      isActive ? "bg-primary/20" : "",
+                    )}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {/* Aktywny wskaźnik pionowy */}
+                    {isActive && <span className="absolute left-0 w-1 h-5 bg-primary rounded-r-full" />}
+                    <Icon className="w-4 h-4 text-muted-foreground" />
+                    {item.hasBadge && (
+                      <span className="absolute top-0 right-0 inline-flex items-center justify-center w-3.5 h-3.5 text-[10px] font-bold text-white bg-red-500 rounded-full">
+                        {item.hasBadge}
+                      </span>
+                    )}
+                  </motion.button>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="right" // po której stronie triggera ma być tooltip
+                  align="center" // wyrównanie w pionie względem triggera
+                  sideOffset={2} // dystans od triggera w px
+                  className="text-xs"
+                >
+                  {item.title}
+                </TooltipContent>
+              </Tooltip>
+            );
+          })}
+        </div>
       </div>
-      <div className="mb-3">
-        <Button variant="ghost">
-          <LogOut />
+
+      {/* DOLE: logout */}
+      <div className="mb-6 space-y-24 ">
+        <Button variant="ghost" onClick={onOpenLogoutAlert}>
+          <LogOut className="w-4 h-4" />
         </Button>
+        <div className="space-y-2">
+          <motion.button
+            onClick={onOpenChangeLogModal}
+            className={cn(
+              "relative flex hover:bg-primary/20 items-center justify-center w-10 h-10  rounded-lg text-sidebar-foreground transition-colors",
+            )}
+            whileTap={{ scale: 0.95 }}
+          >
+            {/* Aktywny wskaźnik pionowy */}
+
+            <HelpCircle className="w-4 h-4" />
+          </motion.button>
+        </div>
       </div>
     </nav>
   );

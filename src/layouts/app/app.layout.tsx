@@ -2,13 +2,17 @@ import { SendIssueReportModal } from "@/components/issue-report/send-issue-repor
 import { SettingsModal } from "@/components/settings/settings-modal";
 import { CreateWorkspaceModal } from "@/components/workspace/CreateWorkspaceModal";
 import { useQuery } from "@tanstack/react-query";
-import { BellIcon, BookPlus, Bug, FolderPlus, Settings } from "lucide-react";
+import { ClipboardPlus, FolderPlus, MailQuestionMark, ShieldUser, UserPlus } from "lucide-react";
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { ChangeLogModal } from "../../components/change-log/change-log-modal";
 import { IssueReportsModal } from "../../components/issue-reports/issue-reports-modal";
 import { NotificationsPanel } from "../../components/notifications-panel/notifications-panel";
+import { Alert } from "../../components/shared/alert-modal";
 import { WorkspaceInviteModal } from "../../components/workspace-invite/WorkspaceInviteModal";
+import queryClient from "../../config/query.client";
+import { useLogoutMutation } from "../../hooks/auth/use-auth";
 import Header from "./components/Header";
 import { LeftNavBar } from "./components/LeftNavbar";
 import { Sidebar } from "./components/Sidebar";
@@ -18,7 +22,10 @@ const AppLayout = () => {
     queryKey: ["onlineUsers"],
   });
 
-  console.log(onlineUsers, "SOCKET");
+  const { mutate: logoutMutate, isPending: isLogoutPending } = useLogoutMutation();
+
+  const navigate = useNavigate();
+
   const [isCreatingWorkspace, setIsCreatingWorkspace] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [isIssueReportsModalOpen, setIsIssueReportsModalOpen] = useState(false);
@@ -26,6 +33,18 @@ const AppLayout = () => {
   const [isWorkspaceInviteModalOpen, setIsWorkspaceInviteModalOpen] = useState(false);
   const [isChangeLogModalOpen, setIsChangeLogModalOpen] = useState(false);
   const [isNotificationsPanelOpen, setIsNotificationsPanelOpen] = useState(false);
+  const [isLogoutOpen, setIsLogoutOpen] = useState<boolean>(false);
+
+  const onLogoutConfirm = () => {
+    logoutMutate(undefined, {
+      onSuccess: () => {
+        queryClient.clear();
+        navigate("/auth/login", { replace: true });
+        toast.success("Zostałeś pomyślnie wylogowany", { position: "bottom-right" });
+      },
+      onError: () => toast.error("Wystąpił błąd. Spróbuj ponownie"),
+    });
+  };
 
   return (
     <div className="flex flex-col h-screen w-full ">
@@ -40,16 +59,37 @@ const AppLayout = () => {
         onOpenWorkspaceInviteModal={() => setIsWorkspaceInviteModalOpen(true)}
       /> */}
 
-      <main className="flex w-full flex-1 min-h-0   bg-background">
+      <main className="flex w-full flex-1 min-h-0">
         <div className="flex w-full flex-1 min-h-0 bg-gradient-to-br from-muted/60 to-card/60">
           <LeftNavBar
+            onOpenLogoutAlert={() => setIsLogoutOpen(true)}
+            onOpenChangeLogModal={() => setIsChangeLogModalOpen(true)}
             items={[
-              { title: "A", href: "/articles/new", icon: BellIcon },
-              { title: "A", href: "/articles/new", icon: BookPlus },
-
-              { title: "B", href: "/b", icon: FolderPlus },
-              { title: "C", href: "/c", icon: Bug },
-              { title: "B", href: "/b", icon: Settings },
+              {
+                title: "Dodaj artykuł",
+                icon: ClipboardPlus,
+                onClick: () => navigate("/articles/new"),
+              },
+              {
+                title: "Dołącz do kolekcji",
+                icon: UserPlus,
+                onClick: () => setIsWorkspaceInviteModalOpen(true),
+              },
+              {
+                title: "Dodaj kolekcje",
+                icon: FolderPlus,
+                onClick: () => setIsCreatingWorkspace(true),
+              },
+              {
+                title: "Panel admina",
+                icon: MailQuestionMark,
+                onClick: () => navigate("/reports"),
+              },
+              {
+                title: "Panel admina",
+                icon: ShieldUser,
+                onClick: () => navigate("/admin"),
+              },
             ]}
           />
 
@@ -59,23 +99,17 @@ const AppLayout = () => {
             onOpenSettingsModal={() => setIsSettingsModalOpen(true)}
           />
 
-          <div className="flex flex-col flex-1 rounded-2xl bg-sidebar shadow-xl my-1.5 border border-border/80">
+          <div className="flex flex-col flex-1 rounded-2xl my-2 mr-1.5 border border-border/80 bg-sidebar">
             <Header
-              onCreateWorkspace={() => setIsCreatingWorkspace(true)}
               onOpenSettingsModal={() => setIsSettingsModalOpen(true)}
               onOpenIssueReportsModal={() => setIsIssueReportsModalOpen(true)}
               onOpenCreateIssueReport={() => setIsCreatingIssueReport(true)}
-              onOpenNotificationsPanel={() => {
-                setIsNotificationsPanelOpen(true);
-              }}
+              onOpenNotificationsPanel={() => setIsNotificationsPanelOpen(true)}
               onOpenWorkspaceInviteModal={() => setIsWorkspaceInviteModalOpen(true)}
+              onOpenChangeLogModal={() => setIsChangeLogModalOpen(true)}
             />
-            <div className="flex-1 min-h-0 overflow-y-auto scrollbar-custom  ">
-              <div className="min-h-screen   shadow-xl  ">
-                <div className="">
-                  <Outlet context={{ onOpenCreateIssueReport: () => setIsCreatingIssueReport(true) }} />
-                </div>
-              </div>
+            <div className="flex-1 min-h-0 overflow-y-auto scrollbar-custom bg-sidebar rounded-b-2xl py-6">
+              <Outlet context={{ onOpenCreateIssueReport: () => setIsCreatingIssueReport(true) }} />
             </div>
           </div>
         </div>
@@ -122,6 +156,21 @@ const AppLayout = () => {
       )}
       {isChangeLogModalOpen && (
         <ChangeLogModal isChangeLogModalOpen={isChangeLogModalOpen} setIsChangeLogModalOpen={setIsChangeLogModalOpen} />
+      )}
+
+      {isLogoutOpen && (
+        <Alert
+          isOpen={isLogoutOpen}
+          type="info"
+          title="Wylogować się?"
+          isLoading={isLogoutPending}
+          onCancel={() => setIsLogoutOpen(false)}
+          onConfirm={onLogoutConfirm}
+        >
+          <div className="flex items-center gap-3">
+            <p className="text-sm text-muted-foreground">Czy na pewno chcesz się wylogować ?</p>
+          </div>
+        </Alert>
       )}
     </div>
   );

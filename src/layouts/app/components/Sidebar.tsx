@@ -7,13 +7,10 @@ import {
   Clipboard,
   FolderSearch,
   HeartIcon,
-  HelpCircle,
   LandPlot,
   Layers2,
   LayoutDashboard,
   Link,
-  MailQuestionMark,
-  MoreHorizontal,
   Network,
   RectangleEllipsis,
   School,
@@ -22,14 +19,12 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAuthQuery } from "@/hooks/auth/use-auth";
 import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -38,7 +33,6 @@ import {
 
 import { motion } from "framer-motion";
 import { Avatar, AvatarFallback, AvatarImage } from "../../../components/ui/avatar";
-import { Separator } from "../../../components/ui/separator";
 import * as animation from "../../../constants/animations";
 import { useFindUserWorkspacesQuery } from "../../../hooks/workspace/use-workspace";
 import { useSidebar } from "../../../providers/sidebar-provider";
@@ -161,11 +155,11 @@ export const Sidebar = ({
         boxShadow: "var(--sidebar-shadow)",
       }}
       className={cn(
-        "flex flex-col backdrop-blur-sm transition-all duration-300 bg-gradient-to-br from-muted/60 to-card/60",
+        "flex flex-col backdrop-blur-sm transition-all duration-300 ",
         sidebarVariant === "compact" ? "w-20" : "w-[260px]",
       )}
     >
-      <div className="px-5 pt-3 pb-1 ">
+      <div className="px-5 pt-3 pb-3  ">
         <CurrentUserAvatarDropdown
           compact={false}
           onOpenSettings={onOpenSettingsModal}
@@ -173,7 +167,7 @@ export const Sidebar = ({
         />
       </div>
 
-      <ScrollArea className="flex-1 py-2 ">
+      <ScrollArea className="flex-1 py-0 ">
         <SidebarNav
           items={filteredNavItems}
           isCollapsed={sidebarVariant === "compact"}
@@ -183,7 +177,7 @@ export const Sidebar = ({
         <SidebarMyNav items={filteredMyNavItems} isCollapsed={sidebarVariant === "compact"} />
       </ScrollArea>
 
-      {sidebarVariant === "compact" ? (
+      {/* {sidebarVariant === "compact" ? (
         <DropdownMenu>
           <DropdownMenuTrigger className=" mx-auto" asChild>
             <MoreHorizontal className="w-7 h-7 mb-3" />
@@ -225,7 +219,7 @@ export const Sidebar = ({
             zgłosz.
           </Button>
         </div>
-      )}
+      )} */}
     </motion.div>
   );
 };

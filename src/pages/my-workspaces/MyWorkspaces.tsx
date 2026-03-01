@@ -41,7 +41,7 @@ export const MyWorkspaces = () => {
       initial="init"
       animate="visible"
       exit="exit"
-      className="flex flex-col h-full w-full py-4 px-6 lg:px-12 bg-gradient-to-br from-background via-background/90 to-background/60 backdrop-blur-md max-w-7xl mx-auto"
+      className="flex flex-col h-full w-full py-4 px-6 lg:px-12  backdrop-blur-md max-w-7xl mx-auto"
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-10">
