@@ -18,7 +18,7 @@ const backendBase = import.meta.env.VITE_BACKEND_BASE_URL ?? "http://localhost:5
 interface CurrentUserDropdownProps {
   onOpenSettings?: () => void;
   onJoinWorkspace?: () => void;
-  compact?: boolean; // tylko avatar, bez email
+  compact?: boolean;
 }
 
 export const CurrentUserAvatarDropdown: React.FC<CurrentUserDropdownProps> = ({
@@ -93,7 +93,7 @@ export const CurrentUserAvatarDropdown: React.FC<CurrentUserDropdownProps> = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="group flex bg-transparent items-center justify-between w-full px-3 py-2 rounded-xl transition-colors duration-200 hover:bg-muted/30 data-[state=open]:bg-muted/40">
+        <button className="group flex bg-transparent items-center pr-4 justify-between w-full px-3 py-2 rounded-xl transition-colors duration-200 hover:bg-muted/30 data-[state=open]:bg-muted/40">
           <div className="flex items-center gap-3">
             {/* Avatar z glow – W SIDEBARZE */}
             <div className="relative">
@@ -122,7 +122,7 @@ export const CurrentUserAvatarDropdown: React.FC<CurrentUserDropdownProps> = ({
 
       <DropdownMenuContent
         className="w-64 rounded-xl shadow-xl bg-background border border-border overflow-hidden animate-slide-fade"
-        side="bottom"
+        side={compact ? "right" : "bottom"}
         align="center"
         sideOffset={6}
       >
@@ -138,10 +138,8 @@ export const CurrentUserAvatarDropdown: React.FC<CurrentUserDropdownProps> = ({
           {!compact && (
             <div className="flex flex-col truncate leading-tight">
               {/* Imię i nazwisko */}
-
               {/* Email */}
               <span className="text-[12px] text-muted-foreground/80 truncate">{user?.email}</span>
-
               {/* Rola jako badge */}
               <span className="mt-2 inline-flex w-fit items-center rounded-md bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
                 {user?.role?.name}

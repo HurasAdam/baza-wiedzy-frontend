@@ -159,9 +159,9 @@ export const Sidebar = ({
         sidebarVariant === "compact" ? "w-20" : "w-[260px]",
       )}
     >
-      <div className="px-5 pt-3 pb-3  ">
+      <div className={`${sidebarVariant === "compact" ? "px-2.5" : "px-5"}  pt-3 pb-3  `}>
         <CurrentUserAvatarDropdown
-          compact={false}
+          compact={sidebarVariant === "compact"}
           onOpenSettings={onOpenSettingsModal}
           onJoinWorkspace={() => console.log("Join workspace")}
         />
