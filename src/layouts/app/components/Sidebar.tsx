@@ -155,7 +155,7 @@ export const Sidebar = ({
         boxShadow: "var(--sidebar-shadow)",
       }}
       className={cn(
-        "flex flex-col backdrop-blur-sm transition-all duration-300 ",
+        "flex flex-col backdrop-blur-sm transition-all duration-300",
         sidebarVariant === "compact" ? "w-20" : "w-[260px]",
       )}
     >

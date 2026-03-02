@@ -60,7 +60,7 @@ const AppLayout = () => {
       /> */}
 
       <main className="flex w-full flex-1 min-h-0">
-        <div className="flex w-full flex-1 min-h-0 bg-gradient-to-br from-muted/60 to-card/60">
+        <div className="flex w-full flex-1 min-h-0    bg-sidebar">
           <LeftNavBar
             onOpenLogoutAlert={() => setIsLogoutOpen(true)}
             onOpenChangeLogModal={() => setIsChangeLogModalOpen(true)}
@@ -100,7 +100,7 @@ const AppLayout = () => {
             onOpenSettingsModal={() => setIsSettingsModalOpen(true)}
           />
 
-          <div className="flex flex-col flex-1 rounded-2xl my-2 mr-1.5 border border-border/80 bg-sidebar">
+          <div className="flex flex-col flex-1 rounded-2xl my-2 mr-1.5 border border-border/80 bg-background">
             <Header
               onOpenSettingsModal={() => setIsSettingsModalOpen(true)}
               onOpenIssueReportsModal={() => setIsIssueReportsModalOpen(true)}
@@ -109,7 +109,7 @@ const AppLayout = () => {
               onOpenWorkspaceInviteModal={() => setIsWorkspaceInviteModalOpen(true)}
               onOpenChangeLogModal={() => setIsChangeLogModalOpen(true)}
             />
-            <div className="flex-1 min-h-0 overflow-y-auto scrollbar-custom bg-sidebar rounded-b-2xl py-6">
+            <div className="flex-1 min-h-0 overflow-y-auto scrollbar-custom  rounded-b-2xl py-6">
               <Outlet context={{ onOpenCreateIssueReport: () => setIsCreatingIssueReport(true) }} />
             </div>
           </div>
