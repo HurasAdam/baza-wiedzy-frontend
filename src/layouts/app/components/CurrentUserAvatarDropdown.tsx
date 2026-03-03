@@ -129,7 +129,7 @@ export const CurrentUserAvatarDropdown: React.FC<CurrentUserDropdownProps> = ({
         {/* Sekcja Profilowa */}
         <div className="px-5 py-4 bg-muted/5 flex items-center gap-4">
           <Avatar className="w-14 h-14 rounded-lg ring-1 ring-border/40 bg-background">
-            <AvatarImage src={avatarUrl ?? undefined} />
+            <AvatarImage src={avatarUrl ?? undefined} alt={user?.name ?? "Avatar"} crossOrigin="anonymous" />
             <AvatarFallback className="bg-primary/70 rounded-lg text-primary-foreground text-lg font-semibold">
               {initials}
             </AvatarFallback>
