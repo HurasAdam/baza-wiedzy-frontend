@@ -98,6 +98,7 @@ const AppLayout = () => {
             onCreateWorkspace={() => setIsCreatingWorkspace(true)}
             onOpenChangeLogModal={() => setIsChangeLogModalOpen(true)}
             onOpenSettingsModal={() => setIsSettingsModalOpen(true)}
+            onOpenWorkspaceInviteModal={() => setIsWorkspaceInviteModalOpen(true)}
           />
 
           <div className="flex flex-col flex-1 rounded-2xl my-2 mr-1.5 border border-border/80 bg-background">

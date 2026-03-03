@@ -111,11 +111,13 @@ export const Sidebar = ({
   currentWorkspace,
   onOpenSettingsModal,
   onOpenChangeLogModal,
+  onOpenWorkspaceInviteModal,
 }: {
   currentWorkspace?: Workspace | null;
   onOpenChangeLogModal: () => void;
   onCreateWorkspace: () => void;
   onOpenSettingsModal: () => void;
+  onOpenWorkspaceInviteModal: () => void;
 }) => {
   const { variant: sidebarVariant, setVariant } = useSidebar();
   const navigate = useNavigate();
@@ -151,7 +153,6 @@ export const Sidebar = ({
       animate="visible"
       exit="exit"
       style={{
-        // background: "linear-gradient(to bottom, var(--sidebar), var(--sidebar)/95%)",
         boxShadow: "var(--sidebar-shadow)",
       }}
       className={cn(
@@ -164,6 +165,7 @@ export const Sidebar = ({
           compact={sidebarVariant === "compact"}
           onOpenSettings={onOpenSettingsModal}
           onJoinWorkspace={() => console.log("Join workspace")}
+          onOpenWorkspaceInviteModal={onOpenWorkspaceInviteModal}
         />
       </div>
 

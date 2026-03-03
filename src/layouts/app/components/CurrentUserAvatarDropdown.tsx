@@ -18,12 +18,14 @@ const backendBase = import.meta.env.VITE_BACKEND_BASE_URL ?? "http://localhost:5
 interface CurrentUserDropdownProps {
   onOpenSettings?: () => void;
   onJoinWorkspace?: () => void;
+  onOpenWorkspaceInviteModal: () => void;
   compact?: boolean;
 }
 
 export const CurrentUserAvatarDropdown: React.FC<CurrentUserDropdownProps> = ({
   onOpenSettings,
   onJoinWorkspace,
+  onOpenWorkspaceInviteModal,
   compact = false,
 }) => {
   const { data: user } = useAuthQuery();
@@ -65,7 +67,7 @@ export const CurrentUserAvatarDropdown: React.FC<CurrentUserDropdownProps> = ({
           {
             label: "Dołącz do kolekcji",
             icon: <PlusCircle className="w-4 h-4 text-muted-foreground" />,
-            action: onJoinWorkspace,
+            action: onOpenWorkspaceInviteModal,
           },
         ]
       : []),
