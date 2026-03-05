@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Box, Check, FolderSearch, Plus, Type, X } from "lucide-react";
+import { Box, Check, ChevronDown, FolderSearch, Plus, Search, Type, X } from "lucide-react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -53,7 +53,7 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
   const navigate = useNavigate();
 
   return (
-    <div className="rounded-xl border border-border/95 bg-sidebar shadow-sm">
+    <div className="rounded-xl border border-border/95 bg-gradient-to-br from-muted/15 to-background ">
       {/* ===== Header ===== */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-border">
         <div className="flex items-center gap-3">
@@ -74,27 +74,44 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
       </div>
 
       {/* ===== Filters bar ===== */}
-      <div className="flex flex-wrap items-center gap-3 px-6 py-4">
-        <Input value={selectedTitle} onChange={onTitleChange} placeholder="Szukaj artykułów" className="w-60" />
+      <div className="flex flex-wrap items-center gap-2 px-6 py-4">
+        {/* SEARCH */}
+        <div className="relative w-64">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            value={selectedTitle}
+            onChange={onTitleChange}
+            placeholder="Wyszukaj artykuł"
+            className="w-60 h-9  pl-9"
+          />
+        </div>
+        <div className="h-6 w-px bg-border" />
 
+        {/* PRODUCT */}
         <Popover open={openProduct} onOpenChange={setOpenProduct}>
           <PopoverTrigger asChild>
-            <Button variant="outline" role="combobox" aria-expanded={openProduct} className="w-52 justify-between">
-              {selectedProduct ? (
-                (() => {
-                  const product = products.find((p) => p._id === selectedProduct);
-                  if (!product) return "Produkt";
+            <Button variant="outline" role="combobox" aria-expanded={openProduct} className="w-52  h-9 justify-between">
+              <div className="flex items-center gap-2">
+                {selectedProduct ? (
+                  (() => {
+                    const product = products.find((p) => p._id === selectedProduct);
+                    if (!product) return "Produkt";
 
-                  return (
-                    <div className="flex items-center gap-2">
-                      <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: product.labelColor }} />
-                      <span className="font-normal">{product.name}</span>
-                    </div>
-                  );
-                })()
-              ) : (
-                <span className="text-muted-foreground font-normal">Wszystkie</span>
-              )}
+                    return (
+                      <div className="flex items-center gap-2">
+                        <Box className="w-2.5 h-2.5 rounded-full" style={{ color: product.labelColor }} />
+
+                        <span className="font-normal text-[13px]">{product.name}</span>
+                      </div>
+                    );
+                  })()
+                ) : (
+                  <div className=" flex gap-2 text-[13px] items-center text-muted-foreground font-normal">
+                    <Box className="w-2 h-2 rounded-full text-muted-foreground" /> Wybierz produkt
+                  </div>
+                )}
+              </div>
+              <ChevronDown className="h-4 w-4 opacity-60" />
             </Button>
           </PopoverTrigger>
 
@@ -147,21 +164,28 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
           </PopoverContent>
         </Popover>
 
-        {/* ===== Kategorie ===== */}
+        {/* Divider */}
+        <div className="h-6 w-px bg-border" />
+
+        {/* ===== Category ===== */}
         <Popover open={openCategory} onOpenChange={setOpenCategory}>
           <PopoverTrigger asChild>
             <Button
               variant="outline"
               role="combobox"
               aria-expanded={openCategory}
-              className="w-50 justify-between font-normal"
+              className="w-55 justify-between font-normal"
               disabled={!selectedProduct}
             >
-              {selectedCategory ? categories?.find((c) => c._id === selectedCategory)?.name : "Wszystkie"}
+              <div className="flex items-center gap-2 text-[13px]">
+                <FolderSearch className="h-3 w-3 text-muted-foreground" />
+                {selectedCategory ? categories?.find((c) => c._id === selectedCategory)?.name : "Wybierz kategorie"}
+              </div>
+              <ChevronDown className="h-4 w-4 opacity-60" />
             </Button>
           </PopoverTrigger>
 
-          <PopoverContent className="w-50 p-0">
+          <PopoverContent className="w-52 p-0">
             <Command>
               <CommandInput placeholder="Wyszukaj kategorię..." />
               <CommandList className="max-h-[264px] overflow-auto scrollbar-custom bg-background/95">
@@ -211,8 +235,15 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
           </PopoverContent>
         </Popover>
 
-        <Button variant="ghost" size="sm" disabled={!hasFilters} onClick={onResetAll} className="text-muted-foreground">
-          Wyczyść
+        <Button
+          variant={hasFilters ? "secondary" : "ghost"}
+          size="sm"
+          disabled={!hasFilters}
+          onClick={onResetAll}
+          className="text-muted-foreground"
+        >
+          {hasFilters ? <X /> : <div className="w-3" />}
+          Wyczyść filtry
         </Button>
 
         <div className="ml-auto flex flex-col items-end gap-0.5">
