@@ -82,7 +82,7 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
             value={selectedTitle}
             onChange={onTitleChange}
             placeholder="Wyszukaj artykuł"
-            className="w-60 h-9  pl-9"
+            className="w-60 h-9  pl-9 placeholder:text-[13px] "
           />
         </div>
         <div className="h-6 w-px bg-border" />

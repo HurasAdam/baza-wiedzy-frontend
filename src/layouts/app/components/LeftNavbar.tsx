@@ -43,7 +43,7 @@ export const LeftNavBar = ({
   const { data: workspaces = [], isPending } = useFindUserWorkspacesQuery();
 
   return (
-    <nav className="flex flex-col items-center justify-between py-2 px-[9px] gap-y-3 bg-gradient-to-br from-muted to-muted shadow-md border border-border/55 h-full">
+    <nav className="flex flex-col items-center justify-between py-2 px-[8px] gap-y-3 bg-gradient-to-br from-muted to-muted shadow-md border border-border/55 h-full">
       {/* GÓRA: Workspace / logo */}
       <div className="flex flex-col items-center w-full">
         <DropdownMenu>
