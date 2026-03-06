@@ -50,7 +50,7 @@ const FaqItemsList = ({ isFaqLoading, items, canEdit, onEdit, onDelete }: FaqIte
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-start gap-4 flex-1 mb-1.5">
                   <div className="min-w-0.5 max-w-0.5 min-h-[40px] rounded-full bg-primary/60 mt-1 self-stretch" />
-                  <div>{item.answer}</div>
+                  <div className="text-[15px]">{item.answer}</div>
                 </div>
 
                 {canEdit && (
