@@ -9,6 +9,7 @@ import {
   LinkIcon,
   Loader,
   MoreVertical,
+  Sheet,
   Trash2,
   UploadIcon,
 } from "lucide-react";
@@ -62,7 +63,7 @@ function getFileIcon(fileType: FileType) {
     case "txt":
       return <FileTextIcon className={`${baseClass} text-[#6E6E6E]`} />;
     case "xls":
-      return <FileIcon className={`${baseClass} text-[#4C7E4C]`} />;
+      return <Sheet className={`${baseClass} text-[#4C7E4C]`} />;
     default:
       return <FileIcon className={`${baseClass} text-[#7A7A7A]`} />;
   }
@@ -131,7 +132,7 @@ export const Articlev2AttachmentsPage = () => {
       initial="init"
       animate="visible"
       exit="exit"
-      className="space-y-8 mx-auto"
+      className="space-y-8 mx-auto max-w-7xl px-10 2xl:px-0"
     >
       {/* ===== HEADER ===== */}
       <div className="flex items-center justify-between border-b border-border pb-4 mb-6">
@@ -166,7 +167,7 @@ export const Articlev2AttachmentsPage = () => {
           buttonAction={openAttachmentModal}
         />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
           {attachments.map((file) => {
             const type = mapMimeTypeToFileType(file.mimeType);
             return (
