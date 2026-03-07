@@ -72,7 +72,7 @@ export function WorkspaceFolderPage() {
       initial="init"
       animate="visible"
       exit="exit"
-      className="flex flex-col pb-5 max-w-[1320px] py-3.5  mx-auto "
+      className="flex flex-col pb-5 max-w-7xl py-3.5  mx-auto "
     >
       <WorkspaceFolderHeader folder={folderData} isLoading={isFolderDataLoading} permissions={permissions} />
 

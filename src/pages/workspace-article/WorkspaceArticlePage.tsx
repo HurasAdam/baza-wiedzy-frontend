@@ -56,7 +56,7 @@ export function WorkspaceArticlePage() {
       initial="init"
       animate="visible"
       exit="exit"
-      className="mx-auto max-w-[1380px]  py-1 space-y-6"
+      className="mx-auto max-w-7xl py-1 space-y-6"
     >
       <ArticleHeader
         title={article.title}
