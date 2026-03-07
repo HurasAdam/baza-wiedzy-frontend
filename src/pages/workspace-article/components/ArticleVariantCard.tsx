@@ -60,7 +60,7 @@ export function ArticleVariantCard({ name, content, onCopy, onEdit, onDelete, pe
         <div className="border-t border-muted my-0.5"></div>
 
         {/* Treść wariantu */}
-        <p className="text-[15.5px] whitespace-pre-wrap text-muted-foreground">{content}</p>
+        <p className="text-[15.5px] whitespace-pre-wrap text-foreground/85">{content}</p>
       </CardContent>
     </Card>
   );
