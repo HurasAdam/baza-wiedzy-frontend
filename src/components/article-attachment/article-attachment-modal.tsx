@@ -14,7 +14,7 @@ import { Form, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 
-const DEFAULT_MAX_MB = 15;
+const DEFAULT_MAX_MB = 10;
 const ACCEPTED_MIMES = [
   "application/pdf",
   "image/png",
@@ -23,6 +23,7 @@ const ACCEPTED_MIMES = [
   "text/plain",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 ];
 
 const fileSchema = z.custom<File>((val) => val instanceof File, { message: "Nieprawidłowy plik" });
@@ -64,7 +65,7 @@ export const ArticleAttachmentModal = ({
     mode: "onChange",
   });
 
-  const humanAccept = ".pdf, .png, .jpg, .jpeg, .webp, .txt, .docx, .pptx";
+  const humanAccept = ".pdf, .png, .jpg, .jpeg, .webp, .txt, .docx, .pptx, xlsx";
 
   const onFilesPicked = (files: FileList | null) => {
     if (!files || files.length === 0) return;
@@ -73,12 +74,15 @@ export const ArticleAttachmentModal = ({
     const typeOk = acceptedMimes.includes(f.type);
 
     if (tooBig || !typeOk) {
-      toast.error(
-        `Plik odrzucony: ${f.name} ${tooBig ? `(>${maxSizeMB} MB)` : ""} ${!typeOk ? "(niedozwolony typ)" : ""}`
-      );
+      let reason = "";
+      if (tooBig) reason += `Plik przekracza maksymalny rozmiar ${maxSizeMB} MB. `;
+      if (!typeOk) reason += `Typ pliku jest niedozwolony.`;
+
+      toast.error(`Nie udało się załączyć pliku, "${f.name}". ${reason}`, {
+        position: "bottom-right",
+      });
       return;
     }
-
     form.setValue("files", [f], { shouldValidate: true, shouldDirty: true });
   };
 
@@ -116,7 +120,7 @@ export const ArticleAttachmentModal = ({
           onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["articles-attachments", articleId] });
           },
-        }
+        },
       );
 
       setUploadProgress(100);
