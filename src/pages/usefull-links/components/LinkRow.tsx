@@ -22,9 +22,10 @@ interface CompanyLink {
 interface Props {
   link: CompanyLink;
   onDelete: (linkId: string) => void;
+  disableActions?: boolean;
 }
 
-export const LinkRow = ({ link, onDelete }: Props) => {
+export const LinkRow = ({ link, onDelete, disableActions = false }: Props) => {
   const copyToClipboard = (e: React.MouseEvent) => {
     e.stopPropagation();
     navigator.clipboard.writeText(link.url).then(() => {
@@ -65,33 +66,35 @@ export const LinkRow = ({ link, onDelete }: Props) => {
         </div>
       </div>
 
-      <div className="opacity-0 group-hover:opacity-100 transition-opacity" onClick={(e) => e.stopPropagation()}>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <MoreHorizontal className="w-4 h-4" />
-            </Button>
-          </DropdownMenuTrigger>
+      {!disableActions && (
+        <div className="opacity-0 group-hover:opacity-100 transition-opacity" onClick={(e) => e.stopPropagation()}>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <MoreHorizontal className="w-4 h-4" />
+              </Button>
+            </DropdownMenuTrigger>
 
-          <DropdownMenuContent align="end">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="cursor-not-allowed opacity-50">
-                  <Pencil className="w-3 h-3 mr-2" />
-                  Edytuj
-                </DropdownMenuItem>
-              </TooltipTrigger>
+            <DropdownMenuContent align="end">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="cursor-not-allowed opacity-50">
+                    <Pencil className="w-3 h-3 mr-2" />
+                    Edytuj
+                  </DropdownMenuItem>
+                </TooltipTrigger>
 
-              <TooltipContent side="left">✨ Funkcja edycji w przygotowaniu</TooltipContent>
-            </Tooltip>
+                <TooltipContent side="left">✨ Funkcja edycji w przygotowaniu</TooltipContent>
+              </Tooltip>
 
-            <DropdownMenuItem onClick={() => onDelete(link._id)}>
-              <Trash2 className="w-3 h-3 mr-2" />
-              Usuń
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+              <DropdownMenuItem onClick={() => onDelete?.(link._id)}>
+                <Trash2 className="w-3 h-3 mr-2" />
+                Usuń
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      )}
     </div>
   );
 };

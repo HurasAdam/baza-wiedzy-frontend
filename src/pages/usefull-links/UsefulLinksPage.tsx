@@ -48,7 +48,6 @@ export const UsefulLinksPage = () => {
     });
   };
 
-  // --- Przygotowanie danych ---
   const links = useMemo(() => {
     if (!apiLinks) return [];
     return apiLinks.map((link) => ({
@@ -104,7 +103,6 @@ export const UsefulLinksPage = () => {
         </DropdownMenu>
       </div>
 
-      {/* Search */}
       <div className="relative mb-6 max-w-md">
         <Search className="absolute left-3 top-2.5 w-4 h-4 text-muted-foreground" />
         <Input
@@ -126,7 +124,7 @@ export const UsefulLinksPage = () => {
 
             <div className="space-y-2">
               {featuredLinks.map((link) => (
-                <LinkRow key={link._id} link={link} />
+                <LinkRow key={link._id} link={link} disableActions={true} />
               ))}
             </div>
           </section>
