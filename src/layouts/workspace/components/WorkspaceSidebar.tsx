@@ -39,6 +39,7 @@ interface WorkspaceSidebarProps {
     articlesCount: number;
     permissions?: Record<string, boolean>;
   }[];
+  permissions?: Record<string, boolean>;
   onAddFolder: () => void;
   onOpenNewArticle: () => void;
   onCreateWorkspace: () => void;
@@ -57,77 +58,84 @@ export const WorkspaceSidebar = ({
 }: WorkspaceSidebarProps) => {
   const navigate = useNavigate();
 
+  const IconComponent = workspace?.icon && WORKSPACE_ICONS[workspace.icon] ? WORKSPACE_ICONS[workspace.icon] : null;
+
   return (
     <motion.aside
       variants={sidebarVariants}
       initial="init"
       animate="visible"
       exit="exit"
-      className="w-64 border-r  flex flex-col bg-gradient-to-b from-background/80 via-background/60 to-background/30 backdrop-blur-xl shadow-inner"
+      className="w-65 border-r bg-card/95 flex flex-col"
     >
-      <div className="border-b flex flex-col px-2 pt-2 pb-2">
+      {/* TOP */}
+      <div className="border-b px-3 pt-3 pb-3 flex flex-col gap-3">
+        {/* WORKSPACE SWITCHER */}
         <DropdownMenu>
-          <DropdownMenuTrigger className="flex items-center hover:bg-muted/15 gap-3 p-3 mb-3 rounded-xl bg-gradient-to-r from-background/20 via-background/10 to-background/20 shadow-sm w-full justify-between">
-            <div className="flex items-center gap-3">
-              {workspace?.icon &&
-                WORKSPACE_ICONS[workspace.icon] &&
-                (() => {
-                  const IconComponent = WORKSPACE_ICONS[workspace.icon];
-                  return <IconComponent className="w-6 h-6" style={{ color: workspace.labelColor || "#6b7280" }} />;
-                })()}
-              <div className="flex flex-col">
-                <h2 className="text-md font-semibold text-foreground truncate">{workspace?.name || "Workspace"}</h2>
-                {workspace?.description && <span className="text-xs text-muted-foreground truncate">kolekcja</span>}
+          <DropdownMenuTrigger className="flex items-center justify-between gap-3 px-3 py-2 rounded-lg hover:bg-muted transition-colors w-full">
+            <div className="flex items-center gap-3 min-w-0">
+              {IconComponent && (
+                <div
+                  className="flex items-center justify-center w-9 h-9 rounded-lg"
+                  style={{
+                    background: `${workspace?.labelColor || "#6b7280"}20`,
+                  }}
+                >
+                  <IconComponent className="w-5 h-5" style={{ color: workspace?.labelColor }} />
+                </div>
+              )}
+
+              <div className="flex flex-col min-w-0">
+                <span className="text-sm font-semibold truncate">{workspace?.name || "Workspace"}</span>
+                <span className="text-xs text-muted-foreground">Kolekcja</span>
               </div>
             </div>
+
             <ChevronDown className="w-4 h-4 text-muted-foreground" />
           </DropdownMenuTrigger>
 
-          <DropdownMenuContent
-            side="right"
-            align="start"
-            className="w-full px-2 bg-background rounded-xl shadow-lg border border-border"
-          >
+          <DropdownMenuContent side="right" align="start" className="w-56 rounded-lg border shadow-md">
             {workspaces.map((ws) => {
               const IconComp = ws.icon ? WORKSPACE_ICONS[ws.icon] : null;
+
               return (
                 <DropdownMenuItem
                   key={ws._id}
                   className="flex items-center gap-2"
                   onClick={() => navigate(`/workspace/${ws._id}`)}
                 >
-                  {IconComp && <IconComp className="w-5 h-5" style={{ color: ws.labelColor }} />}
+                  {IconComp && <IconComp className="w-4 h-4" style={{ color: ws.labelColor }} />}
+
                   <span className="truncate">{ws.name}</span>
                 </DropdownMenuItem>
               );
             })}
 
-            <DropdownMenuItem
-              className="text-primary font-medium mt-1 border-t border-border"
-              onClick={onCreateWorkspace}
-            >
+            <DropdownMenuItem className="text-primary font-medium border-t mt-1" onClick={onCreateWorkspace}>
               + Nowa kolekcja
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <div className="px-0.5 py-1" title={!permissions?.addArticle ? "Brak uprawnień" : ""}>
+        {/* NEW ARTICLE BUTTON */}
+        <div title={!permissions?.addArticle ? "Brak uprawnień" : ""}>
           <Button
             size="sm"
-            variant={permissions?.addArticle ? "outline" : "ghost"}
-            className="w-full flex items-center justify-center gap-2 relative disabled:border"
+            variant="secondary"
+            className="w-full justify-center relative"
             onClick={permissions?.addArticle ? onOpenNewArticle : undefined}
             disabled={!permissions?.addArticle}
           >
             + Nowy artykuł
-            {!permissions?.addArticle && (
-              <Lock className="w-4 h-4 text-gray-400 absolute right-3 pointer-events-none" />
-            )}
+            {!permissions?.addArticle && <Lock className="w-4 h-4 text-muted-foreground absolute right-3" />}
           </Button>
         </div>
 
+        {/* NAV LINKS */}
         <WorkspaceSidebarNavLinks workspaceId={workspaceId} />
       </div>
+
+      {/* FOLDERS */}
 
       <WorkspaceSidebarFoldersList
         folders={folders}
@@ -136,11 +144,12 @@ export const WorkspaceSidebar = ({
         permissions={permissions}
       />
 
-      <div className="border-t p-4">
+      {/* FOOTER */}
+      <div className="border-t p-3">
         <Button
-          variant="outline"
+          variant="ghost"
           size="sm"
-          className="w-full justify-center text-xs"
+          className="w-full text-xs text-muted-foreground hover:text-foreground"
           onClick={() => navigate("/articles")}
         >
           Powrót do BW

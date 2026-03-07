@@ -27,14 +27,15 @@ export const WorkspaceSidebarFoldersList = ({
 
   return (
     <div className="flex flex-col flex-1 overflow-hidden">
-      <div className="flex items-center justify-between px-3.5 pt-3 pb-2 bg-muted/30">
-        <h3 className="text-xs font-medium text-muted-foreground/75 uppercase tracking-wide flex items-center gap-2">
+      {/* HEADER */}
+      <div className="flex items-center justify-between px-3 pt-3 pb-2">
+        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-2">
           <button
-            className="p-0 text-muted-foreground hover:text-primary transition-colors"
-            onClick={() => navigate(`/workspace/${workspaceId}/folders`)}
+            className="text-muted-foreground hover:text-primary transition-colors"
+            onClick={() => navigate(`/workspace/${workspaceId}/manage-folders`)}
             title="Zarządzaj folderami"
           >
-            <Folders className="w-3.5 h-3.5" />
+            <Folders className="w-4 h-4" />
           </button>
           Foldery
         </h3>
@@ -50,46 +51,46 @@ export const WorkspaceSidebarFoldersList = ({
             +
           </Button>
         ) : (
-          // jeśli brak permisji, pokazujemy kłódkę zamiast przycisku
           <div
             className="h-6 w-6 flex items-center justify-center text-muted-foreground cursor-not-allowed"
-            title="Brak uprawnień do dodawania folderów"
+            title="Brak uprawnień"
           >
-            <Lock className="w-3.5 h-3.5 text-foreground/40" />
+            <Lock className="w-3.5 h-3.5 opacity-50" />
           </div>
         )}
       </div>
 
+      {/* LISTA */}
       {isLoading ? (
         <SkeletonFoldersList />
       ) : (
-        <nav className="flex-1 px-2 py-2 space-y-1 overflow-y-auto scrollbar-custom">
+        <nav className="flex-1 px-2 pb-3 space-y-1 overflow-y-auto">
           {folders?.map((folder) => (
             <NavLink
               key={folder._id}
               to={`/workspace/${workspaceId}/folders/${folder._id}`}
               className={({ isActive }) =>
                 cn(
-                  "flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors",
-                  isActive ? "bg-primary/10 text-primary/80 font-medium" : "text-muted-foreground hover:bg-muted",
+                  "flex items-center justify-between gap-3 px-3 py-2 rounded-md text-sm transition-all",
+                  isActive
+                    ? "bg-primary/15 text-primary font-medium"
+                    : "text-card-foreground/85 hover:bg-muted hover:text-foreground",
                 )
               }
             >
               {({ isActive }) => (
                 <>
-                  <div className="relative flex-shrink-0">
-                    {isActive ? (
-                      <FolderOpen size={18} className="text-primary/90" />
-                    ) : (
-                      <Folder size={18} className="text-muted-foreground" />
-                    )}
-                    {folder.articlesCount > 0 && (
-                      <span className="absolute -top-1 -right-1.5 flex items-center justify-center w-3.5 h-3.5 text-[9px] font-medium text-primary-foreground bg-primary rounded-full shadow-sm">
-                        {folder.articlesCount}
-                      </span>
-                    )}
+                  <div className="flex items-center gap-3 min-w-0">
+                    {isActive ? <FolderOpen size={18} className="text-primary" /> : <Folder size={18} />}
+
+                    <span className="truncate">{folder.name}</span>
                   </div>
-                  <span className="truncate">{folder.name}</span>
+
+                  {folder.articlesCount > 0 && (
+                    <span className="text-[11px] font-medium text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
+                      {folder.articlesCount}
+                    </span>
+                  )}
                 </>
               )}
             </NavLink>
@@ -102,12 +103,11 @@ export const WorkspaceSidebarFoldersList = ({
 
 const SkeletonFoldersList = () => {
   return (
-    <ul className="space-y-1 mt-2">
+    <ul className="px-2 space-y-1 mt-2">
       {Array.from({ length: 6 }).map((_, i) => (
-        <li key={i} className="flex items-center gap-3 px-5 py-3 rounded-md text-sm bg-transparent">
-          <div className="w-[18px] h-[18px] rounded-sm bg-muted-foreground/20 animate-pulse flex-shrink-0" />
-
-          <div className="h-[18px] w-full rounded bg-muted-foreground/20 animate-pulse" />
+        <li key={i} className="flex items-center gap-3 px-3 py-2 rounded-md">
+          <div className="w-[18px] h-[18px] rounded bg-muted animate-pulse" />
+          <div className="h-[14px] w-full rounded bg-muted animate-pulse" />
         </li>
       ))}
     </ul>
