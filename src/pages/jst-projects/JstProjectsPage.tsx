@@ -51,7 +51,7 @@ export const JstProjectsPage = () => {
       initial="init"
       animate="visible"
       exit="exit"
-      className="flex w-full py-2 pb-5 max-w-[1320px] mx-auto"
+      className="flex w-full py-6 px-10 max-w-6xl mx-auto"
     >
       <div className="w-full">
         <JstProjectsHeader

@@ -160,7 +160,7 @@ export const PendingArticles: React.FC = () => {
       initial="init"
       animate="visible"
       exit="exit"
-      className="pb-5 max-w-[1320px] mx-auto"
+      className="py-6 px-10 max-w-7xl mx-auto"
     >
       <PendingArticlesHeader
         currentStatus={currentStatus}

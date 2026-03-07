@@ -105,7 +105,7 @@ export const FlaggedArticlesPage: React.FC = () => {
       initial="init"
       animate="visible"
       exit="exit"
-      className="flex flex-col gap-2 pb-5 max-w-[1320px] mx-auto"
+      className="flex flex-col gap-2 py-6 max-w-7xl px-10 mx-auto"
     >
       <FlaggedArticlesHeader
         isLoading={isFlagsLoading}

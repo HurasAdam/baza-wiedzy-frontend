@@ -28,7 +28,7 @@ export const TableFlaggedArticleCard = ({ article, openFlagModal, onUnflag }: Ta
   return (
     <div
       key={article._id}
-      className="flex items-center justify-between px-5 py-3 text-sm
+      className="flex items-center border-r border-l justify-between px-5 py-3 text-sm
         hover:bg-muted/70 transition-colors
         first:rounded-t-xl first:border-t
         last:rounded-b-xl last:border-b
@@ -40,7 +40,7 @@ export const TableFlaggedArticleCard = ({ article, openFlagModal, onUnflag }: Ta
           <div
             className={cn(
               "flex-shrink-0 w-5.5 h-5.5 rounded-full flex items-center justify-center",
-              selectedFlag === article.flag._id ? "ring-1 ring-border" : ""
+              selectedFlag === article.flag._id ? "ring-1 ring-border" : "",
             )}
             style={{ backgroundColor: article.flag.color }}
             title={article.flag.name}

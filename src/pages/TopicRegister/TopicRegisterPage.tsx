@@ -62,7 +62,7 @@ export const TopicRegisterPage = () => {
       initial="init"
       animate="visible"
       exit="exit"
-      className="flex w-full pb-5 max-w-6xl mx-auto"
+      className="flex w-full py-6 max-w-7xl px-10 mx-auto"
     >
       <div className="w-full">
         <TopicRegisterHeader

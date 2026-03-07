@@ -57,9 +57,9 @@ export const MyEntriesPage = () => {
       initial="init"
       animate="visible"
       exit="exit"
-      className="mx-auto pb-5 max-w-[1320px]"
+      className="mx-auto py-6 max-w-7xl px-10"
     >
-      <h1 className="text-xl font-bold mb-6.5 tracking-wide text-foreground">Moje artykuły</h1>
+      <h1 className="text-[22px] font-semibold tracking-tight  mb-6.5  text-foreground">Moje artykuły</h1>
 
       <StatusBar currentStatus={currentStatus} setCurrentStatus={setCurrentStatus} statuses={statuses} />
 

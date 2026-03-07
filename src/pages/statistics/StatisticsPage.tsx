@@ -61,7 +61,7 @@ export const StatisticsPage = () => {
       initial="init"
       animate="visible"
       exit="exit"
-      className="space-y-6 pb-5 max-w-[1320px] mx-auto py-4 "
+      className="space-y-6 px-10 max-w-7xl mx-auto py-6 "
     >
       <StatisticsHeader
         startDate={startDate}

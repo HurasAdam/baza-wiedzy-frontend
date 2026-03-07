@@ -32,7 +32,8 @@ const FlaggedArticlesHeader = ({
           <h1 className="text-lg font-semibold text-muted-foreground">Ładowanie...</h1>
         </>
       ) : (
-        <>
+        <div className="flex flex-col gap-2.5">
+          <h1 className="text-xl font-semibold flex items-center gap-2">Moje ulubione</h1>
           <Popover open={openFlags} onOpenChange={setOpenFlags}>
             <PopoverTrigger asChild>
               <button
@@ -96,11 +97,7 @@ const FlaggedArticlesHeader = ({
               </Command>
             </PopoverContent>
           </Popover>
-
-          <h1 className="text-xl font-semibold flex items-center gap-2">
-            Moje ulubione — <span className="text-muted-foreground">{activeFlagData.name}</span>
-          </h1>
-        </>
+        </div>
       )}
     </div>
   );

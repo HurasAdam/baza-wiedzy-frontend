@@ -79,7 +79,7 @@ export const FavoritesArticlesPage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col ">
+    <div className="flex flex-col  ">
       {/* ------ State Loaders ------ */}
       {/* ------ Filter Bar ------ */}
       <h1 className="text-xl font-bold mb-6.5 tracking-wide text-foreground flex items-center gap-1.5">

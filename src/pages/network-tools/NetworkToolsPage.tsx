@@ -52,7 +52,7 @@ export const NetworkToolsPage = () => {
       {/* --- HEADER PREMIUM Z IKONĄ --- */}
       <div className="flex items-center gap-3 mb-4">
         <Network className="w-6 h-6 text-foreground" />
-        <h1 className="text-2xl font-semibold">Narzędzia sieciowe</h1>
+        <h1 className="text-[22px]  font-semibold tracking-tight">Narzędzia sieciowe</h1>
       </div>
 
       {/* --- FILTRY --- */}

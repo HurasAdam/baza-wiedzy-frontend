@@ -99,7 +99,7 @@ export const MyFlagsPage = () => {
       initial="init"
       animate="visible"
       exit="exit"
-      className="flex flex-col h-full w-full py-3 px-8 lg:px-12  backdrop-blur-md max-w-7xl mx-auto"
+      className="flex flex-col h-full w-full py-6  px-10  backdrop-blur-md max-w-6xl mx-auto"
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
@@ -131,7 +131,7 @@ export const MyFlagsPage = () => {
           </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
           {userFlags.map((flag) => (
             <div
               key={flag._id}

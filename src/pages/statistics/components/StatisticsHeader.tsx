@@ -22,7 +22,7 @@ const StatisticsHeader = ({
   return (
     <>
       <div className="flex items-center justify-between gap-4 mr-4">
-        <h1 className="text-xl font-bold tracking-tight flex items-center gap-1.5">
+        <h1 className="text-[22px]  font-semibold tracking-tight flex items-center gap-1.5">
           <ChartColumnDecreasing /> Statystyki użytkowników
         </h1>
 

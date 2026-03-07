@@ -83,7 +83,7 @@ const MyEntryCard = ({ article, label }: MyEntryCardProps) => {
       key={article._id}
       className="flex justify-between items-center px-4 py-3 text-sm hover:bg-muted/50 transition-colors"
     >
-      <div className="flex items-center gap-3 min-w-0 overflow-hidden">
+      <div className="flex items-center gap-4 min-w-0 overflow-hidden">
         <Box className="w-5 h-5 flex-shrink-0" style={{ color: article.product.labelColor }} />
         <div className="flex flex-col overflow-hidden">
           <span className="font-medium text-foreground truncate">{article.title}</span>

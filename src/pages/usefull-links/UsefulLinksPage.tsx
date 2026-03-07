@@ -77,7 +77,7 @@ export const UsefulLinksPage = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-semibold">Przydatne linki</h1>
+          <h1 className="text-[22px] font-semibold tracking-tight ">Przydatne linki</h1>
           <p className="text-sm text-muted-foreground">Szybki dostęp do dokumentów i plików</p>
         </div>
 

@@ -41,12 +41,12 @@ export const MyWorkspaces = () => {
       initial="init"
       animate="visible"
       exit="exit"
-      className="flex flex-col h-full w-full py-4 px-6 lg:px-12  backdrop-blur-md max-w-7xl mx-auto"
+      className="flex flex-col h-full w-full py-6 px-10  max-w-6xl mx-auto backdrop-blur-md "
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-10">
         <div>
-          <h1 className="text-2xl font-semibold text-foreground">Moje kolekcje</h1>
+          <h1 className="text-[22px]  font-semibold tracking-tight text-foreground">Moje kolekcje</h1>
           <p className="text-muted-foreground text-sm mt-1">Zarządzaj swoimi kolekcjami.</p>
         </div>
         {userPermissions.includes("ADD_COLLECTION") && (
