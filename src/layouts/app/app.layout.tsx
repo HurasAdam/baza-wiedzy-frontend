@@ -101,7 +101,7 @@ const AppLayout = () => {
             onOpenWorkspaceInviteModal={() => setIsWorkspaceInviteModalOpen(true)}
           />
 
-          <div className="flex flex-col flex-1 rounded-2xl my-2 mr-1.5 border border-border/80 bg-background">
+          <div className="flex flex-col flex-1 rounded-l-2xl border border-border/80 bg-background">
             <Header
               onOpenSettingsModal={() => setIsSettingsModalOpen(true)}
               onOpenIssueReportsModal={() => setIsIssueReportsModalOpen(true)}
@@ -109,8 +109,10 @@ const AppLayout = () => {
               onOpenNotificationsPanel={() => setIsNotificationsPanelOpen(true)}
               onOpenWorkspaceInviteModal={() => setIsWorkspaceInviteModalOpen(true)}
               onOpenChangeLogModal={() => setIsChangeLogModalOpen(true)}
+              onOpenAdminPanel={() => navigate("/admin")}
+              onOpenReportsPanel={() => navigate("/reports")}
             />
-            <div className="flex-1 min-h-0 overflow-y-auto scrollbar-custom   rounded-b-2xl py-6">
+            <div className="flex-1 min-h-0 overflow-y-auto scrollbar-custom rounded-b-2xl py-6">
               <Outlet context={{ onOpenCreateIssueReport: () => setIsCreatingIssueReport(true) }} />
             </div>
           </div>

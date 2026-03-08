@@ -67,7 +67,7 @@ const navItems: NavItem[] = [
     href: "/network-tools",
     icon: Network,
   },
-  { title: "Szkoły JST", href: `/jst-projects`, icon: School },
+  { title: "Szkoły projektowe", href: `/jst-projects`, icon: School },
   { title: "Działy i kontakty", href: `/achieved`, icon: BookUser },
 
   { title: "Zabawne wiad.", href: "/funny-messages", icon: Smile },

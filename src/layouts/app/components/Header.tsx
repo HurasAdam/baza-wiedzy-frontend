@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useFindMySummaryNotificationsQuery } from "@/hooks/notifications/use-notifications";
-import { Bell, Bug, PanelLeftClose, PanelLeftOpen, Settings } from "lucide-react";
+import { Bell, Bug, MailQuestionMark, PanelLeftClose, PanelLeftOpen, Settings, ShieldUser } from "lucide-react";
 import { Breadcrumb } from "../../../components/breadcrumb/Breadcrumb";
 import { useSidebar } from "../../../providers/sidebar-provider";
 
@@ -9,7 +9,8 @@ interface HeaderProps {
   subtitle?: string;
   onOpenSettingsModal: () => void;
   onOpenNotificationsPanel: () => void;
-  onOpenChangeLogModal: () => void;
+  onOpenAdminPanel: () => void;
+  onOpenReportsPanel: () => void;
   onOpenCreateIssueReport: () => void;
 }
 
@@ -18,7 +19,8 @@ const Header = ({
   subtitle = "Zarządzaj wszystkimi artykułami",
   onOpenSettingsModal,
   onOpenNotificationsPanel,
-  onOpenChangeLogModal,
+  onOpenAdminPanel,
+  onOpenReportsPanel,
   onOpenCreateIssueReport,
 }: HeaderProps) => {
   const { variant: sidebarVariant, setVariant } = useSidebar();
@@ -30,7 +32,7 @@ const Header = ({
   };
 
   return (
-    <header className="sticky top-0 z-40 px-2 py-1  bg-transparent rounded-t-2xl border-b">
+    <header className="sticky top-0 z-40 pl-2.5 pr-3.5 py-1  bg-transparent rounded-t-2xl border-b">
       <div className="h-10  flex items-center justify-between ">
         {/* LEFT */}
         <div className="flex items-center gap-4">
@@ -54,7 +56,25 @@ const Header = ({
 
         {/* RIGHT */}
         <div className="flex items-center gap-2">
+          <Button onClick={onOpenAdminPanel} size="sm" variant="ghost" className="group hover:bg-muted/40  ">
+            <ShieldUser className="group-hover:text-destructive" />
+          </Button>
+          <Button onClick={onOpenReportsPanel} size="sm" variant="ghost" className="group hover:bg-muted/40  ">
+            <MailQuestionMark className="group-hover:text-destructive" />
+          </Button>
+          <Button onClick={onOpenCreateIssueReport} size="sm" variant="ghost" className="group hover:bg-muted/40  ">
+            <Bug className="group-hover:text-destructive" />
+          </Button>
           {/* Notifications */}
+
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={onOpenSettingsModal}
+            className="hover:bg-muted/40 hover:text-foreground"
+          >
+            <Settings className="size-4" />
+          </Button>
           <Button
             size="icon"
             variant="ghost"
@@ -65,19 +85,6 @@ const Header = ({
             {unreadCount > 0 && (
               <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-rose-500 animate-pulse" />
             )}
-          </Button>
-          {/* Settings */}
-
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={onOpenSettingsModal}
-            className="hover:bg-muted/40 hover:text-foreground"
-          >
-            <Settings className="size-4" />
-          </Button>
-          <Button onClick={onOpenCreateIssueReport} size="sm" variant="ghost" className="group hover:bg-muted/40  ">
-            <Bug className="group-hover:text-destructive" />
           </Button>
         </div>
       </div>
