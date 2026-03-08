@@ -1,9 +1,8 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { motion } from "framer-motion";
-import { HelpCircle, Layers2, LogOut, Origami, Plus, type LucideIcon } from "lucide-react";
+import { HelpCircle, Layers2, LogOut, Origami, Plus, Settings, type LucideIcon } from "lucide-react";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button } from "../../../components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -136,11 +135,19 @@ export const LeftNavBar = ({
       </div>
 
       {/* DOLE: logout */}
-      <div className="mb-6 space-y-24 ">
-        <Button variant="ghost" onClick={onOpenLogoutAlert}>
-          <LogOut className="w-4 h-4" />
-        </Button>
-        <div className="space-y-2">
+      <div className="mb-3 space-y-21">
+        <div className="flex flex-col gap-2.5">
+          <motion.button
+            onClick={onOpenChangeLogModal}
+            className={cn(
+              "relative flex hover:bg-primary/20 items-center justify-center w-10 h-10  rounded-lg text-sidebar-foreground transition-colors",
+            )}
+            whileTap={{ scale: 0.95 }}
+          >
+            {/* Aktywny wskaźnik pionowy */}
+
+            <Settings className="w-4 h-4" />
+          </motion.button>
           <motion.button
             onClick={onOpenChangeLogModal}
             className={cn(
@@ -151,6 +158,19 @@ export const LeftNavBar = ({
             {/* Aktywny wskaźnik pionowy */}
 
             <HelpCircle className="w-4 h-4" />
+          </motion.button>
+        </div>
+        <div className="space-y-2">
+          <motion.button
+            onClick={onOpenLogoutAlert}
+            className={cn(
+              "relative flex bg-primary/40 hover:bg-primary/50 items-center justify-center w-8.5 h-8.5  rounded-xl text-sidebar-foreground transition-colors",
+            )}
+            whileTap={{ scale: 0.95 }}
+          >
+            {/* Aktywny wskaźnik pionowy */}
+
+            <LogOut className="w-4 h-4" />
           </motion.button>
         </div>
       </div>
