@@ -135,74 +135,74 @@ export const MyFlagsPage = () => {
           {userFlags.map((flag) => (
             <div
               key={flag._id}
-              className="group relative border rounded-xl p-4 bg-gradient-to-br from-card/70 to-card/40 backdrop-blur-sm
-                         shadow-sm hover:bg-muted/40 transition-all flex flex-col justify-between"
+              className="group relative border rounded-2xl p-6 bg-gradient-to-br from-card/70 to-card/40 backdrop-blur-sm
+             shadow-sm hover:shadow-xl hover:border-primary/45 transition-all duration-200
+             flex flex-col gap-4 cursor-pointer"
             >
-              {/* Top left*/}
-              <div className="flex items-center gap-4">
+              <div className="flex items-start gap-4">
                 <div
-                  className="flex items-center justify-center w-10 h-10 rounded-xl"
+                  className="flex items-center justify-center w-12 h-12 rounded-xl flex-shrink-0"
                   style={{ backgroundColor: `${flag.color}22` }}
                 >
-                  <Flag className="w-5 h-5" style={{ color: flag.color }} />
+                  <Flag className="w-6 h-6" style={{ color: flag.color }} />
                 </div>
-                <div className="min-w-0 flex-1">
-                  <h3 className="font-semibold text-foreground truncate">{flag.name}</h3>
+
+                <div className="flex-1">
+                  <h3
+                    className="text-[16px] font-semibold text-foreground leading-snug break-words max-w-full"
+                    title={flag.name}
+                  >
+                    {flag.name}
+                  </h3>
                 </div>
               </div>
 
-              {/* Top right*/}
-              <div className="absolute top-2 right-2">
-                <Button size="icon" variant="ghost" onClick={() => navigate(`/flagged-articles?flag=${flag._id}`)}>
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
-              </div>
-
-              {/* Bottom left */}
-              <div className="mt-4">
-                <p className="text-sm text-muted-foreground font-medium">
+              <div className="flex justify-between items-center mt-4">
+                <p className="text-[13px] text-muted-foreground font-medium">
                   {flag.articlesCount ?? 0} {flag.articlesCount === 1 ? "artykuł" : "artykułów"}
                 </p>
-              </div>
 
-              {/* Bottom right*/}
-              <div className="flex justify-end gap-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <MoreHorizontal className="w-4 h-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onSelect={() => handleEditFlag(flag._id)}>
-                      <Pencil className="w-3 h-3" />
-                      Edytuj
-                    </DropdownMenuItem>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <DropdownMenuItem
-                          onSelect={(e) => {
-                            if (flag.articlesCount > 0) {
-                              e.preventDefault();
-                              return;
-                            }
-                            onDeleteFlagClick(flag);
-                          }}
-                          className={flag.articlesCount > 0 ? "opacity-50 " : ""}
-                        >
-                          <Trash2 className="w-3 h-3 mr-2" />
-                          Usuń
-                        </DropdownMenuItem>
-                      </TooltipTrigger>
+                <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button className="hover:bg-muted hover:text-foreground" variant="ghost" size="icon">
+                        <MoreHorizontal className="w-4 h-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onSelect={() => handleEditFlag(flag._id)}>
+                        <Pencil className="w-3 h-3 mr-2" /> Edytuj
+                      </DropdownMenuItem>
 
-                      {flag.articlesCount > 0 && (
-                        <TooltipContent side="right" className="bg-muted">
-                          Nie można usunąć etykiety przypisanej do artykułów
-                        </TooltipContent>
-                      )}
-                    </Tooltip>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <DropdownMenuItem
+                            onSelect={(e) => {
+                              if (flag.articlesCount > 0) {
+                                e.preventDefault();
+                                return;
+                              }
+                              onDeleteFlagClick(flag);
+                            }}
+                            className={flag.articlesCount > 0 ? "opacity-50" : ""}
+                          >
+                            <Trash2 className="w-3 h-3 mr-2" /> Usuń
+                          </DropdownMenuItem>
+                        </TooltipTrigger>
+
+                        {flag.articlesCount > 0 && (
+                          <TooltipContent side="bottom" className="bg-primary">
+                            Nie można usunąć etykiety przypisanej do artykułów
+                          </TooltipContent>
+                        )}
+                      </Tooltip>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+
+                  <Button size="icon" variant="ghost" onClick={() => navigate(`/flagged-articles?flag=${flag._id}`)}>
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
             </div>
           ))}

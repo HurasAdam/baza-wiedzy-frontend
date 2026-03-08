@@ -81,15 +81,15 @@ const navItems: NavItem[] = [
 
 export const myNavItems: MySectionNavItem[] = [
   {
+    title: "Ulubione",
+    href: "/flagged-articles",
+    icon: HeartIcon,
+  },
+  {
     title: "Kolekcje",
     href: "/my-workspaces",
     icon: Layers2,
     requiredPermission: ["ADD_COLLECTION", "JOIN_COLLECTION"], // teraz tablica permisji
-  },
-  {
-    title: "Ulubione",
-    href: "/flagged-articles",
-    icon: HeartIcon,
   },
   {
     title: "Wpisy",
