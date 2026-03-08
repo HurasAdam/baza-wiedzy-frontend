@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useFindMySummaryNotificationsQuery } from "@/hooks/notifications/use-notifications";
-import { Bell, ChevronsLeft, ChevronsRight, MessageCircleWarning, Settings } from "lucide-react";
+import { Bell, Bug, PanelLeftClose, PanelLeftOpen, Settings } from "lucide-react";
+import { Breadcrumb } from "../../../components/breadcrumb/Breadcrumb";
 import { useSidebar } from "../../../providers/sidebar-provider";
 
 interface HeaderProps {
@@ -29,7 +30,7 @@ const Header = ({
   };
 
   return (
-    <header className="sticky top-0 z-40 px-2 py-0.5  bg-transparent rounded-t-2xl border-b">
+    <header className="sticky top-0 z-40 px-2 py-1  bg-transparent rounded-t-2xl border-b">
       <div className="h-10  flex items-center justify-between ">
         {/* LEFT */}
         <div className="flex items-center gap-4">
@@ -39,11 +40,15 @@ const Header = ({
             onClick={toggleVariant}
             className="hover:bg-transparent hover:text-primary"
           >
-            {sidebarVariant === "compact" ? <ChevronsRight className="size-4" /> : <ChevronsLeft className="size-4" />}
+            {sidebarVariant === "compact" ? (
+              <PanelLeftOpen className="size-4" />
+            ) : (
+              <PanelLeftClose className="size-4" />
+            )}
           </Button>
 
           <div className="flex flex-col leading-tight">
-            <span className="text-xs font-medium text-foreground">{title}</span>
+            <Breadcrumb />
           </div>
         </div>
 
@@ -71,13 +76,8 @@ const Header = ({
           >
             <Settings className="size-4" />
           </Button>
-          <Button
-            onClick={onOpenCreateIssueReport}
-            size="sm"
-            variant="ghost"
-            className="flex flex-1 hover:bg-transparent text-xs font-medium "
-          >
-            <MessageCircleWarning />
+          <Button onClick={onOpenCreateIssueReport} size="sm" variant="ghost" className="group hover:bg-muted/40  ">
+            <Bug className="group-hover:text-destructive" />
           </Button>
         </div>
       </div>

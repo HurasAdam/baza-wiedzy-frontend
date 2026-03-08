@@ -102,7 +102,7 @@ export const CurrentUserAvatarDropdown: React.FC<CurrentUserDropdownProps> = ({
               {/* subtelny glow */}
               <span className="absolute inset-0 rounded-lg bg-primary/20 blur-md opacity-60" />
 
-              <Avatar className="relative w-10 h-10 rounded-lg ring-1 ring-border/40 bg-background">
+              <Avatar className="relative w-9.5 h-9.5 rounded-lg ring-1 ring-border/40 bg-background">
                 <AvatarImage src={avatarUrl ?? undefined} alt={user?.name ?? "Avatar"} crossOrigin="anonymous" />
                 <AvatarFallback className="bg-primary/70 text-primary-forground text-sm font-medium rounded-lg">
                   {initials}

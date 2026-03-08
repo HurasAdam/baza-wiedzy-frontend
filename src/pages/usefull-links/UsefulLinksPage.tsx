@@ -72,7 +72,7 @@ export const UsefulLinksPage = () => {
       initial="init"
       animate="visible"
       exit="exit"
-      className="flex flex-col h-full w-full py-6 px-10 max-w-6xl mx-auto"
+      className="flex flex-col h-full w-full py-5 px-10 max-w-6xl mx-auto"
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-6">

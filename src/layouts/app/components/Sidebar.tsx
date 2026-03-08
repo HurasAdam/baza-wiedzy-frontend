@@ -7,9 +7,9 @@ import {
   Clipboard,
   FolderSearch,
   HeartIcon,
+  Home,
   LandPlot,
   Layers2,
-  LayoutDashboard,
   Link,
   Network,
   RectangleEllipsis,
@@ -48,7 +48,7 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  { title: "Start", href: "/dashboard", icon: LayoutDashboard },
+  { title: "Start", href: "/dashboard", icon: Home },
   { title: "Baza artykułów", href: "/articles", icon: FolderSearch },
   // { title: "Moje ulubione", href: `/flagged-articles`, icon: HeartIcon },
   { title: "Przydatne linki", href: "/useful-links", icon: Link },

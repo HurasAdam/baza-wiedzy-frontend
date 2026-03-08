@@ -117,7 +117,7 @@ export const ArticlesPage: React.FC = () => {
       initial="init"
       animate="visible"
       exit="exit"
-      className="flex flex-col gap-1.5 pb-5 max-w-[1320px] mx-auto  py-6 px-10 max-w-6xl"
+      className="flex flex-col gap-1.5  mx-auto  py-4.5 px-10 max-w-7xl"
     >
       <ArticlesFilterBar
         selectedTitle={titleParam}

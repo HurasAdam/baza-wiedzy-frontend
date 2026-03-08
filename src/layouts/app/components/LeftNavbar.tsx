@@ -43,13 +43,13 @@ export const LeftNavBar = ({
   const { data: workspaces = [], isPending } = useFindUserWorkspacesQuery();
 
   return (
-    <nav className="flex flex-col items-center justify-between py-2 px-[8px] gap-y-3 bg-gradient-to-br from-muted to-muted shadow-md border border-border/55 h-full">
+    <nav className="flex flex-col items-center justify-between py-2.5 px-[8px] gap-y-3 bg-gradient-to-br from-muted to-muted shadow-md border border-border/55 h-full">
       {/* GÓRA: Workspace / logo */}
       <div className="flex flex-col items-center w-full">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button
-              className="flex items-center justify-center w-10 h-10 rounded-md hover:bg-primary/60 transition-colors mb-4"
+              className="flex items-center  justify-center w-10 h-10 rounded-md hover:bg-primary/60 transition-colors mb-4"
               aria-label="Switch workspace"
             >
               <Origami className="w-5 h-5 text-sidebar-logo/70" />
