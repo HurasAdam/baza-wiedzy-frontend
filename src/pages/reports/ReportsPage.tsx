@@ -30,13 +30,14 @@ export const ReportsPage = () => {
 
   const { data: reports = [], isLoading, isError, error } = useFindIssueReportsQuery(params);
   const { onOpenCreateIssueReport } = useOutletContext<{ onOpenCreateIssueReport: () => void }>();
+
   return (
     <motion.div
       variants={animation.pageFadePremium}
       initial="init"
       animate="visible"
       exit="exit"
-      className="mx-auto pb-5 max-w-[1320px] flex flex-col  backdrop-blur-md"
+      className="mx-auto pb-5 pt-1 max-w-7xl px-6 lg:px-0 flex flex-col  backdrop-blur-md"
     >
       <IssueReportsHeader
         searchTerm={searchTerm}

@@ -74,7 +74,7 @@ export function ReportDetailsPage() {
       initial="init"
       animate="visible"
       exit="exit"
-      className="max-w-[1320px] mx-auto h-full"
+      className="max-w-7xl px-6 lg:px-0 py-5 mx-auto h-full"
     >
       <Header report={report} canManageReportStatus={userPermissions.includes("MANAGE_REPORT_STATUS")} />
 
