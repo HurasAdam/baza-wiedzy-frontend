@@ -57,6 +57,7 @@ const IssueReportsList = ({ isLoading, isError, error, reports, navigate }: Issu
             const status = statusConfig[report.status as ReportStatus];
             return (
               <li
+                title={report.title}
                 onClick={() => navigate(`/reports/${report._id}`)}
                 key={report._id}
                 className="flex items-center justify-between px-4 py-3 group hover:bg-muted/30 transition-all
@@ -87,7 +88,7 @@ const IssueReportsList = ({ isLoading, isError, error, reports, navigate }: Issu
                     </div>
                   )}
 
-                  <div className="flex flex-col min-w-0">
+                  <div className="flex flex-col min-w-0 mr-5">
                     <span className="text-sm font-semibold text-foreground truncate">{report.title}</span>
 
                     <span
@@ -99,8 +100,8 @@ const IssueReportsList = ({ isLoading, isError, error, reports, navigate }: Issu
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center space-x-2">
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center space-x-1">
                     <Badge className={`${status.badge}  px-2 py-1`}>{status.label}</Badge>
                     <div className="w-28" />
                     <span className="text-xs text-muted-foreground whitespace-nowrap">
