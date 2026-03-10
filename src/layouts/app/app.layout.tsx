@@ -64,6 +64,7 @@ const AppLayout = () => {
           <LeftNavBar
             onOpenLogoutAlert={() => setIsLogoutOpen(true)}
             onOpenChangeLogModal={() => setIsChangeLogModalOpen(true)}
+            onOpenSettingsModal={() => setIsSettingsModalOpen(true)}
             items={[
               {
                 title: "Dodaj artykuł",

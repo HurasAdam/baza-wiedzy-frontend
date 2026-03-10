@@ -28,6 +28,7 @@ interface LeftNavBarProps {
   onOpenInviteModal: () => void;
   onOpenChangeLogModal: () => void;
   onOpenLogoutAlert: () => void;
+  onOpenSettingsModal: () => void;
 }
 
 export const LeftNavBar = ({
@@ -35,6 +36,7 @@ export const LeftNavBar = ({
   onCreateWorkspace,
   onOpenInviteModal,
   onOpenChangeLogModal,
+  onOpenSettingsModal,
   onOpenLogoutAlert,
 }: LeftNavBarProps) => {
   const location = useLocation();
@@ -138,7 +140,7 @@ export const LeftNavBar = ({
       <div className="mb-3 space-y-21">
         <div className="flex flex-col gap-2.5">
           <motion.button
-            onClick={onOpenChangeLogModal}
+            onClick={onOpenSettingsModal}
             className={cn(
               "relative flex hover:bg-primary/20 items-center justify-center w-10 h-10  rounded-lg text-sidebar-foreground transition-colors",
             )}
