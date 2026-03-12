@@ -32,7 +32,7 @@ export function EditWorkspaceArticleModal({
   const handleSubmit = (data: EditWorkspaceArticleFormData) => {
     const payload = {
       ...data,
-      marker: data.marker === "" ? undefined : data.marker,
+      marker: data.marker === "none" || data.marker === "" ? undefined : data.marker,
     };
 
     updateWorkspaceArticleMutate(
