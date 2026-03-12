@@ -30,9 +30,13 @@ export function EditWorkspaceArticleModal({
   const { mutate: updateWorkspaceArticleMutate, isPending } = useUpdateWorkspaceArticleMutation();
 
   const handleSubmit = (data: EditWorkspaceArticleFormData) => {
-    console.log(data);
+    const payload = {
+      ...data,
+      marker: data.marker === "" ? undefined : data.marker,
+    };
+
     updateWorkspaceArticleMutate(
-      { articleId: article._id, payload: data },
+      { articleId: article._id, payload },
       {
         onSuccess: (data: WorkspaceArticleUpdateResponse) => {
           onClose();
@@ -56,7 +60,7 @@ export function EditWorkspaceArticleModal({
             queryKey: ["workspace-article", currentArticle],
           });
         },
-      }
+      },
     );
   };
 
@@ -77,6 +81,7 @@ export function EditWorkspaceArticleModal({
           defaultValues={{
             title: article.title,
             folderId: article.folder?._id ?? "",
+            marker: article.marker ?? "",
           }}
           folders={folders}
           onSubmit={handleSubmit}

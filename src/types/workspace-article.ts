@@ -2,6 +2,7 @@ export interface WorkspaceArticle {
   _id: string;
   title: string;
   workspaceId: string;
+  marker: string;
   createdBy: ArticleAuthor;
   createdAt: string; // ISO date
   updatedAt: string; // ISO date

@@ -14,6 +14,13 @@ interface WorkspaceArticleFormProps {
   folders: WorkspaceFolder[];
 }
 
+const ARTICLE_MARKERS = [
+  { value: "red", label: "Czerwony", color: "bg-red-500" },
+  { value: "yellow", label: "Żółty", color: "bg-yellow-500" },
+  { value: "green", label: "Zielony", color: "bg-green-500" },
+  { value: "blue", label: "Niebieski", color: "bg-blue-500" },
+];
+
 export const WorkspaceArticleForm = ({ folders = [] }: WorkspaceArticleFormProps) => {
   const form = useFormContext<WorkspaceArticleFormData>();
 
@@ -24,41 +31,87 @@ export const WorkspaceArticleForm = ({ folders = [] }: WorkspaceArticleFormProps
 
   return (
     <div className="flex flex-col gap-6 w-full max-w-6xl mx-auto">
-      {/* ===================================================== */}
-      {/* Folder docelowy */}
-      {/* ===================================================== */}
       <Card className="bg-card/80 p-6 shadow-sm">
-        <div className="flex items-center gap-3 mb-1.5 pb-2 border-b border-border">
-          <FolderKanban className="w-5 h-5 text-primary" />
-          <h3 className="text-base font-semibold">Folder docelowy</h3>
-        </div>
+        <div className="grid grid-cols-2 gap-6">
+          {/* ================= Folder ================= */}
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <FolderKanban className="w-5 h-5 text-primary" />
+              <h3 className="text-base font-semibold">Folder docelowy</h3>
+            </div>
 
-        <FormField
-          control={form.control}
-          name="folderId"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger className="bg-muted/30 min-w-[260px]">
-                    <SelectValue placeholder="Wybierz folder" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {folders.map((f) => (
-                      <SelectItem key={f._id} value={f._id}>
-                        <div className="flex items-center gap-2">
-                          <FolderCheck className="w-4 h-4 text-primary" />
-                          <span>{f.name}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <FormField
+              control={form.control}
+              name="folderId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="bg-muted/30 w-full">
+                        <SelectValue placeholder="Wybierz folder" />
+                      </SelectTrigger>
+
+                      <SelectContent>
+                        {folders.map((f) => (
+                          <SelectItem key={f._id} value={f._id}>
+                            <div className="flex items-center gap-2">
+                              <FolderCheck className="w-4 h-4 text-primary" />
+                              <span>{f.name}</span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          {/* ================= Marker ================= */}
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <Type className="w-5 h-5 text-primary" />
+              <h3 className="text-base font-semibold">Marker</h3>
+            </div>
+
+            <FormField
+              control={form.control}
+              name="marker"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Select
+                      value={field.value ?? "none"}
+                      onValueChange={(val) => field.onChange(val === "none" ? undefined : val)}
+                    >
+                      <SelectTrigger className="bg-muted/30 w-full">
+                        <SelectValue placeholder="Brak oznaczenia" />
+                      </SelectTrigger>
+
+                      <SelectContent>
+                        <SelectItem value="none">Brak</SelectItem>
+
+                        {ARTICLE_MARKERS.map((m) => (
+                          <SelectItem key={m.value} value={m.value}>
+                            <div className="flex items-center gap-2">
+                              <span className={`w-3 h-3 rounded-full ${m.color}`} />
+                              {m.label}
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
       </Card>
 
       {/* ===================================================== */}

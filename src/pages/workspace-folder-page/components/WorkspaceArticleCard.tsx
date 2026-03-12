@@ -1,14 +1,7 @@
-import { FileText, List } from "lucide-react";
-import { useState } from "react";
+import { Bookmark, List } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../../components/ui/tooltip";
 import { cn } from "../../../lib/utils";
-
-const statusLabels: Record<string, string> = {
-  approved: "Zatwierdzony",
-  pending: "Oczekujący",
-  rejected: "Odrzucony",
-};
 
 export interface Article {
   _id: string;
@@ -16,16 +9,9 @@ export interface Article {
   tags: Tag[];
   isVerified: boolean;
   status: "approved" | "rejected" | "pending";
-  rejectionReason: string | null;
-  rejectedBy: string | null;
-  createdBy: Author;
-  viewsCounter: number;
+  marker?: "red" | "yellow" | "green" | "blue" | "none";
   responseVariantsCount: number;
-  isTrashed: boolean;
-  product: Product;
-  category: Category;
-  createdAt: string; // ISO date string
-  isFavourite: boolean;
+  createdAt: string;
 }
 
 interface Tag {
@@ -33,112 +19,78 @@ interface Tag {
   name: string;
 }
 
-interface Author {
-  _id: string;
-  name: string;
-  surname: string;
-}
-
-interface Product {
-  _id: string;
-  name: string;
-  labelColor: string;
-  banner: string;
-}
-
-interface Category {
-  _id: string;
-  name: string;
-}
-
-interface Flag {
-  _id: string;
-  name: string;
-  labelColor: string;
-}
-
-interface TableArticleCardProps {
+interface WorkspaceArticleCardProps {
   folderId: string;
   workspaceId: string;
   article: Article;
-  flags: Flag[];
-  onFlagChange: (articleId: string, flagId: string) => void;
-  toggleFavourite: (id: string) => void;
-  toggleFavouriteLoading: boolean;
-  openArticleDrawer: (articleId: string) => void;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
 }
+
+// Premium, stonowane kolory dla markerów
+const markerStyles: Record<NonNullable<Article["marker"]>, { icon: string; bg: string }> = {
+  red: { icon: "text-red-400/80 dark:text-red-500/80", bg: "bg-red-400/10 dark:bg-red-500/20" },
+  yellow: { icon: "text-yellow-400/80 dark:text-yellow-500/80", bg: "bg-yellow-400/10 dark:bg-yellow-500/20" },
+  green: { icon: "text-green-400/80 dark:text-green-500/80", bg: "bg-green-400/10 dark:bg-green-500/20" },
+  blue: { icon: "text-blue-400/80 dark:text-blue-500/80", bg: "bg-blue-400/10 dark:bg-blue-500/20" },
+  none: { icon: "text-muted-foreground/60", bg: "bg-muted/25" },
+};
 
 const WorkspaceArticleCard = ({
   folderId,
   workspaceId,
   article,
-  flags,
-  onFlagChange,
-  toggleFavourite,
-  toggleFavouriteLoading,
-  openArticleDrawer,
   onMouseEnter,
   onMouseLeave,
-}: TableArticleCardProps) => {
-  const [selectedFlag, setSelectedFlag] = useState<string | undefined>();
-
-  const handleFlagSelect = (flagId: string) => {
-    setSelectedFlag(flagId);
-    onFlagChange(article._id, flagId);
-  };
-
-  const selectedFlagColor = selectedFlag ? flags.find((f) => f._id === selectedFlag)?.labelColor : "#999";
+}: WorkspaceArticleCardProps) => {
+  const hasMarker = !!article.marker;
 
   return (
     <Link
       to={`/workspace/${workspaceId}/folders/${folderId}/articles/${article._id}`}
       state={{ from: location.pathname + location.search }}
       className={cn(
-        "flex justify-between items-center px-4 py-2 text-sm hover:bg-muted transition-colors bg-muted/15",
-        "border-b last:border-0",
-        "first:rounded-t-xl",
-        "last:rounded-b-lg",
+        "flex justify-between items-center px-5 py-3 text-sm transition-all hover:shadow-lg hover:bg-muted/20",
+        "bg-gradient-to-br from-card/70 to-card/40 backdrop-blur-md border-b last:border-0 first:rounded-t-xl last:rounded-b-xl",
       )}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
       {/* Left side */}
-      <div className="flex items-center gap-1.5 min-w-0 overflow-hidden flex-grow ">
-        <div className="relative flex-shrink-0  p-1.5 rounded-md  bg-muted/40 border border-muted/50">
-          <FileText className="w-4.5 h-4.5 text-muted-foreground" />
+      <div className="flex items-center gap-4.5 min-w-0 overflow-hidden flex-grow">
+        <div
+          className={cn(
+            "flex items-center justify-center w-7 h-7 rounded-lg border border-muted/30 shadow-sm",
+            hasMarker ? markerStyles[article.marker!].bg : "bg-muted/25",
+          )}
+        >
+          <Bookmark
+            className={cn(
+              "w-5 h-5 ",
+              hasMarker ? markerStyles[article.marker!].icon : "text-muted-foreground/60 bg-muted/25",
+            )}
+          />
         </div>
 
         <div className="flex flex-col overflow-hidden">
-          <span className="font-medium text-muted-foreground truncate">{article.title}</span>
+          <span className="font-semibold truncate text-card-foreground/90">{article.title}</span>
         </div>
       </div>
 
       {/* Right side */}
-      <div className="flex items-center gap-20">
-        {/* Liczba wariantów */}
-        {/* Liczba wariantów z ikoną */}
+      <div className="flex items-center gap-4">
         {article.responseVariantsCount > 1 && (
-          <div className="flex items-center gap-1 px-2 py-1 rounded-full text-xs text-muted-foreground">
+          <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-muted/10 text-xs font-medium shadow-sm">
             <List className="w-3.5 h-3.5 text-muted-foreground" />
-            <span className="text-xs">{article.responseVariantsCount}</span>
+            <span>{article.responseVariantsCount}</span>
           </div>
         )}
-
-        {/* Status pending */}
         {article.status === "pending" && (
           <Tooltip>
             <TooltipTrigger asChild>
-              <div
-                className="flex items-center justify-center w-6 h-6 cursor-default"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  e.preventDefault();
-                }}
-              >
+              <div className="flex items-center justify-center w-6 h-6 rounded-full bg-amber-100 dark:bg-amber-900/20 shadow">
                 <svg
-                  className="w-4 h-4 text-amber-600 dark:text-amber-400 animate-pulse"
+                  className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 animate-pulse"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                 >
@@ -146,7 +98,7 @@ const WorkspaceArticleCard = ({
                 </svg>
               </div>
             </TooltipTrigger>
-            <TooltipContent className="bg-muted" side="top">
+            <TooltipContent side="top" className="bg-card text-foreground">
               Wymaga weryfikacji
             </TooltipContent>
           </Tooltip>
