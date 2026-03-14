@@ -71,7 +71,7 @@ export function EditWorkspaceArticleModal({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Pencil className="w-5 h-5 text-primary" />
-              <DialogTitle className="text-xl font-semibold text-foreground/90">Edytuj tytuł artykułu</DialogTitle>
+              <DialogTitle className="text-xl font-semibold text-foreground/90">Edytuj wpis</DialogTitle>
             </div>
             {isPending && <Loader className="animate-spin w-5 h-5 text-primary" />}
           </div>
