@@ -65,10 +65,16 @@ export const EditWorkspaceArticleForm = ({
                 </FormControl>
 
                 <SelectContent side="bottom">
-                  {["red", "yellow", "green", "blue", "none"].map((color) => (
+                  {[
+                    { label: "czerwony", value: "red" },
+                    { label: "żółty", value: "yellow" },
+                    { label: "zielony", value: "green" },
+                    { label: "niebieski", value: "blue" },
+                    { label: "brak", value: "none" },
+                  ].map(({ label, value }) => (
                     <SelectItem
-                      key={color}
-                      value={color}
+                      key={value}
+                      value={value}
                       className="
                 flex items-center gap-3 py-2.5 px-3
                 cursor-pointer
@@ -82,13 +88,13 @@ export const EditWorkspaceArticleForm = ({
                       <div
                         className={cn(
                           "w-5 h-5 rounded-md flex items-center justify-center border",
-                          color === "red" && "bg-red-500/30 border-red-600/95",
-                          color === "yellow" && "bg-yellow-400/30 border-yellow-500/95",
-                          color === "green" && "bg-green-500/30 border-green-600/95",
-                          color === "blue" && "bg-blue-500/30 border-blue-600/95",
+                          value === "red" && "bg-red-500/30 border-red-600/95",
+                          value === "yellow" && "bg-yellow-400/30 border-yellow-500/95",
+                          value === "green" && "bg-green-500/30 border-green-600/95",
+                          value === "blue" && "bg-blue-500/30 border-blue-600/95",
                         )}
                       />
-                      <span className="font-medium capitalize">{color}</span>
+                      <span className="font-medium capitalize">{label}</span>
                     </SelectItem>
                   ))}
                 </SelectContent>
