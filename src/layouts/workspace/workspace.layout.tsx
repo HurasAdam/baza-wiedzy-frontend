@@ -1,9 +1,10 @@
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Outlet, useNavigate, useParams } from "react-router-dom";
+import { Outlet, useMatch, useNavigate, useParams } from "react-router-dom";
 
 import { CreateWorkspaceFolderModal } from "../../components/workspace-folder/CreateWorkspaceFolderModal";
 import { CreateWorkspaceModal } from "../../components/workspace/CreateWorkspaceModal";
+import { WORKSPACE_ICONS } from "../../components/workspace/workspace-form";
 import { useFindWorkspaceFoldersQuery } from "../../hooks/workspace-folders/use-workspace-folder";
 import { useFindCurrentWorkspaceMemberQuery } from "../../hooks/workspace-members/use-workspace-member";
 import { useFindUserWorkspacesQuery, useFindWorkspaceQuery } from "../../hooks/workspace/use-workspace";
@@ -32,6 +33,8 @@ export default function WorkspaceLayout() {
     navigate(`/workspace/${workspaceId}/new-article`);
   };
 
+  const showFoldersSidebar = useMatch("/workspace/:workspaceId/folders/*");
+
   const isLoading = isWorkspacesLoading || isWorkspaceLoading || isFoldersLoading;
 
   if (isLoading) {
@@ -42,50 +45,53 @@ export default function WorkspaceLayout() {
     return <WorkspaceAccessDenied message="Nie masz dostępu do tej kolekcji" />;
   }
 
+  const IconComponent = workspace?.icon && WORKSPACE_ICONS[workspace.icon] ? WORKSPACE_ICONS[workspace.icon] : null;
+
   return (
-    <div className="flex h-screen text-foreground bg-background">
+    <div className="flex flex-col  h-screen text-foreground bg-background">
       {/* Sidebar */}
+      <div className="flex h-screen   text-foreground bg-background">
+        <WorkspaceSidebar
+          workspaceId={workspaceId!}
+          workspace={workspace}
+          workspaces={workspaces}
+          folders={folders}
+          onAddFolder={handleAddFolder}
+          onOpenNewArticle={handleNewArticle}
+          isLoading={isFoldersLoading}
+          permissions={currentWorkspaceMember?.permissions}
+          onCreateWorkspace={handleAddWorkspace}
+        />
 
-      <WorkspaceSidebar
-        workspaceId={workspaceId!}
-        workspace={workspace}
-        workspaces={workspaces}
-        folders={folders}
-        onAddFolder={handleAddFolder}
-        onOpenNewArticle={handleNewArticle}
-        isLoading={isFoldersLoading}
-        permissions={currentWorkspaceMember?.permissions}
-        onCreateWorkspace={handleAddWorkspace}
-      />
+        <div className="flex flex-col flex-1">
+          <main className="flex-1 overflow-y-auto h-full w-full  scrollbar-custom ">
+            <div className="mx-auto container px-2 sm:px-6 lg:px-8 py-0 md:py-10 w-full h-full ">
+              <Outlet
+                context={{
+                  workspace,
+                  folders,
+                  handleAddFolder,
+                  permissions: {
+                    ...currentWorkspaceMember?.permissions,
+                    isOwner: currentWorkspaceMember?.isOwner || false,
+                  },
+                }}
+              />
+            </div>
+          </main>
+        </div>
+        <CreateWorkspaceFolderModal
+          isCreatingWorkspaceFolder={isCreatingWorkspaceFolder}
+          setIsCreatingWorkspaceFolder={setIsCreatingWorkspaceFolder}
+          workspaceId={workspace?._id}
+        />
 
-      <div className="flex flex-col flex-1">
-        <main className="flex-1 overflow-y-auto h-full w-full  scrollbar-custom ">
-          <div className="mx-auto container px-2 sm:px-6 lg:px-8 py-0 md:py-10 w-full h-full ">
-            <Outlet
-              context={{
-                workspace,
-                folders,
-                handleAddFolder,
-                permissions: {
-                  ...currentWorkspaceMember?.permissions,
-                  isOwner: currentWorkspaceMember?.isOwner || false,
-                },
-              }}
-            />
-          </div>
-        </main>
+        <CreateWorkspaceModal
+          isCreatingWorkspace={isCreatingWorkspace}
+          setIsCreatingWorkspace={setIsCreatingWorkspace}
+          onClose={() => setIsCreatingWorkspace(false)}
+        />
       </div>
-      <CreateWorkspaceFolderModal
-        isCreatingWorkspaceFolder={isCreatingWorkspaceFolder}
-        setIsCreatingWorkspaceFolder={setIsCreatingWorkspaceFolder}
-        workspaceId={workspace?._id}
-      />
-
-      <CreateWorkspaceModal
-        isCreatingWorkspace={isCreatingWorkspace}
-        setIsCreatingWorkspace={setIsCreatingWorkspace}
-        onClose={() => setIsCreatingWorkspace(false)}
-      />
     </div>
   );
 }
