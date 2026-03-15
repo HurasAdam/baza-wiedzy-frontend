@@ -20,7 +20,7 @@ export const useAddWorkspaceMemberMutation = () => {
 
 export const useFindCurrentWorkspaceMemberQuery = (workspaceId: string) => {
   return useQuery({
-    queryKey: ["current-workspace-member"],
+    queryKey: ["current-workspace-member", workspaceId],
     queryFn: () => {
       return workspaceMembersService.findCurrentWorkspaceMember(workspaceId);
     },
