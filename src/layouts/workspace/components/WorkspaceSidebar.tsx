@@ -176,50 +176,65 @@ export const WorkspaceSidebar = ({
           </div>
 
           {/* LIST */}
-          <nav className="flex-1 overflow-y-auto px-2 pt-2 pb-14 space-y-1 scrollbar-custom ">
-            {folders.map((folder) => (
-              <NavLink
-                key={folder._id}
-                to={`/workspace/${workspaceId}/folders/${folder._id}`}
-                className={({ isActive }) =>
-                  cn(
-                    "group relative flex items-center justify-between gap-2.5 px-3 py-1.5 rounded-xl text-sm transition-all duration-200 ease-out",
-                    isActive
-                      ? "bg-primary/20 text-primary font-medium"
-                      : "text-muted-foreground hover:bg-muted/50 hover:text-foreground hover:shadow-sm",
-                  )
-                }
-              >
-                {({ isActive }) => (
-                  <>
-                    {isActive && (
-                      <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-[3px] bg-primary rounded-r" />
-                    )}
+          <nav className="flex-1 overflow-y-auto px-2 pt-2 pb-14 space-y-1 scrollbar-custom">
+            {folders.length > 0 ? (
+              folders.map((folder) => (
+                <NavLink
+                  key={folder._id}
+                  to={`/workspace/${workspaceId}/folders/${folder._id}`}
+                  className={({ isActive }) =>
+                    cn(
+                      "group relative flex items-center justify-between gap-2.5 px-3 py-1.5 rounded-xl text-sm transition-all duration-200 ease-out",
+                      isActive
+                        ? "bg-primary/20 text-primary font-medium"
+                        : "text-muted-foreground hover:bg-muted/50 hover:text-foreground hover:shadow-sm",
+                    )
+                  }
+                >
+                  {({ isActive }) => (
+                    <>
+                      {isActive && (
+                        <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-[3px] bg-primary rounded-r" />
+                      )}
 
-                    <div className="flex items-center gap-2 min-w-0">
-                      <div
-                        className={cn(
-                          "flex items-center justify-center w-6 h-6 rounded-md transition-colors",
-                          isActive
-                            ? "bg-primary/15 text-primary"
-                            : "bg-muted/60 text-muted-foreground/80 group-hover:bg-primary/10 group-hover:text-primary",
-                        )}
-                      >
-                        {isActive ? <FolderOpen size={14} /> : <Folder size={14} />}
+                      <div className="flex items-center gap-2 min-w-0">
+                        <div
+                          className={cn(
+                            "flex items-center justify-center w-6 h-6 rounded-md transition-colors",
+                            isActive
+                              ? "bg-primary/15 text-primary"
+                              : "bg-muted/60 text-muted-foreground/80 group-hover:bg-primary/10 group-hover:text-primary",
+                          )}
+                        >
+                          {isActive ? <FolderOpen size={14} /> : <Folder size={14} />}
+                        </div>
+
+                        <span className="truncate">{folder.name}</span>
                       </div>
 
-                      <span className="truncate">{folder.name}</span>
-                    </div>
-
-                    {folder.articlesCount > 0 && (
-                      <span className="text-[11px] font-medium text-muted-foreground bg-muted/70 px-1.5 py-0.5 rounded-md">
-                        {folder.articlesCount}
-                      </span>
-                    )}
-                  </>
+                      {folder.articlesCount > 0 && (
+                        <span className="text-[11px] font-medium text-muted-foreground bg-muted/70 px-1.5 py-0.5 rounded-md">
+                          {folder.articlesCount}
+                        </span>
+                      )}
+                    </>
+                  )}
+                </NavLink>
+              ))
+            ) : (
+              <div className="flex flex-col items-center justify-center h-full text-center px-4 py-8 text-muted-foreground space-y-2">
+                <Folder className="w-10 h-10 text-muted-foreground/50" />
+                <span className="text-sm font-semibold">Brak folderów</span>
+                <span className="text-xs text-muted-foreground/70">
+                  Dodaj pierwszy folder i rozpocznij organizację artykułów.
+                </span>
+                {permissions?.addFolder && (
+                  <Button size="sm" variant="secondary" className="mt-2" onClick={onAddFolder}>
+                    + Dodaj folder
+                  </Button>
                 )}
-              </NavLink>
-            ))}
+              </div>
+            )}
           </nav>
         </div>
       </div>
