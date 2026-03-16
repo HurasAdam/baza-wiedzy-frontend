@@ -89,7 +89,7 @@ export const WorkspaceSidebar = ({
                 style={{ backgroundColor: workspace?.labelColor ? `${workspace.labelColor}35` : undefined }}
                 className="
           flex-1 flex items-center justify-between
-          px-3.5 pt-1.5 pb-1.5
+          px-3 pt-1.5 pb-1.5
           rounded-xl
           bg-card/70
           border border-l-0
@@ -100,7 +100,7 @@ export const WorkspaceSidebar = ({
               >
                 <div className="flex flex-col min-w-0 leading-tight">
                   <span className="text-sm font-semibold truncate">{workspace?.name || "Workspace"}</span>
-                  <span className="text-xs text-muted-foreground">Kolekcja</span>
+                  <span className="text-xs tracking-wide text-muted-foreground">Kolekcja</span>
                 </div>
 
                 <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0" />
@@ -134,12 +134,12 @@ export const WorkspaceSidebar = ({
       <div className="flex flex-1 min-h-0  ">
         {/* LEFT ICON SIDEBAR */}
         <div className="w-16 border-r bg-card/95 flex flex-col justify-between pt-2.5">
-          <div className="flex flex-col gap-3.5 px-2 mt-1.5">
+          <div className="flex flex-col gap-3 px-2 mt-2">
             <Button
               size="icon"
               variant="secondary"
               disabled={!permissions?.addArticle}
-              className="w-10 h-10 ml-1.5 p-0 group hover:bg-primary  rounded-lg   transition-all"
+              className="w-10 h-10 ml-1 p-0 group hover:bg-primary  rounded-lg   transition-all"
               onClick={permissions?.addArticle ? onOpenNewArticle : undefined}
             >
               <Plus size={20} className="group-hover:text-primary-foreground  " />
@@ -161,9 +161,9 @@ export const WorkspaceSidebar = ({
         </div>
 
         {/* RIGHT FOLDERS SIDEBAR */}
-        <div className="w-[276px] min-w-[260px] max-w-[300px] backdrop-blur-sm flex flex-col min-h-0  bg-sidebar">
+        <div className="w-[274px] min-w-[260px] max-w-[300px] backdrop-blur-sm flex flex-col min-h-0  bg-sidebar">
           {/* HEADER */}
-          <div className="flex items-center justify-between px-4 py-2.5  border-b border-border/60">
+          <div className="flex items-center justify-between px-4 py-2  border-b border-border/60">
             <h3 className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">Foldery</h3>
 
             {permissions?.addFolder ? (
@@ -184,7 +184,7 @@ export const WorkspaceSidebar = ({
                   to={`/workspace/${workspaceId}/folders/${folder._id}`}
                   className={({ isActive }) =>
                     cn(
-                      "group relative flex items-center justify-between gap-2.5 px-3 py-1.5 rounded-xl text-sm transition-all duration-200 ease-out",
+                      "group relative flex items-center justify-between gap-2.5 px-3 py-1 rounded-xl text-sm transition-all duration-200 ease-out",
                       isActive
                         ? "bg-primary/20 text-primary font-medium"
                         : "text-muted-foreground hover:bg-muted/50 hover:text-foreground hover:shadow-sm",
@@ -200,13 +200,17 @@ export const WorkspaceSidebar = ({
                       <div className="flex items-center gap-2 min-w-0">
                         <div
                           className={cn(
-                            "flex items-center justify-center w-6 h-6 rounded-md transition-colors",
+                            "flex items-center justify-center w-5.5 h-5.5 rounded-md transition-colors",
                             isActive
                               ? "bg-primary/15 text-primary"
                               : "bg-muted/60 text-muted-foreground/80 group-hover:bg-primary/10 group-hover:text-primary",
                           )}
                         >
-                          {isActive ? <FolderOpen size={14} /> : <Folder size={14} />}
+                          {isActive ? (
+                            <FolderOpen size={14} />
+                          ) : (
+                            <Folder size={14} className="text-muted-foreground/70" />
+                          )}
                         </div>
 
                         <span className="truncate">{folder.name}</span>
@@ -223,7 +227,7 @@ export const WorkspaceSidebar = ({
               ))
             ) : (
               <div className="flex flex-col items-center justify-center h-full text-center px-4 py-8 text-muted-foreground space-y-2">
-                <Folder className="w-10 h-10 text-muted-foreground/50" />
+                <Folder className="w-9 h-9 text-muted-foreground/50 " />
                 <span className="text-sm font-semibold">Brak folderów</span>
                 <span className="text-xs text-muted-foreground/70">
                   Dodaj pierwszy folder i rozpocznij organizację artykułów.

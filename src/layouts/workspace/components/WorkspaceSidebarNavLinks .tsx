@@ -15,7 +15,7 @@ export const WorkspaceSidebarNavLinks = ({ workspaceId }: WorkspaceSidebarNavLin
   ];
 
   return (
-    <nav className="px-1.5 py-2 space-y-2.5">
+    <nav className="px-1.5 py-2 space-y-2">
       {links.map(({ to, icon: Icon }) => (
         <NavLink
           key={to}
