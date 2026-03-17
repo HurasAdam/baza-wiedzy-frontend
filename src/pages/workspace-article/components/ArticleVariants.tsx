@@ -18,9 +18,13 @@ interface ArticleVariantsGridProps {
 export function ArticleVariants({ articleId, variants, onCopy, permissions }: ArticleVariantsGridProps) {
   const [editingVariant, setEditingVariant] = useState<Variant | null>(null);
 
+  if (!variants.length) {
+    return <div className="text-center py-20 text-muted-foreground">Brak wariantów odpowiedzi</div>;
+  }
+
   return (
     <>
-      <div className={`grid gap-4 ${variants.length === 1 ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-2"}`}>
+      <div className="flex flex-col gap-5 pb-8">
         {variants.map((v) => (
           <ArticleVariantCard
             key={v._id}
@@ -33,6 +37,7 @@ export function ArticleVariants({ articleId, variants, onCopy, permissions }: Ar
           />
         ))}
       </div>
+
       <EditWorkspaceArticleVariantModal
         articleId={articleId}
         isOpen={!!editingVariant}

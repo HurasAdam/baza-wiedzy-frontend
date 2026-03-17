@@ -8,14 +8,17 @@ import * as animation from "../../constants/animations";
 import { useFindWorkspaceArticleQuery } from "../../hooks/workspace-articles/use-workspace-articles";
 import type { Folder } from "../workspace-manage-folders/components/ManageFoldersFilters";
 import ArticleHeader from "./components/ArticleHeader";
+import { ArticleMetaSection } from "./components/ArticleMetaSection"; // 👈 NOWE
 import { ArticleVariants } from "./components/ArticleVariants";
 
 export function WorkspaceArticlePage() {
   const { articleId } = useParams();
   const { folderId: currentFolderId } = useParams();
+
   const { data: article, isLoading } = useFindWorkspaceArticleQuery(articleId!);
-  const [isCreateVariantModalOpen, setIsCreateVariantModalOpen] = useState<boolean>(false);
-  const [isEditTitleModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+
+  const [isCreateVariantModalOpen, setIsCreateVariantModalOpen] = useState(false);
+  const [isEditTitleModalOpen, setIsEditModalOpen] = useState(false);
 
   const { folders, permissions } = useOutletContext<{
     folders: Folder[];
@@ -25,13 +28,8 @@ export function WorkspaceArticlePage() {
 
   const navigate = useNavigate();
 
-  const onAddVariant = () => {
-    setIsCreateVariantModalOpen(true);
-  };
-
-  const onArticleEdit = () => {
-    setIsEditModalOpen(true);
-  };
+  const onAddVariant = () => setIsCreateVariantModalOpen(true);
+  const onArticleEdit = () => setIsEditModalOpen(true);
 
   if (isLoading) {
     return (
@@ -42,12 +40,14 @@ export function WorkspaceArticlePage() {
   }
 
   if (!article) {
-    return <p className="text-center mt-10">Nie znaleziono artykułu</p>;
+    return <p className="text-center py-20 text-muted-foreground">Nie znaleziono artykułu</p>;
   }
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    toast.success("Odpowiedź skopiowana do schowka", { position: "bottom-right" });
+    toast.success("Odpowiedź skopiowana do schowka", {
+      position: "bottom-right",
+    });
   };
 
   return (
@@ -56,8 +56,9 @@ export function WorkspaceArticlePage() {
       initial="init"
       animate="visible"
       exit="exit"
-      className="mx-auto max-w-7xl py-1 space-y-6"
+      className="max-w-7xl px-6 lg:px-0 py-1 mx-auto h-full" // 👈 ważne
     >
+      {/* HEADER */}
       <ArticleHeader
         title={article.title}
         folderName={article.folder.name}
@@ -69,16 +70,22 @@ export function WorkspaceArticlePage() {
         permissions={permissions}
       />
 
-      <ArticleVariants
-        articleId={article._id}
-        variants={article.responseVariants}
-        onCopy={copyToClipboard}
-        permissions={permissions}
-      />
+      <div className="mt-8 flex flex-col xl:flex-row lg:gap-6">
+        <div className="lg:flex-1 space-y-6">
+          <ArticleVariants
+            articleId={article._id}
+            variants={article.responseVariants}
+            onCopy={copyToClipboard}
+            permissions={permissions}
+          />
+        </div>
+
+        <ArticleMetaSection article={article} />
+      </div>
 
       <CreateWorkspaceArticleVariantModal
         isOpen={isCreateVariantModalOpen}
-        articleId={article?._id}
+        articleId={article._id}
         onClose={() => setIsCreateVariantModalOpen(false)}
       />
 

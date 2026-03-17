@@ -50,7 +50,7 @@ const WorkspaceArticleCard = ({
       to={`/workspace/${workspaceId}/folders/${folderId}/articles/${article._id}`}
       state={{ from: location.pathname + location.search }}
       className={cn(
-        "flex justify-between items-center px-5 py-3 text-sm transition-all hover:shadow-lg hover:bg-muted/20",
+        "flex justify-between items-center px-5 py-2.5 text-sm transition-all hover:shadow-lg hover:bg-muted/20",
         "bg-gradient-to-br from-card/70 to-card/40 backdrop-blur-md border-b last:border-0 first:rounded-t-xl last:rounded-b-xl",
       )}
       onMouseEnter={onMouseEnter}
