@@ -57,10 +57,10 @@ const Header = ({
         {/* RIGHT */}
         <div className="flex items-center gap-2">
           <Button onClick={onOpenAdminPanel} size="sm" variant="ghost" className="group hover:bg-muted/40  ">
-            <ShieldUser className="group-hover:text-destructive" />
+            <ShieldUser className="group-hover:text-primary" />
           </Button>
           <Button onClick={onOpenReportsPanel} size="sm" variant="ghost" className="group hover:bg-muted/40  ">
-            <MailQuestionMark className="group-hover:text-destructive" />
+            <MailQuestionMark className="group-hover:text-primary" />
           </Button>
           <Button onClick={onOpenCreateIssueReport} size="sm" variant="ghost" className="group hover:bg-muted/40  ">
             <Bug className="group-hover:text-destructive" />
@@ -71,17 +71,17 @@ const Header = ({
             size="icon"
             variant="ghost"
             onClick={onOpenSettingsModal}
-            className="hover:bg-muted/40 hover:text-foreground"
+            className="hover:bg-muted/40 hover:text-foreground group"
           >
-            <Settings className="size-4" />
+            <Settings className="size-4 group-hover:text-primary" />
           </Button>
           <Button
             size="icon"
             variant="ghost"
             onClick={onOpenNotificationsPanel}
-            className="relative hover:bg-muted/40 hover:text-foreground"
+            className="relative hover:bg-muted/40 hover:text-foreground group"
           >
-            <Bell className="size-4" />
+            <Bell className="size-4 group-hover:text-primary" />
             {unreadCount > 0 && (
               <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-rose-500 animate-pulse" />
             )}
