@@ -65,6 +65,7 @@ interface ArticlesListProps {
   setHoveredArticleId: (id: string | null) => void;
   setHoveredArticleIdRef: (id: string | null) => void;
 }
+
 const ArticlesList = ({
   articles,
   isLoading,
@@ -80,9 +81,9 @@ const ArticlesList = ({
   setHoveredArticleIdRef,
 }: ArticlesListProps) => {
   return (
-    <div className="flex-grow flex flex-col h-fit divide-y divide-border rounded-xl  ">
+    <div className="flex flex-col rounded-xl border border-border/90 bg-card/70 backdrop-blur-md overflow-hidden">
       {isLoading && (
-        <ul className="divide-y divide-border ">
+        <ul className="divide-y divide-border">
           {Array(12)
             .fill(0)
             .map((_, i) => (
@@ -91,31 +92,33 @@ const ArticlesList = ({
         </ul>
       )}
 
-      {isError && <p className="text-sm text-destructive">Błąd podczas ładowania artykułów.</p>}
+      {isError && <p className="text-sm text-destructive px-4 py-3">Błąd podczas ładowania artykułów.</p>}
 
       {!isLoading &&
         !isError &&
         articles?.data.length === 0 &&
         (selectedTitle || selectedProduct || selectedCategory) && (
-          <NoDataFound
-            title="Nie znaleziono żadnych artykułów"
-            description="Spróbuj zmienić filtry lub zresetuj wszystkie."
-            buttonText="Wyczyść filtry"
-            buttonAction={onResetAllFilters}
-          />
+          <div className="p-6">
+            <NoDataFound
+              title="Nie znaleziono żadnych artykułów"
+              description="Spróbuj zmienić filtry lub zresetuj wszystkie."
+              buttonText="Wyczyść filtry"
+              buttonAction={onResetAllFilters}
+            />
+          </div>
         )}
 
       {!isError &&
         articles?.data.length > 0 &&
         articles.data.map((article) => (
           <TableArticleCard
-            onMouseEnter={() => setHoveredArticleIdRef(article._id)}
-            onMouseLeave={() => setHoveredArticleIdRef(null)}
             key={article._id}
             article={article}
             toggleFavourite={toggleFavourite}
             toggleFavouriteLoading={pendingId === article._id}
             openArticleDrawer={openArticleDrawer}
+            onMouseEnter={() => setHoveredArticleIdRef(article._id)}
+            onMouseLeave={() => setHoveredArticleIdRef(null)}
           />
         ))}
     </div>
