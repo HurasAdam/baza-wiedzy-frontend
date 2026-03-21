@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu";
 import { WORKSPACE_ICONS } from "../../../components/workspace/workspace-form";
+import { useAuthQuery } from "../../../hooks/auth/use-auth";
 import { useFindUserWorkspacesQuery } from "../../../hooks/workspace/use-workspace";
 import { cn } from "../../../lib/utils";
 
@@ -19,7 +20,7 @@ interface LeftNavItem {
   title: string;
   icon: LucideIcon;
   onClick: () => void;
-  hasBadge?: number; // np. powiadomienia
+  requiredPermission: string;
 }
 
 interface LeftNavBarProps {
@@ -42,7 +43,12 @@ export const LeftNavBar = ({
   const location = useLocation();
   const navigate = useNavigate();
   const { data: workspaces = [], isPending } = useFindUserWorkspacesQuery();
+  const { data: authData, isLoading } = useAuthQuery();
+  const userPermissions = authData?.role?.permissions || [];
 
+  const filteredItems = items.filter((item) =>
+    item.requiredPermission ? userPermissions.includes(item.requiredPermission) : true,
+  );
   return (
     <nav className="flex flex-col items-center justify-between py-2.5 px-[8px] gap-y-3 bg-gradient-to-br from-muted to-muted shadow-md border border-border/55 h-full">
       {/* GÓRA: Workspace / logo */}
@@ -97,9 +103,9 @@ export const LeftNavBar = ({
 
         {/* AKCJE: dołącz / nowe / ustawienia / powiadomienia */}
         <div className="flex flex-col items-center mt-4 gap-y-2">
-          {items.map((item) => {
+          {filteredItems.map((item) => {
             const Icon = item.icon;
-            const isActive = false; // Możesz dodać logikę aktywnej strony, jeśli potrzebne
+            const isActive = false;
 
             return (
               <Tooltip key={item.title}>
@@ -112,22 +118,11 @@ export const LeftNavBar = ({
                     )}
                     whileTap={{ scale: 0.95 }}
                   >
-                    {/* Aktywny wskaźnik pionowy */}
                     {isActive && <span className="absolute left-0 w-1 h-5 bg-primary rounded-r-full" />}
                     <Icon className="w-4 h-4 text-muted-foreground" />
-                    {item.hasBadge && (
-                      <span className="absolute top-0 right-0 inline-flex items-center justify-center w-3.5 h-3.5 text-[10px] font-bold text-white bg-red-500 rounded-full">
-                        {item.hasBadge}
-                      </span>
-                    )}
                   </motion.button>
                 </TooltipTrigger>
-                <TooltipContent
-                  side="right" // po której stronie triggera ma być tooltip
-                  align="center" // wyrównanie w pionie względem triggera
-                  sideOffset={2} // dystans od triggera w px
-                  className="text-xs"
-                >
+                <TooltipContent side="right" align="center" sideOffset={2} className="text-xs">
                   {item.title}
                 </TooltipContent>
               </Tooltip>
@@ -146,8 +141,6 @@ export const LeftNavBar = ({
             )}
             whileTap={{ scale: 0.95 }}
           >
-            {/* Aktywny wskaźnik pionowy */}
-
             <Settings className="w-4 h-4" />
           </motion.button>
           <motion.button
@@ -157,8 +150,6 @@ export const LeftNavBar = ({
             )}
             whileTap={{ scale: 0.95 }}
           >
-            {/* Aktywny wskaźnik pionowy */}
-
             <HelpCircle className="w-4 h-4" />
           </motion.button>
         </div>
@@ -170,8 +161,6 @@ export const LeftNavBar = ({
             )}
             whileTap={{ scale: 0.95 }}
           >
-            {/* Aktywny wskaźnik pionowy */}
-
             <LogOut className="w-4 h-4" />
           </motion.button>
         </div>

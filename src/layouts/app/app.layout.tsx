@@ -70,27 +70,31 @@ const AppLayout = () => {
                 title: "Dodaj artykuł",
                 icon: ClipboardPlus,
                 onClick: () => navigate("/articles/new"),
+                requiredPermission: "ADD_ARTICLE",
               },
               {
                 title: "Dodaj kolekcje",
                 icon: FolderPlus,
                 onClick: () => setIsCreatingWorkspace(true),
+                requiredPermission: "ADD_COLLECTION",
               },
               {
                 title: "Dołącz do kolekcji",
                 icon: UserPlus,
                 onClick: () => setIsWorkspaceInviteModalOpen(true),
+                requiredPermission: "JOIN_COLLECTION",
               },
-
               {
                 title: "Zgłoszenia i propozycje",
                 icon: MailQuestionMark,
                 onClick: () => navigate("/reports"),
+                requiredPermission: "SEND_REPORT",
               },
               {
                 title: "Panel admina",
                 icon: ShieldUser,
                 onClick: () => navigate("/admin"),
+                requiredPermission: "ACCESS_ADMIN_PANEL",
               },
             ]}
           />

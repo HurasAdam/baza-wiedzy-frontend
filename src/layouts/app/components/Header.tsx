@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { useFindMySummaryNotificationsQuery } from "@/hooks/notifications/use-notifications";
 import { Bell, Bug, MailQuestionMark, PanelLeftClose, PanelLeftOpen, Settings, ShieldUser } from "lucide-react";
 import { Breadcrumb } from "../../../components/breadcrumb/Breadcrumb";
+import { useAuthQuery } from "../../../hooks/auth/use-auth";
 import { useSidebar } from "../../../providers/sidebar-provider";
 
 interface HeaderProps {
@@ -25,6 +26,8 @@ const Header = ({
 }: HeaderProps) => {
   const { variant: sidebarVariant, setVariant } = useSidebar();
   const { data } = useFindMySummaryNotificationsQuery();
+  const { data: authData, isLoading } = useAuthQuery();
+  const userPermissions = authData?.role?.permissions || [];
   const unreadCount = data?.unreadCount || 0;
 
   const toggleVariant = () => {
@@ -56,15 +59,21 @@ const Header = ({
 
         {/* RIGHT */}
         <div className="flex items-center gap-2">
-          <Button onClick={onOpenAdminPanel} size="sm" variant="ghost" className="group hover:bg-muted/40  ">
-            <ShieldUser className="group-hover:text-primary" />
-          </Button>
+          {userPermissions.includes("ACCESS_ADMIN_PANEL") && (
+            <Button onClick={onOpenAdminPanel} size="sm" variant="ghost" className="group hover:bg-muted/40  ">
+              <ShieldUser className="group-hover:text-primary" />
+            </Button>
+          )}
+
           <Button onClick={onOpenReportsPanel} size="sm" variant="ghost" className="group hover:bg-muted/40  ">
             <MailQuestionMark className="group-hover:text-primary" />
           </Button>
-          <Button onClick={onOpenCreateIssueReport} size="sm" variant="ghost" className="group hover:bg-muted/40  ">
-            <Bug className="group-hover:text-destructive" />
-          </Button>
+
+          {userPermissions.includes("ACCESS_ADMIN_PANEL") && (
+            <Button onClick={onOpenCreateIssueReport} size="sm" variant="ghost" className="group hover:bg-muted/40  ">
+              <Bug className="group-hover:text-destructive" />
+            </Button>
+          )}
           {/* Notifications */}
 
           <Button
