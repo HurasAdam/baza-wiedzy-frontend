@@ -68,16 +68,16 @@ const TableArticleCard = ({ article, openArticleDrawer, onMouseEnter, onMouseLea
       key={article._id}
       onClick={() => navigate(`/articles/${article._id}`, { state: { from: location.pathname + location.search } })}
       className={cn(
-        "flex justify-between items-center px-3.5 py-3 text-sm group cursor-pointer transition-all duration-300 rounded-lg",
-        "border-b last:border-0 border-border/95",
-        "bg-card/70 hover:bg-card/50 backdrop-blur-md gap-3",
+        "flex justify-between items-center px-3.5 py-3 text-sm group cursor-pointer transition-all duration-300",
+        "border-b last:border-0 first:rounded-t-lg border-border/85",
+        "bg-sidebar/20 hover:bg-card/70 backdrop-blur-md gap-3",
       )}
       title={`Autor: ${article.createdBy.name}`}
     >
       {/* LEFT */}
       <div className="flex items-center gap-3 min-w-0 overflow-hidden flex-grow">
         {/* ICON */}
-        <div className="relative flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg border border-muted/40 bg-muted/60 transition-transform duration-200 group-hover:scale-105">
+        <div className="relative flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg border border-muted/40 bg-muted/60 transition-transform duration-200 ">
           {article.isImportant ? (
             <Star className="w-4.5 h-4.5 text-yellow-500/90" />
           ) : (
@@ -88,7 +88,7 @@ const TableArticleCard = ({ article, openArticleDrawer, onMouseEnter, onMouseLea
         {/* TEXT */}
         <div className="flex flex-col overflow-hidden min-w-0 gap-[5px]">
           {/* TITLE */}
-          <span className="font-semibold text-[14.5px] text-card-foreground/90 group-hover:text-primary/95 transition-colors duration-200 line-clamp-2">
+          <span className="font-semibold text-[14.5px] text-card-foreground/85 group-hover:text-primary/95 transition-colors duration-200 line-clamp-2">
             {article.title}
           </span>
 
