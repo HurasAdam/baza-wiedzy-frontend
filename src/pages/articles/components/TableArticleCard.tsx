@@ -69,8 +69,8 @@ const TableArticleCard = ({ article, openArticleDrawer, onMouseEnter, onMouseLea
       onClick={() => navigate(`/articles/${article._id}`, { state: { from: location.pathname + location.search } })}
       className={cn(
         "flex justify-between items-center px-3.5 py-3 text-sm group cursor-pointer transition-all duration-300",
-        "border-b last:border-0 first:rounded-t-lg border-border/70",
-        "bg-sidebar/20 hover:bg-card/70 backdrop-blur-md gap-3",
+        "border-b last:border-0 first:rounded-t-lg border-border/80",
+        "bg-muted/20 hover:bg-card/70 backdrop-blur-md gap-3",
       )}
       title={`Autor: ${article.createdBy.name}`}
     >
