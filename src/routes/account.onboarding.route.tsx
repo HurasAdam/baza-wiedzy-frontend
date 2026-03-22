@@ -1,6 +1,6 @@
-import { Navigate, Outlet } from "react-router-dom";
-import { useAuthQuery } from "@/hooks/auth/use-auth";
 import { Loader } from "@/components/Loader";
+import { useAuthQuery } from "@/hooks/auth/use-auth";
+import { Navigate, Outlet } from "react-router-dom";
 
 export const AccountOnboardingRoute = () => {
   const { data: authData, isLoading } = useAuthQuery();
