@@ -153,6 +153,16 @@ const THEMES = [
     label: "Dark · Slack",
     colors: ["#a559a5", "#e0215b", "#2a2e33", "#1a1d22"],
   },
+  {
+    key: "light-office",
+    label: "Light · Office",
+    colors: ["#003296", "#fe9729", "#f5f5f5", "#d1d9e8"],
+  },
+  {
+    key: "dark-office",
+    label: "Dark · Office",
+    colors: ["#4a7fd4", "#fe9729", "#1e2a3d", "#1e2a3d"],
+  },
 
   // DARK VIOLET / AQUA / HALLOWEEN
   {

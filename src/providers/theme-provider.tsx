@@ -27,6 +27,8 @@ type Theme =
   | "dark-classy"
   | "light-slac"
   | "dark-slack"
+  | "light-office"
+  | "dark-office"
   | "dark-aqua"
   | "dark-halloween"
   | "dark-violet"
@@ -95,6 +97,8 @@ export function ThemeProvider({
       "dark-classy",
       "light-slack",
       "dark-slack",
+      "light-office",
+      "dark-office",
       "dark-aqua",
       "dark-violet",
       "light-violet",
