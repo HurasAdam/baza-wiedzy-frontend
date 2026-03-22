@@ -152,7 +152,7 @@ export const WorkspaceSidebar = ({
             <Button
               variant="ghost"
               size="lg"
-              className="w-12 h-12 bg-primary/20 "
+              className="w-12 h-12 bg-primary/30 hover:bg-primary/60 "
               onClick={() => navigate("/articles")}
             >
               <ArrowBigLeft />

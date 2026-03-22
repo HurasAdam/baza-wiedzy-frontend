@@ -88,11 +88,10 @@ const TableArticleCard = ({ article, openArticleDrawer, onMouseEnter, onMouseLea
         {/* TEXT */}
         <div className="flex flex-col overflow-hidden min-w-0 gap-[5px]">
           {/* TITLE */}
-          <span className="font-semibold text-[14.5px] text-card-foreground/85 group-hover:text-primary/95 transition-colors duration-200 line-clamp-2">
+          <span className="font-semibold text-[14.5px] text-card-foreground/90 group-hover:text-primary/95 transition-colors duration-200 line-clamp-2">
             {article.title}
           </span>
 
-          {/* CATEGORY + TAGS w jednej linii */}
           <div className="flex items-center gap-1.5 flex-wrap overflow-hidden mt-[3.5px] ">
             {/* Kategoria – wyróżniona kolorem produktu */}
             <span
@@ -115,7 +114,6 @@ const TableArticleCard = ({ article, openArticleDrawer, onMouseEnter, onMouseLea
               </span>
             ))}
 
-            {/* +N tooltip */}
             {article.tags.length > 3 && (
               <Tooltip>
                 <TooltipTrigger asChild>
