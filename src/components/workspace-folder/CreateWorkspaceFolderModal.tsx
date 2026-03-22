@@ -67,6 +67,14 @@ export const CreateWorkspaceFolderModal = ({
             });
             return;
           }
+          if (status === 403) {
+            toast.error("Brak uprawnień", {
+              description: "Nie posiadasz wymaganych uprawnień do wykonania tej operacji.",
+              position: "bottom-right",
+              duration: 7000,
+            });
+            return;
+          }
 
           toast.error("Wystąpił błąd serwera");
         },
