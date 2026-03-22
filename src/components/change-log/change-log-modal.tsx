@@ -49,7 +49,7 @@ export const ChangeLogModal = ({ isChangeLogModalOpen, setIsChangeLogModalOpen }
         </span>
         <h4 className="text-sm font-semibold uppercase tracking-wide">{title}</h4>
       </div>
-      <ul className="list-disc list-inside space-y-2 max-w-2xl text-sm break-words whitespace-pre-wrap leading-relaxed">
+      <ul className="list-disc list-inside space-y-5 max-w-2xl text-sm break-words whitespace-pre-wrap leading-lose">
         {items.map((c, idx) => (
           <li className="text-sm" key={idx}>
             {c}
@@ -107,13 +107,13 @@ export const ChangeLogModal = ({ isChangeLogModalOpen, setIsChangeLogModalOpen }
                   {activeEntry ? (
                     <>
                       <CardTitle className="mb-2">Wersja {activeEntry.version}</CardTitle>
-                      <p className="text-sm text-muted-foreground mb-4">Data wydania: {activeEntry.date}</p>
+                      <p className="text-sm mt-8 text-muted-foreground mb-4">Data wydania: {activeEntry.date}</p>
                       {activeEntry.changes.added.length > 0 &&
-                        renderSection("Dodano", "➕", activeEntry.changes.added, "#2563EB")}{" "}
+                        renderSection("Dodano", "🚀", activeEntry.changes.added, "#2563EB")}{" "}
                       {activeEntry.changes.improved.length > 0 &&
                         renderSection("Ulepszono", "⚡", activeEntry.changes.improved, "#D97706")}{" "}
                       {activeEntry.changes.fixed.length > 0 &&
-                        renderSection("Naprawiono", "✅", activeEntry.changes.fixed, "#16A34A")}{" "}
+                        renderSection("Naprawiono", "🔧", activeEntry.changes.fixed, "#16A34A")}{" "}
                     </>
                   ) : (
                     <p className="text-sm text-muted-foreground">Brak danych dla tej wersji.</p>
