@@ -60,7 +60,7 @@ const ArticlesFilterBar: React.FC<ArticlesFilterBarProps> = ({
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-muted">
             <FolderSearch className="h-4 w-4 text-muted-foreground" />
           </div>
-          <h1 className="text-lg font-semibold text-foreground">Baza artykułów</h1>
+          <h1 className="text-lg font-semibold text-foreground tracking-tight">Baza artykułów</h1>
         </div>
 
         <div className="flex items-center gap-4">

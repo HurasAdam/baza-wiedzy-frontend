@@ -63,7 +63,7 @@ const TopicRegisterHeader = ({
   return (
     <>
       <div className="flex justify-between">
-        <h1 className="text-[22px]  font-semibold tracking-tight mb-6 text-foreground flex items-center gap-1.5">
+        <h1 className="text-2xl  font-bold tracking-tight mb-6 text-foreground flex items-center gap-1.5">
           <ClipboardList className="w-6 h-6" /> Rejestr tematów
         </h1>
 
