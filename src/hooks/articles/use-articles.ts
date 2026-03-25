@@ -109,6 +109,17 @@ export const useFindArticlesQuery = (params?: URLSearchParams) => {
   });
 };
 
+export function useLatestArticles() {
+  const params = new URLSearchParams({
+    limit: "7",
+    page: "1",
+    sortBy: "createdAt",
+    sortAt: "-1",
+  });
+
+  return useFindArticlesQuery(params);
+}
+
 export const useFindMyFlaggedArticlesQuery = (params?: URLSearchParams) => {
   return useQuery({
     queryKey: ["my-flagged-articles", params?.toString()],
