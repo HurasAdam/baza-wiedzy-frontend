@@ -4,6 +4,8 @@ import { PROTECTED_ROUTES } from "./common/routePaths";
 export const protectedRoutePaths = [
   { path: PROTECTED_ROUTES.ONBOARDING, element: <PAGES.OnboardingPage /> },
   { path: PROTECTED_ROUTES.DASHBOARD, element: <PAGES.DashboardPage /> },
+  { path: PROTECTED_ROUTES.DASHBOARD_PINNED_LINKS, element: <PAGES.DashboardPinnedLinksPage /> },
+  { path: PROTECTED_ROUTES.DASHBOARD_PINNED_WORKSPACES, element: <PAGES.DashboardPinnedWorkspacesPage /> },
   { path: PROTECTED_ROUTES.ARTICLES, element: <PAGES.ArticlesPage /> },
   { path: PROTECTED_ROUTES.FLAGGED_ARTICLES, element: <PAGES.FlaggedArticlesPage /> },
   { path: PROTECTED_ROUTES.ARTICLE, element: <PAGES.ArticlePage /> },

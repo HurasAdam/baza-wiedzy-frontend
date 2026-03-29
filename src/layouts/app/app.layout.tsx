@@ -12,7 +12,7 @@ import { NotificationsPanel } from "../../components/notifications-panel/notific
 import { Alert } from "../../components/shared/alert-modal";
 import { WorkspaceInviteModal } from "../../components/workspace-invite/WorkspaceInviteModal";
 import queryClient from "../../config/query.client";
-import { useLogoutMutation } from "../../hooks/auth/use-auth";
+import { useAuthQuery, useLogoutMutation } from "../../hooks/auth/use-auth";
 import Header from "./components/Header";
 import { LeftNavBar } from "./components/LeftNavbar";
 import { Sidebar } from "./components/Sidebar";
@@ -21,6 +21,8 @@ const AppLayout = () => {
   const { data: onlineUsers = [] } = useQuery({
     queryKey: ["onlineUsers"],
   });
+
+  const { data: authData, isLoading } = useAuthQuery();
 
   const { mutate: logoutMutate, isPending: isLogoutPending } = useLogoutMutation();
 
@@ -118,7 +120,7 @@ const AppLayout = () => {
               onOpenReportsPanel={() => navigate("/reports")}
             />
             <div className="flex-1 min-h-0 overflow-y-auto scrollbar-custom rounded-b-2xl py-6">
-              <Outlet context={{ onOpenCreateIssueReport: () => setIsCreatingIssueReport(true) }} />
+              <Outlet context={{ onOpenCreateIssueReport: () => setIsCreatingIssueReport(true), userData: authData }} />
             </div>
           </div>
         </div>

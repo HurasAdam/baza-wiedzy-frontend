@@ -34,6 +34,8 @@ import { CreateFaqPage } from "./create-faq/CreateFaqPage";
 import { CreateRolePage } from "./create-role/CreateRolePage";
 import { CreateWorkspaceArticlePage } from "./create-workspace-article/CreateWorkspaceArticle";
 import { DashboardPage } from "./dashboard/DashboardPage";
+import { DashboardPinnedLinksPage } from "./dashboard/DashboardPinnedLinksPage";
+import { DashboardPinnedWorkspacesPage } from "./dashboard/DashboardPinnedWorkspacesPage";
 import { EditRolePage } from "./edit-role/EditRolePage";
 import { GlobalBadRequestPage } from "./errors/GlobalBadRequestPage";
 import { GlobalNotFoundPage } from "./errors/GlobalNotFoundPage";
@@ -125,4 +127,6 @@ export const PAGES = {
   ArchivedArticleHistoryPage,
   UsefulLinksPage,
   NetworkToolsPage,
+  DashboardPinnedLinksPage,
+  DashboardPinnedWorkspacesPage,
 };

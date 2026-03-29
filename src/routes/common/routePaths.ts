@@ -1,5 +1,7 @@
 export const PROTECTED_ROUTES = {
   DASHBOARD: "/dashboard",
+  DASHBOARD_PINNED_LINKS: "/dashboard/pinned-links",
+  DASHBOARD_PINNED_WORKSPACES: "/dashboard/pinned-workspaces",
   ARTICLES: "/articles",
   FLAGGED_ARTICLES: "/flagged-articles",
   PENDING_ARTICLES: "articles-pending",
