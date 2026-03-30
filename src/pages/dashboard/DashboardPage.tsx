@@ -99,7 +99,7 @@ function CollectionsList({ className }: any) {
   );
 }
 
-export function QuickLinksListVertical({ className, openCreateModal, links = [] }: any) {
+export function QuickLinksListVertical({ className, openCreateModal, links = [], isLoading }: any) {
   const navigate = useNavigate();
 
   function normalizeUrl(url: string) {
@@ -140,8 +140,19 @@ export function QuickLinksListVertical({ className, openCreateModal, links = [] 
         </DropdownMenu>
       </div>
 
-      {/* EMPTY STATE / PREMIUM PLACEHOLDER */}
-      {links.length === 0 ? (
+      {/* LOADING DATA PLACEHOLDER */}
+      {isLoading ? (
+        <div className="flex flex-1 items-center justify-center">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-8 h-8 rounded-full border-2 border-muted border-t-foreground animate-spin" />
+
+            <div className="flex flex-col items-center leading-tight">
+              <span className="text-sm font-medium text-foreground">Wczytywanie linków</span>
+              <span className="text-xs text-muted-foreground">Proszę czekać</span>
+            </div>
+          </div>
+        </div>
+      ) : links.length === 0 ? (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -255,7 +266,7 @@ function TopBarUser() {
 export function DashboardPage() {
   const [isCreatePinnedLinkModalOpen, setIsCreatePinnedLinkModalOpen] = useState<boolean>(false);
   const { userData } = useOutletContext<{ onOpenCreateIssueReport: () => void; userData: AuthUserData }>();
-  const { data: pinnedLinks } = useFindUserPinnedLinksQuery(userData._id);
+  const { data: pinnedLinks, isPending } = useFindUserPinnedLinksQuery(userData._id);
 
   const openCreateModal = () => {
     setIsCreatePinnedLinkModalOpen(true);
@@ -273,6 +284,7 @@ export function DashboardPage() {
               <QuickLinksListVertical
                 openCreateModal={openCreateModal}
                 links={pinnedLinks ?? []}
+                isLoading={isPending}
                 className="md:pl-6 shadow-none bg-transparent min-h-[502px] max-h-[502px]"
               />
             </div>
