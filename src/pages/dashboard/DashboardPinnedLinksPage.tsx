@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { motion } from "framer-motion";
 import { ArrowLeft, Edit, Link as LinkIcon, Plus, Search, Star, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
@@ -9,6 +10,7 @@ import { EditPinnedLinkModal } from "../../components/pinned-link/edit-pinned-li
 import { PinnedLinkModal } from "../../components/pinned-link/pinned-link.modal";
 import { Alert } from "../../components/shared/alert-modal";
 import queryClient from "../../config/query.client";
+import * as animation from "../../constants/animations";
 import { useDeletePinnedLinkMutation, useFindUserPinnedLinksQuery } from "../../hooks/pinned-links/use-pinned-links";
 import type { AuthUserData } from "../../types/user";
 
@@ -59,7 +61,13 @@ export function DashboardPinnedLinksPage() {
   );
 
   return (
-    <div className="min-h-screen bg-background p-6">
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="min-h-screen bg-background p-6"
+    >
       <div className="max-w-5xl mx-auto flex flex-col gap-6">
         {/* ===== HEADER ===== */}
         <div className="flex items-center justify-between border-b border-border pb-4 mb-6">
@@ -209,6 +217,6 @@ export function DashboardPinnedLinksPage() {
       {editedLinkId && (
         <EditPinnedLinkModal isOpen={!!editedLinkId} setIsOpen={setEditedLinkId} editedLinkId={editedLinkId} />
       )}
-    </div>
+    </motion.div>
   );
 }

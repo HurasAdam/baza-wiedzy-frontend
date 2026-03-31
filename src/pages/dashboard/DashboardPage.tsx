@@ -21,6 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu";
 import { WORKSPACE_ICONS } from "../../components/workspace/workspace-form";
+import * as animation from "../../constants/animations";
 import { useLatestArticles } from "../../hooks/articles/use-articles";
 import { useFindUserPinnedLinksQuery } from "../../hooks/pinned-links/use-pinned-links";
 import { useFindUserWorkspacesQuery } from "../../hooks/workspace/use-workspace";
@@ -273,7 +274,13 @@ export function DashboardPage() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-100px)] bg-background py-5 px-6 2xl:px-0">
+    <motion.div
+      variants={animation.pageFadePremium}
+      initial="init"
+      animate="visible"
+      exit="exit"
+      className="min-h-[calc(100vh-100px)] bg-background py-5 px-6 2xl:px-0"
+    >
       <div className="mx-auto max-w-[1320px] flex flex-col gap-6">
         <div className="flex flex-col gap-6">
           <TopBarUser />
@@ -301,6 +308,6 @@ export function DashboardPage() {
           onSave={() => {}}
         />
       )}
-    </div>
+    </motion.div>
   );
 }
