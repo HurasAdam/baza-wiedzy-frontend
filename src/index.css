@@ -1796,6 +1796,17 @@
   --shadow-2xl: 0px 4px 10px 0px hsl(0 0 0 / 0.25);
   --tracking-normal: -0.01em;
   --spacing: 0.25rem;
+
+  --admin-sidebar: oklch(0.9611 0.007 268.5473);
+
+  --admin-sidebar-foreground: oklch(0.2054 0.0574 249.536);
+  --admin-sidebar-primary: oklch(0.3658 0.1704 262.0948);
+  --admin-sidebar-primary-foreground: oklch(1 0 0);
+  --admin-sidebar-accent: oklch(0.9248 0.0213 268.4259);
+  --admin-sidebar-accent-foreground: oklch(0.3658 0.1704 262.0948);
+  --admin-sidebar-border: oklch(0.8837 0.0224 263.1842);
+  --admin-sidebar-ring: oklch(0.3658 0.1704 262.0948);
+  --admin-sidebar-logo: oklch(0.3658 0.1704 262.0948);
 }
 
 .dark-office {
@@ -1856,6 +1867,17 @@
   --shadow-xl: 0 30px 60px hsl(0 0% 0% / 0.18), 0 10px 24px hsl(0 0% 0% / 0.12);
 
   --shadow-2xl: 0 40px 80px hsl(0 0% 0% / 0.22);
+
+  --admin-sidebar: oklch(0.1976 0.0365 264.1931);
+
+  --admin-sidebar-foreground: oklch(0.9452 0.0145 264.4975);
+  --admin-sidebar-primary: oklch(0.6008 0.1419 259.4377);
+  --admin-sidebar-primary-foreground: oklch(1 0 0);
+  --admin-sidebar-accent: oklch(0.2833 0.039 259.371);
+  --admin-sidebar-accent-foreground: oklch(0.9452 0.0145 264.4975);
+  --admin-sidebar-border: oklch(0.2833 0.039 259.371);
+  --admin-sidebar-ring: oklch(0.6008 0.1419 259.4377);
+  --admin-sidebar-logo: oklch(0.6008 0.1419 259.4377);
 }
 
 .dark-aqua {
