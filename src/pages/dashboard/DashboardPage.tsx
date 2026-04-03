@@ -214,22 +214,45 @@ export function QuickLinksListVertical({ className, openCreateModal, links = [],
   );
 }
 // ---------------- RECENT ARTICLES ----------------
-function RecentArticles({ className }: any) {
+function RecentArticles({ className }: { className?: string }) {
   const { data: articlesData = [] } = useLatestArticles();
 
   return (
     <Card title="Ostatnio dodane wpisy" icon={FileText} className={className}>
-      <div className="flex flex-col gap-2 h-full overflow-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 overflow-auto min-h-[600px]">
         {articlesData?.data?.map((a) => (
-          <button key={a.id} className="w-full text-left text-sm hover:text-accent transition truncate">
-            {a.title}
-          </button>
+          <ArticleCard key={a._id} article={a} />
         ))}
       </div>
     </Card>
   );
 }
 
+function ArticleCard({ article }: { article: any }) {
+  return (
+    <div className="flex flex-col p-4 bg-muted/50 border border-border/60 rounded-xl transition cursor-pointer hover:shadow-md">
+      <h3 className="text-sm font-semibold text-foreground truncate">{article.title}</h3>
+
+      <div className="flex flex-wrap gap-2 mt-2 text-xs text-muted-foreground">
+        <span>
+          Autor: {article.createdBy.name} {article.createdBy.surname}
+        </span>
+        <span>
+          Produkt: <span style={{ color: article.product.labelColor }}>{article.product.name}</span>
+        </span>
+        <span>Kategoria: {article.category.name}</span>
+      </div>
+
+      <div className="flex flex-wrap gap-1 mt-2">
+        {article.tags?.map((tag) => (
+          <span key={tag._id} className="text-[10px] bg-primary/45 text-foreground px-2 py-0.5 rounded-full">
+            {tag.name}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
 // ---------------- TOP BAR USER ----------------
 
 function TopBarUser() {
@@ -279,7 +302,7 @@ export function DashboardPage() {
       initial="init"
       animate="visible"
       exit="exit"
-      className="min-h-[calc(100vh-100px)] bg-background py-5 px-6 2xl:px-0"
+      className="min-h-[calc(100vh-100px)] bg-background py-5 px-6 2xl:px-0 mx-auto max-w-7xl "
     >
       <div className="mx-auto max-w-[1320px] flex flex-col gap-6">
         <div className="flex flex-col gap-6">

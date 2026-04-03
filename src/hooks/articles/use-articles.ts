@@ -111,7 +111,7 @@ export const useFindArticlesQuery = (params?: URLSearchParams) => {
 
 export function useLatestArticles() {
   const params = new URLSearchParams({
-    limit: "7",
+    limit: "10",
     page: "1",
     sortBy: "createdAt",
     sortAt: "-1",
