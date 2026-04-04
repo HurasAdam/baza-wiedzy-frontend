@@ -86,9 +86,9 @@ const TableArticleCard = ({ article, openArticleDrawer, onMouseEnter, onMouseLea
         })
       }
       className={cn(
-        "group flex items-center justify-between gap-4 px-5 pt-4 pb-3 cursor-pointer",
-        "border-b last:border-0 border-border/60",
-        "bg-transparent hover:bg-card/60",
+        "group flex items-center justify-between gap-4 px-5 pt-4 pb-3 cursor-pointer ",
+        "border-b last:border-0 border-border/85",
+        "bg-card/50 hover:bg-card/60",
         "transition-all duration-200",
         "hover:bg-muted/45 ",
       )}

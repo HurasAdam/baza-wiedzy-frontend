@@ -81,7 +81,7 @@ const ArticlesList = ({
   setHoveredArticleIdRef,
 }: ArticlesListProps) => {
   return (
-    <div className="flex flex-col rounded-xl border border-border/70 bg-card/30 backdrop-blur-md overflow-hidden">
+    <div className="flex flex-col rounded-xl border border-border/75 bg-gradient-to-br from-card/60 to-card/55 backdrop-blur-sm overflow-hidden">
       {isLoading && (
         <ul className="divide-y divide-border">
           {Array(12)
