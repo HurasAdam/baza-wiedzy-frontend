@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import {
+  ChartSpline,
   Edit,
   FileText,
   FolderSymlink,
+  Home,
   Layers2,
   Link as LinkIcon,
   List,
@@ -65,8 +67,8 @@ function CollectionsList({ className }: any) {
         <p className="text-sm text-muted-foreground">Brak przypiętych kolekcji</p>
       )}
 
-      <div className="flex flex-col gap-3.5 overflow-hidden min-h-[502px] max-h-[502px]">
-        {workspaces.slice(0, 6).map((ws) => {
+      <div className="flex flex-col gap-2 overflow-hidden min-h-[564px] max-h-[564px]">
+        {workspaces.slice(0, 7).map((ws) => {
           const Icon = WORKSPACE_ICONS[ws.icon] ?? FileText;
 
           return (
@@ -110,15 +112,15 @@ export function QuickLinksListVertical({ className, openCreateModal, links = [],
     return url;
   }
 
-  const maxLeft = 16;
+  const maxLeft = 10;
   const leftColumn = links.slice(0, maxLeft);
   const rightColumn = links.slice(maxLeft);
 
   return (
-    <div className={`${className} flex flex-col min-h-[400px]`}>
+    <div className={`${className} flex flex-col pb-5`}>
       {/* HEADER */}
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+        <h2 className="text-sm font-semibold uppercase tracking-tight text-muted-foreground flex items-center gap-2">
           <LinkIcon className="w-5 h-5" /> Moje przypięte linki
         </h2>
 
@@ -256,30 +258,32 @@ function ArticleCard({ article }: { article: any }) {
 // ---------------- TOP BAR USER ----------------
 
 function TopBarUser() {
-  const month = "Marzec 2026";
-
+  const month = "Kwiecień 2026";
   const stats = [
     { label: "Dodane artykuły", value: 12, icon: FileText },
     { label: "Edytowane artykuły", value: 8, icon: Edit },
-    { label: "Komentarze / wiadomości", value: 4, icon: MessageCircle },
+    { label: "Odnotowane tematy", value: 4, icon: MessageCircle },
   ];
 
   return (
-    <div className="flex flex-col md:flex-row items-center justify-between p-6 bg-card border border-border/70 backdrop-blur-md rounded-3xl shadow-lg gap-14">
-      <div className="flex flex-col">
-        <span className="text-sm text-muted-foreground uppercase tracking-wider">Moja Aktywność</span>
-        <h2 className="text-2xl md:text-3xl font-extrabold text-foreground mt-1">{month}</h2>
+    <div className="flex flex-col gap-4 pb-6 w-full  ">
+      <div className="flex justify-between items-center px-4">
+        <div className="flex items-center gap-2">
+          <ChartSpline className="w-5 h-5" />
+          <span className="text-sm font-semibold  text-muted-foreground tracking-wide"> Moja aktywność ( Marzec )</span>
+        </div>
       </div>
 
-      <div className="flex flex-1 justify-between mt-4 md:mt-0 gap-4">
+      {/* KAFELKI */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-muted/50 py-4 rounded-xl">
         {stats.map((s, i) => (
           <div
             key={i}
-            className="flex flex-col items-center justify-center flex-1 p-5 bg-background border border-border/50 backdrop-blur-md rounded-2xl shadow-xs "
+            className="flex flex-col items-center justify-center p-9 border-r border-border last:border-r-0 transition-all"
           >
-            {s.icon && <s.icon className="w-6 h-6 text-muted-foreground/85 mb-2" />}
-            <span className="text-2xl font-bold text-foreground">{s.value}</span>
-            <span className="text-sm text-muted-foreground text-center">{s.label}</span>
+            {s.icon && <s.icon className="w-6 h-6 text-muted-foreground mb-1" />}
+            <span className="text-xl font-bold text-foreground">{s.value}</span>
+            <span className="text-xs text-muted-foreground text-center">{s.label}</span>
           </div>
         ))}
       </div>
@@ -306,20 +310,33 @@ export function DashboardPage() {
     >
       <div className="mx-auto max-w-[1320px] flex flex-col gap-6">
         <div className="flex flex-col gap-6">
-          <TopBarUser />
-
+          {/* <TopBarUser /> */}
+          <div className="flex justify-between">
+            <div className="flex items-center gap-2">
+              <div className="bg-muted px-2.5 py-2.5 rounded-xl">
+                <Home className="h-4 w-4" />
+              </div>
+              <h1 className="font-semibold text-xl tracking-tight"> Moja tablica</h1>
+            </div>
+            <span>...</span>
+          </div>
           <Card>
             <div className="grid grid-cols-1 md:grid-cols-[0.9fr_1.1fr] gap-6 md:gap-2">
-              <CollectionsList className="md:pr-6 border-r border-border/70 shadow-none bg-transparent" />
-              <QuickLinksListVertical
-                openCreateModal={openCreateModal}
-                links={pinnedLinks ?? []}
-                isLoading={isPending}
-                className="md:pl-6 shadow-none bg-transparent min-h-[502px] max-h-[502px]"
-              />
+              <div>
+                <CollectionsList className="md:pr-6 border-r border-border/70 shadow-none bg-transparent" />
+              </div>
+
+              <div className="flex flex-col justify-between">
+                <TopBarUser />
+                <QuickLinksListVertical
+                  openCreateModal={openCreateModal}
+                  links={pinnedLinks ?? []}
+                  isLoading={isPending}
+                  className="md:pl-6 shadow-none bg-transparent min-h-[362px] max-h-[362px]"
+                />
+              </div>
             </div>
           </Card>
-
           <RecentArticles />
         </div>
       </div>
