@@ -7,7 +7,6 @@ import {
   Home,
   Layers2,
   Link as LinkIcon,
-  List,
   MessageCircle,
   MoreHorizontal,
   Plus,
@@ -50,15 +49,32 @@ function Card({ children, title, icon: Icon, action, className }: any) {
 
 // ---------------- COLLECTIONS ----------------
 function CollectionsList({ className }: any) {
+  const navigate = useNavigate();
   const { data: workspaces = [], isPending } = useFindUserWorkspacesQuery();
 
   return (
     <div className={className}>
-      <div className="flex items-center gap-2 mb-4">
-        <Layers2 className="w-5 h-5 text-muted-foreground" />
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+      <div className="flex justify-between gap-2 mb-4">
+        <h2 className="text-sm flex gap-2 font-semibold uppercase tracking-wider text-muted-foreground">
+          <Layers2 className="w-5 h-5 text-muted-foreground" />
           Moje przypięte kolekcje
         </h2>
+
+        <Button
+          size="icon"
+          variant="ghost"
+          onClick={() => navigate("/dashboard/pinned-workspaces")}
+          className="
+    h-8 w-8 rounded-lg
+    text-muted-foreground
+    hover:text-foreground
+    hover:bg-accent
+    transition
+  "
+          title="Zarządzaj kolekcjami"
+        >
+          <Plus className="w-4 h-4" />
+        </Button>
       </div>
 
       {isPending && <p className="text-sm text-muted-foreground">Ładowanie kolekcji...</p>}
@@ -124,23 +140,9 @@ export function QuickLinksListVertical({ className, openCreateModal, links = [],
           <LinkIcon className="w-5 h-5" /> Moje przypięte linki
         </h2>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger className="p-2 rounded-lg hover:bg-accent transition">
-            <MoreHorizontal className="w-4 h-4" />
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent align="end" className="w-48">
-            <DropdownMenuItem className="flex items-center gap-2" onClick={openCreateModal}>
-              <Plus className="w-4 h-4 text-muted-foreground" />
-              Dodaj link
-            </DropdownMenuItem>
-
-            <DropdownMenuItem className="flex items-center gap-2" onClick={() => navigate("/dashboard/pinned-links")}>
-              <List className="w-4 h-4 text-muted-foreground" />
-              Zarządzaj
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Button size="icon" variant="ghost" onClick={openCreateModal} className="h-8 w-8 rounded-lg hover:bg-accent ">
+          <Plus className="w-4 h-4" />
+        </Button>
       </div>
 
       {/* LOADING DATA PLACEHOLDER */}
@@ -260,21 +262,21 @@ function ArticleCard({ article }: { article: any }) {
 function TopBarUser() {
   const month = "Kwiecień 2026";
   const stats = [
-    { label: "Dodane artykuły", value: 12, icon: FileText },
+    { label: "Dodane artykuły", value: 4, icon: FileText },
     { label: "Edytowane artykuły", value: 8, icon: Edit },
-    { label: "Odnotowane tematy", value: 4, icon: MessageCircle },
+    { label: "Odnotowane tematy", value: 320, icon: MessageCircle },
   ];
 
   return (
-    <div className="flex flex-col gap-4 pb-6 w-full  ">
-      <div className="flex justify-between items-center px-4">
-        <div className="flex items-center gap-2">
+    <div className="flex flex-col gap-4 pb-6 w-full px-3 ">
+      <div className="flex justify-between items-center ">
+        <div className="flex items-center gap-2 px-1">
           <ChartSpline className="w-5 h-5" />
           <span className="text-sm font-semibold  text-muted-foreground tracking-wide"> Moja aktywność ( Marzec )</span>
         </div>
       </div>
 
-      {/* KAFELKI */}
+      {/* TILES */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-muted/50 py-4 rounded-xl">
         {stats.map((s, i) => (
           <div
@@ -295,6 +297,7 @@ export function DashboardPage() {
   const [isCreatePinnedLinkModalOpen, setIsCreatePinnedLinkModalOpen] = useState<boolean>(false);
   const { userData } = useOutletContext<{ onOpenCreateIssueReport: () => void; userData: AuthUserData }>();
   const { data: pinnedLinks, isPending } = useFindUserPinnedLinksQuery(userData._id);
+  const navigate = useNavigate();
 
   const openCreateModal = () => {
     setIsCreatePinnedLinkModalOpen(true);
@@ -318,7 +321,27 @@ export function DashboardPage() {
               </div>
               <h1 className="font-semibold text-xl tracking-tight"> Moja tablica</h1>
             </div>
-            <span>...</span>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                className="    p-2 rounded-lg hover:bg-accent transition
+    focus:outline-none focus:ring-0 focus-visible:ring-0
+    data-[state=open]:bg-accent"
+              >
+                <MoreHorizontal className="w-4 h-4" />
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuItem onClick={() => navigate("/dashboard/pinned-workspaces")}>
+                  <Layers2 className="w-4 h-4 mr-2" />
+                  Zarządzaj kolekcjami
+                </DropdownMenuItem>
+
+                <DropdownMenuItem onClick={() => navigate("/dashboard/pinned-links")}>
+                  <LinkIcon className="w-4 h-4 mr-2" />
+                  Zarządzaj linkami
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
           <Card>
             <div className="grid grid-cols-1 md:grid-cols-[0.9fr_1.1fr] gap-6 md:gap-2">
