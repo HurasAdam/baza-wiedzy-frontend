@@ -3,6 +3,7 @@ import {
   ChartSpline,
   Edit,
   FileText,
+  FolderOpen,
   FolderSymlink,
   Home,
   Layers2,
@@ -14,6 +15,7 @@ import {
 import { useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { PinnedLinkModal } from "../../components/pinned-link/pinned-link.modal";
+import { PinnedWorkspacesModal } from "../../components/pinned-workspaces/pinned-workspaces.modal";
 import { Button } from "../../components/ui/button";
 import {
   DropdownMenu,
@@ -25,7 +27,7 @@ import { WORKSPACE_ICONS } from "../../components/workspace/workspace-form";
 import * as animation from "../../constants/animations";
 import { useLatestArticles } from "../../hooks/articles/use-articles";
 import { useFindUserPinnedLinksQuery } from "../../hooks/pinned-links/use-pinned-links";
-import { useFindUserWorkspacesQuery } from "../../hooks/workspace/use-workspace";
+import { useFindUserPinnedWorkspacesQuery } from "../../hooks/pinned-workspaces/use-pinned-workspaces";
 import type { AuthUserData } from "../../types/user";
 
 function Card({ children, title, icon: Icon, action, className }: any) {
@@ -48,12 +50,17 @@ function Card({ children, title, icon: Icon, action, className }: any) {
 }
 
 // ---------------- COLLECTIONS ----------------
-function CollectionsList({ className }: any) {
-  const navigate = useNavigate();
-  const { data: workspaces = [], isPending } = useFindUserWorkspacesQuery();
+function CollectionsList({ className, onOpenModal }: any) {
+  const { data: workspaces = [], isPending } = useFindUserPinnedWorkspacesQuery();
+
+  const isTwoColumns = workspaces.length > 7;
+  const maxPerColumn = Math.ceil(workspaces.length / 1.3);
+  const leftColumn = isTwoColumns ? workspaces.slice(0, maxPerColumn) : workspaces;
+  const rightColumn = isTwoColumns ? workspaces.slice(maxPerColumn) : [];
 
   return (
     <div className={className}>
+      {/* HEADER */}
       <div className="flex justify-between gap-2 mb-4">
         <h2 className="text-sm flex gap-2 font-semibold uppercase tracking-wider text-muted-foreground">
           <Layers2 className="w-5 h-5 text-muted-foreground" />
@@ -63,64 +70,91 @@ function CollectionsList({ className }: any) {
         <Button
           size="icon"
           variant="ghost"
-          onClick={() => navigate("/dashboard/pinned-workspaces")}
-          className="
-    h-8 w-8 rounded-lg
-    text-muted-foreground
-    hover:text-foreground
-    hover:bg-accent
-    transition
-  "
+          onClick={onOpenModal}
+          className="h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition"
           title="Zarządzaj kolekcjami"
         >
           <Plus className="w-4 h-4" />
         </Button>
       </div>
 
+      {/* LOADING */}
       {isPending && <p className="text-sm text-muted-foreground">Ładowanie kolekcji...</p>}
 
+      {/* PLACEHOLDER */}
       {!isPending && workspaces.length === 0 && (
-        <p className="text-sm text-muted-foreground">Brak przypiętych kolekcji</p>
+        <div className="flex flex-col items-center justify-center gap-6 py-12 h-[564px]  rounded-2xl ">
+          <FolderOpen className="w-24 h-24 text-primary/40 mb-2" />
+          <h3 className="text-2xl font-semibold text-foreground">Brak przypiętych kolekcji</h3>
+          <p className="text-sm text-muted-foreground max-w-[320px] text-center">
+            Przypnij kolekcję, aby mieć szybki dostęp do ważnych zasobów z poziomu tablicy.
+          </p>
+          <Button size="lg" className="mt-6 gap-2 bg-primary/80 hover:shadow-lg transition-all" onClick={onOpenModal}>
+            <Plus className="w-5 h-5" />
+            Dodaj kolekcję
+          </Button>
+        </div>
       )}
 
-      <div className="flex flex-col gap-2 overflow-hidden min-h-[564px] max-h-[564px]">
-        {workspaces.slice(0, 7).map((ws) => {
-          const Icon = WORKSPACE_ICONS[ws.icon] ?? FileText;
+      {/* KOLUMNY */}
+      {!isPending && workspaces.length > 0 && (
+        <div
+          className={
+            isTwoColumns
+              ? "grid grid-cols-2 gap-2 overflow-hidden min-h-[564px] max-h-[564px]"
+              : "flex flex-col gap-2 overflow-hidden min-h-[564px] max-h-[564px]"
+          }
+        >
+          {/* LEFT COLUMN */}
+          <div className="flex flex-col gap-2">
+            {leftColumn.map((ws) => {
+              const Icon = WORKSPACE_ICONS[ws.workspace.icon] ?? FileText;
+              return (
+                <div
+                  key={ws._id}
+                  className="flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-background shadow-sm hover:shadow-none hover:bg-accent/10 transition cursor-pointer min-h-[72px] border border-border/55"
+                >
+                  <div
+                    className="flex items-center justify-center w-10 h-10 rounded-xl"
+                    style={{ backgroundColor: `${ws.workspace.labelColor}22` }}
+                  >
+                    <Icon className="w-5 h-5" style={{ color: ws.labelColor }} />
+                  </div>
+                  <span className="text-sm font-semibold truncate">{ws.workspace.name}</span>
+                </div>
+              );
+            })}
+          </div>
 
-          return (
-            <div
-              key={ws._id}
-              className="
-    flex items-center gap-2.5
-    px-4 py-3
-    rounded-2xl
-    bg-background
-    shadow-sm hover:shadow-none
-    hover:bg-accent/10
-    transition cursor-pointer
-    min-h-[72px]
-    border border-border/55
-  "
-            >
-              <div
-                className="flex items-center justify-center w-10 h-10 rounded-xl"
-                style={{ backgroundColor: `${ws.labelColor}22` }}
-              >
-                <Icon className="w-5 h-5" style={{ color: ws.labelColor }} />
-              </div>
-
-              <span className="text-sm font-semibold truncate">{ws.name}</span>
+          {/* RIGHT COLUMN */}
+          {isTwoColumns && (
+            <div className="flex flex-col gap-2">
+              {rightColumn.map((ws) => {
+                const Icon = WORKSPACE_ICONS[ws.workspace.icon] ?? FileText;
+                return (
+                  <div
+                    key={ws._id}
+                    className="flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-background shadow-sm hover:shadow-none hover:bg-accent/10 transition cursor-pointer min-h-[72px] border border-border/55"
+                  >
+                    <div
+                      className="flex items-center justify-center w-10 h-10 rounded-xl"
+                      style={{ backgroundColor: `${ws.workspace.labelColor}22` }}
+                    >
+                      <Icon className="w-5 h-5" style={{ color: ws.labelColor }} />
+                    </div>
+                    <span className="text-sm font-semibold truncate">{ws.workspace.name}</span>
+                  </div>
+                );
+              })}
             </div>
-          );
-        })}
-      </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
 
 export function QuickLinksListVertical({ className, openCreateModal, links = [], isLoading }: any) {
-  const navigate = useNavigate();
-
   function normalizeUrl(url: string) {
     if (!url.startsWith("http://") && !url.startsWith("https://")) {
       return `https://${url}`;
@@ -295,12 +329,17 @@ function TopBarUser() {
 
 export function DashboardPage() {
   const [isCreatePinnedLinkModalOpen, setIsCreatePinnedLinkModalOpen] = useState<boolean>(false);
+  const [isManagePinnedWorkspacesModalOpen, setIsManagePinnedWorkspacesModalOpen] = useState<boolean>(false);
   const { userData } = useOutletContext<{ onOpenCreateIssueReport: () => void; userData: AuthUserData }>();
   const { data: pinnedLinks, isPending } = useFindUserPinnedLinksQuery(userData._id);
   const navigate = useNavigate();
 
   const openCreateModal = () => {
     setIsCreatePinnedLinkModalOpen(true);
+  };
+
+  const openManagePinnedWorkspacesModal = () => {
+    setIsManagePinnedWorkspacesModalOpen(true);
   };
 
   return (
@@ -346,7 +385,10 @@ export function DashboardPage() {
           <Card>
             <div className="grid grid-cols-1 md:grid-cols-[0.9fr_1.1fr] gap-6 md:gap-2">
               <div>
-                <CollectionsList className="md:pr-6 border-r border-border/70 shadow-none bg-transparent" />
+                <CollectionsList
+                  onOpenModal={openManagePinnedWorkspacesModal}
+                  className="md:pr-6 border-r border-border/70 shadow-none bg-transparent"
+                />
               </div>
 
               <div className="flex flex-col justify-between">
@@ -369,6 +411,13 @@ export function DashboardPage() {
           isOpen={isCreatePinnedLinkModalOpen}
           setIsOpen={setIsCreatePinnedLinkModalOpen}
           onSave={() => {}}
+        />
+      )}
+
+      {isManagePinnedWorkspacesModalOpen && (
+        <PinnedWorkspacesModal
+          isOpen={isManagePinnedWorkspacesModalOpen}
+          setIsOpen={setIsManagePinnedWorkspacesModalOpen}
         />
       )}
     </motion.div>
