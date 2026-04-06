@@ -13,7 +13,7 @@ import {
   Plus,
 } from "lucide-react";
 import { useState } from "react";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import { PinnedLinkModal } from "../../components/pinned-link/pinned-link.modal";
 import { PinnedWorkspacesModal } from "../../components/pinned-workspaces/pinned-workspaces.modal";
 import { Button } from "../../components/ui/button";
@@ -270,27 +270,29 @@ function RecentArticles({ className }: { className?: string }) {
 
 function ArticleCard({ article }: { article: any }) {
   return (
-    <div className="flex flex-col p-4 bg-muted/50 border border-border/60 rounded-xl transition cursor-pointer hover:shadow-md">
-      <h3 className="text-sm font-semibold text-foreground truncate">{article.title}</h3>
+    <Link to={`/articles/${article._id}`} target="_blank" rel="noopener noreferrer">
+      <div className="flex flex-col p-4 bg-muted/50 border border-border/65 rounded-xl transition cursor-pointer hover:shadow-xs">
+        <h3 className="text-sm font-semibold text-foreground truncate">{article.title}</h3>
 
-      <div className="flex flex-wrap gap-2 mt-2 text-xs text-muted-foreground">
-        <span>
-          Autor: {article.createdBy.name} {article.createdBy.surname}
-        </span>
-        <span>
-          Produkt: <span style={{ color: article.product.labelColor }}>{article.product.name}</span>
-        </span>
-        <span>Kategoria: {article.category.name}</span>
-      </div>
-
-      <div className="flex flex-wrap gap-1 mt-2">
-        {article.tags?.map((tag) => (
-          <span key={tag._id} className="text-[10px] bg-primary/45 text-foreground px-2 py-0.5 rounded-full">
-            {tag.name}
+        <div className="flex flex-wrap gap-2 mt-2 text-xs text-muted-foreground">
+          <span>
+            Autor: {article.createdBy.name} {article.createdBy.surname}
           </span>
-        ))}
+          <span>
+            Produkt: <span style={{ color: article.product.labelColor }}>{article.product.name}</span>
+          </span>
+          <span>Kategoria: {article.category.name}</span>
+        </div>
+
+        <div className="flex flex-wrap gap-1 mt-2">
+          {article.tags?.map((tag) => (
+            <span key={tag._id} className="text-[10px] bg-primary/45 text-foreground px-2 py-0.5 rounded-full">
+              {tag.name}
+            </span>
+          ))}
+        </div>
       </div>
-    </div>
+    </Link>
   );
 }
 // ---------------- TOP BAR USER ----------------
