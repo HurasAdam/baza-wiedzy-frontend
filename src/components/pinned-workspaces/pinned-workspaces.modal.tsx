@@ -64,8 +64,13 @@ export const PinnedWorkspacesModal = ({ isOpen, setIsOpen, closeOnOutsideClick =
             setActiveId(null);
 
             const { status } = error as AxiosError;
-            if (status === 409) {
-              toast.error("Wybrana kolekcja została już przypięta.");
+            if (status === 409) toast.error("Wybrana kolekcja została już przypięta.");
+            else if (status === 422) {
+              toast.warning("Osiągnięto maksymalny limit przypięć", {
+                position: "bottom-right",
+                description: "Twoja tablica może mieć maksymalnie 14 przypiętych kolekcji. Usuń jedną, aby dodać nową.",
+                duration: 5500,
+              });
             } else {
               toast.error("Nieoczekiwany błąd. Odśwież stronę i spróbuj ponownie.");
             }
