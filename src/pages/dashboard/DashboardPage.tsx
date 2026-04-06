@@ -108,7 +108,7 @@ function CollectionsList({ className, onOpenModal }: any) {
           {/* LEFT COLUMN */}
           <div className="flex flex-col gap-2">
             {leftColumn.map((ws) => {
-              const Icon = WORKSPACE_ICONS[ws.workspace.icon] ?? FileText;
+              const Icon = WORKSPACE_ICONS[ws?.workspace?.icon] ?? FileText;
               return (
                 <div
                   key={ws._id}
@@ -130,7 +130,7 @@ function CollectionsList({ className, onOpenModal }: any) {
           {isTwoColumns && (
             <div className="flex flex-col gap-2">
               {rightColumn.map((ws) => {
-                const Icon = WORKSPACE_ICONS[ws.workspace.icon] ?? FileText;
+                const Icon = WORKSPACE_ICONS[ws?.workspace?.icon] ?? FileText;
                 return (
                   <div
                     key={ws._id}
@@ -138,9 +138,9 @@ function CollectionsList({ className, onOpenModal }: any) {
                   >
                     <div
                       className="flex items-center justify-center w-10 h-10 rounded-xl"
-                      style={{ backgroundColor: `${ws.workspace.labelColor}22` }}
+                      style={{ backgroundColor: `${ws?.workspace?.labelColor}22` }}
                     >
-                      <Icon className="w-5 h-5" style={{ color: ws.labelColor }} />
+                      <Icon className="w-5 h-5" style={{ color: ws?.workspace?.labelColor }} />
                     </div>
                     <span className="text-sm font-semibold truncate">{ws.workspace.name}</span>
                   </div>
