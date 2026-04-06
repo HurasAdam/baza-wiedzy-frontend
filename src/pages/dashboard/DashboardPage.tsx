@@ -50,11 +50,11 @@ function Card({ children, title, icon: Icon, action, className }: any) {
 }
 
 // ---------------- COLLECTIONS ----------------
-function CollectionsList({ className, onOpenModal }: any) {
+function CollectionsList({ className, onOpenModal, navigate }: any) {
   const { data: workspaces = [], isPending } = useFindUserPinnedWorkspacesQuery();
 
   const isTwoColumns = workspaces.length > 7;
-  const maxPerColumn = Math.ceil(workspaces.length / 1.3);
+  const maxPerColumn = Math.ceil(workspaces.length / 2);
   const leftColumn = isTwoColumns ? workspaces.slice(0, maxPerColumn) : workspaces;
   const rightColumn = isTwoColumns ? workspaces.slice(maxPerColumn) : [];
 
@@ -111,6 +111,7 @@ function CollectionsList({ className, onOpenModal }: any) {
               const Icon = WORKSPACE_ICONS[ws?.workspace?.icon] ?? FileText;
               return (
                 <div
+                  onClick={() => navigate(`/workspace/${ws.workspace._id}`)}
                   key={ws._id}
                   className="flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-background shadow-sm hover:shadow-none hover:bg-accent/10 transition cursor-pointer min-h-[72px] border border-border/55"
                 >
@@ -134,6 +135,7 @@ function CollectionsList({ className, onOpenModal }: any) {
                 return (
                   <div
                     key={ws._id}
+                    onClick={() => navigate(`/workspace/${ws.workspace._id}`)}
                     className="flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-background shadow-sm hover:shadow-none hover:bg-accent/10 transition cursor-pointer min-h-[72px] border border-border/55"
                   >
                     <div
@@ -386,6 +388,7 @@ export function DashboardPage() {
             <div className="grid grid-cols-1 md:grid-cols-[0.9fr_1.1fr] gap-6 md:gap-2">
               <div>
                 <CollectionsList
+                  navigate={navigate}
                   onOpenModal={openManagePinnedWorkspacesModal}
                   className="md:pr-6 border-r border-border/70 shadow-none bg-transparent"
                 />
